@@ -12,7 +12,6 @@ class TeacherModule extends CWebModule
             'teacher.assets.*',
 			'teacher.models.*',
 			'teacher.components.*',
-            'student.components.*',
 			'admin.classes.*',
             'student.classes.*',
             'student.actions.*',
@@ -34,7 +33,7 @@ class TeacherModule extends CWebModule
 			// this method is called before any module controller action is performed
 			// you may place customized code here
             $controller->layout = '//layouts/teacher';
-            Yii::app()->language = 'vi';//Config admin language is Vietnamese
+            Yii::app()->language = 'en';//Config admin language is Vietnamese
 			return true;
 		}
 		else

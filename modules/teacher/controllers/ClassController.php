@@ -10,7 +10,7 @@ class ClassController extends Controller
     
     public function actionIndex()
     {
-		$this->subPageTitle = 'Danh sách khóa học';
+		$this->subPageTitle = 'Courses List';
         $uid = yii::app()->user->id;
         $teacherCourses = Course::model()->findAll(array("condition"=>"teacher_id = ".$uid." AND deleted_flag=0"));
         $this->render('index',array(
@@ -22,7 +22,7 @@ class ClassController extends Controller
     //Display courses of Teacher
     public function actionCourse($id)
     {
-		$this->subPageTitle = 'Thông tin khóa học';
+		$this->subPageTitle = 'Courses Information';
         $uid = yii::app()->user->id;
         $course  = Course::model()->findByPk($id);
         if($course->teacher_id!=$uid)
@@ -40,7 +40,7 @@ class ClassController extends Controller
 	//Display nearest session of Student
     public function actionNearestSession()
     {
-		$this->subPageTitle = 'Buổi dạy gần nhất';
+		$this->subPageTitle = 'Nearest Sessions';
     	$teacherId = Yii::app()->user->id;
         $ClsSession = new ClsSession();
         $nearestSessions = $ClsSession->getNearestSessions($teacherId, 'teacher', 8);
@@ -60,7 +60,7 @@ class ClassController extends Controller
 	//Display ended session of Teacher
     public function actionEndedSession()
     {
-		$this->subPageTitle = 'Buổi dạy đã hoàn thành';
+		$this->subPageTitle = 'Completed sesion';
     	$teacherId = Yii::app()->user->id;
     	$endedSession = Session::model()->getEndedStudentSessions($teacherId, 'teacher');
 	    $this->render('endedSession', $endedSession);
@@ -69,7 +69,7 @@ class ClassController extends Controller
     //View course as calendar
     public  function actionCalendar($id)
     {
-		$this->subPageTitle = 'Khóa học dạng lịch';
+		$this->subPageTitle = 'Calendar View';
         $uid = yii::app()->user->id;
         $course  = Course::model()->findByPk($id);
         if($course->teacher_id!=$uid){
@@ -84,7 +84,7 @@ class ClassController extends Controller
     //Course profile
 	public function actionCourseProfile($id)
     {
-        $this->subPageTitle = 'Thông tin khóa học';
+        $this->subPageTitle = 'Course Information';
         $userID = Yii::app()->user->id;
         $course  = Course::model()->findByPk($id);
     	if($course->teacher_id!=$userID){
@@ -143,7 +143,7 @@ class ClassController extends Controller
     //Session detail
     public function actionSession($id)
     {
-		$this->subPageTitle = 'Thông tin buổi học';
+		$this->subPageTitle = 'Session Information';
         $uid = yii::app()->user->id;
         $session  = Session::model()->findByPk($id);
         if($session->teacher_id!=$uid)

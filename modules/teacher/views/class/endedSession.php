@@ -1,4 +1,7 @@
+<!-- not using tab anymore
 <div class="page-title"><label class="tabPage"> The training was completed</label></div>
+-->
+<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Completed Sessions</p></div>
 <?php $this->renderPartial('myCourseTab'); ?>
 <div class="details-class">
     <div class="session">

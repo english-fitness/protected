@@ -1,6 +1,9 @@
+<!-- WHY YOU USE ONE TAB GUY
 <div class="page-title">
 	<label class="tabPage">Buổi học đã hoàn thành</label>
 </div>
+-->
+<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Buổi học đã hoàn thành</p></div>
 <?php $this->renderPartial('myCourseTab'); ?>
 <div class="details-class">
     <div class="session">

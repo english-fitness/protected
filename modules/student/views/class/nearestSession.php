@@ -1,6 +1,9 @@
+<!-- not using tab anymore
 <div class="page-title">
 	<label class="tabPage">Buổi học gần nhất</label>
 </div>
+-->
+<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Lịch học</p></div>
 <?php if(Yii::app()->controller->action->id=='nearestSession'):?>
 	<script type="text/javascript">
 	   	setTimeout(function(){window.location.href="/student/class/nearestSession"},60000);
@@ -12,9 +15,9 @@
     <table class="table table-bordered table-striped data-grid">
         <thead>
         <tr>
-        	<th class="w150">Lớp/môn học</th>
-        	<th>Khóa học</th>
-            <th>Chủ đề buổi học</th>
+        	<th class="w150">Loại lớp học</th>
+        	<th>Tên lớp học</th>
+            <th>Học sinh</th>
             <th class="w150">Giáo viên</th>
             <th class="w100">Ngày học</th>
             <th class="w100">Giờ học</th>
@@ -25,14 +28,15 @@
         <?php if(count($nearestSessions)>0):?>
         	<?php foreach ($nearestSessions as $key=>$session): ?>
             <tr class="even">
-           		<td><?php echo $session->course->subject->class->name.' - '.$session->course->subject->name;?></td>
-           		<td><a href="<?php echo Yii::app()->baseUrl; ?>/student/class/course/id/<?php echo $session->course_id;?>">
-           				<?php echo $session->course->title; ?>
-           			</a>
-				</td>
-                <td>
+           		<td><?php echo $session->course->subject->name;?></td>
+           		<td>
 					<a href="<?php echo Yii::app()->baseUrl; ?>/student/class/session/id/<?php echo $session->id?>" title="<?php echo $session->content;?>">
 					<?php echo $session->subject; ?></a>
+				</td>
+                <td>
+					<?php $sessionStudentValues = array_values($session->getAssignedStudentsArrs());
+						echo implode(', ', $sessionStudentValues);
+					?>
 				</td>
                 <td><?php $teacher = $session->getTeacher();
                 		echo ($teacher)? $teacher: "Chưa xác định";

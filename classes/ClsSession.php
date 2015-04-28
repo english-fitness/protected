@@ -8,7 +8,7 @@ class ClsSession
     public function getNearestSessions($userId, $type="student", $limit=5)
     {
         $criteria = new CDbCriteria;
-        $nextWeekTime = date('Y-m-d H:i:s', time('now')+7*86400);
+        //$nextWeekTime = date('Y-m-d H:i:s', time('now')+7*86400);
         //Plan end will >= time now -(prev 30p)
         $checkDisplayTime = date('Y-m-d H:i:s', time('now')-30*60);
         $criteria->select = 't.*'; $condition = "";//Select fields & condition
@@ -18,7 +18,7 @@ class ClsSession
         }elseif($type=="teacher"){
         	$condition = "(teacher_id = $userId) AND ";//Teacher id condition
         }
-        $condition .= "(DATE_ADD(plan_start,INTERVAL plan_duration MINUTE)>='".$checkDisplayTime."') AND (plan_start<='".$nextWeekTime."')";
+        $condition .= "(DATE_ADD(plan_start,INTERVAL plan_duration MINUTE)>='".$checkDisplayTime."')";
         $condition .= " AND (status=".Session::STATUS_APPROVED." OR status=".Session::STATUS_WORKING.") AND deleted_flag=0";
         $criteria->condition = $condition;
         $criteria->limit = $limit;

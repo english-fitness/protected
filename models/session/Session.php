@@ -345,17 +345,55 @@ class Session extends CActiveRecord
 		$planStart = new DateTime($this->plan_start);
 		$strDisplayTime = "";//Str display time
 		if($this->plan_start > date('Y-m-d H:i:s')){
-			$interval = $planStart->diff($now);
-			$year = $interval->format('%Y');//number of Year
-			$month = $interval->format('%m');//number of Month
-			$day = $interval->format('%d');//number of Date
-			$hour = $interval->format('%h');//number of Hour
-			if($year>0) $strDisplayTime .= $year.' năm, ';
-			if($month>0) $strDisplayTime .= $month.' tháng, ';
-			if($day>0) $strDisplayTime .= $day.' ngày, ';
-			if($hour>0) $strDisplayTime .= $hour.' giờ, ';
-			$strDisplayTime .= $interval->format('%i phút');//number of Min
-			return "Còn ".$strDisplayTime;
+			if (Yii::app()->language == 'vi'){
+				$interval = $planStart->diff($now);
+				$year = $interval->format('%Y');//number of Year
+				$month = $interval->format('%m');//number of Month
+				$day = $interval->format('%d');//number of Date
+				$hour = $interval->format('%h');//number of Hour
+				if($year>0) $strDisplayTime .= $year.' năm, ';
+				if($month>0) $strDisplayTime .= $month.' tháng, ';
+				if($day>0) $strDisplayTime .= $day.' ngày, ';
+				if($hour>0) $strDisplayTime .= $hour.' giờ, ';
+				$strDisplayTime .= $interval->format('%i phút');//number of Min
+				return "Còn ".$strDisplayTime;
+			} else {
+				$interval = $planStart->diff($now);
+				$year = $interval->format('%Y');//number of Year
+				$month = $interval->format('%m');//number of Month
+				$day = $interval->format('%d');//number of Date
+				$hour = $interval->format('%h');//number of Hour
+				$minutes = $interval->format('%i');
+				if($year>0) {
+					if ($year == 1)
+						$strDisplayTime .= $year.' year, ';
+					else
+						$strDisplayTime .= $year.' years, ';
+				}
+				if($month>0) {
+					if ($month == 1)
+						$strDisplayTime .= $month.' month, ';
+					else
+						$strDisplayTime .= $month.' months, ';
+				}
+				if($day>0) {
+					if ($day == 1)
+						$strDisplayTime .= $day.' day, ';
+					else
+						$strDisplayTime .= $day.' days, ';
+				}
+				if($hour>0) {
+					if ($hour == 1)
+						$strDisplayTime .= $hour.' hour, ';
+					else
+						$strDisplayTime .= $hour.' hours, ';
+				}
+				if ($minutes <= 1)
+					$strDisplayTime .= $minutes.' minute ';
+				else
+					$strDisplayTime .= $minutes.' minutes ';
+				return $strDisplayTime." until class begins";
+			}
 		}
 		return $strDisplayTime;
 	}
@@ -398,7 +436,7 @@ class Session extends CActiveRecord
 			$session = new Session;
 			$session->attributes=$sessionValues;
 			if(trim($sessionValues['subject'])==""){
-				$session->subject = 'Buổi '.$sessionIndex;
+				$session->subject = 'Session '.$sessionIndex;
 			}
 			$session->save();
 			$sessionIndex++;

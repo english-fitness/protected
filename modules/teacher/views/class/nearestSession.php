@@ -1,4 +1,7 @@
+<!-- not using tab anymore
 <div class="page-title"><label class="tabPage"> Schedule</label></div>
+-->
+<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Schedule</p></div>
 <?php if(Yii::app()->controller->action->id=='nearestSession'):?>
 	<script type="text/javascript">
 	   	setTimeout(function(){window.location.href="/teacher/class/nearestSession"},60000);
