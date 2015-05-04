@@ -16,7 +16,7 @@ class Board extends CComponent
      * @return false|session object
      * @author Son Nguyen
      */
-    public function createBoard($session, $trial = 0, $p2p = 0, $nuve=0)
+    public function createBoard($session, $trial = 0, $p2p = 0, $nuve=0, $mode = 1 )
     {
         if(!$session instanceof Session) {
         	$session = Session::model()->findByPk($session);
@@ -28,7 +28,7 @@ class Board extends CComponent
 
         $url = $trial ? $this->trialCurl : $this->licodeCurl;
         $url = $url.'/api/create';
-        $params = array('p2p' => $p2p, 'nuve' => $nuve, 'sessionType' => $session->type, 'sessionId' => $session->id);
+        $params = array('p2p' => $p2p, 'nuve' => $nuve, 'sessionType' => $session->type, 'sessionId' => $session->id,'mode'=>$mode);
         $userIds = $session->getAttendedUserIds();
         $params['userIds'] = json_encode($userIds);
         $params['sessionPlanStart'] = strtotime($session->plan_start);
@@ -41,13 +41,11 @@ class Board extends CComponent
             }
         }
         $params['users'] = json_encode($users);
-
         try {
         	$response = Yii::app()->curl->get($url, $params);
         } catch(Exception $e) {
         	$response = false;
         }
-
         if($response) {
             $response = json_decode($response, true);
             if($response['success'] == true) {
@@ -100,7 +98,7 @@ class Board extends CComponent
 
         $url = $trial ? $this->trialCurl : $this->licodeCurl;
         $url = $url.'/api/update';
-        $params = array('boardId' => $boardId, 'p2p' => $p2p, 'sessionType' => $session->type, 'sessionId' => $session->id);
+        $params = array('boardId' => $boardId, 'p2p' => $p2p,'sessionType' => $session->type, 'sessionId' => $session->id);
         $userIds = $session->getAttendedUserIds();
         $params['userIds'] = json_encode($userIds);
 
