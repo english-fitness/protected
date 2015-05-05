@@ -377,10 +377,11 @@ class SessionController extends Controller
     {
         $sessionId = Yii::app()->request->getPost('session_id', '');
         $trial = Yii::app()->request->getPost('trial', 0);
-        $p2p = Yii::app()->request->getPost('p2p', 0);
+        $p2p = Yii::app()->request->getPost('p2p', 0);                         
         $nuve = Yii::app()->request->getPost('nuve', 0);
+        $mode = Yii::app()->request->getPost('mode', 0);
         try {
-            $session = Yii::app()->board->createBoard($sessionId, $trial, $p2p, $nuve);
+            $session = Yii::app()->board->createBoard($sessionId, $trial, $p2p, $nuve,$mode);
         }catch(Exception $e){
             $session = false;
         }
