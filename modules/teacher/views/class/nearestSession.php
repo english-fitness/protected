@@ -32,7 +32,7 @@
            				<?php echo $session->course->title; ?>
            			</a>
 				</td>
-                <td><a href="<?php echo Yii::app()->baseUrl; ?>/teacher/class/session/id/<?php echo $session->id?>" title="<?php echo $session->content;?>"><?php echo $session->subject; ?></a></td>
+                <td style="min-width:120px"><a href="<?php echo Yii::app()->baseUrl; ?>/teacher/class/session/id/<?php echo $session->id?>" title="<?php echo $session->content;?>"><?php echo $session->subject; ?></a></td>
                 <td>
                 <?php $sessionStudentValues = array_values($session->getAssignedStudentsArrs());
 				  	echo implode(', ', $sessionStudentValues);

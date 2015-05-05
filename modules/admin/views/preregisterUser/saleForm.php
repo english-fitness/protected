@@ -62,9 +62,6 @@
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-4">
-			<label>Khối lớp:&nbsp;</label><?php $model->class_name;?>
-		</div>
-		<div class="col col-lg-4">
 			<label>Ngày sinh:&nbsp;</label><?php echo ($model->birthday)? date('d/m/Y', strtotime($model->birthday)):"";?>
 		</div>
 		<div class="col col-lg-4">
@@ -79,12 +76,6 @@
 			<label>Người đăng ký:&nbsp;</label>
 			<?php echo $model->userTypeOptions($model->user_type);?>
 		</div>
-		<div class="col col-lg-4">
-			<label>Tên phụ huynh:&nbsp;</label><?php echo $model->parent_name;?>
-		</div>
-		<div class="col col-lg-4">
-			<label>ĐT phụ huynh:&nbsp;</label><?php echo $model->parent_phone;?>
-		</div>
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-4">
@@ -98,24 +89,6 @@
 			<label>Thành viên trong hệ thống?:&nbsp;</label>
 			<?php echo ($model->refer_user_id)? User::model()->displayUserById($model->refer_user_id):"";?>
 		</div>		
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-4">
-			<label>Môn muốn gia sư:&nbsp;</label><?php echo $model->subject_note;?>
-		</div>
-		<div class="col col-lg-8">
-			<label>Mục tiêu học tập:&nbsp;</label><?php echo $model->objective;?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-12">
-			<label>Yêu cầu giáo viên:&nbsp;</label><?php echo $model->teacher_request;?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-12">
-			<label>Yêu cầu học tập:&nbsp;</label><?php echo $model->content_request;?>
-		</div>
 	</div>
 </fieldset>
 <div class="clearfix h20">&nbsp;</div>	

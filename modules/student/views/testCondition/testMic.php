@@ -1,8 +1,8 @@
 <h5><b>B) Kiểm tra mic và loa (với trình duyệt <b style="color: #275cb3"><?php echo TestConditions::app()->getBrowser(); ?></b>)</b></h5>
 <br/>
+<!--
 <p><div class="content"><img src="<?php echo Yii::app()->baseurl; ?>/media/images/help/mic_<?php echo TestConditions::app()->getBrowser('name'); ?>1.jpg"></div> </p>
-<br/>
-
+-->
 <div id="frameCanvasTestMic" class="fL" style="width:420px;">
     <div id="controls">
         <button id="start_button"><i class="icon-play"></i> Ghi âm</button>
@@ -42,6 +42,7 @@
 <?php endif;?>
 <div style="clear: both"></div>
 <br/>
+<p><div class="content"><img src="<?php echo Yii::app()->baseurl; ?>/media/images/help/mic_<?php echo TestConditions::app()->getBrowser('name'); ?>1.png"></div> </p>
 <div class="content">
     Sau 4 bước trên nếu bạn không gặp lỗi gì thì có thể tham gia chương trình của chúng tôi.<br/>
     Nếu bạn không ghi âm hoặc nghe lại được vui lòng liên hệ với chúng tôi để được tư vấn cụ thể hơn <br/>

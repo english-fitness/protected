@@ -41,9 +41,18 @@
     $browser = $testCondition->getBrowserSupport();
     if($browser && $browser['version'] <= $testCondition->getVersion()){
 ?>
+	<?php if (TestConditions::app()->getBrowser() != "Chrome") {?>
+		<p><b style="color:red">
+			Note!:</b>
+			You are using <?php echo TestConditions::app()->getBrowser(); ?> browser. We recommend that you use Google Chrome for best compabilities. A download link can be found below.
+			<br><a href="https://www.google.com/chrome">Download Google Chrome</a>
+		</p>
+		<br>
+	<?php } else {?>
         <div class="content">
             <b style="color: #0e9e19">Your browser meets the requirements</b>
         </div><br/>
+	<?php }?>
         <?php
         if($checkStatus):
             $this->renderPartial('teacher.views.testCondition.testMic');

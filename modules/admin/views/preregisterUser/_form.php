@@ -108,24 +108,15 @@
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'class_name'); ?>
+			<?php echo $form->labelEx($model,'phone'); ?>
 		</div>
 		<div class="col col-lg-9">
 			<div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->textField($model,'class_name', array_merge($readOnlyAttrs, array('size'=>60,'maxlength'=>256, 'placeholder'=>'Ví dụ: lớp 8, 9, 11, 12 ...'))); ?>
-				<?php echo $form->error($model,'class_name'); ?>
-			</div>
-			<div class="col col-lg-7 pL0i pR0i">
-				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($model,'phone', array('class'=>'mT10')); ?>
-				</div>
-				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textField($model,'phone', array_merge($readOnlyAttrs, array('size'=>20,'maxlength'=>20))); ?>
+				<?php echo $form->textField($model,'phone', array_merge($readOnlyAttrs, array('size'=>20,'maxlength'=>20))); ?>
 					<?php echo $form->error($model,'phone'); ?>
-				</div>
 			</div>
 		</div>
-	</div>
+	</div>	
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'address'); ?>
@@ -133,26 +124,6 @@
 		<div class="col col-lg-9">
 			<?php echo $form->textField($model,'address',array_merge($readOnlyAttrs,array('size'=>60,'maxlength'=>256))); ?>
 			<?php echo $form->error($model,'address'); ?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'parent_name'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->textField($model,'parent_name', array_merge($readOnlyAttrs, array('size'=>60,'maxlength'=>256))); ?>
-				<?php echo $form->error($model,'parent_name'); ?>
-			</div>
-			<div class="col col-lg-7 pL0i pR0i">
-				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($model,'parent_phone', array('class'=>'mT10')); ?>
-				</div>
-				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textField($model,'parent_phone', array_merge($readOnlyAttrs, array('size'=>20,'maxlength'=>80))); ?>
-					<?php echo $form->error($model,'parent_phone'); ?>
-				</div>
-			</div>
 		</div>
 	</div>
 	<div class="form-element-container row">
@@ -187,16 +158,7 @@
 </fieldset>
 <div class="clearfix h20">&nbsp;</div>	
 <fieldset>
-	<legend>Thông tin cần tư vấn</legend>	
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'subject_note'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->textField($model,'subject_note',array_merge($readOnlyAttrs,array('size'=>60,'maxlength'=>256))); ?>
-			<?php echo $form->error($model,'subject_note'); ?>
-		</div>
-	</div>
+	<legend>Thông tin khác</legend>	
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'objective'); ?>
@@ -206,24 +168,7 @@
 			<?php echo $form->error($model,'objective'); ?>
 		</div>
 	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'content_request'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->textArea($model,'content_request',array_merge($readOnlyAttrs,array('rows'=>6, 'cols'=>50, 'style'=>'height:5em'))); ?>
-			<?php echo $form->error($model,'content_request'); ?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'teacher_request'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->textArea($model,'teacher_request',array_merge($readOnlyAttrs,array('rows'=>6, 'cols'=>50, 'style'=>'height:5em'))); ?>
-			<?php echo $form->error($model,'teacher_request'); ?>
-		</div>
-	</div>
+	
 </fieldset>
 <div class="clearfix h20">&nbsp;</div>	
 <?php $this->endWidget(); ?>

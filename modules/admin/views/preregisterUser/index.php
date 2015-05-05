@@ -44,13 +44,7 @@ $this->breadcrumbs=array(
 	'rowHtmlOptionsExpression'=>'($data->deleted_flag==1)?array("class"=>"deletedRecord"):array()',
 	'columns'=>array(
 		'fullname',
-		'phone',
-		array(
-		   'name'=>'class_name',
-		   'value'=>'$data->class_name',
-		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
-		),
-		'subject_note',
+		'phone',		
 		array(
 		   'name'=>'created_date',
 		   'value'=>'date("d/m/Y, H:i", strtotime($data->created_date))',

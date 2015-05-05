@@ -1,8 +1,8 @@
 <h5><b>B) Test Speaker and Microphone (using <b style="color: #275cb3"><?php echo TestConditions::app()->getBrowser(); ?></b>)</b></h5>
 <br/>
-<p><div class="content"><img src="<?php echo Yii::app()->baseurl; ?>/media/images/help/mic_<?php echo TestConditions::app()->getBrowser('name'); ?>1.jpg"></div> </p>
-<br/>
-
+<!--
+<p><div class="content"><img src="<?php echo Yii::app()->baseurl; ?>/media/images/help/mic_<?php echo TestConditions::app()->getBrowser('name'); ?>1e.jpg"></div> </p>
+-->
 <div id="frameCanvasTestMic" class="fL" style="width:420px;">
     <div id="controls">
         <button id="start_button"><i class="icon-play"></i> Record</button>
@@ -42,8 +42,9 @@
 <?php endif;?>
 <div style="clear: both"></div>
 <br/>
+<p><div class="content"><img src="<?php echo Yii::app()->baseurl; ?>/media/images/help/mic_<?php echo TestConditions::app()->getBrowser('name'); ?>1e.png"></div> </p>
 <div class="content">
-    After all tests are passed, you can use our program.<br/>
+    After all tests are passed, you can start using our program.<br/>
     If the recording or playback did not goes well, you may contact us for more information. <br/>
     Hotline:<strong> 0961.00.50.57</strong> or leave us a message with your <strong>name and phone number</strong> in the LiveChat pannel in the bottom right, our support team will contact you ASAP.<br/>
 </div>

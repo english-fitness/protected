@@ -135,8 +135,8 @@ class SiteController extends Controller
 				$url = Yii::app()->baseurl."/".$urlModule;
 				
 			}else{
-                            Yii::app()->user->setFlash('success','Incorrect username or password.');
-                        }
+				Yii::app()->user->setFlash('success','Incorrect username or password.');
+			}
 			
 		}
 		$this->redirect("tutor.vn");

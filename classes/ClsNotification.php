@@ -192,12 +192,12 @@ class ClsNotification
     			$validPhoneNumber = Common::validatePhoneNumber($user->phone);
     			if(!$validPhoneNumber) return false;
     		}
-    		if($user->role==User::ROLE_STUDENT){
-    			$student = Student::model()->findByPk($userId);
-    			if(isset($student->user_id) && $student->class_id==NULL){
-    				return false;
-    			}
-    		}
+    		// if($user->role==User::ROLE_STUDENT){
+    			// $student = Student::model()->findByPk($userId);
+    			// if(isset($student->user_id) && $student->class_id==NULL){
+    				// return false;
+    			// }
+    		// }
     	}
     	return true;
     }

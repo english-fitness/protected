@@ -17,27 +17,9 @@ $this->breadcrumbs=array(
 		'gender',
 		'address',
 		'phone',
-		'class_name',
-		'parent_name',
-		'parent_phone',
-		array(
-		   'name'=>'subject_note',
-		   'value'=>$model->subject_note,
-		   'type'=>'raw',
-		),
 		array(
 		   'name'=>'objective',
 		   'value'=>$model->objective,
-		   'type'=>'raw',
-		),
-		array(
-		   'name'=>'content_request',
-		   'value'=>$model->content_request,
-		   'type'=>'raw',
-		),
-		array(
-		   'name'=>'teacher_request',
-		   'value'=>$model->teacher_request,
 		   'type'=>'raw',
 		),
 		array(

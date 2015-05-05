@@ -29,7 +29,7 @@
         	<?php foreach ($nearestSessions as $key=>$session): ?>
             <tr class="even">
            		<td><?php echo $session->course->subject->name;?></td>
-           		<td>
+           		<td style="min-width:130px">
 					<a href="<?php echo Yii::app()->baseUrl; ?>/student/class/session/id/<?php echo $session->id?>" title="<?php echo $session->content;?>">
 					<?php echo $session->subject; ?></a>
 				</td>

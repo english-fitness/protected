@@ -25,10 +25,6 @@ $this->breadcrumbs=array(
 		'email',
 		'phone',
 		array(
-		   'name'=>'Lớp học',
-		   'value'=>$studentProfile->displayClass($model->id),
-		),
-		array(
 		   'name'=>'Đơn xin học',
 		   'value'=>Student::model()->displayPreCourseLink($model->id, " đơn xin học"),
 		   'type'=>'raw',
@@ -46,27 +42,7 @@ $this->breadcrumbs=array(
 		   'name'=>'gender',
 		   'value'=>$gender[$model->gender],
 		),
-		'address',		
-		array(
-		   'name'=>'Họ tên bố',
-		   'value'=>"<b>".$studentProfile->father_name."</b> (Điện thoại: ".$studentProfile->father_phone.")",
-		   'type'=>'raw',
-		),
-		array(
-		   'name'=>'Họ tên mẹ',
-		   'value'=>"<b>".$studentProfile->mother_name."</b> (Điện thoại: ".$studentProfile->mother_phone.")",
-		   'type'=>'raw',
-		),
-		array(
-		   'name'=>'Mô tả ngắn',
-		   'value'=>$studentProfile->short_description,
-		   'type'=>'raw',
-		),
-		array(
-		   'name'=>'Mô tả đầy đủ',
-		   'value'=>$studentProfile->description,
-		   'type'=>'raw',	
-		),
+		'address',
 		array(
 		   'name'=>'last_login_time',
 		   'value'=>($model->last_login_time)? date('d/m/Y H:i', strtotime($model->last_login_time)):"",

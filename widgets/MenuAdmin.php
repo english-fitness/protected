@@ -34,6 +34,7 @@ class MenuAdmin extends CWidget
                     array('label'=>'Thoát','url'=>array('/site/logout')),
                 )
             ),
+			/*
             array(
                 'label'=>'Trắc nghiệm',
                 'url'=>'#',
@@ -44,6 +45,7 @@ class MenuAdmin extends CWidget
                     array('label'=>'Thống kê trắc nghiệm','url'=>array('/admin/quizHistory/index'))
                 )
             ),
+			*/
             array(
                 'label'=>'Tin nhắn '.$this->renderItemCount($countMessageNotReadFlag),
                 'title'=>$this->renderTitleCount("Tin nhắn chưa đọc: ",$countMessageNotReadFlag),

@@ -14,6 +14,7 @@ class StudentModule extends CWebModule{
         	'admin.classes.*',
         ));
     }
+	
     public function beforeControllerAction($controller, $action)
     {
         //Check loggin user is admin user
@@ -25,12 +26,12 @@ class StudentModule extends CWebModule{
         	}
         }
         //Redirect to status param page to tracking
-    	if(!(isset($_GET['status']) || strpos(Yii::app()->request->requestUri, "?")>0)){
-    		$trueBaseUrl = Yii::app()->getRequest()->getBaseUrl(true);
-    		if(!(isset($_POST) && count($_POST)>0)){
-	        	$controller->redirect($trueBaseUrl.Yii::app()->request->requestUri.'?status='.Yii::app()->user->status);
-    		}
-		}
+    	// if(!(isset($_GET['status']) || strpos(Yii::app()->request->requestUri, "?")>0)){
+    		// $trueBaseUrl = Yii::app()->getRequest()->getBaseUrl(true);
+    		// if(!(isset($_POST) && count($_POST)>0)){
+	        	// $controller->redirect($trueBaseUrl.Yii::app()->request->requestUri.'?status='.Yii::app()->user->status);
+    		// }
+		// }
         if(parent::beforeControllerAction($controller, $action))
         {
             // this method is called before any module controller action is performed

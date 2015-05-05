@@ -1,6 +1,10 @@
+<!--
 <div class="page-title">
     <label class="tabPage">Kiểm tra loa, mic</label>
 </div>
+-->
+<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Kiểm tra loa, microphone</p></div>
+<!--
 <?php
     $testCondition = TestConditions::app();
     $baseModule =Yii::app()->baseurl.'/'.$this->getModule()->id;
@@ -17,19 +21,19 @@
         </b>
     </div>
 <?php endif;?>
+-->
 
 <script type="text/javascript" src="<?php echo Yii::app()->baseurl; ?>/media/js/chroma.js"></script>
 
 <div id="testCondition" style="line-height: 25px;">
     <h5><b>Để tham gia chương trình học này yêu cầu bạn cần có các điều kiện sau: </b></h5>
     <div class="content">
-    	 <b>Bắt buộc:</b><br/>
+		<br>
         - Máy tính có kết nối internet ADSL hoặc tốt hơn   <br/>
         - Sử dụng trình duyệt Chrome, CờRôm+, hoặc Firefox <br/>
         - Loa hoạt động tốt<br/>
-         <b>Nên có:</b><br/>
-		- Mic sử dụng tốt (bắt buộc có đối với lớp nhóm nhỏ 1-1, 2-3)<br/>
-		- Nên có webcam để lớp học được sinh động hơn<br/>
+		- Micro sử dụng tốt<br/>
+		- Nên có webcam<br/>
     </div><br/>
     <h5><b>A) Kiểm tra trình duyệt: </b></h5>
     <div class="content">
@@ -39,13 +43,22 @@
     $browser = $testCondition->getBrowserSupport();
     if($browser && $browser['version'] <= $testCondition->getVersion()){
 ?>
+	<?php if (TestConditions::app()->getBrowser() != "Chrome") {?>
+		<p><b style="color:red">
+			Chú ý!:</b>
+			Bạn đang dùng trình duyệt Firefox. Chúng tôi khuyên dùng Google Chrome để có thể tương thích tốt nhất với hệ thống.
+			<br><a href="https://www.google.com/chrome">Tải Google Chrome</a>
+		</p>
+		<br>
+	<?php } else {?>
         <div class="content">
             <b style="color: #0e9e19">Đạt yêu cầu để tham gia chương trình</b>
         </div><br/>
+	<?php }?>
         <?php
-        if($checkStatus):
+        //if($checkStatus):
             $this->renderPartial('student.views.testCondition.testMic');
-        endif;
+        //endif;
     }elseif($testCondition->getBrowserSupport()==null){
 ?>
         <b style="color: red">

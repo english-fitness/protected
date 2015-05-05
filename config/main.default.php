@@ -7,7 +7,7 @@
 // CWebApplication properties can be configured here.
 return array(
     'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-    'name'=>'tutor.vn',
+    'name'=>'English Fitness',
 
     // path aliases
     'aliases' => array(
@@ -120,10 +120,10 @@ return array(
     // application-level parameters that can be accessed
     // using Yii::app()->params['paramName']
     'params'=>array(
-        'copyright'=>'tutor.vn',
+        'copyright'=>'English Fitness',
         // this is used in contact page
         'isUserAction'=>true,
-        'adminEmail'=>'admin@daykem11.com',
+        'adminEmail'=>'admin001@hocmai.edu.vn',
         'YiiMailer'=>array(
             'SMTPAuth'=>true,
             'SMTPSecure'=>'tls',

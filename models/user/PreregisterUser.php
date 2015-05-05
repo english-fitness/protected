@@ -60,7 +60,7 @@ class PreregisterUser extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		$modelRules = array(
-			array('fullname, class_name, phone, subject_note', 'required'),
+			array('fullname, phone, email', 'required'),
 			array('gender, user_type, sale_user_id, refer_user_id, status', 'numerical', 'integerOnly'=>true),
 			array('email', 'length', 'max'=>128),
 			array('email', 'email'),
@@ -111,7 +111,7 @@ class PreregisterUser extends CActiveRecord
 			'parent_name' => 'Tên phụ huynh',
 			'parent_phone' => 'ĐT phụ huynh',
 			'subject_note' => 'Môn muốn gia sư',
-			'objective' => 'Mục tiêu học tập',
+			'objective' => 'Mã Code',
 			'content_request' => 'Yêu cầu học tập',
 			'teacher_request' => 'Yêu cầu giáo viên',
 			'user_type' => 'Người đăng ký',

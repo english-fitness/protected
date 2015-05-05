@@ -145,27 +145,6 @@
 	</legend>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
-			<?php echo $form->labelEx($student,'class_id'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<div class="col col-lg-5 pL0i pR0i">
-				<?php $classes = array(''=>'Chọn lớp...') + CHtml::listData(Classes::model()->getAll(false), 'id', 'name');?>
-				<?php echo $form->dropDownList($student,'class_id', $classes, $disabledAttrs); ?>
-				<?php echo $form->error($student,'class_id'); ?>
-			</div>
-			<div class="col col-lg-7 pL0i pR0i">
-				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($model,'phone', array('class'=>'mT10')); ?>
-				</div>
-				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textField($model,'phone',array_merge(array('size'=>20,'maxlength'=>20),$readonlyAttrs)); ?>
-					<?php echo $form->error($model,'phone'); ?>
-				</div>
-			</div>
-		</div>
-	</div>	
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'birthday'); ?>
 		</div>
 		<div class="col col-lg-9">
@@ -188,51 +167,22 @@
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
+			<?php echo $form->labelEx($model,'phone'); ?>
+		</div>
+		<div class="col col-lg-9">
+			<div class="col col-lg-5 pL0i pR0i">
+				<?php echo $form->textField($model,'phone',array_merge(array('size'=>20,'maxlength'=>20),$readonlyAttrs)); ?>
+					<?php echo $form->error($model,'phone'); ?>
+			</div>
+		</div>
+	</div>	
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'address'); ?>
 		</div>
 		<div class="col col-lg-9">
 			<?php echo $form->textField($model,'address',array_merge(array('size'=>60,'maxlength'=>256),$readonlyAttrs)); ?>
 			<?php echo $form->error($model,'address'); ?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($student,'father_name'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->textField($student,'father_name',array_merge(array('size'=>60,'maxlength'=>128),$readonlyAttrs)); ?>
-				<?php echo $form->error($student,'father_name'); ?>
-			</div>
-			<div class="col col-lg-7 pL0i pR0i">
-				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($student,'father_phone', array('class'=>'mT10')); ?>
-				</div>
-				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textField($student,'father_phone',array_merge(array('size'=>20,'maxlength'=>20),$readonlyAttrs)); ?>
-					<?php echo $form->error($student,'father_phone'); ?>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($student,'mother_name'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->textField($student,'mother_name',array_merge(array('size'=>60,'maxlength'=>128),$readonlyAttrs)); ?>
-				<?php echo $form->error($student,'mother_name'); ?>
-			</div>
-			<div class="col col-lg-7 pL0i pR0i">
-				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($student,'mother_phone', array('class'=>'mT10')); ?>
-				</div>
-				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textField($student,'mother_phone',array_merge(array('size'=>20,'maxlength'=>20),$readonlyAttrs)); ?>
-					<?php echo $form->error($student,'mother_phone'); ?>
-				</div>
-			</div>
 		</div>
 	</div>
 	<div class="form-element-container row">

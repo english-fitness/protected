@@ -1,5 +1,5 @@
 <?php $this->renderPartial('/messages/tab'); ?>
-<?php $this->renderPartial('accountTab'); ?>
+<div class="nav nav-tabs"><p style="text-align:center; font-size:20px; padding-top:5px;">Đổi mật khẩu</p></div>
 <div class="form">
     <div class="account">
         <?php $form=$this->beginWidget('CActiveForm',array(
