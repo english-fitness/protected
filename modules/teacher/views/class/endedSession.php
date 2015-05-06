@@ -8,9 +8,9 @@
     <table class="table table-bordered table-striped data-grid">
         <thead>
         <tr>
-        	<th class="w150">Class</th>
-        	<th>Objective</th>
-            <th>Session</th>
+        	<th class="w150">Type of Class</th>
+        	<th>Class name</th>
+            <th>Session Number</th>
             <th class="w150">Student</th>
             <th class="w100">Date</th>
             <th class="w100">Time slot</th>

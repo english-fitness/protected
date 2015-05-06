@@ -11,10 +11,10 @@
                     right: 'month,agendaWeek,agendaDay'
                 },
                 firstDay:1,
-                eventClick: function(calEvent, jsEvent, view) {
-                    loadPopupCalendar.editSession(calEvent,'<?php echo Yii::app()->baseurl?>/teacher/class/ajaxEditSessionById/id/'+calEvent.id);
-                    loadPopupCalendar.ajaxForm(calEvent,calendar);
-                },
+                // eventClick: function(calEvent, jsEvent, view) {
+                    // loadPopupCalendar.editSession(calEvent,'<?php echo Yii::app()->baseurl?>/teacher/class/ajaxEditSessionById/id/'+calEvent.id);
+                    // loadPopupCalendar.ajaxForm(calEvent,calendar);
+                // },
                 allDaySlot:false,
                 events:"<?php echo Yii::app()->baseUrl; ?>/teacher/class/ajaxLoadSessionsByCourseId/id/<?php echo  $course->id; ?>"
             });

@@ -12,7 +12,7 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$this->redirect(Yii::app()->baseurl.'/site/login');
+		$this->redirect(Yii::app()->baseurl.'/news');
 		$this->layout = '//layouts/blank';
 		$this->subPageTitle = 'Trang chủ';
 		$this->render('index');
@@ -139,7 +139,7 @@ class SiteController extends Controller
 			}
 			
 		}
-		$this->redirect("tutor.vn");
+		$this->redirect("/");
 	}
 	
 	//Popup login account

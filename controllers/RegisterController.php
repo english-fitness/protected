@@ -21,13 +21,15 @@ class RegisterController extends Controller
 		{
 			$preUserValues = $_POST['PreregisterUser'];
 			$model->attributes = $preUserValues;
-			if($model->save()){
-				$this->redirect(array('/register/contact?status=success'));
-			}
+			$model->save();
+			// if($model->save()){
+				// // $this->redirect(array('/register/contact?status=success'));
+				// echo "<script type='text/javascript'>alert('Chúng tôi đã nhận được thông tin của bạn, nhân viên hỗ trợ sẽ liên lạc với bạn trong thời gian sớm nhất');</script>";
+			// }
 		}
-		$this->render('/site/preregister', array(
-			'model'=>$model,
-		));
+		// $this->render('/site/preregister', array(
+			// 'model'=>$model,
+		// ));
 	}
 	
 }
