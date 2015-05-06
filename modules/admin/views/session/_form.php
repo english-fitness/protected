@@ -106,13 +106,23 @@
 		<div class="col col-lg-9" id="whiteboard<?php echo $model->id;?>">
 			<?php if($model->whiteboard && $model->status<=Session::STATUS_WORKING):?>
 				<span><?php echo Yii::app()->board->generateUrl($model->whiteboard); ?></span>
-				<a href="javascript:removeWhiteboard('<?php echo $model->id;?>', '<?php echo $model->whiteboard;?>')" class="fR pR5 clrRed">Xóa lớp ảo</a>
+				<a href="javascript:removeWhiteboard('<?php echo $model->id;?>', '<?php echo $model->whiteboard;?>')" class="fR pR5 clrRed">Xóa lớp ảo </a>
 			<?php else:?>
-				<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 1, 0);">Lớp nhỏ P2P</a> hoặc
-				<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 0, 0);">Lớp nhỏ Server nhỏ</a> hoặc
-				<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 0, 1);">Lớp nhỏ Server lớn</a> hoặc
-				<a href="javascript: createBoard('<?php echo $model->id;?>', 1, 0, 1);">Lớp lớn</a>
+				<!--<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 1, 0, 2);">Lớp nhỏ P2P Bình thường</a> hoặc-->
+				<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 0, 0, 2);">Lớp nhỏ Server nhỏ Bình thường</a> hoặc
+				<!--
+				<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 0, 1, 2);">Lớp nhỏ Server lớn Bình thường</a> hoặc
+				<a href="javascript: createBoard('<?php echo $model->id;?>', 1, 0, 1, 2);">Lớp lớn Bình thường</a>
+				-->
+                                <br>
+                                <!--<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 1, 0, 1);">Lớp nhỏ P2P Đặc biệt</a> hoặc-->
+				<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 0, 0, 1);">Lớp nhỏ Server nhỏ Đặc biệt</a> hoặc
+				<!--
+				<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 0, 1, 1);">Lớp nhỏ Server lớn Đặc biệt</a> hoặc
+				<a href="javascript: createBoard('<?php echo $model->id;?>', 1, 0, 1, 1);">Lớp lớn Đặc biệt</a>
+				-->
 			<?php endif;?>
+                                
 		</div>
 	</div>
 	<?php $endedDisplayCss = (!$model->isNewRecord && $model->status==Session::STATUS_ENDED)? "dpn":"";?>
