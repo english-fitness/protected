@@ -10,8 +10,8 @@ return array(
     // application components
     'components'=>array(
         'board'=>array(
-            'licodeUrl'=>'http://'.$_SERVER['SERVER_NAME'].'/vsr',
-            'trialUrl'=>'http://'.$_SERVER['SERVER_NAME'].'/trial',
+            'licodeUrl'=>'https://'.$_SERVER['SERVER_NAME'].'/vsr',
+            'trialUrl'=>'https://'.$_SERVER['SERVER_NAME'].'/trial',
             'licodeCurl'=>'http://127.0.0.1:8000',
             'trialCurl'=>'http://127.0.0.1:3000',
         ),
