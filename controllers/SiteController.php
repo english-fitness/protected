@@ -12,7 +12,7 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$this->redirect(Yii::app()->baseurl.'/news');
+		$this->redirect(Yii::app()->baseurl.'/site/login');
 		$this->layout = '//layouts/blank';
 		$this->subPageTitle = 'Trang chủ';
 		$this->render('index');
