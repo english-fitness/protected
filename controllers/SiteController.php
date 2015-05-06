@@ -139,7 +139,7 @@ class SiteController extends Controller
 			}
 			
 		}
-		$this->redirect("/");
+		$this->redirect("/site/login");
 	}
 	
 	//Popup login account
