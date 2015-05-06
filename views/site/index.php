@@ -1,243 +1,310 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-    <head>
-        <title>Hoc Mai</title>
-        <meta charset="utf-8" />
-        <!-- css -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/css/bootstrap.min.css">
-        <link href="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/css/style.css" rel="stylesheet" type="text/css"/>
-        <!-- JavaScript -->
-		<script src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/js/jquery.min.js" type="text/javascript"></script>
-        <script src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/js/bootstrap.min.js"></script>
+<head>
+<title>English Fitness - Login</title>
+<meta charset="UTF-8" />
+<meta name="Designer" content="PremiumPixels.com">
+<meta name="Author" content="$hekh@r d-Ziner, CSSJUNTION.com">
+</head>
 
-    </head>
-    <body>     
-        <div class="container">
-            <div class="banner">
-                <div class="row">
-                    <div class="col-lg-1">
-                        
-                    </div>
-                    <div class="col-lg-4 search1">
-                        <form>
-                            <p class="text-center">
-                                Học tiếng anh trực tiếp với
-                            </p>
-                            <input type="text" name="" class="textsearch1" >
-                            <button type="submit" class="btn btn-textsearch1"><span class="glyphicon glyphicon-search glyphicon1"></span> </button>
-                        </form>
-                    </div>
-                    <div class="col-lg-4 sodienthoai">    
-                        <p class="text-uppercase text-center">
-                            Hỗ trợ trực tuyến
-                        </p>
-                        <span>
-                            012.346.789
-                        </span>
-                    </div>
-                    <div class="col-lg-3">
-                    </div>
-                </div>
-            </div>
-            <!--end banner-->
-            <div id="menu">
-                <ul class="nav navbar-nav">
-                    <li ><a href="fitness.hocmai.vn"> <img class="menu1"  src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/menu-trangchu.png" alt="dfs"> 
-                            <p class="text-uppercase" > Trang Chủ</p>
-                    </a></li>
-                    <li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-delay="0" data-toggle="dropdown">
-							<img class="menu1"  src="/media/english-fitness/images/menu-vechungtoi.png"> 
-							<p class="text-uppercase">Giới Thiệu</p>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="/public/aboutus.php">Về English Fitness</a></li>
-							<li><a href="/public/courseinfo.php">Thông Tin Khóa Học</a></li>
-						</ul>
-					</li>
-                    <li ><a href="<?php echo Yii::app() -> baseUrl; ?>/public/schedule.php"> <img class="menu1"  src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/menu-lichhoc.png" alt="dfs"> 
-                            <p class="text-uppercase" > Lịch Học</p>
-                    </a></li>
-                    <li ><a href="<?php echo Yii::app() -> baseUrl; ?>/subjects"> <img class="menu1"  src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/menu-monhoc.png" alt="dfs"> 
-                            <p class="text-uppercase" > Môn Học</p>
-                    </a></li>
-                    <li ><a href="<?php echo Yii::app() -> baseUrl; ?>/faq"> <img class="menu1"  src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/menu-afg.png" alt="dfs"> 
-                            <p class="text-uppercase" > FAQ</p>
-                    </a></li>
-                    <li ><a href="<?php echo Yii::app() -> baseUrl; ?>/contact"> <img class="menu1"  src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/menu-lienhe.png" alt="dfs"> 
-                            <p class="text-uppercase" > Liên Hệ</p>
-                    </a></li>
-                    <li ><a href="<?php echo Yii::app() -> baseUrl; ?>/media"> <img class="menu1"  src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/menu-thuvien.png" alt="dfs"> 
-                            <p class="text-uppercase" > Thư viện</p>
-                    </a></li>
-                    <li ><a href="<?php echo Yii::app() -> baseUrl; ?>/public/register.php"> <img class="menu1"  src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/menu-hocvai.vn.png" alt="dfs"> 
-                            <p class="text-uppercase" > Đăng ký</p>
-                    </a></li>
-                </ul>
-              </div><!-- /end menu -->
-		<h3 class="text-danger text-center">
-                <?php foreach(Yii::app()->user->getFlashes() as $key => $message) : ?>
-                    <?php
-                    echo  $message; ?>
-                <?php endforeach; ?>
-              </h3>
-              <nav class="navbar navbar-default dangnhap">
-                <div class="container-fluid">
-                    <form class="navbar-form navbar-left" role="search" action="<?php echo Yii::app()->baseurl;?>/site/signin" method="post">
-                      <div class="form-group">
-                          <label id="dangnhaptaiday">
-                              Đăng nhập tại đây
-                            </label> <span id="icondangnhap" ></span>
-                          <input type="email" id="textdangnhap" name="email" class="form-control" placeholder="Tên đăng Nhập">
-                      </div>
-                        <div class="form-group matkhau">
-                          <span id="iconmatkhau"></span>
-                          <input type="password" name="password" class="form-control" placeholder="Mật Khẩu">
-                      </div>
-                      <button type="submit" class="btn btndangnhap">
-                          Đăng Nhập
-                      </button>
-                    </form>
-                    
-                    <ul class="nav navbar-nav menutroxuong">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" id="aaa" data-toggle="dropdown" role="button" aria-expanded="false">
-                                Ngôn Ngữ 
-                            <span class="caret"></span></a>
-                          <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">
-                                    English
-                            </a></li>
-                            <li><a href="#">
-                                    Tiếng Việt
-                                </a></li>
-                          </ul>
-                        </li>
-                      </ul>
-                </div><!-- /.container-fluid -->
-              </nav>
-              <div id="header" class="row">
-                <div class="col-lg-8 nav navbar-left sidebar-left">
-                    
-                </div>
-                <!--end sidebar left-->
-                
-                <div class="col-lg-4 nav navbar-right sidebar-ringt">
-                    <p class="text-center text-uppercase" id="danhngon">Danh Ngôn Học Tập</p>
-                    <marquee id="hoho" direction="up" scrolldelay="5" scrollamount="2" onmouseover="this.stop()" onmouseout="this.start()">
-                        <ul class="chaychu">  
-                            <li><p class="chayli">
-                                    “Learning to know, learning to do, learning to live together and learning to be.” <br>
-                                UNESCO – Four pillars of learning
-                                </p><span class="chim"></span>
-                            </li>
-                            
-                            <li class="aaaaaaa"><p class="chayli1">
-                                    “Anyone who stops learning is old, whether at twenty or eighty. Anyone who keeps learning stays young.” <br>
-                                    Henry Ford
-                                </p><span class="chim2"></span>
-                            </li>
-                            
-                            <li><p class="chayli">
-                                    “Education is the most powerful weapon you can use to change the world” <br>
-                                    Nelson Mandela 
-                                </p><span class="chim"></span>
-                            </li>
-                            
-                            <li class="aaaaaaa"><p class="chayli1">
-                                    “The roots of education is bitter but the fruit sweet” <br>
-                                    Aristotle 
-                                </p><span class="chim2"></span>
-                            </li>
-                            
-                            <li><p class="chayli">
-                                    “The limits of your language are the limits of your world” <br>
-                                    Ludwig Wittgenstein 
-                                </p><span class="chim"></span>
-                            </li>
-                            
-                            <li class="aaaaaaa"><p class="chayli1">
-                                “If you put in the work to sharpen the steel, it will eventually turn into needle” <br>
-                                Vietnamese Proverb 
-                                </p><span class="chim2"></span>
-                            </li>
-                        </ul>
-                        </marquee>
-                    <!--<img src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/banner-right-logo.gif" alt="dfsd">-->
-                </div>
-                <!--end sidebar left-->
-              </div>
-              <!--end header-->
-              <div class="clearfix"></div>
-              <div class="row main">
-                    <div class="col-lg-3 content-left">
-                        <div id="nganhang">
-                            <p class="text-center text-uppercase">
-                                Thanh Toán Trực Tuyến
-                            </p>
-                            <a href="#" class="nganluong"><img src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/nganluong-hocmai.gif" alt="adsf"></a>
-                            <a href="#" class="nganluong"><img src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/nganluong-nganhang.gif" alt="adsf"></a>
-                            <a href="#" class="nganluong"><img src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/nganluongvn.gif" alt="adsf"></a>
-                        </div>
-                        <!--end ngan hang-->
-                        
-                        <div id="huongdanhoc">
-                            <p class="text-center text-uppercase">
-                                hướng dẫn học
-                            </p>
-                            <a href="#"></a>
-                        </div>
-                        <!--end huongdanhoc-->
-                        
-                        <div id="giaovien">
-                            <p class="text-center text-uppercase">
-                                Giáo Viên Mới
-                            </p>                            
-                        </div>
-                        <!--end giaovien--> 
-                    </div>
-                    <!--end content-left-->
-                    
-                    <div  class="nav navbar-right content-right">
-                        <div id="tieude">
-                            <p class="text-primary text-center text-uppercase">
-                                video gioi thieu
-                            </p>
-                        </div>
-                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/EK-S1dj6QK8"></iframe>
-                    </div>
-                    <!--end content-right-->
-                    <div  class="nav navbar-right content-right1">
-                        <img src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/images/facebook.png" alt="dfs">
-                    </div>
-            </div>
-            <!--end main-->
-            <div class="clearfix"></div>
-            <div id="footer" class="text-capitalize">
-                <div class="footer1">
-                    <ul>
-                        <li><a href="">Tin Tức</a></li>
-                        <li><a href="">Lịch Học</a></li>
-                        <li><a href="">học phí</a></li>
-                    </ul>
-                </div>
-                <div class="footer2">
-                    <ul>
-                        <li><a href="">bí quyết học tiếng anh</a></li>
-                        <li><a href="">bí quyết học tiếng anh</a></li>
-                        <li><a href="">bí quyết học tiếng anh</a></li>
-                    </ul>
-                </div>
-                <div class="clearfix"></div>
-                <p class="text-center">Giấy Phép được cung cấp bởi mạng xã hội fdsffsdfsd fsdfs sdfsd fsdf sdfs</p>
-            </div>
-            <!--end footer-->
-        </div>
-        <!--end container-->
-        
-        <!-- JavaScript --><!--
-        <script src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/js/bootstrap.min.js"></script>
-        <script src="<?php echo Yii::app()->baseUrl; ?>/media/english-fitness/js/jquery.min.js" type="text/javascript"></script>-->
-    </body>
-</html>    
+<body>
+            
+<form class="box login" action="<?php echo Yii::app()->baseurl;?>/site/signin" method="post" >
+    
+	<fieldset class="boxBody">
+            <h2 class="text-warning text-center">
+                <?php 
+                foreach(Yii::app()->user->getFlashes() as $key => $message) : 
+                    echo  $message; 
+                endforeach;
+                ?>
+            </h2>
+	  <label>Username</label>
+	  <input type="text" tabindex="1" name="email" placeholder="E-mail" required>
+	  <label><a href="#" class="rLink" tabindex="5">Forget your password?</a>Password</label>
+	  <input type="password" tabindex="2" name="password" placeholder="Password" required>
+	</fieldset>
+	<footer>
+	  <label><input type="checkbox" tabindex="3">Keep me logged in</label>
+	  <input type="submit" class="btnLogin" value="Login" tabindex="4" >
+	</footer>
+</form>            
+</body>
+</html>
+<style>
+    
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after,
+q:before, q:after { content: ''; content: none; }
+ins { background-color: #ff9; color: #000; text-decoration: none; }
+mark { background-color: #ff9; color: #000; font-style: italic; font-weight: bold; }
+del { text-decoration: line-through; }
+abbr[title], dfn[title] { border-bottom: 1px dotted; cursor: help; }
+table { border-collapse: collapse; border-spacing: 0; }
+hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0; }
+input, select { vertical-align: middle; }
+
+body {font:12px/18px Lucida Sans, sans-serif;} 
+select, input, textarea, button { font:99% sans-serif; }
+pre, code, kbd, samp { font-family: monospace, sans-serif; }
+a:hover, a:active, *:focus, input:focus, button:focus { outline: none; }
+ul, ol { margin-left: 2em; }
+ol { list-style-type: decimal; }
+nav ul, nav li { margin: 0; list-style:none; list-style-image: none; }
+small { font-size: 85%; }
+strong, th { font-weight: bold; }
+td { vertical-align: top; }
+
+sub, sup { font-size: 75%; line-height: 0; position: relative; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 15px; }
+textarea { overflow: auto; }
+.ie6 legend, .ie7 legend { margin-left: -7px; } 
+input[type="radio"] { vertical-align: text-bottom; }
+input[type="checkbox"] { vertical-align: bottom; }
+.ie7 input[type="checkbox"] { vertical-align: baseline; }
+.ie6 input { vertical-align: text-bottom; }
+label, input[type="button"], input[type="submit"], input[type="image"], button { cursor: pointer; }
+button, input, select, textarea { margin: 0; }
+input:valid, textarea:valid   {  }
+input:invalid, textarea:invalid { border-radius: 1px; -moz-box-shadow: 0px 0px 5px red; -webkit-box-shadow: 0px 0px 5px red; box-shadow: 0px 0px 5px red; }
+.no-boxshadow input:invalid, .no-boxshadow textarea:invalid { background-color: #f0dddd; }
+
+::-moz-selection{ background: #a1d8f0; color:#fff; text-shadow: none; }
+::selection { background:#a1d8f0; color:#fff; text-shadow: none; }
+a:link { -webkit-tap-highlight-color: #a1d8f0; }
+
+button {  width: auto; overflow: visible; }
+.ie7 img { -ms-interpolation-mode: bicubic; }
+
+body, select, input, textarea {color: #444; }
+a, a:active, a:visited { color: #666; text-decoration:none; }
+a:hover { color: #c00; }
+.ir { display: block; text-indent: -999em; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }
+.hidden { display: none; visibility: hidden; }
+.visuallyhidden { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus { clip: auto; height: auto; margin: 0; overflow: visible; position: static; width: auto; }
+.invisible { visibility: hidden; }
+.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+
+@media all and (orientation:portrait) {
+
+}
+
+@media all and (orientation:landscape) {
+
+}
+
+@media screen and (max-device-width: 480px) {
+
+  /* html { -webkit-text-size-adjust:none; -ms-text-size-adjust:none; } */
+}
+
+
+@media print {
+  * { background: transparent !important; color: black !important; text-shadow: none !important; filter:none !important;
+  -ms-filter: none !important; } 
+  a, a:visited { color: #444 !important; text-decoration: underline; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }  
+  pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  tr, img { page-break-inside: avoid; }
+  @page { margin: 0.5cm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3{ page-break-after: avoid; }
+}
+/*
+  ✰✰✰✰✰✰✰✰✰✰✰✰✰✰ 
+
+  Simple Login Form
+  HTML5/CSS3 Coded by: $hekh@r d-Ziner, CSSJunction.com
+  PSD by:PremiumPixels.com
+  
+  Uuage: Free. You can modify, remove our links and use wherever you want ☺.
+  
+  ✰✰✰✰✰✰✰✰✰✰✰✰✰✰✰ 
+  
+*/
+body{
+  background:#eff3f6;
+}
+.box
+{
+    background:#fefefe;
+    border: 1px solid #C3D4DB;
+	border-top:1px;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    border-radius:5px;
+    -moz-box-shadow:rgba(0,0,0,0.15) 0 0 1px;
+    -webkit-box-shadow:rgba(0,0,0,0.15) 0 0 1px;
+    box-shadow:rgba(0,0,0,0.15) 0 0 1px;
+    color:#444;
+    font:normal 12px/14px Arial, Helvetica, Sans-serif;
+    margin:0 auto 30px;
+	overflow:hidden;
+}
+.box.login
+{
+	height:260px;
+    width:332px;
+	position:absolute;
+	left:50%;
+	top:50%;
+	margin:-130px 0 0 -166px;
+}
+.boxBody
+{
+    background:#fefefe;
+    border-top:1px solid #dde0e8;
+    border-bottom:1px solid #dde0e8;
+    padding:10px 20px;
+}
+
+.box footer
+{
+    background:#eff4f6;
+    border-top:1px solid #fff;
+    padding:22px 26px;
+    overflow:hidden;
+	height:32px;
+}
+.box label
+{
+    display:block;
+    font:14px/22px Arial, Helvetica, Sans-serif;
+    margin:10px 0 0 6px;
+}
+.box footer label{
+	float:left;
+	margin:4px 0 0;
+}
+.box footer input[type=checkbox]{
+	vertical-align:sub;
+	*vertical-align:middle;
+	margin-right:10px;
+}
+.box input[type=text],
+.box input[type=password],
+.txtField,
+.cjComboBox
+{
+    border:6px solid #F7F9FA;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px;
+    -moz-box-shadow:2px 3px 3px rgba(0, 0, 0, 0.06) inset, 0 0 1px #95a2a7 inset;
+    -webkit-box-shadow:2px 3px 3px rgba(0, 0, 0, 0.06) inset, 0 0 1px #95a2a7 inset;
+    box-shadow:2px 3px 3px rgba(0, 0, 0, 0.06) inset, 0 0 1px #95a2a7 inset;
+    margin:3px 0 4px;
+    padding:8px 6px;
+    width:270px;
+    display:block;
+}
+.box input[type=text]:focus,
+.box input[type=password]:focus,
+.txtField:focus,
+.cjComboBox:focus
+{
+    border:6px solid #f0f7fc;
+    -moz-box-shadow:2px 3px 3px rgba(0, 0, 0, 0.04) inset, 0 0 1px #0d6db6 inset;
+    -webkit-box-shadow:2px 3px 3px rgba(0, 0, 0, 0.04) inset, 0 0 1px #0d6db6 inset;
+    box-shadow:2px 3px 3px rgba(0, 0, 0, 0.04) inset, 0 0 1px #0d6db6 inset;
+	color:#333;
+}
+.cjComboBox
+{
+    width:294px;
+}
+.cjComboBox.small
+{
+    padding:3px 2px 3px 6px;
+    width:100px;
+    border-width:3px !important;
+}
+.txtField.small
+{
+    padding:3px 6px;
+    width:200px;
+    border-width:3px !important;
+}
+
+.rLink{padding:0 6px 0 0; font-size:11px; float:right;}
+.box a{color:#999;}
+.box a:hover, .box a:focus{text-decoration:underline;}
+.box a:active{color:#f84747;}
+.btnLogin
+{
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    border-radius:15px;
+    background:#a1d8f0;
+    background:-moz-linear-gradient(top, #badff3, #7acbed);
+    background:-webkit-gradient(linear, left top, left bottom, from(#badff3), to(#7acbed));
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#badff3', EndColorStr='#7acbed')";
+    border:1px solid #7db0cc !important;
+    cursor: pointer;
+    padding:11px 16px;
+    font:bold 11px/14px Verdana, Tahomma, Geneva;
+    text-shadow:rgba(0,0,0,0.2) 0 1px 0px; 
+    color:#fff;
+    -moz-box-shadow:inset rgba(255,255,255,0.6) 0 1px 1px, rgba(0,0,0,0.1) 0 1px 1px;
+    -webkit-box-shadow:inset rgba(255,255,255,0.6) 0 1px 1px, rgba(0,0,0,0.1) 0 1px 1px;
+    box-shadow:inset rgba(255,255,255,0.6) 0 1px 1px, rgba(0,0,0,0.1) 0 1px 1px;
+    margin-left:12px;
+    float:right;
+	padding:7px 21px;
+}
+
+.btnLogin:hover,
+.btnLogin:focus,
+.btnLogin:active{
+    background:#a1d8f0;
+    background:-moz-linear-gradient(top, #7acbed, #badff3);
+    background:-webkit-gradient(linear, left top, left bottom, from(#7acbed), to(#badff3));
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#7acbed', EndColorStr='#badff3')";
+}
+.btnLogin:active
+{
+    text-shadow:rgba(0,0,0,0.3) 0 -1px 0px; 
+}
+footer#main{
+	position:fixed;
+	left:0;
+	bottom:10px;
+	text-align:center;
+	font:normal 11px/16px Arial, Helvetica, sans-serif;
+	width:100%;
+}
+
+</style>
