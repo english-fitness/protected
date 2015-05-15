@@ -28,8 +28,8 @@ class SessionController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index','view','ajaxCreateBoard', 'ajaxApprove', 'ajaxEditInline', 'nearest', 'ended'
-                , 'ajaxDeleteBoard','unassignStudent','canceled','active','create','update', 'cancel', 'reminder'),
+                'actions'=>array('index','view','ajaxCreateBoard', 'ajaxApprove', 'ajaxEditInline', 'nearest', 'ended', 'recorded'
+                , 'ajaxDeleteBoard','unassignStudent','canceled','active','create','update', 'cancel', 'reminder', 'getSettings'),
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -305,6 +305,20 @@ class SessionController extends Controller
             'model'=>$model,
         ));
     }
+	
+	public function actionRecorded()
+	{
+		$this->subPageTitle  = 'Buổi học được ghi âm';
+		$this->loadJQuery = false;
+		$model = new Session('searchRecordedSession');
+		$model->unsetAttributes();
+		if (isset($_GET['Session'])){
+			$model->attributes = $_GET['Session'];
+		}
+		$this->render('recorded', array(
+			'model'=>$model,
+		));
+	}
 
     /**
      * Dislay nearest sessions in admin
@@ -445,4 +459,17 @@ class SessionController extends Controller
         }
         $this->renderJSON(array('success'=>$success));
     }
+	
+	public function actionGetSettings()
+	{
+		$session_id = $_REQUEST['id'];
+		$model = $this->loadModel($session_id);//Load model
+		$record = $model->record;
+		$response['settings'] = array(
+			'record'=>$record,
+		);
+		$encoded = json_encode($response);
+		header('Content-type: application/json');
+		exit($encoded);
+	}
 }

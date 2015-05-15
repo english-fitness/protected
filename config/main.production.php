@@ -45,5 +45,6 @@ return array(
 			'receiver' => 'paypal@tutor.vn',
 			'setExpressCheckout' => true,
 		),
+		'recordDir'=>"/home/administrator/records/",
     ),
 );

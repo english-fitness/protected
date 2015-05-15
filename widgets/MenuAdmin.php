@@ -110,6 +110,7 @@ class MenuAdmin extends CWidget
                     array('label'=>'Đang diễn ra','url'=>array('/admin/session/active')),
                     array('label'=>'Đã hoàn thành','url'=>array('/admin/session/ended')),
                     array('label'=>'Đã hủy/xóa','url'=>array('/admin/session/canceled?Session[status]='.Session::STATUS_CANCELED)),
+					array('label'=>'Được ghi âm','url'=>array('/admin/session/recorded')),
                 )
             ),
             array('title'=>$this->renderTitleCount("Buổi học đang chờ xác nhận: ",$countPendingReminderSession),'label'=>'Nhắc lịch học'.$this->renderItemCount($countPendingReminderSession), 'url'=>array('/admin/session/reminder') )

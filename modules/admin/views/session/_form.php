@@ -116,8 +116,9 @@
 				-->
                                 <br>
                                 <!--<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 1, 0, 1);">Lớp nhỏ P2P Đặc biệt</a> hoặc-->
-				<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 0, 0, 1);">Lớp nhỏ Server nhỏ Đặc biệt</a> hoặc
-				<!--
+				<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 0, 0, 1);">Lớp nhỏ Server nhỏ Đặc biệt</a> 
+				<!--hoặc
+				
 				<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 0, 1, 1);">Lớp nhỏ Server lớn Đặc biệt</a> hoặc
 				<a href="javascript: createBoard('<?php echo $model->id;?>', 1, 0, 1, 1);">Lớp lớn Đặc biệt</a>
 				-->
@@ -214,6 +215,26 @@
 	            <?php echo CHtml::dropDownList('startMin', date('i', strtotime($model->plan_start)), $minutesInHourArrs, array_merge($disabledAttrs, array('style'=>'width:70px;')));?>
 			</div>
 			<?php echo $form->error($model,'plan_start'); ?>
+		</div>
+	</div>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+			<label>Tùy chọn</label>
+		</div>
+		<div class="col col-lg-9">
+			<div class="w150 fL">
+				<b>Ghi âm buổi học:</b>&nbsp;</span>
+				<?php
+					$htmlOptions = array();
+					if (!$model->isNewRecord && in_array($model->status, array(Session::STATUS_ENDED, Session::STATUS_CANCELED)))
+						$htmlOptions['disabled'] = 'disabled';
+					if ($model->record == true)
+						$htmlOptions['checked'] = 'checked';
+					$htmlOptions['value'] = 1;
+					// $checked = $model->record == true ? array('checked'=>'checked') : array();
+					echo $form->checkBox($model, 'record', $htmlOptions);
+				?>
+			</div>
 		</div>
 	</div>
 	<?php if(!$model->isNewRecord):?>

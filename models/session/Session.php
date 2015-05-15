@@ -54,9 +54,10 @@ class Session extends CActiveRecord
 		// will receive user inputs.
 		$modelRules = array(
 			array('course_id, subject, plan_start', 'required'),
-			array('course_id, teacher_id, plan_duration, status, type, payment_type, payment_status, final_price, total_of_student', 'numerical', 'integerOnly'=>true),
+			array('course_id, teacher_id, plan_duration, status, type, payment_type, payment_status, final_price, total_of_student, record', 'numerical', 'integerOnly'=>true),
 			array('subject', 'length', 'max'=>256),
 			array('content, whiteboard, actual_start, actual_end, actual_duration, modified_date, payment_status, final_price, total_of_student, deleted_flag, teacher_entered_time, status_note,created_user_id,modified_user_id', 'safe'),
+			
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, course_id, teacher_id, subject, whiteboard, content, type, payment_type, plan_start, plan_duration, actual_start, actual_end, actual_duration, status, status_note, created_date, modified_date,created_user_id,modified_user_id', 'safe', 'on'=>'search'),
@@ -264,6 +265,17 @@ class Session extends CActiveRecord
 		$criteria->addCondition("actual_start IS NOT NULL AND actual_start<='".$currentTime."'");
 		$criteria->addCondition("status=".self::STATUS_WORKING);
 		$criteria->compare('deleted_flag', 0);//Not deleted
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+			'pagination'=>array('pageVar'=>'page'),
+		    'sort'=>array('sortVar'=>'sort'),
+		));
+	}
+	
+	public function searchRecordedSession()
+	{
+		$criteria = $this->search(null, "plan_start desc")->criteria;
+		$criteria->addCondition("record = 1");
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array('pageVar'=>'page'),
@@ -589,4 +601,25 @@ class Session extends CActiveRecord
 		return NULL;
 	}
 
+	public function getRecordInfo()
+	{
+		$criteria=new CDbCriteria();
+		$criteria->condition='session_id = '.$this->id;
+		
+		$record_file = SessionRecord::model()->findAll($criteria);
+		
+		if ($record_file)
+		{
+			$html = "";
+			foreach ($record_file as $file)
+				$html .= $file->record_file. '<br><a href="'. '/api/session/getRecordFile?id='. $file->id .'">Tải xuống</a>&nbsp&nbsp&nbsp' . 
+						'<a href="'. '/api/session/removeRecordFile?id='. $file->id .'" onclick="return confirm(\'Xóa file ghi âm của buổi học này?\')">Xóa  </a><br>';
+		}
+		else
+		{
+			return "Chưa có";
+		}
+		
+		return $html;
+	}
 }

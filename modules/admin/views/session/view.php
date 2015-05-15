@@ -109,6 +109,11 @@ $this->breadcrumbs=array(
 		   'value'=>($model->modified_date)? date('d/m/Y H:i', strtotime($model->modified_date)):"",
 		),
 		'deleted_flag',
+		array(
+			'name'=>'File ghi âm',
+			'value'=> $model->getRecordInfo(),
+			'type'=>'raw',
+		),
 	),
 )); ?>
 <div class="clearfix h20">&nbsp;</div>

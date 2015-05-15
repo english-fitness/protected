@@ -23,11 +23,24 @@ class SessionController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('start','end', 'getFeedbackUrls', 'kickUser'),
+                'actions'=>array('start','end', 'getFeedbackUrls', 'kickUser', 'getSettings', 'setRecordFile', 'getRecordFile'),
                 'users'=>array('*'),
+            ),
+			array('allow',
+                'actions'=>array('removeRecordFile'),
+                'users'=>array('*'),
+                'expression' => 'Yii::app()->user->isAdmin()',
             ),
             array('deny',),
         );
+    }
+	
+	public function loadModel($id)
+    {
+        $model=Session::model()->findByPk($id);
+        if($model===null)
+            throw new CHttpException(404,'The requested page does not exist.');
+        return $model;
     }
 
     public function actionStart()
@@ -104,4 +117,102 @@ class SessionController extends Controller
             $this->renderJSON(array('success'=>false));
         }
     }
+	
+	public function actionGetSettings()
+	{
+		$session_id = $_REQUEST['id'];
+		$model = $this->loadModel($session_id);//Load model
+		$record = $model->record;
+		$response['settings'] = array(
+			'record'=>$record,
+		);
+		$encoded = json_encode($response);
+		header('Content-type: application/json');
+		exit($encoded);
+	}
+	
+	public function actionSetRecordFile()
+	{
+		$session_id = $_REQUEST['id'];
+		$record_file = $_REQUEST['url'];
+		
+		$date = date("D M d, Y G:i:s");
+		$real_file_name = $session_id . "_" . $date . ".mkv";
+		
+		$record_dir = Yii::app()->params['recordDir'];
+		if (!$record_dir)
+			$record_dir = "/home/administrator/records/";
+		$old_url = $record_dir . $record_file;
+		
+		$new_dir = $session_id;
+		if (!file_exists($record_dir . $new_dir))
+			mkdir($record_dir . $new_dir);
+		
+		$model = new SessionRecord();
+		$model->attributes = array('session_id'=>$session_id, 'record_file'=>$real_file_name);
+		
+		if ($model->save()){
+			$new_url = $record_dir . $new_dir . "/" . $real_file_name;
+			rename($old_url, $new_url);
+		}
+	}
+	
+	public function actionGetRecordFile()
+	{
+		$record_id = $_REQUEST['id'];
+		$model = SessionRecord::model()->findByPk($record_id);
+		$record_file = $model->record_file;
+		$session_id = $model->session_id;
+
+		if ($record_file) {
+			$record_dir = Yii::app()->params['recordDir'];
+			if (!$record_dir)
+				$record_dir = "/home/administrator/records/";
+			
+			$fileUrl = $record_dir . $session_id ."/". $record_file;
+			
+			if (file_exists($fileUrl)) {
+				header('Content-Description: File Transfer');
+				header('Content-Type: application/octet-stream');
+				header('Content-Disposition: attachment; filename="'.basename($record_file));
+				header('Expires: 0');
+				header('Cache-Control: must-revalidate');
+				header('Pragma: public');
+				header('Content-Length: ' . filesize($fileUrl));
+				
+				readfile($fileUrl);
+				exit;
+			}
+			else
+			{
+				$this->redirect('/admin/session/view/id/'.$session_id);
+			}
+		}
+	}
+	
+	public function actionRemoveRecordFile()
+	{
+		$record_id = $_REQUEST['id'];
+		$model = SessionRecord::model()->findByPk($record_id);
+		$record_file = $model->record_file;
+		$session_id = $model->session_id;
+		
+		if ($record_file) {
+			$record_dir = Yii::app()->params['recordDir'];
+			if (!$record_dir)
+				$record_dir = "/home/administrator/records/";
+			
+			$fileUrl = $record_dir . $session_id ."/". $record_file;
+			
+			if ($model->delete())
+			{
+				if (file_exists($fileUrl))
+				{
+					unlink($fileUrl);
+				}
+			}
+		}
+		$this->redirect("/admin/session/view/id/".$session_id);
+	}
+	
 }

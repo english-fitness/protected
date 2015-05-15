@@ -40,7 +40,7 @@ class ClassController extends Controller
 	//Display nearest session of Student
     public function actionNearestSession()
     {
-		$this->subPageTitle = 'Nearest Sessions';
+		$this->subPageTitle = 'Schedule';
     	$teacherId = Yii::app()->user->id;
         $ClsSession = new ClsSession();
         $nearestSessions = $ClsSession->getNearestSessions($teacherId, 'teacher', 8);
