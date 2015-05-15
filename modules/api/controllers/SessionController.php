@@ -136,17 +136,19 @@ class SessionController extends Controller
 		$session_id = $_REQUEST['id'];
 		$record_file = $_REQUEST['url'];
 		
-		$date = date("D M d, Y G:i:s");
-		$real_file_name = $session_id . "_" . $date . ".mkv";
-		
 		$record_dir = Yii::app()->params['recordDir'];
 		if (!$record_dir)
 			$record_dir = "/home/administrator/records/";
 		$old_url = $record_dir . $record_file;
 		
+		if (!file_exists($old_url)) return;
+		
 		$new_dir = $session_id;
 		if (!file_exists($record_dir . $new_dir))
 			mkdir($record_dir . $new_dir);
+		
+		$date = date("D M d, Y G:i:s");
+		$real_file_name = $session_id . "_" . $date . ".mkv";
 		
 		$model = new SessionRecord();
 		$model->attributes = array('session_id'=>$session_id, 'record_file'=>$real_file_name);
