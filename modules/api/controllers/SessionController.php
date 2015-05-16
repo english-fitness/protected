@@ -134,7 +134,7 @@ class SessionController extends Controller
 	public function actionSetRecordFile()
 	{
 		$session_id = $_REQUEST['id'];
-		$record_file = $_REQUEST['url'];
+		$record_file = $_REQUEST['file'];
 		
 		$record_dir = Yii::app()->params['recordDir'];
 		if (!$record_dir)
@@ -148,14 +148,16 @@ class SessionController extends Controller
 			mkdir($record_dir . $new_dir);
 		
 		$date = date("D M d, Y G:i:s");
-		$real_file_name = $session_id . "_" . $date . ".mkv";
+		$extension = pathinfo($record_file, PATHINFO_EXTENSION);
+		$real_file_name = $session_id . "_" . $date . "." . $extension;
 		
 		$model = new SessionRecord();
 		$model->attributes = array('session_id'=>$session_id, 'record_file'=>$real_file_name);
 		
-		if ($model->save()){
-			$new_url = $record_dir . $new_dir . "/" . $real_file_name;
-			rename($old_url, $new_url);
+		$new_url = $record_dir . $new_dir . "/" . $real_file_name;
+		if (rename($old_url, $new_url))
+		{
+			$model->save();
 		}
 	}
 	
