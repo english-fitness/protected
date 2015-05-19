@@ -612,8 +612,8 @@ class Session extends CActiveRecord
 		{
 			$html = "";
 			foreach ($record_file as $file)
-				$html .= $file->record_file. '<br><a href="'. '/api/session/getRecordFile?id='. $file->id .'">Tải xuống</a>&nbsp&nbsp&nbsp' . 
-						'<a href="'. '/api/session/removeRecordFile?id='. $file->id .'" onclick="return confirm(\'Xóa file ghi âm của buổi học này?\')">Xóa  </a><br>';
+				$html .= $file->record_file. '<br><a href="'. '/admin/session/getRecordFile?id='. $file->id .'">Tải xuống</a>&nbsp&nbsp&nbsp' . 
+						'<a href="'. '/admin/session/removeRecordFile?id='. $file->id .'" onclick="return confirm(\'Xóa file ghi âm của buổi học này?\')">Xóa  </a><br>';
 		}
 		else
 		{

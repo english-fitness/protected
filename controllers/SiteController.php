@@ -12,10 +12,15 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$this->redirect(Yii::app()->baseurl.'/site/login');
-		$this->layout = '//layouts/blank';
-		$this->subPageTitle = 'Trang chủ';
-		$this->render('index');
+		if(isset(Yii::app()->user->id)){
+			$this->redirect('/site/loggedRedirect');
+		}
+		else {
+			$this->redirect(Yii::app()->baseurl.'/news');
+			$this->layout = '//layouts/blank';
+			$this->subPageTitle = 'Trang chủ';
+			$this->render('index');
+		}
 	}
 	
 	public function actionLogin()
@@ -125,21 +130,27 @@ class SiteController extends Controller
 			// $this->redirect(Yii::app() -> homeUrl);
 		// }
 		
+		if(isset(Yii::app()->user->id)){
+			$this->redirect('/site/loggedRedirect');
+		}
+		
 		if (isset($_POST['email'])){
 			$model->attributes = $_POST;
 			if ($model->validate() && $model->login()){
+				//do something when user is logged in
 				$success = true;
-				$adminRules = array(User::ROLE_ADMIN, User::ROLE_MONITOR);
-				$userRole = Yii::app()->user->role;
-				$urlModule = in_array($userRole, $adminRules)? 'admin': str_replace("role_","",$userRole);
-				$url = Yii::app()->baseurl."/".$urlModule;
+				// $adminRules = array(User::ROLE_ADMIN, User::ROLE_MONITOR);
+				// $userRole = Yii::app()->user->role;
+				// $urlModule = in_array($userRole, $adminRules)? 'admin': str_replace("role_","",$userRole);
+				// $url = Yii::app()->baseurl."/".$urlModule;
 				
 			}else{
 				Yii::app()->user->setFlash('success','Incorrect username or password.');
 			}
 			
 		}
-		$this->redirect("/site/login");
+		// $this->redirect("/site/login");
+		$this->redirect('/site/loggedRedirect');
 	}
 	
 	//Popup login account

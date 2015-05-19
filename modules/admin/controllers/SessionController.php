@@ -29,7 +29,7 @@ class SessionController extends Controller
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
                 'actions'=>array('index','view','ajaxCreateBoard', 'ajaxApprove', 'ajaxEditInline', 'nearest', 'ended', 'recorded'
-                , 'ajaxDeleteBoard','unassignStudent','canceled','active','create','update', 'cancel', 'reminder', 'getSettings'),
+                , 'ajaxDeleteBoard','unassignStudent','canceled','active','create','update', 'cancel', 'reminder', 'getRecordFile', 'removeRecordFile'),
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -460,16 +460,61 @@ class SessionController extends Controller
         $this->renderJSON(array('success'=>$success));
     }
 	
-	public function actionGetSettings()
+	public function actionGetRecordFile()
 	{
-		$session_id = $_REQUEST['id'];
-		$model = $this->loadModel($session_id);//Load model
-		$record = $model->record;
-		$response['settings'] = array(
-			'record'=>$record,
-		);
-		$encoded = json_encode($response);
-		header('Content-type: application/json');
-		exit($encoded);
+		$record_id = $_REQUEST['id'];
+		$model = SessionRecord::model()->findByPk($record_id);
+		$record_file = $model->record_file;
+		$session_id = $model->session_id;
+
+		if ($record_file) {
+			$record_dir = Yii::app()->params['recordDir'];
+			if (!$record_dir)
+				$record_dir = "/home/administrator/records/";
+			
+			$fileUrl = $record_dir . $session_id ."/". $record_file;
+			
+			if (file_exists($fileUrl)) {
+				header('Content-Description: File Transfer');
+				header('Content-Type: application/octet-stream');
+				header('Content-Disposition: attachment; filename="'.basename($record_file));
+				header('Expires: 0');
+				header('Cache-Control: must-revalidate');
+				header('Pragma: public');
+				header('Content-Length: ' . filesize($fileUrl));
+				
+				readfile($fileUrl);
+				exit;
+			}
+			else
+			{
+				$this->redirect('/admin/session/view/id/'.$session_id);
+			}
+		}
+	}
+	
+	public function actionRemoveRecordFile()
+	{
+		$record_id = $_REQUEST['id'];
+		$model = SessionRecord::model()->findByPk($record_id);
+		$record_file = $model->record_file;
+		$session_id = $model->session_id;
+		
+		if ($record_file) {
+			$record_dir = Yii::app()->params['recordDir'];
+			if (!$record_dir)
+				$record_dir = "/home/administrator/records/";
+			
+			$fileUrl = $record_dir . $session_id ."/". $record_file;
+			
+			if ($model->delete())
+			{
+				if (file_exists($fileUrl))
+				{
+					unlink($fileUrl);
+				}
+			}
+		}
+		$this->redirect("/admin/session/view/id/".$session_id);
 	}
 }
