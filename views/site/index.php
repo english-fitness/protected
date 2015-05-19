@@ -25,7 +25,7 @@
 	  <input type="password" tabindex="2" name="password" placeholder="Password" required>
 	</fieldset>
 	<footer>
-            <label><a href="https://speakup.vn/news"><< Back to homepage </a> </label>
+            <label><a href="https://speakup.vn"><< Back to homepage </a> </label>
 	  <input type="submit" class="btnLogin" value="Login" tabindex="4" >
 	</footer>
 </form>            
