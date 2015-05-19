@@ -41,10 +41,10 @@
                 <td><?php echo Common::formatDate($session->plan_start); ?></td>
                 <td><?php echo Common::formatDuration($session->plan_start,$session->plan_duration); ?></td>
                 <td>
-                	<?php if(!$session->checkDisplayBoard(10)):?>
+                	<?php if(!$session->checkDisplayBoard(15)):?>
                        	<p><span><?php echo $session->displayRemainTime();?></span></p>
                     <?php endif;?>
-                	<?php if($session->checkDisplayBoard(10)):?>
+                	<?php if($session->checkDisplayBoard(15)):?>
                 	<div class="go">                        
                         <?php  ClsSession::displayEnterBoardButton($session->whiteboard); ?>
                     </div>
