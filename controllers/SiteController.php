@@ -16,7 +16,7 @@ class SiteController extends Controller
 			$this->redirect('/site/loggedRedirect');
 		}
 		else {
-			$this->redirect(Yii::app()->baseurl.'/news');
+			$this->redirect('/news');
 			$this->layout = '//layouts/blank';
 			$this->subPageTitle = 'Trang chủ';
 			$this->render('index');
@@ -149,8 +149,7 @@ class SiteController extends Controller
 			}
 			
 		}
-		// $this->redirect("/site/login");
-		$this->redirect('/site/loggedRedirect');
+		$this->redirect("/site/login");
 	}
 	
 	//Popup login account

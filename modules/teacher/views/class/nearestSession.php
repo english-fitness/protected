@@ -44,7 +44,7 @@
                 	<?php if(!$session->checkDisplayBoard(10)):?>
                        	<p><span><?php echo $session->displayRemainTime();?></span></p>
                     <?php endif;?>
-                	<?php if($session->checkDisplayBoard(14)):?>
+                	<?php if($session->checkDisplayBoard(10)):?>
                 	<div class="go">                        
                         <?php  ClsSession::displayEnterBoardButton($session->whiteboard); ?>
                     </div>
