@@ -21,11 +21,11 @@
             </h2>
 	  <label>Username</label>
 	  <input type="text" tabindex="1" name="email" placeholder="E-mail" required>
-	  <label><a href="#" class="rLink" tabindex="5">Forget your password?</a>Password</label>
+	  <label>Password</label>
 	  <input type="password" tabindex="2" name="password" placeholder="Password" required>
 	</fieldset>
 	<footer>
-	  <label><input type="checkbox" tabindex="3">Keep me logged in</label>
+            <label><a href="https://speakup.vn/news"><< Back to homepage </a> </label>
 	  <input type="submit" class="btnLogin" value="Login" tabindex="4" >
 	</footer>
 </form>            
