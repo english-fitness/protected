@@ -50,7 +50,7 @@ $(document).ready(function() {
 <form name="login-form" class="login-form" action="<?php echo Yii::app()->baseurl;?>/site/signin" method="post" >
 	<!--HEADER-->
     <div class="header">
-    <!--TITLE--><h1>Well come to Speakup</h1><!--END TITLE-->
+    <!--TITLE--><h1>Speakup</h1><!--END TITLE-->
     <h2 class="text-warning text-center">
         <?php 
         foreach(Yii::app()->user->getFlashes() as $key => $message) : 
@@ -58,7 +58,7 @@ $(document).ready(function() {
         endforeach;
         ?>
     </h2>
-    <!--DESCRIPTION--><br><a href="https://speakup.vn/news/dang-ky"><br>Need help?</a><!--END DESCRIPTION-->
+    <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br>If you need any help or registration, please contact to us?</a><!--END DESCRIPTION-->
     </div>
     <!--END HEADER-->
 	
@@ -134,7 +134,7 @@ body {
 
 #wrapper {
 	/* Center wrapper perfectly */
-	width: 350px;
+	width: 300px;
 	height: 400px;
 	position: absolute;
 	left: 50%;
@@ -189,7 +189,7 @@ LOGIN FORM
 *******************/
 
 .login-form {
-	width: 350px;
+	width: 300px;
 	margin: 0 auto;
 	position: relative;
 	z-index:5;
@@ -238,7 +238,7 @@ CONTENT
 
 /* Input field */
 .login-form .content .input {
-	width: 236px;
+	width: 188px;
 	padding: 15px 25px;
 	
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -332,7 +332,7 @@ FOOTER
 	
 	font-family: 'Bree Serif', serif;
 	font-weight: 300;
-	font-size: 18px;
+	font-size: 13px;
 	color: #fff;
 	text-shadow: 0px 1px 0 rgba(0,0,0,0.25);
 	
@@ -371,7 +371,7 @@ FOOTER
 	display: block;
 	float: right;
 	padding: 10px;
-	margin-right: 20px;
+	margin-right: 25px;
 	
 	//background: none;
 	//border: none;
@@ -383,7 +383,7 @@ FOOTER
 	
 	font-family: 'Bree Serif', serif;
 	font-weight: 300;
-	font-size: 18px;
+	font-size: 13px;
 	color: #fff;
 	//text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
         text-shadow: 0 1px rgba(0,0,0,0.1);
