@@ -334,7 +334,7 @@ FOOTER
 	padding: 11px 25px;
 	
 	font-family: 'Bree Serif', serif;
-	font-weight: 300;
+	font-weight: bold;
 	font-size: 13px;
 	color: #fff;
 	text-shadow: 0px 1px 0 rgba(0,0,0,0.25);
@@ -385,7 +385,7 @@ FOOTER
 	cursor: pointer;
 	
 	font-family: 'Bree Serif', serif;
-	font-weight: 300;
+	font-weight: bold;
 	font-size: 13px;
 	color: #fff;
 	//text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
