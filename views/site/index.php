@@ -15,7 +15,7 @@ www.amitjakhu.com
 <!--STYLESHEETS-->
 
 <!--SCRIPTS-->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
 <!--Slider-in icons-->
 <script type="text/javascript">
 $(document).ready(function() {
@@ -58,7 +58,7 @@ $(document).ready(function() {
         endforeach;
         ?>
     </h2>
-    <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br>If you need any help or registration, please contact to us?</a><!--END DESCRIPTION-->
+    <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br> Don't have an account? Sign up now!</a><!--END DESCRIPTION-->
     </div>
     <!--END HEADER-->
 	
