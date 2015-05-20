@@ -51,13 +51,13 @@ $(document).ready(function() {
 	<!--HEADER-->
     <div class="header">
     <!--TITLE--><h1>Speakup</h1><!--END TITLE-->
-    <h2 class="text-warning text-center">
+    <span class="text-warning text-center">
         <?php 
         foreach(Yii::app()->user->getFlashes() as $key => $message) : 
             echo  $message; 
         endforeach;
         ?>
-    </h2>
+    </span>
     <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br> Don't have an account? Sign up now!</a><!--END DESCRIPTION-->
     <!--DESCRIPTION--><a href="https://speakup.vn/news/lien-he"><br> Need help? Contact us!</a><!--END DESCRIPTION-->
     </div>
@@ -225,10 +225,11 @@ HEADER
 }
 
 .login-form .header span {
-	font-size: 11px;
+	font-size: 13px;
 	line-height: 16px;
-	color: #678889;
+	color: red;
 	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
+        font-weight: bold;
 }
 
 /*******************
