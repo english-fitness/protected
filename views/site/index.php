@@ -225,11 +225,10 @@ HEADER
 }
 
 .login-form .header span {
-	font-size: 13px;
+	font-size: 12px;
 	line-height: 16px;
 	color: red;
 	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
-        font-weight: bold;
 }
 
 /*******************
