@@ -59,6 +59,7 @@ $(document).ready(function() {
         ?>
     </h2>
     <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br> Don't have an account? Sign up now!</a><!--END DESCRIPTION-->
+    <!--DESCRIPTION--><a href="https://speakup.vn/news/lien-he"><br> Need help? Contact us!</a><!--END DESCRIPTION-->
     </div>
     <!--END HEADER-->
 	
