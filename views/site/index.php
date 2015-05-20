@@ -64,8 +64,8 @@ $(document).ready(function() {
 	
 	<!--CONTENT-->
     <div class="content">
-	<!--USERNAME--><input name="email" type="text" class="input username"  placeholder="Username.." onfocus="this.value=''" /><!--END USERNAME-->
-    <!--PASSWORD--><input name="password" type="password" class="input password" placeholder="Password.." onfocus="this.value=''" /><!--END PASSWORD-->
+	<!--USERNAME--><input name="email" type="text" class="input username"  placeholder="Username.."  /><!--END USERNAME-->
+    <!--PASSWORD--><input name="password" type="password" class="input password" placeholder="Password.."  /><!--END PASSWORD-->
     </div>
     <!--END CONTENT-->
     
@@ -398,5 +398,19 @@ FOOTER
 .login-form .footer .register:focus {
 	position: relative;
 	bottom: -1px;
+}
+::selection {
+background: #56c2e1;
+color:#555;
+}
+ 
+::-moz-selection {
+background:#f094b7;
+color:#555;
+}
+ 
+::-webkit-selection {
+background:#f094b7;
+color:#555;
 }
 </style>
