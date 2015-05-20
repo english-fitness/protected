@@ -159,8 +159,10 @@ body {
 a{
     color: #3f9db8;
     text-decoration: none;
-    font-family: 'Bree Serif', serif;
-    font-size: 12px;
+    font-size: 11px;
+    line-height: 16px;
+    color: #678889;
+    text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
 }
 .gradient {
 	/* Center Positioning */
