@@ -164,6 +164,7 @@ a{
     line-height: 16px;
     color: #678889;
     text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
+    height: 20px;
 }
 .gradient {
 	/* Center Positioning */
@@ -211,7 +212,7 @@ HEADER
 *******************/
 
 .login-form .header {
-	padding: 40px 30px 10px 30px;
+	padding: 20px 30px 30px 30px;
 }
 
 .login-form .header h1 {
