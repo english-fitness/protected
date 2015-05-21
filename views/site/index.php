@@ -58,6 +58,12 @@ $(document).ready(function() {
         endforeach;
         ?>
     </span>
+    <?php
+       if(isset( $_SERVER["HTTPS"])){
+           echo "co https";
+       }
+       
+    ?>
     <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br> Don't have an account? Sign up now!</a><!--END DESCRIPTION-->
     <!--DESCRIPTION--><a href="https://speakup.vn/news/lien-he"><br> Need help? Contact us!</a><!--END DESCRIPTION-->
     </div>
@@ -100,7 +106,7 @@ www.amitjakhu.com
 FONTS
 *******************/
 
-@import url(http://fonts.googleapis.com/css?family=Bree+Serif);
+@import url(https://fonts.googleapis.com/css?family=Bree+Serif);
 
 /*******************
 SELECTION STYLING
