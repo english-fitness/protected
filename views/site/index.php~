@@ -10,7 +10,7 @@ www.amitjakhu.com
 
 <!--META-->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Login Form</title>
+<title>Speak Up | Online English Tutoring</title>
 
 <!--STYLESHEETS-->
 
