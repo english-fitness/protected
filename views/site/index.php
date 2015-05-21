@@ -58,12 +58,6 @@ $(document).ready(function() {
         endforeach;
         ?>
     </span>
-    <?php
-       if(isset( $_SERVER["HTTPS"])){
-           echo "co https";
-       }
-       
-    ?>
     <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br> Don't have an account? Sign up now!</a><!--END DESCRIPTION-->
     <!--DESCRIPTION--><a href="https://speakup.vn/news/lien-he"><br> Need help? Contact us!</a><!--END DESCRIPTION-->
     </div>
@@ -340,7 +334,6 @@ FOOTER
 	padding: 11px 25px;
 	
 	font-family: 'Bree Serif', serif;
-	font-weight: bold;
 	font-size: 13px;
 	color: #fff;
 	text-shadow: 0px 1px 0 rgba(0,0,0,0.25);
@@ -391,7 +384,6 @@ FOOTER
 	cursor: pointer;
 	
 	font-family: 'Bree Serif', serif;
-	font-weight: bold;
 	font-size: 13px;
 	color: #fff;
 	//text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
