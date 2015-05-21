@@ -164,7 +164,7 @@ a{
     line-height: 16px;
     color: #678889;
     text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
-    height: 20px;
+    height: 21px;
 }
 .gradient {
 	/* Center Positioning */
@@ -385,7 +385,7 @@ FOOTER
 	cursor: pointer;
 	
 	font-family: 'Bree Serif', serif;
-	font-size: 13px;
+	font-size: 12px;
 	color: #fff;
 	//text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
         text-shadow: 0 1px rgba(0,0,0,0.1);
