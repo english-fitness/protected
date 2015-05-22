@@ -10,7 +10,7 @@ www.amitjakhu.com
 
 <!--META-->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Speak Up | Online English Tutoring</title>
+<title>Speak up | Online english tutoring</title>
 
 <!--STYLESHEETS-->
 
@@ -50,7 +50,7 @@ $(document).ready(function() {
 <form name="login-form" class="login-form" action="<?php echo Yii::app()->baseurl;?>/site/signin" method="post" >
 	<!--HEADER-->
     <div class="header">
-    <!--TITLE--><h1>Speakup</h1><!--END TITLE-->
+    <!--TITLE--><h1>Speak up</h1><!--END TITLE-->
     <span class="text-warning text-center">
         <?php 
         foreach(Yii::app()->user->getFlashes() as $key => $message) : 
