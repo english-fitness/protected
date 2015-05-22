@@ -54,11 +54,12 @@ $this->breadcrumbs=array(
 	'pager' => array('class'=>'CustomLinkPager'),
 	'rowHtmlOptionsExpression'=>'($data->deleted_flag==1)?array("class"=>"deletedRecord"):array()',
 	'columns'=>array(
+		/*
 		array(
 		   'name'=>'title',
 		   'value'=>'CHtml::link($data->title, Yii::app()->createUrl("admin/session?course_id=$data->id"))',
 		   'type' => 'raw',
-		),
+		),*/
 		array(
 		   'name'=>'subject_id',
 		   'value'=>'Subject::model()->displayClassSubject($data->subject_id)',
@@ -66,8 +67,9 @@ $this->breadcrumbs=array(
 		),
 		array(
 		   'header' => 'Số buổi',
-		   'value'=>'$data->countSessions(null, true)',
+		   'value'=>'CHtml::link($data->countSessions(null, true)." buổi", Yii::app()->createUrl("admin/session?course_id=$data->id"))',
 		   'htmlOptions'=>array('style'=>'width:60px; text-align:center;'),
+		   'type'=>'raw',
 		),
 		array(
 		   'name'=>'total_of_student',

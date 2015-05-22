@@ -10,7 +10,7 @@ class FileController extends Controller
      * */
     public function actionIndex($dir = null)
     {
-        $this->subPageTitle = 'Quản lý tài liệu, giáo án';
+        $this->subPageTitle = 'File Manager';
         $this->render('index');
     }
 

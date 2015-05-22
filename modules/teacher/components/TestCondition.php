@@ -3,7 +3,7 @@
 /* Test Condition */
 class TestCondition extends Controller {
 
-	public  $subPageTitle = 'Check speaker, mic';
+	public  $subPageTitle = 'Test speaker and microphone';
     /*  Action Index*/
     public function actionIndex() {
         $this->render("teacher.views.testCondition.index");
