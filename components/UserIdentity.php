@@ -24,7 +24,7 @@ class UserIdentity extends CUserIdentity
 	}
 	public function authenticate($cryptPassword=NULL)
 	{
-		$user= User::model()->find('LOWER(email)=?', array(strtolower($this->username)));
+		$user= User::model()->find('LOWER(username)=?', array(strtolower($this->username)));
 		
 		if($user === null)
 		{
@@ -39,7 +39,7 @@ class UserIdentity extends CUserIdentity
 			else
 			{
 				$this->_id = $user->id;
-				$this->_username = $user->email;
+				$this->_username = $user->username;
 				$user->last_login_time=new CDbExpression("NOW()");
                 $user->last_login_note = TestConditions::app()->renderJsonUpdate();
 				$user->save();

@@ -7,7 +7,7 @@
  */
 class LoginForm extends CFormModel
 {
-	public $email;
+	public $username;
 	public $password;
 	public $rememberMe = 0;
 
@@ -22,7 +22,7 @@ class LoginForm extends CFormModel
 	{
 		return array(
 			// email and password are required
-			array('email, password', 'required'),
+			array('username, password', 'required'),
 			// rememberMe needs to be a boolean
 			array('rememberMe', 'boolean'),
 			// password needs to be authenticated
@@ -48,9 +48,9 @@ class LoginForm extends CFormModel
 	{
 		if(!$this->hasErrors())
 		{
-			$this->_identity=new UserIdentity($this->email,$this->password);
+			$this->_identity=new UserIdentity($this->username,$this->password);
 			if(!$this->_identity->authenticate())
-				$this->addError('password','Email hoặc mật khẩu không chính xác.');
+				$this->addError('password','Tài khoản hoặc mật khẩu không chính xác.');
 		}
 	}
 
@@ -62,7 +62,7 @@ class LoginForm extends CFormModel
 	{
 		if($this->_identity===null)
 		{
-			$this->_identity=new UserIdentity($this->email,$this->password);
+			$this->_identity=new UserIdentity($this->username,$this->password);
 			$this->_identity->authenticate();
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)

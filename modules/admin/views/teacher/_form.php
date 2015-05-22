@@ -61,12 +61,12 @@
 	<legend>Thông tin tài khoản</legend>	
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
-            <?php echo $form->labelEx($model,'email'); ?>
+            <?php echo $form->labelEx($model,'username'); ?>
         </div>
         <?php $changeStatus = Yii::app()->request->getPost('changeStatus', "0");?>
         <div class="col col-lg-9">
-            <?php echo $form->textField($model,'email',array_merge(array('size'=>60,'maxlength'=>128), $disabledAttrs)); ?>
-			<?php echo $form->error($model,'email'); ?>
+            <?php echo $form->textField($model,'username',array_merge(array('size'=>60,'maxlength'=>30), $disabledAttrs)); ?>
+			<?php echo $form->error($model,'username'); ?>
 			<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
 			<div class="fL">
 				<a class="fs12 errorMessage" href="javascript: changeToStudent(<?php echo $model->id;?>);">Chuyển giáo viên này thành role học sinh?</a>
@@ -77,6 +77,15 @@
 			</div>
 			<?php endif;?>
         </div>		
+	</div>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+			<?php echo $form->labelEx($model,'email'); ?>
+		</div>
+		<div class="col col-lg-9">        	
+			<?php echo $form->textField($model,'email',array_merge(array('size'=>60,'maxlength'=>128))); ?>
+			<?php echo $form->error($model,'email'); ?>
+		</div>
 	</div>
 	<div id="changePassword" class="form-element-container row" style="<?php echo (!$model->isNewRecord && $changeStatus==0)? 'display:none;': "";?>">
 		<div class="col col-lg-3">
@@ -177,7 +186,7 @@
 	</div>
 
 	<div class="form-element-container row">
-		<?php $gender_options = array(0=>'Nữ', 1=>'Nam');?>
+		<?php $gender_options = array(0=>'Chưa xác định', 1=>'Nữ', 2=>'Nam',);?>
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'gender'); ?>
 		</div>

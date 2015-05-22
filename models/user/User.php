@@ -126,10 +126,12 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		$modelRules = array(
-			array('email, password, firstname, lastname', 'required'),
+			array('username, password, firstname, lastname', 'required'),
+			array('username', 'unique'),			
 			array('email', 'email'),
-			array('email', 'unique'),			
+			array('email', 'unique'),	
 			array('gender, status', 'numerical', 'integerOnly'=>true),
+			array('username', 'length', 'max'=>128),
 			array('email, password, firstname, lastname, profile_picture, role, activation_code', 'length', 'max'=>128),
 			array('password', 'length', 'min'=>6),
 			array('address', 'length', 'max'=>256),
@@ -247,6 +249,7 @@ class User extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'username' => 'Tài Khoản',
 			'email' => 'Email',
 			'password' => 'Mật khẩu',
 			'firstname' => 'Tên',
@@ -289,6 +292,7 @@ class User extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('username',$this->username,true);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('password',$this->password,true);
 		//$criteria->compare('firstname',$this->firstname,true);
@@ -368,7 +372,7 @@ class User extends CActiveRecord
         	}
         	if(isset($user->id)){
         		//Auto login & redirect
-        		$identity = new UserIdentity($user->email, $user->password);
+        		$identity = new UserIdentity($user->username, $user->password);
 				$identity->authenticate($user->password);
 				if($identity->errorCode===UserIdentity::ERROR_NONE){
 					Yii::app()->user->login($identity);
@@ -518,7 +522,7 @@ class User extends CActiveRecord
 	public function searchUsersToAssign($keyword, $userRole=NULL)
 	{
 		$criteria = new CDbCriteria();
-		$condition = "((email LIKE '%".$keyword."%') OR (CONCAT(`lastname`,' ',`firstname`) LIKE '%".$keyword."%'))";
+		$condition = "((username LIKE '%".$keyword."%') OR (email LIKE '%".$keyword."%') OR (CONCAT(`lastname`,' ',`firstname`) LIKE '%".$keyword."%'))";
 		if($userRole!=NULL){
 			$condition .= " AND (role='".$userRole."')";
 		}

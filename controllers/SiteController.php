@@ -134,7 +134,7 @@ class SiteController extends Controller
 			$this->redirect('/site/loggedRedirect');
 		}
 		
-		if (isset($_POST['email'])){
+		if (isset($_POST['username'])){
 			$model->attributes = $_POST;
 			if ($model->validate() && $model->login()){
 				//do something when user is logged in

@@ -77,12 +77,12 @@
 	<legend>Thông tin tài khoản</legend>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
-            <?php echo $form->labelEx($model,'email'); ?>
+            <?php echo $form->labelEx($model,'username'); ?>
         </div>
-        <?php $changeStatus = Yii::app()->request->getPost('changeStatus', "0");?>
-        <div class="col col-lg-9">        	
-            <?php echo $form->textField($model,'email',array_merge(array('size'=>60,'maxlength'=>128), $disabledAttrs)); ?>
-			<?php echo $form->error($model,'email'); ?>
+		<?php $changeStatus = Yii::app()->request->getPost('changeStatus', "0");?>
+		<div class="col col-lg-9">        	
+            <?php echo $form->textField($model,'username',array_merge(array('size'=>60,'maxlength'=>30), $disabledAttrs)); ?>
+			<?php echo $form->error($model,'username'); ?>
 			<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
 			<div class="fL">
 				<a class="fs12 errorMessage" href="javascript: changeToTeacher(<?php echo $model->id;?>);">Chuyển học sinh này thành role giáo viên?</a>
@@ -92,7 +92,16 @@
 				<input type="hidden" id="changePasswordStatus" name="changeStatus" value="<?php echo $changeStatus;?>"/>
 			</div>
 			<?php endif;?>
-        </div>		
+        </div>	
+	</div>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+			<?php echo $form->labelEx($model,'email'); ?>
+		</div>
+		<div class="col col-lg-9">        	
+			<?php echo $form->textField($model,'email',array_merge(array('size'=>60,'maxlength'=>128))); ?>
+			<?php echo $form->error($model,'email'); ?>
+		</div>
 	</div>
 	<div id="changePassword" class="form-element-container row" style="<?php echo (!$model->isNewRecord && $changeStatus==0)? 'display:none;': "";?>">
 		<div class="col col-lg-3">
@@ -158,8 +167,8 @@
 					<?php echo $form->labelEx($model,'gender', array('class'=>'mT10')); ?>
 				</div>
 				<div class="col col-lg-8 pL0i pR0i">
-					<?php $genderOptions = array(0=>'Nữ', 1=>'Nam');?>
-					<?php echo $form->dropDownList($model,'gender', $genderOptions, $disabledAttrs); ?>
+					<?php $genderOptions = array(0=>'Chưa xác định', 1=>'Nữ', 2=>'Nam');?>
+					<?php echo $form->dropDownList($model,'gender', $genderOptions, $readonlyAttrs); ?>
 					<?php echo $form->error($model,'gender'); ?>
 				</div>
 			</div>

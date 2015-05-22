@@ -58,14 +58,14 @@ $(document).ready(function() {
         endforeach;
         ?>
     </h2>
-    <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br> Don't have an account? Sign up now!</a><!--END DESCRIPTION-->
+    <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br> Don't have an account? Sign up now!</a>&nbspor<!--END DESCRIPTION-->
     <!--DESCRIPTION--><a href="https://speakup.vn/news/lien-he"><br> Need help? Contact us!</a><!--END DESCRIPTION-->
     </div>
     <!--END HEADER-->
 	
 	<!--CONTENT-->
     <div class="content">
-	<!--USERNAME--><input name="email" type="text" class="input username"  placeholder="Username.."  /><!--END USERNAME-->
+	<!--USERNAME--><input name="username" type="text" class="input username"  placeholder="Username.."  /><!--END USERNAME-->
     <!--PASSWORD--><input name="password" type="password" class="input password" placeholder="Password.."  /><!--END PASSWORD-->
     </div>
     <!--END CONTENT-->
