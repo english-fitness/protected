@@ -10,7 +10,7 @@ www.amitjakhu.com
 
 <!--META-->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Login Form</title>
+<title>Speak Up | Online English Tutoring</title>
 
 <!--STYLESHEETS-->
 
@@ -51,14 +51,14 @@ $(document).ready(function() {
 	<!--HEADER-->
     <div class="header">
     <!--TITLE--><h1>Speakup</h1><!--END TITLE-->
-    <h2 class="text-warning text-center">
+    <span class="text-warning text-center">
         <?php 
         foreach(Yii::app()->user->getFlashes() as $key => $message) : 
             echo  $message; 
         endforeach;
         ?>
-    </h2>
-    <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br> Don't have an account? Sign up now!</a>&nbspor<!--END DESCRIPTION-->
+    </span>
+    <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br> Don't have an account? Sign up now!</a><!--END DESCRIPTION-->
     <!--DESCRIPTION--><a href="https://speakup.vn/news/lien-he"><br> Need help? Contact us!</a><!--END DESCRIPTION-->
     </div>
     <!--END HEADER-->
@@ -100,7 +100,7 @@ www.amitjakhu.com
 FONTS
 *******************/
 
-@import url(http://fonts.googleapis.com/css?family=Bree+Serif);
+@import url(https://fonts.googleapis.com/css?family=Bree+Serif);
 
 /*******************
 SELECTION STYLING
@@ -164,6 +164,7 @@ a{
     line-height: 16px;
     color: #678889;
     text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
+    height: 21px;
 }
 .gradient {
 	/* Center Positioning */
@@ -211,7 +212,7 @@ HEADER
 *******************/
 
 .login-form .header {
-	padding: 40px 30px 10px 30px;
+	padding: 20px 30px 30px 30px;
 }
 
 .login-form .header h1 {
@@ -225,9 +226,9 @@ HEADER
 }
 
 .login-form .header span {
-	font-size: 11px;
+	font-size: 12px;
 	line-height: 16px;
-	color: #678889;
+	color: red;
 	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
 }
 
@@ -334,7 +335,6 @@ FOOTER
 	padding: 11px 25px;
 	
 	font-family: 'Bree Serif', serif;
-	font-weight: 300;
 	font-size: 13px;
 	color: #fff;
 	text-shadow: 0px 1px 0 rgba(0,0,0,0.25);
@@ -385,8 +385,7 @@ FOOTER
 	cursor: pointer;
 	
 	font-family: 'Bree Serif', serif;
-	font-weight: 300;
-	font-size: 13px;
+	font-size: 12px;
 	color: #fff;
 	//text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
         text-shadow: 0 1px rgba(0,0,0,0.1);
