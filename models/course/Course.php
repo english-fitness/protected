@@ -51,7 +51,7 @@ class Course extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		$modelRules = array(
-			array('subject_id, title', 'required'),
+			array('subject_id', 'required'),
 			array('created_user_id, teacher_id, subject_id, status, type, payment_type, payment_status, final_price, total_of_student, modified_user_id, deleted_flag', 'numerical', 'integerOnly'=>true),
 			array('title', 'length', 'max'=>256),
 			array('content, modified_date, payment_type, payment_status, final_price, total_of_student, deleted_flag, teacher_form_url, student_form_url', 'safe'),
