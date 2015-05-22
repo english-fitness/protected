@@ -46,19 +46,20 @@ $this->breadcrumbs=array(
 		   'value'=>'$data->fullName()',
 		   'htmlOptions'=>array('style'=>'width:180px;'),
 		),
-		'email',
 		array(
-		   'header' => 'Lớp học',
-		   'value'=>'Student::model()->displayClass($data->id)',
-		   'filter'=>Student::model()->displayFilterClasses($classId),
-		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
+		   'name'=>'username',
+		   'value'=>$model->username,
+		   'htmlOptions'=>array('style'=>'width:180px;'),
 		),
+		'email',
+		/*
 		array(
 		   'name' => 'birthday',
 		   'value'=>'($data->birthday)? date("d/m/Y", strtotime($data->birthday)): ""',
 		   'filter'=>'<input type="text" value="'.$birthdayFilter.'" name="User[birthday]">',
 		   'htmlOptions'=>array('style'=>'width:100px;'),
 		),
+		*/
 		array(
 		   'name' => 'phone',
 		   'value'=>'$data->displayContactIcons()',
@@ -76,12 +77,14 @@ $this->breadcrumbs=array(
 		   'filter'=>'<input type="text" value="'.$createdDateFilter.'" name="User[created_date]">',
 		   'htmlOptions'=>array('style'=>'width:100px;'),
 		),
+		/*
 		array(
 		   'header'=>'Đơn',
 		   'value'=>'Student::model()->displayPreCourseLink($data->id, "")',
 		   'htmlOptions'=>array('style'=>'width:20px; text-align:center;'),
 		   'type' => 'raw',
 		),
+		*/
 		array(
 		   'header'=>'Khóa',
 		   'value'=>'Student::model()->displayCourseLink($data->id, "")',

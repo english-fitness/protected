@@ -36,22 +36,30 @@ $this->breadcrumbs=array(
 		   'name'=>'firstname',
 		   'value'=>'$data->fullName()',
 		),
-		'email',		
+		array(
+		   'name'=>'username',
+		   'value'=>$model->username,
+		   'htmlOptions'=>array('style'=>'width:180px;'),
+		),
+		'email',
+		/*
 		array(
 		   'name'=>'birthday',
 		   'value'=>'($data->birthday)? date("d/m/Y", strtotime($data->birthday)): ""',
 		   'filter'=>'<input type="text" value="'.$birthdayFilter.'" name="User[birthday]">',
 		   'htmlOptions'=>array('style'=>'width:100px;'),
-		),
+		),*/
 		array(
 		   'name' => 'phone',
 		   'value'=>'$data->displayContactIcons()', 
 		),
+		/*
 		array(
 		   'header'=>'Môn dạy gia sư',
 		   'value'=>'Teacher::model()->displayAbilitySubjects($data->id)',
 		   'htmlOptions'=>array('style'=>'width:250px;'),
 		),
+		*/
 		array(
 		   'name'=>'status',
 		   'value'=>'($data->statusOptions($data->status))',

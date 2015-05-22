@@ -21,7 +21,8 @@ $this->breadcrumbs=array(
 		   'name'=>'Họ và Tên',
 		   'value'=>$model->fullName(),
 		   'type'=>'raw',
-		),		
+		),
+		'username',
 		'email',
 		'phone',
 		array(
