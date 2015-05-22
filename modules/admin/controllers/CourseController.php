@@ -29,7 +29,7 @@ class CourseController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view','ajaxLoadSubjects','ajaxLoadTeachers', 'ajaxApprove',
-				 'unassignStudent', 'ajaxSuggestSchedules', 'ajaxLoadSuggestion', 'ajaxModifySchedule', 'ajaxLoadUser','create','update'),
+				 'unassignStudent', 'ajaxSuggestSchedules', 'ajaxLoadSuggestion', 'ajaxModifySchedule', 'ajaxLoadUser','create','update', 'ajaxLoadStudent'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -353,8 +353,13 @@ class CourseController extends Controller
 	}
 
     /* action Ajax Load User */
-    public  function  actionAjaxLoadUser($keyword){
+    public function actionAjaxLoadUser($keyword){
        $usersAttributes = User::model()->searchUsersToAssign($keyword);
+       $this->renderJSON(array($usersAttributes));
+    }
+	
+	public function actionAjaxLoadStudent($keyword){
+       $usersAttributes = User::model()->searchUsersToAssign($keyword, 'role_student');
        $this->renderJSON(array($usersAttributes));
     }
 	

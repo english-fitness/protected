@@ -4,7 +4,7 @@
 <span class="addUser">
 	<span class="loadUser" id="ajaxLoadSelectedUser"></span>  
     <span class="input pL5">
-        <input id="ajaxSearchUser" class="form-control class_email" name="ajaxSearchUser" placeholder="Họ tên hoặc Email" value="<?php echo isset($ajaxSearchUser)? $ajaxSearchUser: "";?>"/>
+        <input id="ajaxSearchUser" class="form-control class_email" name="ajaxSearchUser" placeholder="Họ tên hoặc Username" value="<?php echo isset($ajaxSearchUser)? $ajaxSearchUser: "";?>"/>
         <button type="button" id="ajaxSearch"><i class="icon-search"></i></button>
         <button type="button" id="ajaxAddUser" name="addUser">Thêm</button>
     </span>
@@ -18,7 +18,7 @@
         function formatAvailableTags(availableTags){
             var resultAvailableTags = [];
             availableTags.forEach(function(value,key){
-                resultAvailableTags[resultAvailableTags.length] = value.emailAndFullName;
+                resultAvailableTags[resultAvailableTags.length] = value.usernameAndFullName;
             });
             return resultAvailableTags;
         }
@@ -43,7 +43,7 @@
 
         function ajaxLoadUsersByValue(value) {
             $.ajax({
-                url:"<?php echo Yii::app()->baseurl; ?>/admin<?php echo isset($ajaxBaseUrl)?$ajaxBaseUrl:"/course/AjaxLoadUser"; ?>/keyword/"+value,
+                url:"<?php echo Yii::app()->baseurl; ?>/admin<?php echo isset($ajaxBaseUrl)?$ajaxBaseUrl:"/course/AjaxLoadStudent"; ?>/keyword/"+value,
                 type:"get",
                 success: function(users) {
                     availableTags = users[0];
@@ -53,32 +53,32 @@
             });
         }
 
-        /* render Object By Email */
-        function renderObjectByEmail(availableTags,email){
-            var renderObjectByEmail = [];
+        /* render Object By Username */
+        function renderObjectByUsername(availableTags,username){
+            var renderObjectByUsername = [];
             availableTags.forEach(function(value,key){
-                if(value.emailAndFullName == email) {
-                    renderObjectByEmail = value;
+                if(value.usernameAndFullName == username) {
+                    renderObjectByUsername = value;
                 }
             });
-            return renderObjectByEmail;
+            return renderObjectByUsername;
         }
 
         /* ajax Add User */
         $("#ajaxSearch").click(function(){
             var value =  $("#ajaxSearchUser").val();
-            var object = renderObjectByEmail(availableTags, value);
-            if(object.email)
-                return ajaxLoadUsersByValue(renderObjectByEmail(availableTags,value).email);
+            var object = renderObjectByUsername(availableTags, value);
+            if(object.username)
+                return ajaxLoadUsersByValue(renderObjectByUsername(availableTags,value).username);
             return ajaxLoadUsersByValue(value);
         });
 
         /*addUser submit */
         $("#ajaxAddUser").click(function(){
-            var email = $("#ajaxSearchUser").val();
-            var object = renderObjectByEmail(availableTags, email);
+            var username = $("#ajaxSearchUser").val();
+            var object = renderObjectByUsername(availableTags, username);
             var ajaxLoadSelectedUser =$("#ajaxLoadSelectedUser");
-            if(object.email && !ajaxLoadSelectedUser.find("span[data='"+object.id+"']").html()) {
+            if(object.username && !ajaxLoadSelectedUser.find("span[data='"+object.id+"']").html()) {
                 var html = '<span data="'+object.id+'"><i class="icon-remove removeUser"></i><a target="_blank" href="<?php echo Yii::app()->baseurl; ?>/admin/student/view/id/'+object.id+'">' +
                     object.fullName+' </a>' +
                     '<input type="hidden" name="extraUserIds[]" value="'+object.id+'"></span>';

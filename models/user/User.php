@@ -540,9 +540,11 @@ class User extends CActiveRecord
 	            $UsersToAssign[] = array(
                     'role' => $user->role,
 	           		'id' => $user->id,
-	           		'email' => $user->email,
+	           		//'email' => $user->email,
+					'username'=> $user->username,
 	           		"fullName" => $user->fullName(),
-	           		"emailAndFullName" => $user->fullName()." (".$user->email.")".$className,
+	           		//"emailAndFullName" => $user->fullName()." (".$user->email.")".$className,
+					"usernameAndFullName" => $user->fullName() . "(" . $user->username . ")",
 	            );
         	}
         }
