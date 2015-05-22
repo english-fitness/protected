@@ -38,7 +38,6 @@ $this->breadcrumbs=array(
 		),
 		array(
 		   'name'=>'username',
-		   'value'=>$model->username,
 		   'htmlOptions'=>array('style'=>'width:180px;'),
 		),
 		'email',

@@ -129,7 +129,7 @@ class User extends CActiveRecord
 			array('username, password, firstname, lastname', 'required'),
 			array('username', 'unique'),			
 			array('email', 'email'),
-			array('email', 'unique'),	
+			//array('email', 'unique'),	
 			array('gender, status', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>128),
 			array('email, password, firstname, lastname, profile_picture, role, activation_code', 'length', 'max'=>128),
@@ -140,7 +140,7 @@ class User extends CActiveRecord
 			array('birthday', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, email, password, firstname, lastname, birthday, gender, address, phone, profile_picture, role, created_date, last_login_time, status, activation_code, activation_expired, status_history, deleted_flag,created_user_id,modified_user_id', 'safe', 'on'=>'search'),
+			array('id, username, email, password, firstname, lastname, birthday, gender, address, phone, profile_picture, role, created_date, last_login_time, status, activation_code, activation_expired, status_history, deleted_flag,created_user_id,modified_user_id', 'safe', 'on'=>'search'),
 			// Set the created and modified dates automatically on insert, update.
 			array('created_date', 'default', 'value'=>date('Y-m-d H:i:s'), 'setOnEmpty'=>false, 'on'=>'insert'),
 		);
