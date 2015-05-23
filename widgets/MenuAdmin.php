@@ -94,10 +94,17 @@ class MenuAdmin extends CWidget
                 'url'=>'#',
                 'title'=>$this->renderTitleCount("Khóa học đang chờ xác nhận: ",$countPendingCourse),
                 'items'=>array(
+					/* Don't use status since we want to show all course
                     array('label'=>'Khóa học thường','url'=>array('/admin/course/index?Course[status]='.Course::STATUS_APPROVED.'&type='.Course::TYPE_COURSE_NORMAL)),
                     array('label'=>'Khóa học tạo trước','url'=>array('/admin/course/index?Course[status]='.Course::STATUS_APPROVED.'&type='.Course::TYPE_COURSE_PRESET)),
                     array('label'=>'Khóa học thử','url'=>array('/admin/course/index?Course[status]='.Course::STATUS_APPROVED.'&type='.Course::TYPE_COURSE_TRAINING)),
                     array('label'=>'Khóa học test','url'=>array('/admin/course/index?Course[status]='.Course::STATUS_APPROVED.'&type='.Course::TYPE_COURSE_TESTING)),
+                    array('label'=>'Đã hủy/xóa','url'=>array('/admin/course?deleted_flag=1')),
+					*/
+					array('label'=>'Khóa học thường','url'=>array('/admin/course/index?type='.Course::TYPE_COURSE_NORMAL)),
+                    array('label'=>'Khóa học tạo trước','url'=>array('/admin/course/index?type='.Course::TYPE_COURSE_PRESET)),
+                    array('label'=>'Khóa học thử','url'=>array('/admin/course/index?type='.Course::TYPE_COURSE_TRAINING)),
+                    array('label'=>'Khóa học test','url'=>array('/admin/course/index?type='.Course::TYPE_COURSE_TESTING)),
                     array('label'=>'Đã hủy/xóa','url'=>array('/admin/course?deleted_flag=1')),
                 )
             ),

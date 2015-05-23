@@ -26,9 +26,10 @@ $this->breadcrumbs=array(
 	'columns'=>array(
 		array(
 		   'name'=>'course_id',
-		   'value'=>'CHtml::link($data->course->title, Yii::app()->createUrl("admin/session?course_id=$data->course_id"))',
+		   'value'=>'CHtml::link($data->course->id, Yii::app()->createUrl("admin/session?course_id=$data->course_id"))',
 		   'htmlOptions'=>array('style'=>'width:150px;'),
 		   'type'=>'raw', 'filter'=>false,
+		   'htmlOptions'=>array('style'=>'text-align:center;'),
 		),
 		array(
 		   'header'=>'Môn học',

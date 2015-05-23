@@ -15,7 +15,9 @@
         <thead>
         <tr>
         	<th class="w150">Type of Class </th>
+			<!-- Remove it for now
         	<th>Class Name</th>
+			-->
             <th class="w150">Session Number</th>
             <th class="w250">Attendees</th>
             <th class="w100">Date</th>
@@ -28,10 +30,12 @@
         	<?php foreach ($nearestSessions as $key=>$session): ?>
             <tr class="even">
            		<td><?php echo $session->course->subject->class->name.' - '.$session->course->subject->name;?></td>
+				<!-- Remove course title for now
            		<td><a href="<?php echo Yii::app()->baseUrl; ?>/teacher/class/course/id/<?php echo $session->course_id;?>">
            				<?php echo $session->course->title; ?>
            			</a>
 				</td>
+				-->
                 <td style="min-width:120px"><a href="<?php echo Yii::app()->baseUrl; ?>/teacher/class/session/id/<?php echo $session->id?>" title="<?php echo $session->content;?>"><?php echo $session->subject; ?></a></td>
                 <td>
                 <?php $sessionStudentValues = array_values($session->getAssignedStudentsArrs());

@@ -83,7 +83,7 @@
 			<?php echo $form->labelEx($model,'email'); ?>
 		</div>
 		<div class="col col-lg-9">        	
-			<?php echo $form->textField($model,'email',array_merge(array('size'=>60,'maxlength'=>128))); ?>
+			<?php echo $form->textField($model,'email',array_merge(array('size'=>60,'maxlength'=>128), $readonlyAttrs)); ?>
 			<?php echo $form->error($model,'email'); ?>
 		</div>
 	</div>
