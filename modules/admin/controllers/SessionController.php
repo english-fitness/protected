@@ -299,6 +299,16 @@ class SessionController extends Controller
         	if(isset($_GET['Session']['plan_start'])){
 				$model->plan_start = Common::convertDateFilter($_GET['Session']['plan_start']);//Created date filter
 			}
+			if(isset($_GET['Session']['teacher_fullname'])){
+				$keyword = $_GET['Session']['teacher_fullname'];
+				$teachers = array_values(Yii::app()->db->createCommand("select id from tbl_user where CONCAT(`lastname`,' ',`firstname`) LIKE '%".$keyword."%'")->queryAll());
+				$teacherId = array();
+				foreach ($teachers as $teacher)
+				{
+					array_push($teacherId, $teacher['id']);
+				}
+				$model->getDbCriteria()->addCondition("teacher_id in (" . implode(", ", $teacherId) . ")");
+			}
         }
         $model->deleted_flag = 0;//not deleted session
         $this->render('ended',array(
@@ -310,10 +320,23 @@ class SessionController extends Controller
 	{
 		$this->subPageTitle  = 'Buổi học được ghi âm';
 		$this->loadJQuery = false;
-		$model = new Session('searchRecordedSession');
+		$model = new Session();
 		$model->unsetAttributes();
 		if (isset($_GET['Session'])){
 			$model->attributes = $_GET['Session'];
+			if(isset($_GET['Session']['plan_start'])){
+				$model->plan_start = Common::convertDateFilter($_GET['Session']['plan_start']);//Created date filter
+			}
+			if(isset($_GET['Session']['teacher_fullname'])){
+				$keyword = $_GET['Session']['teacher_fullname'];
+				$teachers = array_values(Yii::app()->db->createCommand("select id from tbl_user where CONCAT(`lastname`,' ',`firstname`) LIKE '%".$keyword."%'")->queryAll());
+				$teacherId = array();
+				foreach ($teachers as $teacher)
+				{
+					array_push($teacherId, $teacher['id']);
+				}
+				$model->getDbCriteria()->addCondition("teacher_id in (" . implode(", ", $teacherId) . ")");
+			}
 		}
 		$this->render('recorded', array(
 			'model'=>$model,

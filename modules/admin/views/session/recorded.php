@@ -15,9 +15,47 @@ $this->breadcrumbs=array(
     </div>
 </div>
 
+<div id="disk_usage" style="display:inline-table; background-color:#eeeeee; border-radius:5px; padding: 5px 10px 0px 10px;">
+	<?php 
+		$record_dir = Yii::app()->params['recordDir'];
+		if (!$record_dir)
+			$record_dir = "/home/administrator/records/";
+		
+		$io = popen ( 'du -s ' . $record_dir, 'r' );
+		$size = fgets ( $io, 4096);
+		$size = substr ( $size, 0, strpos ( $size, "\t" ) );
+		if ($size <= 1024)
+			$size .= " KB";
+		else if ($size <= 1048576)
+			$size = round($size/1024, 2) . " MB";
+		else
+			$size = round($size/1048576, 2) . " GB";
+		pclose ( $io );
+		echo 'Dung lượng thư mục ghi âm: ' . $size;
+		
+		$lowSpaceThreshold = 0.1;
+		$total = round(disk_total_space('/home/')/pow(2, 30), 2);
+		$remaining = round(disk_free_space('/home/')/pow(2, 30), 2);
+		if ($remaining/$total < $lowSpaceThreshold)
+		{
+			echo "<p style='color:red; line-height:25px; margin:0'>Dung lượng còn lại: " . $remaining . " GB (" . round($remaining/$total, 2)*100 . "%)</p>";
+			echo "<p style='color:red'>Dung lượng lưu trữ trên server còn dưới " . $lowSpaceThreshold*100 . 
+					"%, tải xuống các file ghi âm để lưu trữ và xóa bớt file ghi âm trước khi ghi âm lớp học mới</p>";
+		}
+		else
+		{
+			echo "<p style='color:blue; line-height:25px; margin:0'>Dung lượng còn lại: " . $remaining . " GB (" . round($remaining/$total, 2)*100 . "%)</p>";
+		}
+	?>
+</div>
+
+<?php 
+	$startDateFilter = Yii::app()->controller->getQuery('Session[plan_start]', '');
+	$teacherFullname = Yii::app()->controller->getQuery('Session[teacher_fullname]', '');
+?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$model->searchRecordedSession(),
-	//'filter'=>$model,
+	'filter'=>$model,
 	'enableHistory'=>true,
 	'ajaxVar'=>'',
 	'pager' => array('class'=>'CustomLinkPager'),
@@ -29,6 +67,7 @@ $this->breadcrumbs=array(
 		   'type'=>'raw',
 		   'htmlOptions'=>array('style'=>'text-align:center;'),
 		),
+		'subject',
 		/*
 		array(
 		   'header'=>'Môn học',
@@ -48,6 +87,7 @@ $this->breadcrumbs=array(
 		array(
 		   'name'=>'teacher_id',
 		   'value'=>'$data->getTeacher("/admin/teacher/view/id", true)',
+		   'filter'=>'<input type="text" value="'.$teacherFullname.'" name="Session[teacher_fullname]">',
 		   'type'  => 'raw',
 		),
 		array(
@@ -59,6 +99,7 @@ $this->breadcrumbs=array(
 		array(
 		   'header'=>'Ngày học',
 		   'value'=>'date("d/m/Y", strtotime($data->plan_start))',
+		   'filter'=>'<input type="text" value="'.$startDateFilter.'" name="Session[plan_start]">',
 		),
 		array(
 		   'header'=>'Giờ học',
@@ -69,7 +110,6 @@ $this->breadcrumbs=array(
 		   'name'=>'whiteboard',
 		   'value'=>'ClsAdminHtml::displayBoard($data)',
 		),*/
-		'record_file',
 		array(
 			'class'=>'CButtonColumn',
 			'buttons'=>array (

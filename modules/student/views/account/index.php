@@ -33,12 +33,12 @@
         <div class="row">
             <label class="col-sm-1" style="min-width:120px;">Họ, tên đệm: </label>
             <div class=" col-sm-2">
-				<p> <?php echo $model->firstname;?></p>
+				<p> <?php echo $model->lastname;?></p>
             </div>
             <div class=" col-sm-7">
                 <label class="col-sm-2" style="min-width:125px;">Tên: </label>
                 <div class=" col-sm-4">
-					<p> <?php echo $model->lastname;?></p>
+					<p> <?php echo $model->firstname;?></p>
                 </div>
             </div>
         </div>
@@ -56,7 +56,13 @@
         <div class="row">
             <label class="col-sm-1" style="min-width:120px;">Giới tính: </label>
             <div class=" col-sm-4">
-				<p> <?php if ($model->gender === 0) echo "Nữ"; else echo "Nam";?></p>
+				<p> 
+					<?php 
+						if ($model->gender === 1) echo "Nữ"; 
+						else if ($model->gender === 2) echo "Nam";
+						else echo "";
+					?>
+				</p>
             </div>
         </div>
 		

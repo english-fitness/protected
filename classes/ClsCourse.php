@@ -53,7 +53,7 @@ class ClsCourse
 		$sessionIndex = 1;//Reset subject
 		foreach($tmpSessionSchedules as $key=>$session){
 			if($key>=date('Y-m-d H:i:s') && $sessionIndex<=$values['numberOfSession']){
-				$session['subject'] = 'Buổi '.$sessionIndex;
+				$session['subject'] = 'Session '.$sessionIndex;
 				$generateSessionSchedules[$sessionIndex] = $session;
 				$sessionIndex++;
 			}elseif($sessionIndex>$values['numberOfSession']){

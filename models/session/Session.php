@@ -23,8 +23,8 @@
  */
 class Session extends CActiveRecord
 {
-	const DEFAULT_DURATION = 90;//Default plan duration
-	const DEFAULT_PRESET_DURATION = 120;//Default preset plan duration
+	const DEFAULT_DURATION = 30;//Default plan duration
+	const DEFAULT_PRESET_DURATION = 30;//Default preset plan duration
 	const STATUS_PENDING = 0;//Pending status
 	const STATUS_APPROVED = 1;//Approved status
 	const STATUS_WORKING = 2;//On Working status
@@ -228,7 +228,7 @@ class Session extends CActiveRecord
 	 */
 	public function planDurationOptions()
 	{
-		return array('5'=>'5', '25' => '25', '30'=>'30', '60'=>'60', '90'=>'90', '120'=>'120', '150'=>'150', '180'=>'180');
+		return array('5'=>'5', '10'=>'10', '20' => '20', '30'=>'30', '60'=>'60', '90'=>'90', '120'=>'120', '150'=>'150', '180'=>'180');
 	}
 
 	/**

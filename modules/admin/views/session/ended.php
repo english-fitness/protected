@@ -15,6 +15,7 @@ $this->breadcrumbs=array(
 <?php 
 	$registration = new ClsRegistration();//New Registration class
 	$startDateFilter = Yii::app()->controller->getQuery('Session[plan_start]', '');
+	$teacherFullname = Yii::app()->controller->getQuery('Session[teacher_fullname]', '');
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$model->search(3, "plan_start desc"),
@@ -42,11 +43,13 @@ $this->breadcrumbs=array(
 		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
 		   'type'  => 'raw',
 		),
+		   'name'=>'teacher_id',
 		array(
 		   'name'=>'teacher_id',
 		   'value'=>'$data->getTeacher("/admin/teacher/view/id", true)',
+		   'filter'=>'<input type="text" value="'.$teacherFullname.'" name="Session[teacher_fullname]">',
 		   'htmlOptions'=>array('style'=>'width:150px;'),
-		   'type'  => 'raw', 'filter'=>false,
+		   'type'  => 'raw',
 		),
 		array(
 		   'header' => 'Học sinh',

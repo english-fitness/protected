@@ -75,6 +75,14 @@ class SessionController extends Controller
                 $duration = $end - $start;
                 $actualDuration = $duration / 60; // minutes
             }
+			
+			$plannedEndTime = date("H:i",strtotime($session->plan_start)+$actualDuration*60);
+			$currentTime = date('Y-m-d H:i:s');
+			
+			if ($actualDuration >= $session->plan_duration || $currentTime >= $plannedEndTime)
+			{
+				$session->status = Session::STATUS_ENDED;
+			}
 
             // $session->status = Session::STATUS_ENDED;
             $session->actual_duration = $actualDuration;
@@ -134,30 +142,58 @@ class SessionController extends Controller
 		$record_dir = Yii::app()->params['recordDir'];
 		if (!$record_dir)
 			$record_dir = "/home/administrator/records/";
-		$old_url = $record_dir . $record_file;
+		$file_url = $record_dir . $record_file;
 		
-		if (!file_exists($old_url)) return;
+		if (!file_exists($file_url)) return;
 		
 		$new_dir = $session_id;
-		if (!file_exists($record_dir . $new_dir))
-			mkdir($record_dir . $new_dir);
+		$session_dir = $record_dir . $new_dir;
+		if (!file_exists($session_dir))
+		{
+			mkdir($session_dir);
+		}
 		
 		$date = date("D M d, Y G:i:s");
-		$extension = pathinfo($record_file, PATHINFO_EXTENSION);
-		if ($extension) {
-			$real_file_name = $session_id . "_" . $date . "." . $extension;
-		}
-		else {
-			$real_file_name = $session_id . "_" . $date;
-		}
+		//only use mkv for now, don't need extension handling
 		
-		$model = new SessionRecord();
-		$model->attributes = array('session_id'=>$session_id, 'record_file'=>$real_file_name);
+		// $extension = pathinfo($record_file, PATHINFO_EXTENSION);
+		// if ($extension) {
+			// $real_file_name = $session_id . "_" . $date . "." . $extension;
+		// }
+		// else {
+			// $real_file_name = $session_id . "_" . $date;
+		// }
 		
-		$new_url = $record_dir . $new_dir . "/" . $real_file_name;
-		if (rename($old_url, $new_url))
+		$real_file_name = $session_id . "_" . $date . ".mkv";
+		
+		$criteria=new CDbCriteria();
+		$criteria->condition='session_id = '.$session_id;
+		
+		$model = SessionRecord::model()->find($criteria);
+		
+		if (!$model)
 		{
+			$model = new SessionRecord();
+			$model->attributes = array('session_id'=>$session_id, 'record_file'=>$real_file_name);
+			
+			$new_url = $session_dir . "/" . $real_file_name;
+			if (rename($file_url, $new_url))
+			{
+				$model->save();
+			}
+		}
+		else
+		{
+			$oldRecordFile = $session_dir . "/" . $model->record_file . "";
+			$command = "mkvmerge -o '" . $session_dir . "/" . $real_file_name . "' '" . $oldRecordFile . "' +" . "'" . $file_url . "'";
+			shell_exec($command);
+			
+			unlink($oldRecordFile);
+			unlink($file_url);
+			
+			$model->record_file = $real_file_name;
 			$model->save();
 		}
+		
 	}
 }
