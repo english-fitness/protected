@@ -58,8 +58,15 @@ $(document).ready(function() {
         endforeach;
         ?>
     </span>
-    <!--DESCRIPTION--><a href="https://speakup.vn/news/dang-ky"><br> Don't have an account? Sign up now!</a><!--END DESCRIPTION-->
-    <!--DESCRIPTION--><a href="https://speakup.vn/news/lien-he"><br> Need help? Contact us!</a><!--END DESCRIPTION-->
+    <?php 
+	$tenmien="http";
+	if(isset($_SERVER['HTTPS'])){
+            $tenmien.="s";	
+	}
+	$tenmien.="://".$_SERVER['SERVER_NAME'];
+    ?>
+    <!--DESCRIPTION--><a href=<?php echo $tenmien."/news/dang-ky"?>><br> Don't have an account? Sign up now!</a><!--END DESCRIPTION-->
+    <!--DESCRIPTION--><a href=<?php echo $tenmien."/news/lien-he"?>><br> Need help? Contact us!</a><!--END DESCRIPTION-->
     </div>
     <!--END HEADER-->
 	
@@ -73,7 +80,7 @@ $(document).ready(function() {
     <!--FOOTER-->
     <div class="footer">
     <!--LOGIN BUTTON--><input type="submit" name="submit" value="Login" class="button" /><!--END LOGIN BUTTON-->
-    <!--REGISTER BUTTON--> <a href="https://speakup.vn" class="register" > Back to homepage </a>
+    <!--REGISTER BUTTON--> <a href=<?php echo $tenmien ?> class="register" > Back to homepage </a>
     
     <!--END REGISTER BUTTON-->
     </div>
