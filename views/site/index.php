@@ -34,7 +34,7 @@
                     alt="">
                     <form name="login-form" class="form-signin" action="<?php echo Yii::app()->baseurl;?>/site/signin" method="post">
                         
-                        <input name="email" type="text" class="form-control" placeholder="Username ..." required autofocus>
+                        <input name="username" type="text" class="form-control" placeholder="Username ..." required autofocus>
                         <input name="password" type="password" class="form-control" placeholder="Password ..." required>
                         <span class="text-center test-error">
                             <?php 
