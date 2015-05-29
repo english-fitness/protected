@@ -30,8 +30,9 @@
             </div>
             <div class="col-sm-6 col-md-4 ">
                 <div class="account-wall">
-                     <img class="profile-img" src="<?php echo Yii::app()->baseUrl; ?>/media/images/logo-speakup.png"
-                    alt="">
+		    <a href="<?php echo $tenmien?>">
+                        <img class="profile-img" src="<?php echo Yii::app()->baseUrl; ?>/media/images/logo-speakup.png" alt="">
+		    </a>
                     <form name="login-form" class="form-signin" action="<?php echo Yii::app()->baseurl;?>/site/signin" method="post">
                         
                         <input name="username" type="text" class="form-control" placeholder="Username ..." required autofocus>
