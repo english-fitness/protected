@@ -24,6 +24,21 @@
 			window.location = daykemBaseUrl + '/admin/course/delete/id/'+courseId;
 		}
 	}
+	function toggleChangeSchedule(show)
+	{
+		if (show)
+		{
+			$("#update_schedule").removeAttr("disabled");
+			$("#update_schedule").show();
+			$("#toggle_schedule_link").hide();
+		}
+		else
+		{
+			$("#update_schedule").attr("disabled", true);
+			$("#update_schedule").hide();
+			$("#toggle_schedule_link").show();
+		}
+	}
 </script>
 <div class="form">
 <?php $registration = new ClsRegistration();?>
@@ -223,6 +238,19 @@
 	</div>	
 	<?php endif;?>
 </fieldset>
+<?php if ($action == 'update'):?>
+<div class="clearfix h20">&nbsp;</div>
+<div class="fR"><a id="toggle_schedule_link" class="fs12 errorMessage <?php echo $endedDisplayCss;?>" href="javascript: toggleChangeSchedule(true);">Thay đổi lịch học</a></div>
+<fieldset id="update_schedule" style="display:none" disabled>
+	<legend>Kế hoạch các buổi học trong khóa</legend>
+	<div class="col col-lg-12">
+		<?php
+				echo $this->renderPartial('widget/updateCourseSessions');
+		?>
+	</div>
+	<div class="fR"><a class="fs12 errorMessage <?php echo $endedDisplayCss;?>" href="javascript: toggleChangeSchedule(false);">Hủy thay đổi lịch học</a></div>
+</fieldset>
+<?php endif;?>
 <div class="clearfix h50">&nbsp;</div>	
 <?php $this->endWidget(); ?>
 

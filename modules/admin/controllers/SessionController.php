@@ -28,8 +28,9 @@ class SessionController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index','view','ajaxCreateBoard', 'ajaxApprove', 'ajaxEditInline', 'nearest', 'ended', 'recorded'
-                , 'ajaxDeleteBoard','unassignStudent','canceled','active','create','update', 'cancel', 'reminder', 'getRecordFile', 'removeRecordFile'),
+                'actions'=>array('index','view','ajaxCreateBoard', 'ajaxApprove', 'ajaxEditInline', 'nearest', 'ended', 'recorded', 'today'
+                , 'ajaxDeleteBoard','unassignStudent','canceled','active','create','update', 'cancel', 'reminder', 'getRecordFile', 'removeRecordFile',
+				'loadSessionsByTeacherAndFilter', 'calendar'),
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -325,7 +326,7 @@ class SessionController extends Controller
 		if (isset($_GET['Session'])){
 			$model->attributes = $_GET['Session'];
 			if(isset($_GET['Session']['plan_start'])){
-				$model->plan_start = Common::convertDateFilter($_GET['Session']['plan_start']);//Created date filter
+				$model->plan_start = Common::convertDateFilter($_GET['Session']['plan_start']);
 			}
 			if(isset($_GET['Session']['teacher_fullname'])){
 				$keyword = $_GET['Session']['teacher_fullname'];
@@ -539,5 +540,41 @@ class SessionController extends Controller
 			}
 		}
 		$this->redirect("/admin/session/view/id/".$session_id);
+	}
+	
+	public function actionCalendar()
+	{
+		if (isset($_REQUEST['filter']))
+			$filter = $_REQUEST['filter'];
+		$teacherId = $_REQUEST['teacher'];
+		$this->subPageTitle = 'Calendar View';
+        $this->render('calendar',array(
+				"teacher"=>$teacherId,
+            )
+        );
+	}
+	
+	public function actionLoadSessionsByTeacherAndFilter()
+	{
+		if (isset($_REQUEST['filter']))
+			$filter = $_REQUEST['filter'];
+		$teacherId = $_REQUEST['teacher'];
+		$sessions = Session::model()->findAllBySql('SELECT * FROM tbl_session WHERE teacher_id = ' . $teacherId);
+		$sessionDay = array();
+		if ($sessions)
+		{
+			foreach ($sessions as $session)
+			{
+				$sessionDay[] = array(
+                    'id' => $session->id,
+                    'title' => $session->subject,
+                    'content'=>$session->content,
+                    'start' => $session->plan_start,
+                    'end'=> date("Y-m-d H:i:s",strtotime($session->plan_start) + $session->plan_duration*60),
+                    'allDay'=> false
+                );
+			}
+		}
+		echo json_encode($sessionDay);
 	}
 }

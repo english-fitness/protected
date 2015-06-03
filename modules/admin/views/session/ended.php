@@ -37,13 +37,14 @@ $this->breadcrumbs=array(
 		   'htmlOptions'=>array('style'=>'min-width:100px;'),
 		),
 		'subject',
+		/*
 		array(
 		   'name'=>'total_of_student',
 		   'value'=>'"1-".$data->total_of_student."<br/><span class=\"clrOrange\">(".count($data->assignedStudents())." hs)</span>"',
 		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
 		   'type'  => 'raw',
 		),
-		   'name'=>'teacher_id',
+		*/
 		array(
 		   'name'=>'teacher_id',
 		   'value'=>'$data->getTeacher("/admin/teacher/view/id", true)',

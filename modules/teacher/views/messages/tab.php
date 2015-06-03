@@ -12,6 +12,5 @@ function check($controller,$action,$url) {
 }
 ?>
 <div class="page-title">
-    <label class="tabPage"><a href="<?php echo check("account",'index',$url); ?>">Thông tin tài khoản</a></label>
-    <label class="tabPage"><a href="<?php echo check("messages","send",$url); ?>">Tin nhắn</a></label>
+    <label class="tabPage"><a href="<?php echo check("messages","send",$url); ?>">Messages</a></label>
 </div>

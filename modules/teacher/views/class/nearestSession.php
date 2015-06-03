@@ -8,7 +8,7 @@
 	</script>
 <?php endif;?>
 <?php $this->renderPartial('myCourseTab'); ?>
-<?php $this->renderPartial('student.views.widgets.viewTest'); ?>
+<?php $this->renderPartial('/widgets/viewTest'); ?>
 <div class="details-class">
     <div class="session">
     <table class="table table-bordered table-striped data-grid">

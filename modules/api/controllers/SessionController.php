@@ -65,6 +65,7 @@ class SessionController extends Controller
     {
         $sessionId = Yii::app()->request->getQuery('sessionId', '');
         $actualDuration = Yii::app()->request->getQuery('actualDuration', 0);
+		$forceEnd = Yii::app()->request->getQuery('forceEnd', false);
         $session =  Session::model()->findByPk($sessionId);
 
         if($session && $session->actual_start) {
@@ -76,10 +77,10 @@ class SessionController extends Controller
                 $actualDuration = $duration / 60; // minutes
             }
 			
-			$plannedEndTime = date("H:i",strtotime($session->plan_start)+$actualDuration*60);
+			$plannedEndTime = date("Y-m-d H:i:s",strtotime($session->plan_start)+$session->plan_duration*60);
 			$currentTime = date('Y-m-d H:i:s');
 			
-			if ($actualDuration >= $session->plan_duration || $currentTime >= $plannedEndTime)
+			if ($actualDuration >= $session->plan_duration || $currentTime >= $plannedEndTime || $forceEnd)
 			{
 				$session->status = Session::STATUS_ENDED;
 			}
@@ -185,14 +186,37 @@ class SessionController extends Controller
 		else
 		{
 			$oldRecordFile = $session_dir . "/" . $model->record_file . "";
-			$command = "mkvmerge -o '" . $session_dir . "/" . $real_file_name . "' '" . $oldRecordFile . "' +" . "'" . $file_url . "'";
-			shell_exec($command);
 			
-			unlink($oldRecordFile);
-			unlink($file_url);
-			
-			$model->record_file = $real_file_name;
-			$model->save();
+			if (file_exists($oldRecordFile))
+			{
+				echo $record_dir . "resources/paused.mkv";
+				if (file_exists($record_dir . "resources/paused.mkv"))
+				{
+					$command = "mkvmerge -o '" . $session_dir . "/" . $real_file_name . "' '" . $oldRecordFile . "' +" . "'" . $record_dir . "resources/paused.mkv'" . " +'" . $file_url . "'";
+					shell_exec($command);
+				}
+				else
+				{				
+					$command = "mkvmerge -o '" . $session_dir . "/" . $real_file_name . "' '" . $oldRecordFile . "' +" . "'" . $file_url . "'";
+					shell_exec($command);
+				}
+				
+				unlink($oldRecordFile);
+				unlink($file_url);
+				
+				$model->record_file = $real_file_name;
+				$model->save();
+			}
+			else
+			{
+				$new_url = $session_dir . "/" . $real_file_name;
+				echo $new_url;
+				$model->record_file = $real_file_name;
+				if (rename($file_url, $new_url))
+				{
+					$model->save();
+				}
+			}
 		}
 		
 	}

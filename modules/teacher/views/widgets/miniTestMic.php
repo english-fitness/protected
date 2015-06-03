@@ -1,12 +1,12 @@
 
 <ul class="miniTestMic">
     <li>
-        <i><b><span class="error">Click để kiểm tra ngay</span></b></i>
+        <i><b><span class="error">Click here to test now</span></b></i>
         <div class="frame">
-            <div id="microCanvas"><canvas id="canvas" width="220px" height="130px"></canvas></div>
+            <div id="microCanvas"><canvas id="canvas" height="180" width="220"></canvas></div>
             <div class="button">
-                <button id="start_button"><i class="icon-play"></i> Bắt đầu</button>
-                <button id="playback_button"><i class="icon-volume-up"></i> Nghe lại</button>
+                <button id="start_button"><i class="icon-play"></i> Start</button>
+                <button id="playback_button"><i class="icon-volume-up"></i> Listen</button>
                 <button id="disable_audio" style="display: none" ><i class="icon-remove"></i></button>
                 <button id="audio_options"><i class="icon-asterisk"></i>
                     <div class="options" style="display: none">
@@ -26,6 +26,8 @@
     $(document).ready(function(){
 
         $("#microCanvas").microphone({
+			canvasWidth: 240,
+			canvasHeight: 150,
             /* events */
             events: function(e) {
                 var _e =e;
@@ -57,10 +59,10 @@
                     url:"<?php echo Yii::app()->baseurl; ?>/<?php echo $this->getModule()->id ?>/testCondition/testMic",
                     success: function() {
                         $(".loadNoticeTestMic").removeClass("error").addClass("msg");
-                        $(".loadNoticeTestMic").html("(Bạn đã kiểm tra loa, microphone thành công. Bạn có thể thử lại lần nữa)");
+                        $(".loadNoticeTestMic").html("(You have completed checking your audio, you can try again)");
                     }
                 });
-                e.viewCanvas('+ Micrô đang hoạt động tốt \n+ Bấm nghe lại để kiểm tra');
+                e.viewCanvas('+ Your microphone functions properly \n+ You can click "Listen" to listen again');
             },
 
             /* guide */
@@ -69,35 +71,35 @@
                     validBrowserVersion = '<?php echo TestConditions::app()->validBrowserVersion(); ?>';
                 if(validBrowserSupport==""){
                     $("#start_button").hide();
-                    txt = '1: Trình duyệt không hỗ trợ \n2: Vui lòng sử dụng Chrome,\n Firefox hoặc CờRôm+';
+                    txt = '1: You browser is not supported \n2: Please use Chrome(recommended) or Firefox';
                     return e.viewCanvas(txt);
                 }else if(validBrowserVersion=="") {
                     $("#start_button").hide();
-                    txt = '1: Phiên bản trình duyệt không hỗ trợ \n2: Vui lòng nâng cấp phiên bản.';
+                    txt = '1: This version of your browser is not supported \n2: Please update your browser.';
                     return e.viewCanvas(txt);
                 }
                 var browser = '<?php echo TestConditions::app()->getBrowser(); ?>';
-                txt = '1: Bấm "ghi âm" \n';
+                txt = '1: Click "Start" \n';
                 if(browser == "Chrome") {
-                    txt += '2: Bấm "cho phép" nếu trình duyệt hỏi \n';
+                    txt += '2: Click "Allow" if the browser\nask you to\n';
                 }else if(browser =="Firefox") {
-                    txt += '2: Bấm "chia sẻ" nếu trình duyệt hỏi \n';
+                    txt += '2: Click "Share the selected device" if the browser ask you to \n';
                 }else{
-                    txt += '2: Cho phép sử dụng thiết bị nếu \n trình duyệt hỏi\n';
+                    txt += '2: Allow using your device\nif the browser ask you to\n';
                 }
-                txt += '3: Nói gần mic, rõ ràng \n';
-                txt += '4: Nghe lại để kiểm tra loa \n';
+                txt += '3: Speak clearly \n';
+                txt += '4: Click "Listen" to listen again and make\nsure your speaker functions properly';
                 return e.viewCanvas(txt);
             },
 
             /* play back */
             playback: function(e) {
-                e.viewCanvas("Bạn đang trong chế độ nghe lại,\nnếu như bạn không  nghe thấy  âm \nthanh thì hãy kiểm tra lại loa\nđã hoạt động chưa?");
+                e.viewCanvas("You are in playback mode, if you cannot\nhear anything, please check your speaker");
             },
 
             /* error */
             error: function(e){
-                e.viewCanvas('+ Micro hoạt động không tốt \n+ Vui lòng "ghi âm" lại \n+ Nói gần mic, rõ ràng');
+                e.viewCanvas('Your microphone did not function properly,\nplease check again, speak to the microphone clearly');
             }
         });
     });

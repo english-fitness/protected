@@ -131,7 +131,7 @@ class CourseController extends Controller
 		if(count($assignedStudentIds)==0) $assignedStudentIds = array(0);
 		$availableStudents = User::model()->findAll(array("condition"=>"id IN (".implode(",", $assignedStudentIds).")"));
 		$priorityTeachers = $model->priorityTeachers();//Priority Teachers
-		if(isset($_POST['Course']))
+		if(isset($_POST['Course']) || isset($_POST['Course']))
 		{
 			$model->attributes=$_POST['Course'];
 			if($model->save()){
@@ -151,8 +151,21 @@ class CourseController extends Controller
 					$changeStatus = true;
 				}
 				$model->resetStatusSessions($changeStatus);//Reset status of sessions
-				$this->redirect(array('index?type='.$model->type));
+				// $this->redirect(array('index?type='.$model->type));
 			}
+			if (isset($_POST['Session']))
+			{
+				$sessionValues = $_POST['Session'];
+				$planSet = isset($sessionValues['plan_duration']) 
+						&& isset($sessionValues['dayOfWeek']) 
+						&& isset($sessionValues['startHour']) 
+						&& isset($sessionValues['startMin']);
+				if ($planSet)
+				{
+					$model->changeSchedule($sessionValues);
+				}
+			}
+			$this->redirect(array('index?type='.$model->type));
 		}
 
 		$this->render('update',array(

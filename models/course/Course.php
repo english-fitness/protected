@@ -580,4 +580,21 @@ class Course extends CActiveRecord
 		return implode('&nbsp;&nbsp;', $displayPreCourses);
 	}
 	
+	public function changeSchedule($schedule)
+	{
+		$sessions = $this->getSessions(true);
+		
+		$schedule['numberOfSession'] = count($sessions);
+		$schedule['startDate'] = date('Y-m-d', strtotime('-1 day'));
+		
+		$newSchedule = ClsCourse::generateSchedules($schedule);
+		
+		//apply new schedule
+		for ($i = 0; $i < count($sessions); $i++)
+		{
+			$sessions[$i]->plan_start = $newSchedule[$i+1]['plan_start'];
+			$sessions[$i]->plan_duration = $schedule['plan_duration'];
+			$sessions[$i]->save();
+		}
+	}
 }

@@ -38,13 +38,13 @@ $this->breadcrumbs=array(
 		$remaining = round(disk_free_space('/home/')/pow(2, 30), 2);
 		if ($remaining/$total < $lowSpaceThreshold)
 		{
-			echo "<p style='color:red; line-height:25px; margin:0'>Dung lượng còn lại: " . $remaining . " GB (" . round($remaining/$total, 2)*100 . "%)</p>";
+			echo "<p style='color:red; line-height:25px; margin:0'>Dung lượng còn lại: " . $remaining . " GB (" . round($remaining/$total, 4)*100 . "%)</p>";
 			echo "<p style='color:red'>Dung lượng lưu trữ trên server còn dưới " . $lowSpaceThreshold*100 . 
 					"%, tải xuống các file ghi âm để lưu trữ và xóa bớt file ghi âm trước khi ghi âm lớp học mới</p>";
 		}
 		else
 		{
-			echo "<p style='color:blue; line-height:25px; margin:0'>Dung lượng còn lại: " . $remaining . " GB (" . round($remaining/$total, 2)*100 . "%)</p>";
+			echo "<p style='color:blue; line-height:25px; margin:0'>Dung lượng còn lại: " . $remaining . " GB (" . round($remaining/$total, 4)*100 . "%)</p>";
 		}
 	?>
 </div>

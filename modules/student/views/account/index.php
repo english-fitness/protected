@@ -58,9 +58,12 @@
             <div class=" col-sm-4">
 				<p> 
 					<?php 
-						if ($model->gender === 1) echo "Nữ"; 
-						else if ($model->gender === 2) echo "Nam";
-						else echo "";
+						if ($model->gender == 1)
+							echo "Nữ"; 
+						else if ($model->gender == 2)
+							echo "Nam";
+						else
+							echo "";
 					?>
 				</p>
             </div>

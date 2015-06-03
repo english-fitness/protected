@@ -14,12 +14,18 @@ class TeacherModule extends CWebModule
 			'teacher.components.*',
 			'admin.classes.*',
             'student.classes.*',
-            'student.actions.*',
+            'teacher.actions.*',
 		));
 	}
 
 	public function beforeControllerAction($controller, $action)
 	{
+		$user = User::model()->findByPk(Yii::app()->user->id);
+		if ($user->active_session && $user->active_session != $_SESSION['active_session'])
+		{
+			Yii::app()->user->logout(true);
+		}
+		
         //Check loggin user is admin user
         if(!(Yii::app()->user->getId() && Yii::app()->user->role==User::ROLE_TEACHER))
         {

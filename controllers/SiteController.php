@@ -139,6 +139,13 @@ class SiteController extends Controller
 			if ($model->validate() && $model->login()){
 				//do something when user is logged in
 				$success = true;
+				
+				$user = User::model()->findByPk(Yii::app()->user->id);
+				$user->active_session = $_COOKIE['PHPSESSID'];
+				$user->save();
+				
+				$_SESSION['active_session'] = $user->active_session;
+				
 				// $adminRules = array(User::ROLE_ADMIN, User::ROLE_MONITOR);
 				// $userRole = Yii::app()->user->role;
 				// $urlModule = in_array($userRole, $adminRules)? 'admin': str_replace("role_","",$userRole);
@@ -340,6 +347,9 @@ class SiteController extends Controller
     //Logout 
 	public function actionLogout()
 	{
+		$user = User::model()->findByPk(Yii::app()->user->id);
+		$user->active_session = NULL;
+		$user->save();
 		Yii::app()->user->logout(true);
 		$this->redirect(Yii::app()->homeUrl);
 	}

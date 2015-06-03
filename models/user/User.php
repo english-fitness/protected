@@ -126,7 +126,7 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		$modelRules = array(
-			array('username, password, firstname, lastname', 'required'),
+			array('username, email, password, firstname, lastname', 'required'),
 			array('username', 'unique'),			
 			array('email', 'email'),
 			//array('email', 'unique'),	

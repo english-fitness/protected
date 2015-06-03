@@ -143,7 +143,7 @@
 	</div>
 
 	<div class="form-element-container row">
-		<?php $gender_options = array(0=>'Nữ', 1=>'Nam');?>
+		<?php $gender_options = array(0=>'Chưa xác định', 1=>'Nữ', 2=>'Nam');?>
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'gender'); ?>
 		</div>

@@ -44,12 +44,14 @@ $this->breadcrumbs=array(
 		   'value'=>'ClsAdminHtml::displayInlineEdit($data->id, $data->subject)',
 		   'htmlOptions'=>array('style'=>'min-width:100px;'),	
 		),
+		/*
 		array(
 		   'name'=>'total_of_student',
 		   'value'=>'"1-".$data->total_of_student."<br/><span class=\"clrOrange\">(".count($data->assignedStudents())." hs)</span>"',
 		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
 		   'type'  => 'raw',
 		),
+		*/
 		array(
 		   'name'=>'teacher_id',
 		   'value'=>'$data->getTeacher("/admin/teacher/view/id", true)',

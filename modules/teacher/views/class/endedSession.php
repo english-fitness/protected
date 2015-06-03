@@ -42,7 +42,7 @@
 	        	</tr>
         	<?php endif;?>
         <?php else:?>
-        <tr><td colspan="5">No class has yet finished!</td></tr>
+        <tr><td colspan="5">There doesn't seem to be anything here!</td></tr>
         <?php endif;?>
         </tbody>
     </table>
