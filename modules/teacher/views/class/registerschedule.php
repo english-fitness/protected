@@ -54,7 +54,7 @@
                    
             ?>
                 <tr>
-                    <td class="calendar-td">
+                    <td class="calendar-td calendar-time">
                         <?php 
                             echo $h1.'h'.':'.$m1;
                             echo ' ~ ';
@@ -70,7 +70,7 @@
                             if($calendars!=""){
                                 if($calendars[$toado]==1){
                         ?>
-                            <select name="calendar[<?php echo $toado;?>]">
+                            <select name="calendar[<?php echo $toado;?>]" class="calendar-availble">
                                 <option value="1" selected="selected">Available</options>
                                 <option value="0" > </options>
                             </select>
