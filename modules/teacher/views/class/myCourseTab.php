@@ -10,6 +10,7 @@ $menuCourseTeacher  =  array(
 	/* REMOVE
 	array("label"=>Yii::t('nav','Rearest hour'),"url"=>$baseurl."/class/attendingSession"),
 	*/
+	array("label"=>Yii::t('nav','Register schedule'),"url"=>$baseurl."/class/Registerschedule"),
 );
 echo Html::createNavMenu($menuCourseTeacher,array('class'=>'nav nav-tabs'));
 ?>

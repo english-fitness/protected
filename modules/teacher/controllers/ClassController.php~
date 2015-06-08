@@ -157,31 +157,6 @@ class ClassController extends Controller
     }
     
    //calendar for session
-
-   public function actionRegisterschedule(){
-        $this->subPageTitle = 'Register schedule';
-    	$teacherId = Yii::app()->user->id;
-        $calendars="";
-        if(isset($_POST['calendar']))  
-        {
-            $calendars=$_POST['calendar'];
-            $luucalendar="";
-            foreach ($calendars as $key=>$value){
-                if($value==1){
-                    $luucalendar=$luucalendar.", ".$key;
-                }
-            }
-            if($luucalendar!=""){
-                $luucalendar=ltrim( $luucalendar,"," ) ;
-            }
-            
-            //echo 'Giao vien: '.$teacherId.':'.$luucalendar;
-            $teacher = Teacher::model()->findByPk($teacherId);
-            $teacher->available_timeslot = $luucalendar;
-            $teacher->save();
-        }
-        $this->render('registerschedule',array('calendars'=>$calendars));
-    }
  
 }
 ?>
