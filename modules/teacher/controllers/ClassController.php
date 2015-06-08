@@ -143,7 +143,7 @@ class ClassController extends Controller
     //Session detail
     public function actionSession($id)
     {
-		$this->subPageTitle = 'Session Information';
+        $this->subPageTitle = 'Session Information';
         $uid = yii::app()->user->id;
         $session  = Session::model()->findByPk($id);
         if($session->teacher_id!=$uid)
@@ -155,13 +155,14 @@ class ClassController extends Controller
             )
         );
     }
-    
-   //calendar for session
-
-   public function actionRegisterschedule(){
+    public function actionRegisterschedule(){
         $this->subPageTitle = 'Register schedule';
     	$teacherId = Yii::app()->user->id;
-        $calendars="";
+        $calendars= array();
+        for($i=0;$i<147;$i++){
+            $calendars[$i]=0;
+        }
+            
         if(isset($_POST['calendar']))  
         {
             $calendars=$_POST['calendar'];
@@ -173,6 +174,7 @@ class ClassController extends Controller
             }
             if($luucalendar!=""){
                 $luucalendar=ltrim( $luucalendar,"," ) ;
+                $luucalendar=ltrim( $luucalendar," " ) ;
             }
             
             //echo 'Giao vien: '.$teacherId.':'.$luucalendar;
@@ -180,8 +182,19 @@ class ClassController extends Controller
             $teacher->available_timeslot = $luucalendar;
             $teacher->save();
         }
+        $calendarold=Teacher::model()->findByPk($teacherId)->available_timeslot;
+        while(strpos($calendarold,",")){
+            $vitricat=strpos($calendarold,",");
+            $giatrilay=substr( $calendarold,0,$vitricat );
+            $calendars[$giatrilay]=1;
+            $calendarold=substr($calendarold, $vitricat+2);
+          
+        }
+        if($calendarold){
+            $calendars[$calendarold]=1;
+        }
+        
         $this->render('registerschedule',array('calendars'=>$calendars));
     }
- 
 }
 ?>
