@@ -114,5 +114,5 @@ return array(
     'Không có buổi học nào đã hoàn thành!'=>'No session completes',
     'Cập nhật thông tin cá nhân'=>'Click here to update account information',
     'Vui lòng cập nhật đầy đủ thông tin cá nhân trước gửi tin nhắn'=>'Please update all informations of your account before sending the message',
-    'Gửi tin nhắn cho'=>'Send message to',
+    'Gửi tin nhắn cho tutor.vn'=>'Send message to us',
 );
