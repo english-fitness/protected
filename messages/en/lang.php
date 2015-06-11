@@ -25,8 +25,8 @@ return array(
     'Bắt đầu'=>'Start',
     'Nghe lại'=>'Again',
     'Buổi học gần nhất'=>'On-going sesions',
-    'Buổi học đã hoàn thành'=>'Complated sessions',
-    'Buổi học đã hoàn thành'=>'Complated sessions',
+    'Buổi học đã hoàn thành'=>'Completed sessions',
+    'Buổi học đã hoàn thành'=>'Completed sessions',
     
     'Thời gian học'=>'Time',
     'Kiểm tra loa, mic'=>'Test speaker, microphone',
@@ -65,6 +65,7 @@ return array(
     'Thời gian học'=>'Time',
     'Thoát hệ thống'=>'Exit',
     'Gửi tin nhắn cho speakup.vn'=>'Send message to us',
+    
     'Tiêu đề tin nhắn'=>'Subject',
     'Nội dung tin nhắn'=>'Message',
     'Gửi tin nhắn'=>'Send',
@@ -110,5 +111,8 @@ return array(
     'Bạn đang dùng trình duyệt Firefox. Chúng tôi khuyên dùng Google Chrome để có thể tương thích tốt nhất với hệ thống'=>
     'You are using Firefox browser. We recommend that you use Google Chrome for best compabilities. A download link can be found below',
     'Tải Google Chrome'=>'Download Google Chrome',
-    'Không có buổi học nào đã hoàn thành!'=>'No session complate',
+    'Không có buổi học nào đã hoàn thành!'=>'No session completes',
+    'Cập nhật thông tin cá nhân'=>'Click here to update account information',
+    'Vui lòng cập nhật đầy đủ thông tin cá nhân trước gửi tin nhắn'=>'Please update all informations of your account before sending the message',
+
 );
