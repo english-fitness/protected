@@ -1,3 +1,9 @@
+ <?php
+        $userID = Yii::app()->user->id;
+        $languages = User::model()->findByPk($userID)->language;
+        Yii::app()->language=$languages;
+?>
+   
 <script type="text/javascript">
 	//Auto complete suggest title for course
 	function markRead(noticeId){
@@ -19,7 +25,7 @@
 	}
 </script>
 <div class="page-title">
-	<label class="tabPage"><a style="color:#325DA7;" href="/student/notification">Thông báo từ <?php echo Yii::app()->params['copyright'] ?></a></label>
+	<label class="tabPage"><a style="color:#325DA7;" href="/student/notification"> <?php echo Yii::t('lang','Thông báo từ');?> <?php echo Yii::app()->params['copyright'] ?></a></label>
 </div>
 <div class="mA10 clearfix">
 	<?php
@@ -27,7 +33,7 @@
 		$countNotConfirmed = Notification::model()->getNotifications($user, null, false, true);
 		if($countNotConfirmed>0):
 	?>
-	<span class="error">Bạn có <b id="countNotConfirmed"><?php echo $countNotConfirmed;?></b> thông báo từ hệ thống Dạykèm123 được đánh dấu là chưa đọc! Vui lòng xem thông báo và xác nhận đã đọc!</span>
+	<span class="error"><?php echo Yii::t('lang','Bạn có');?> <b id="countNotConfirmed"><?php echo $countNotConfirmed;?></b> <?php echo Yii::t('lang','thông báo từ hệ thống Dạykèm123 được đánh dấu là chưa đọc! Vui lòng xem thông báo và xác nhận đã đọc');?>!</span>
 	<?php endif;?>
 </div>
 <div class="list-notice">
@@ -35,7 +41,7 @@
     <div class="row-notice">
         <p><?php echo $item->content; ?></p>
         <?php if(!$item->isConfirmed($user->id)):?>
-        	<p><span id="unreadNotice<?php echo $item->id;?>" >(<a id="markRead<?php echo $item->id;?>" href="javascript:markRead(<?php echo $item->id;?>)">Xác nhận đã đọc</a>)</span></p>
+        	<p><span id="unreadNotice<?php echo $item->id;?>" >(<a id="markRead<?php echo $item->id;?>" href="javascript:markRead(<?php echo $item->id;?>)"><?php echo Yii::t('lang','Xác nhận đã đọc');?></a>)</span></p>
         <?php endif;?>
         <p>
         	<label class="hint"><?php echo date("d/m/Y H:i",strtotime($item->created_date))?></label>
@@ -43,6 +49,6 @@
         </p>
     </div>
     <?php endforeach; else: ?>
-    <div class="row-notice">Hiện tại không có thông báo mới.</div>
+    <div class="row-notice"><?php echo Yii::t('lang','Hiện tại không có thông báo mới');?>.</div>
     <?php endif; ?>
 </div>

@@ -115,4 +115,6 @@ return array(
     'Cập nhật thông tin cá nhân'=>'Click here to update account information',
     'Vui lòng cập nhật đầy đủ thông tin cá nhân trước gửi tin nhắn'=>'Please update all informations of your account before sending the message',
     'Gửi tin nhắn cho tutor.vn'=>'Send message to us',
+    'Thông báo từ'=>'Notification',
+    'Hiện tại không có thông báo mới'=>'You do not have any new notifications',
 );

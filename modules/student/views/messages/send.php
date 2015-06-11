@@ -10,7 +10,7 @@
 <?php $disabledMessageAttr = '';?>
 <?php if(isset($user->role) && $user->role==User::ROLE_STUDENT && $user->status < User::STATUS_ENOUGH_PROFILE):?>
 <div class="content pT15 pB15 text-center"><i class="icon-warning-sign"></i>
-    <b class="error"><?php echo Yii::t('lang','Vui lòng cập nhật đầy đủ thông tin cá nhân trước gửi tin nhắn');?> <a href="/student/account/index">( Cập nhật thông tin cá nhân )</a></b>
+    <b class="error"><?php echo Yii::t('lang','Vui lòng cập nhật đầy đủ thông tin cá nhân trước gửi tin nhắn');?> <a href="/student/account/index">( <?php echo Yii::t('lang','Cập nhật thông tin cá nhân');?>  )</a></b>
     <?php $disabledMessageAttr = 'disabled="disabled"';?>
 </div>
 <?php endif;?>
