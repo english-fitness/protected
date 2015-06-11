@@ -110,5 +110,5 @@ return array(
     'Bạn đang dùng trình duyệt Firefox. Chúng tôi khuyên dùng Google Chrome để có thể tương thích tốt nhất với hệ thống'=>
     'You are using Firefox browser. We recommend that you use Google Chrome for best compabilities. A download link can be found below',
     'Tải Google Chrome'=>'Download Google Chrome',
-
+    'Không có buổi học nào đã hoàn thành!'=>'No session complate',
 );
