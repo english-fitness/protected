@@ -18,7 +18,7 @@ class StudentModule extends CWebModule{
     public function beforeControllerAction($controller, $action)
     {
 		$user = User::model()->findByPk(Yii::app()->user->id);
-		if ($user->active_session && $user->active_session != $_SESSION['active_session'])
+		if (isset($user->active_session) && isset($_SESSION['active_session']) && $user->active_session != $_SESSION['active_session'])
 		{
 			Yii::app()->user->logout(true);
 		}
