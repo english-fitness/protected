@@ -1,3 +1,9 @@
+<?php
+        $userID = Yii::app()->user->id;
+        $languages = User::model()->findByPk($userID)->language;
+        Yii::app()->language=$languages;
+?>
+
 <?php $this->renderPartial('/messages/tab'); ?>
 <?php $this->renderPartial('accountTab'); ?>
         <?php
@@ -31,12 +37,12 @@
 
 		<!-- USER PROFILE -->
         <div class="row">
-            <label class="col-sm-1" style="min-width:120px;">Họ, tên đệm: </label>
+            <label class="col-sm-1" style="min-width:120px;"><?php echo Yii::t('lang','Họ, tên đệm');?>: </label>
             <div class=" col-sm-2">
 				<p> <?php echo $model->lastname;?></p>
             </div>
             <div class=" col-sm-7">
-                <label class="col-sm-2" style="min-width:125px;">Tên: </label>
+                <label class="col-sm-2" style="min-width:125px;"><?php echo Yii::t('lang','Tên');?>: </label>
                 <div class=" col-sm-4">
 					<p> <?php echo $model->firstname;?></p>
                 </div>
@@ -54,7 +60,7 @@
 		-->
 
         <div class="row">
-            <label class="col-sm-1" style="min-width:120px;">Giới tính: </label>
+            <label class="col-sm-1" style="min-width:120px;"><?php echo Yii::t('lang','Giới tính');?>: </label>
             <div class=" col-sm-4">
 				<p> 
 					<?php 
@@ -70,19 +76,19 @@
         </div>
 		
         <div class="row">
-            <label class="col-sm-1" style="min-width:120px;">Ngày sinh: </label>
+            <label class="col-sm-1" style="min-width:120px;"><?php echo Yii::t('lang','Ngày sinh');?>: </label>
             <div class="col-sm-2">
 				<p> <?php echo $model->birthday;?></p>
 			</div>
 			<div class="col-sm-7">
-				<label  class="col-sm-2"" style="min-width:125px;">Số điện thoại:</label>
+				<label  class="col-sm-2"" style="min-width:125px;"><?php echo Yii::t('lang','Số điện thoại');?>:</label>
 				<div class=" col-sm-4">
 					<p> <?php echo $model->phone;?></p>
 				</div>
 			</div>
 		</div>
         <div class="row">
-            <label  class="col-sm-1" style="min-width:120px;">Địa chỉ: </label>
+            <label  class="col-sm-1" style="min-width:120px;"><?php echo Yii::t('lang','Địa chỉ');?>: </label>
             <div class=" col-sm-8">
 				<p> <?php echo $model->address;?></p>
             </div>
@@ -106,7 +112,7 @@
             <label class=" col-sm-1" style="min-width:120px;">&nbsp;</label>
             <div class=" col-sm-7">
 				<br>
-                <input type="submit" disabled name="save"  class="btn btn-primary" value="Vui lòng liên hệ khi cần thay đổi thông tin cá nhân"/>
+                <input type="submit" disabled name="save"  class="btn btn-primary" value="<?php echo Yii::t('lang','Vui lòng liên hệ khi cần thay đổi thông tin cá nhân');?>"/>
             </div>
         </div>
         <?php $this->endWidget(); ?>

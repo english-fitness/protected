@@ -1,12 +1,17 @@
-
+<?php
+        $userID = Yii::app()->user->id;
+        $languages = User::model()->findByPk($userID)->language;
+        Yii::app()->language=$languages;
+?>
+<?php echo Yii::t('lang','');?>
 <ul class="miniTestMic">
     <li>
-        <i><b><span class="error">Click để kiểm tra ngay</span></b></i>
+        <i><b><span class="error"><?php echo Yii::t('lang','Click để kiểm tra ngay');?></span></b></i>
         <div class="frame">
             <div id="microCanvas"><canvas id="canvas" width="220px" height="130px"></canvas></div>
             <div class="button">
-                <button id="start_button"><i class="icon-play"></i> Bắt đầu</button>
-                <button id="playback_button"><i class="icon-volume-up"></i> Nghe lại</button>
+                <button id="start_button"><i class="icon-play"></i><?php echo Yii::t('lang','Bắt đầu');?> </button>
+                <button id="playback_button"><i class="icon-volume-up"></i><?php echo Yii::t('lang','Nghe lại');?> </button>
                 <button id="disable_audio" style="display: none" ><i class="icon-remove"></i></button>
                 <button id="audio_options"><i class="icon-asterisk"></i>
                     <div class="options" style="display: none">

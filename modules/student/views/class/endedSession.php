@@ -3,19 +3,24 @@
 	<label class="tabPage">Buổi học đã hoàn thành</label>
 </div>
 -->
-<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Buổi học đã hoàn thành</p></div>
+<?php
+        $userID = Yii::app()->user->id;
+        $languages = User::model()->findByPk($userID)->language;
+        Yii::app()->language=$languages;
+?>
+<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;"><?php echo Yii::t('lang','Buổi học đã hoàn thành');?></p></div>
 <?php $this->renderPartial('myCourseTab'); ?>
 <div class="details-class">
     <div class="session">
     <table class="table table-bordered table-striped data-grid">
         <thead>
         <tr>
-        	<th class="w150">Lớp/môn học</th>
-        	<th>Khóa học</th>
-            <th>Chủ đề buổi học</th>
-            <th class="w150">Giáo viên</th>
-            <th class="w100">Ngày học</th>
-            <th class="w100">Thời gian học</th>
+        	<th class="w150"><?php echo Yii::t('lang','Lớp/môn học');?></th>
+        	<th><?php echo Yii::t('lang','Khóa học');?></th>
+            <th><?php echo Yii::t('lang','Chủ đề buổi học');?></th>
+            <th class="w150"><?php echo Yii::t('lang','Giáo viên');?></th>
+            <th class="w100"><?php echo Yii::t('lang','Ngày học');?></th>
+            <th class="w100"><?php echo Yii::t('lang','Thời gian học');?></th>
         </tr>
         </thead>
         <tbody>
@@ -34,7 +39,7 @@
                 	</a>
                 </td>
                 <td><?php $teacher = $session->getTeacher();
-                		echo ($teacher)? $teacher: "Chưa xác định";
+                		echo ($teacher)? $teacher: Yii::t('lang',"Chưa xác định");
                 	?>
                 </td>
                 <td><?php echo Common::formatDate($session->plan_start); ?></td>
@@ -47,7 +52,7 @@
 	        	</tr>
         	<?php endif;?>
         <?php else:?>
-        <tr><td colspan="6">Không có buổi học nào đã hoàn thành!</td></tr>
+        <tr><td colspan="6"><?php echo Yii::t('lang','Không có buổi học nào đã hoàn thành!');?></td></tr>
         <?php endif;?>
         </tbody>
     </table>

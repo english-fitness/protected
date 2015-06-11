@@ -1,3 +1,9 @@
+<?php
+        $userID = Yii::app()->user->id;
+        $languages = User::model()->findByPk($userID)->language;
+        Yii::app()->language=$languages;
+?>
+
 <?php $this->renderPartial('student.views.messages.tab'); ?>
 <!--.Page-title-->
 <?php $this->renderPartial('student.views.messages.tools'); ?>
@@ -26,7 +32,7 @@
        <?php endif;?>
     <?php else: ?>
         <div style="padding-left: 10px">
-            Không có tin nhắn gửi đi.
+            <?php echo Yii::t('lang','Không có tin nhắn gửi đi');?>.
         </div>
     <?php endif; ?>
 </div>

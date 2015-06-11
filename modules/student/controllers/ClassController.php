@@ -124,6 +124,39 @@ class ClassController extends Controller
         }
         echo json_encode($sessionDay);
     }
+    //set languages
+    public function actionLanguage()
+    {
+        
+        if(isset($_POST['lang'])||isset($_GET['lang'])){
+            $userID = Yii::app()->user->id;
+            $languages = User::model()->findByPk($userID);
+            if(isset($_POST['lang'])){
+                $lang=$_POST['lang'];
+                if(isset($lang['vi'])){
+                     Yii::app()->language=$languages->language = 'vi';
+                    $languages->save();
+                }
+                if(isset($lang['en'])){
+                     Yii::app()->language=$languages->language = 'en';
+                    $languages->save();
+                }
+                if($lang=='en'||$lang=='vi'){
+                    Yii::app()->language=$languages->language = $lang;
+                    $languages->save();
+                }
+            }else if(isset($_GET['lang'])){
+                Yii::app()->language=$languages->language = $_GET['lang'];
+                $languages->save();
+            }
+            $ClsSession = new ClsSession();
+            $nearestSessions = $ClsSession->getNearestSessions($userID, 'student', 8);
+            $this->render("nearestSession",array(
+                    "nearestSessions"=>$nearestSessions,
+            ));
+        }
+       
+    }
 }
 
 ?>
