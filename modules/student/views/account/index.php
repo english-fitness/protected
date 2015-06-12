@@ -65,9 +65,9 @@
 				<p> 
 					<?php 
 						if ($model->gender == 1)
-							echo "Nữ"; 
+							echo Yii::t('lang','Nữ'); 
 						else if ($model->gender == 2)
-							echo "Nam";
+							echo Yii::t('lang','Nam');
 						else
 							echo "";
 					?>
