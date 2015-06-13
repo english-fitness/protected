@@ -119,4 +119,5 @@ return array(
     'Hiện tại không có thông báo mới'=>'You do not have any new notifications',
     'Nữ'=>'Female',
     'Nam'=>'Male',
+    'Vào lớp'=>'Enter class',
 );

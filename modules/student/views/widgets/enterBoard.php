@@ -1,4 +1,9 @@
 <?php
+        $userID = Yii::app()->user->id;
+        $languages = User::model()->findByPk($userID)->language;
+        Yii::app()->language=$languages;
+?>
+<?php
 	$boardLink = Yii::app()->board->generateUrl($whiteboard);
     $btnClass = "btn-primary"; $checkValidBrowser = 1;
     $checkEnterTime = 1;//Check enter time in whiteboard
@@ -10,5 +15,7 @@
     }
 ?>
 <a href="#" onclick='enterWhiteboard("<?php echo $whiteboard;?>", "<?php echo $boardLink; ?>", <?php echo $checkValidBrowser; ?>, <?php echo $checkEnterTime;?>)'>
-<button class="btn <?php echo $btnClass;?> pT0 pR10 pB0 pL10 fs14"><?php if (Yii::app()->language == 'vi') echo('Vào lớp'); else echo('Enter Class'); ?></button></a> 
+<button class="btn <?php echo $btnClass;?> pT0 pR10 pB0 pL10 fs14">
+	<?php echo Yii::t('lang','Vào lớp');?>
+</button></a> 
 
