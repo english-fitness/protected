@@ -3,7 +3,7 @@
         $languages = User::model()->findByPk($userID)->language;
         Yii::app()->language=$languages;
 ?>
-<?php echo Yii::t('lang','');?>
+
 <ul class="miniTestMic">
     <li>
         <i><b><span class="error"><?php echo Yii::t('lang','Click để kiểm tra ngay');?></span></b></i>
@@ -62,10 +62,10 @@
                     url:"<?php echo Yii::app()->baseurl; ?>/<?php echo $this->getModule()->id ?>/testCondition/testMic",
                     success: function() {
                         $(".loadNoticeTestMic").removeClass("error").addClass("msg");
-                        $(".loadNoticeTestMic").html("(Bạn đã kiểm tra loa, microphone thành công. Bạn có thể thử lại lần nữa)");
+                        $(".loadNoticeTestMic").html("(<?php echo Yii::t('lang','Bạn đã kiểm tra loa, microphone thành công. Bạn có thể thử lại lần nữa');?>)");
                     }
                 });
-                e.viewCanvas('+ Micrô đang hoạt động tốt \n+ Bấm nghe lại để kiểm tra');
+                e.viewCanvas('+ <?php echo Yii::t('lang','Micrô đang hoạt động tốt');?> \n+ <?php echo Yii::t('lang','Bấm nghe lại để kiểm tra');?>');
             },
 
             /* guide */
@@ -74,35 +74,35 @@
                     validBrowserVersion = '<?php echo TestConditions::app()->validBrowserVersion(); ?>';
                 if(validBrowserSupport==""){
                     $("#start_button").hide();
-                    txt = '1: Trình duyệt không hỗ trợ \n2: Vui lòng sử dụng Chrome,\n Firefox hoặc CờRôm+';
+                    txt = '1: <?php echo Yii::t('lang','Trình duyệt không hỗ trợ');?> \n2: <?php echo Yii::t('lang','Vui lòng sử dụng Chrome');?>,\n <?php echo Yii::t('lang','Firefox hoặc CờRôm');?>+';
                     return e.viewCanvas(txt);
                 }else if(validBrowserVersion=="") {
                     $("#start_button").hide();
-                    txt = '1: Phiên bản trình duyệt không hỗ trợ \n2: Vui lòng nâng cấp phiên bản.';
+                    txt = '1: <?php echo Yii::t('lang','Phiên bản trình duyệt không hỗ trợ');?> \n2: <?php echo Yii::t('lang','Vui lòng nâng cấp phiên bản');?>.';
                     return e.viewCanvas(txt);
                 }
                 var browser = '<?php echo TestConditions::app()->getBrowser(); ?>';
-                txt = '1: Bấm "ghi âm" \n';
+                txt = '1: <?php echo Yii::t('lang','Bấm');?> "<?php echo Yii::t('lang','ghi âm');?>" \n';
                 if(browser == "Chrome") {
-                    txt += '2: Bấm "cho phép" nếu trình duyệt hỏi \n';
+                    txt += '2: <?php echo Yii::t('lang','Bấm');?> "<?php echo Yii::t('lang','cho phép');?>" <?php echo Yii::t('lang','nếu trình duyệt hỏi');?> \n';
                 }else if(browser =="Firefox") {
-                    txt += '2: Bấm "chia sẻ" nếu trình duyệt hỏi \n';
+                    txt += '2: <?php echo Yii::t('lang','Bấm');?> "<?php echo Yii::t('lang','chia sẻ');?>" <?php echo Yii::t('lang','nếu trình duyệt hỏi');?> \n';
                 }else{
-                    txt += '2: Cho phép sử dụng thiết bị nếu \n trình duyệt hỏi\n';
+                    txt += '2: <?php echo Yii::t('lang','Cho phép sử dụng thiết bị nếu');?> \n <?php echo Yii::t('lang','trình duyệt hỏi');?>\n';
                 }
-                txt += '3: Nói gần mic, rõ ràng \n';
-                txt += '4: Nghe lại để kiểm tra loa \n';
+                txt += '3: <?php echo Yii::t('lang','Nói gần mic, rõ ràng');?> \n';
+                txt += '4: <?php echo Yii::t('lang','Nghe lại để kiểm tra loa');?> \n';
                 return e.viewCanvas(txt);
             },
 
             /* play back */
             playback: function(e) {
-                e.viewCanvas("Bạn đang trong chế độ nghe lại,\nnếu như bạn không  nghe thấy  âm \nthanh thì hãy kiểm tra lại loa\nđã hoạt động chưa?");
+                e.viewCanvas("<?php echo Yii::t('lang','Bạn đang trong chế độ nghe lại');?>,\n<?php echo Yii::t('lang','nếu như bạn không nghe thấy âm thanh thì hãy kiểm tra lại loa đã hoạt động chưa');?>?");
             },
 
             /* error */
             error: function(e){
-                e.viewCanvas('+ Micro hoạt động không tốt \n+ Vui lòng "ghi âm" lại \n+ Nói gần mic, rõ ràng');
+                e.viewCanvas('+ <?php echo Yii::t('lang','Micro hoạt động không tốt');?> \n+ <?php echo Yii::t('lang','Vui lòng');?> "<?php echo Yii::t('lang','ghi âm');?>" lại \n+ <?php echo Yii::t('lang','Nói gần mic, rõ ràng');?>');
             }
         });
     });
