@@ -105,7 +105,7 @@
 		</div>
 		<div class="col col-lg-9">
 			<?php if(isset($preCourse)) $model->total_of_student = $preCourse->total_of_student;?>
-			<?php echo $form->dropDownList($model,'total_of_student', $registration->totalStudentOptions(6), array()); ?>
+			<?php echo $form->dropDownList($model,'total_of_student', $registration->totalStudentOptions(12), array()); ?>
 			<?php echo $form->error($model,'total_of_student'); ?>
 		</div>
 	</div>
