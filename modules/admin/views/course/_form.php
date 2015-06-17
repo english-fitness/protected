@@ -104,7 +104,7 @@
 			<label>Kiểu lớp học</label>
 		</div>
 		<div class="col col-lg-9">
-			<?php echo $form->dropDownList($model,'total_of_student', $registration->totalStudentOptions(6, false, $model->total_of_student), $disabledAttrs); ?>
+			<?php echo $form->dropDownList($model,'total_of_student', $registration->totalStudentOptions(12, false, $model->total_of_student), $disabledAttrs); ?>
 			<?php echo $form->error($model,'total_of_student'); ?>
 		</div>
 	</div>
