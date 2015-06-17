@@ -127,7 +127,9 @@ class User extends CActiveRecord
 		// will receive user inputs.
 		$modelRules = array(
 			array('username, email, password, firstname, lastname', 'required'),
-			array('username', 'unique'),			
+			array('username', 'unique'),
+			array('username', 'match' ,'pattern'=>'/^[A-Za-z0-9-@-_]+$/u',
+                            'message'=> 'Tên người dùng chỉ bao gồm các ký tự và số, không được chứa các ký tự đặc biệt nào khác.'),			
 			array('email', 'email'),
 			//array('email', 'unique'),	
 			array('gender, status', 'numerical', 'integerOnly'=>true),
