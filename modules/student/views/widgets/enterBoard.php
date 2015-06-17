@@ -16,6 +16,12 @@
 ?>
 <a href="#" onclick='enterWhiteboard("<?php echo $whiteboard;?>", "<?php echo $boardLink; ?>", <?php echo $checkValidBrowser; ?>, <?php echo $checkEnterTime;?>)'>
 <button class="btn <?php echo $btnClass;?> pT0 pR10 pB0 pL10 fs14">
-	<?php echo Yii::t('lang','Vào lớp');?>
+    <?php
+        if(Yii::app()->user->role==User::ROLE_STUDENT){
+            echo Yii::t('lang','Vào lớp');
+        }else{
+            echo "Enter class";
+        }
+    ?>
 </button></a> 
 
