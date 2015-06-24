@@ -108,7 +108,7 @@
 	</div>
 </div>
 <script>
-	//global variables	
+	//global variables
 	var options = {
 		hours: <?php echo $hours;?>,
 		minutes: <?php echo $minutes;?>

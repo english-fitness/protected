@@ -66,12 +66,17 @@ class ScheduleController extends Controller
 			
 			$query = "SELECT id FROM tbl_user " .
 					 "WHERE role = '" . User::ROLE_TEACHER . "' ".
-					 "AND status = " . User::STATUS_OFFICIAL_USER . " " .
-					 "LIMIT 12 OFFSET " . ($page - 1) * 12;
+					 "AND status = " . User::STATUS_OFFICIAL_USER;
 			$result = Yii::app()->db->createCommand($query)->queryColumn();
 			$pageCount = ceil(sizeOf($result) / 12);
+						
+			$teachers = array_slice($result, ($page - 1) * 12, 12, true);
 			
-			$this->render('calendar', array("teachers"=>json_encode($result), "pageCount"=>$pageCount, "page"=>$page));
+			$this->render('calendar', array(
+				"teachers"=>json_encode(array_values($teachers)),
+				"pageCount"=>$pageCount,
+				"page"=>$page,
+			));
 		} else {
 			$this->render('teacher', $_REQUEST);
 		}
