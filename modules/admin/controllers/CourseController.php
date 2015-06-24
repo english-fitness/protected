@@ -29,7 +29,8 @@ class CourseController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view','ajaxLoadSubjects','ajaxLoadTeachers', 'ajaxApprove',
-				 'unassignStudent', 'ajaxSuggestSchedules', 'ajaxLoadSuggestion', 'ajaxModifySchedule', 'ajaxLoadUser','create','update', 'ajaxLoadStudent'),
+				'unassignStudent', 'ajaxSuggestSchedules', 'ajaxLoadSuggestion', 'ajaxModifySchedule', 'ajaxLoadUser','create','update', 'ajaxLoadStudent',
+				'ajaxLoadCourse'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -319,10 +320,13 @@ class CourseController extends Controller
 	public function actionAjaxApprove()
 	{
 		$courseId = $_REQUEST['course_id'];
-		$success = true;//Set success
+		$success = false;//Set success
 		$model = $this->loadModel($courseId);//Load model
 		$model->status = Course::STATUS_APPROVED;//Set status course to 2-approve
-		$model->save();//Save status
+		if ($model->save()){
+			$success = true;
+		}
+		//Save status
 		//Approved all session of Course
 		$model->resetStatusSessions();
 		$this->renderJSON(array('success'=>$success));
@@ -376,4 +380,37 @@ class CourseController extends Controller
        $this->renderJSON(array($usersAttributes));
     }
 	
+	public function actionAjaxLoadCourse($student){
+		$query = "SELECT id, title FROM tbl_course JOIN tbl_course_student 
+				  ON tbl_course.id = tbl_course_student.course_id 
+				  WHERE tbl_course_student.student_id = " . $student . " " .
+				  "AND deleted_flag <> 1 " .
+				  " ORDER BY course_id DESC";
+		$course = Course::model()->findAllBySql($query);
+		
+		$student = User::model()->findByPk($student);
+		if (empty($course) && $student->status < User::STATUS_OFFICIAL_USER){
+			$courseOptions = array(
+				array(
+					"id"=>Course::TYPE_COURSE_TRAINING*-1,
+					"title"=>"Tạo khóa học thử",
+				),
+			);
+		} else {
+			$courseOptions = array(
+				array(
+					"id"=>Course::TYPE_COURSE_NORMAL*-1,
+					"title"=>"Tạo khóa học thường",
+				),
+				array(
+					"id"=>Course::TYPE_COURSE_TRAINING*-1,
+					"title"=>"Tạo khóa học thử",
+				),
+			);
+		}
+		
+		$courseOptions = array_merge($course, $courseOptions);
+		
+		$this->renderJSON($courseOptions);
+	}
 }

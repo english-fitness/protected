@@ -1,14 +1,4 @@
-<!-- not using tab anymore
-<div class="page-title"><label class="tabPage"> The training was completed</label></div>
--->
-<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Register Schedules</p></div>
-<?php $this->renderPartial('myCourseTab'); ?>
-<div class="details-class">
-<link rel="stylesheet" type="text/css" href="/media/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
-<link rel="stylesheet" type="text/css" href="/media/css/bootstrap-theme.min.css" />
-<link rel="stylesheet" type="text/css" href="/media/js/bootstrap.min.js" />
-<link rel="stylesheet" type="text/css" href="/media/js/jquery.min.js" />
 <style>
 .calendar-td{
 	border: 1px solid;
@@ -40,8 +30,23 @@ select.schedule{
 	background-color:lime !important;
 }
 </style>
-<form id="schedule" method="POST" style="height:1000px">
-	<div class="form-group" style='float:left'>
+
+<?php
+	$teacherModel = User::model()->findByPk($teacher);
+?>
+<div class="details-class">
+	<form class="form-inline form-element-container" role="form" style="margin:0 auto; width:700px; padding:10px">
+		<div class="form-group">
+			<label class="form-label">Tìm giáo viên: </label>
+			<input id="teacherSearchBox" type="text" class="form-control" placeholder="Nhập tên giáo viên để tìm kiếm" style="width:500px;">
+			<input id="searchTeacherId" type="hidden" name="teacher">
+			<input type="submit" value="Tìm" class="btn" style="margin-top: 0px">
+		</div>
+	</form>
+	<div style="text-align:center;">
+		<span style="margin:0 auto; font-size:15px"><b><?php echo $teacherModel->fullname() . " - " . $teacherModel->username?></b></span>
+	</div>
+	<div class="form-group">
 		<label class="form-label">Week:</label>
 		<div>
 			<button id='prev-week' class='btn' style='float:left; height:36px'>Previous</button>
@@ -89,13 +94,13 @@ select.schedule{
 				$header = 	"<thead>
 								<tr>
 									<th class='calendar-th'>Time</th>
-									<th class='calendar-th wday' day='0'>Monday<br></th>
-									<th class='calendar-th wday' day='1'>Tuesday<br></th>
-									<th class='calendar-th wday' day='2'>Wednesday<br></th>
-									<th class='calendar-th wday' day='3'>Thursday<br></th>
-									<th class='calendar-th wday' day='4'>Friday<br></th>
-									<th class='calendar-th wday' day='5'>Saturday<br></th>
-									<th class='calendar-th wday' day='6'>Sunday<br></th>
+									<th class='calendar-th wday' day='0'>Thứ hai<br></th>
+									<th class='calendar-th wday' day='1'>Thứ ba<br></th>
+									<th class='calendar-th wday' day='2'>Thứ tư<br></th>
+									<th class='calendar-th wday' day='3'>Thứ năm<br></th>
+									<th class='calendar-th wday' day='4'>Thứ sáu<br></th>
+									<th class='calendar-th wday' day='5'>Thứ bảy<br></th>
+									<th class='calendar-th wday' day='6'>Chủ nhật<br></th>
 								</tr>
 							</thead>";
 				
@@ -123,18 +128,14 @@ select.schedule{
 		<p style='color: red; display:none' id='saving'>Processing...</p>
 		<p style='color: green; display:none' id='saved'>Schedule saved</p>
 	</div>
-    <div class="row">
-        <div class="col-md-5">
-            
-        </div>
-        <div class="col-md-7">
-            <input type="button" id="saveSchedule" value="Save Schedule" class="text-center gui btn btn-primary" />
-        </div>
-    </div>
-    
-    
-</form>
-
+	<div class="row">
+		<div class="col-md-5">
+			
+		</div>
+		<div class="col-md-7">
+			<input type="button" id="saveSchedule" value="Save Schedule" class="text-center gui btn btn-primary" />
+		</div>
+	</div>
 </div>
 <script>
 	var modifying = false;
@@ -144,7 +145,9 @@ select.schedule{
 		setHeader()
 		
 		$('#saveSchedule').on('click', function(e){
-			collectData();
+			if (modifying){
+				collectData();
+			}
 			e.preventDefault();
 			return false;
 		});
@@ -213,6 +216,7 @@ select.schedule{
 			weekSelection.onchange();
 			return false;
 		};
+		bindSearchBoxEvent("teacherSearchBox", searchTeacher);
 		// $('.bulk-select').click(function(){
 			// console.log('ya');
 			// var select = $(this);
@@ -295,16 +299,30 @@ select.schedule{
 		$('#saved').hide();
 		$('#saving').show();
 		$.ajax({
-			url:'<?php Yii::app()->baseUrl?>/teacher/class/registerSchedule',
+			url:'<?php Yii::app()->baseUrl?>/admin/schedule/saveSchedule',
 			type: 'post',
 			data: {
+				teacher:<?php echo $teacher?>,
 				week_start: weekStart,
 				timeslots:timeslots,
 			},
-			success:function(){
+			success:function(response){
 				$('#saving').hide();
-				$('#saved').show();
-				modifying = false;
+				if (response.success){
+					$('#saved').show();
+					modifying = false;
+				} else {
+					$('<div>Đã có lỗi xảy ra khi lưu lịch dạy, vui lòng thử lại sau</div>').dialog({
+						title:'Lưu lịch dạy',
+						modal:true,
+						resizable:false,
+						buttons:{
+							'Đóng':function(){
+								$(this).dialog('close');
+							}
+						}
+					});
+				}
 			}
 		});
 	}
@@ -325,14 +343,16 @@ select.schedule{
 			}
 		}
 		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/teacher/class/getSchedule',
+			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/getTeacherSchedule',
 			data:{
+				teacher:<?php echo $teacher?>,
 				week_start: document.getElementById('week_start').value,
 			},
 			success: function(response){
 				populateSchedule(response);
 				setHeader();
 				loading.removed();
+				$('#saved').hide();
 			}
 		});
 	}
@@ -379,8 +399,6 @@ select.schedule{
 	}
 	
 	function addDay(date, amount){
-		if (amount == 0)
-			return date.slice(0, 10);
 		var denormalizedDate = date.replace(/-/g, '/')
 		var result = new Date(denormalizedDate);
 		result.setDate(result.getDate() + amount);
@@ -388,7 +406,75 @@ select.schedule{
 		var day = (result.getDate() < 10) ? '0' + (result.getDate()) : result.getDate();
 		
 		//normalize date format
-		return result.getFullYear() + '-' + month + '-' + day;
+		return day + '-' + month + '-' + result.getFullYear();
+	}
+	
+	//display loading message, copy from student js
+	var loading =[];
+	loading.created = function(message)
+	{
+		if (!message){
+			var message = "Đang tải..."
+		}
+		var courseLoading = $(".loading").length;
+		if(courseLoading==0)
+		{
+			$("body").append('<div class="loading">' + message + '</div>');
+		}
+	}
+	loading.removed = function()
+	{
+		$(".loading").remove();
+	}
+	
+	//searchBoxHandler
+	function bindSearchBoxEvent(searchBoxId, searchFunction){
+		$("#"+searchBoxId).keyup(function(){
+			var keyword =  $(this).val();
+			if(keyword.length<=3 && keyword.length>0) {
+				searchFunction.call(undefined, keyword);
+			}
+		});
+	}
+
+	function searchBoxAutocomplete(searchBox, results, selectCallback){
+		var searchBox = $('#'+searchBox)
+		if (selectCallback){
+			searchBox.autocomplete({
+				source: formatSearchResult(results),
+				height:'50',
+				select:function(e, ui){
+					selectCallback.call(undefined, ui.item.id);
+				},
+			});
+		} else {
+			searchBox.autocomplete({
+				source: formatSearchResult(results),
+				height:'50',
+			});
+		}
+	}
+
+	function formatSearchResult(result){
+		var formattedData = [];
+		result.forEach(function(value,key){
+			formattedData[formattedData.length] = {
+				'value': value.usernameAndFullName,
+				'id': value.id,
+			}
+		});
+		return formattedData;
+	}
+	
+	function searchTeacher(keyword){
+		$.ajax({
+			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/ajaxSearchTeacher/keyword/' + keyword,
+			type:'get',
+			success:function(response){
+				var data = response.result;
+				searchBoxAutocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
+			}
+		});
 	}
 </script>
 <!--.class-->

@@ -84,6 +84,12 @@ class TeacherController extends Controller
 			}
 			$model->attributes = $teacher_values;
 			$model->passwordSave = $teacher_values['password'];
+			$common = new Common();
+			$dir = "media/uploads/profiles";
+			$profilePicture = $common->uploadProfilePicture("profilePicture",$dir);
+			if($profilePicture){
+				$model->profile_picture=$profilePicture;
+			}
 			if($model->save()){
 				$teacher->attributes = $teacher_profile_values;
 				$teacher->user_id = $model->id;
@@ -138,6 +144,12 @@ class TeacherController extends Controller
 			if($changePassStatus){
 				$model->passwordSave = $model->password;
 				$model->repeatPassword = $model->passwordSave;
+			}
+			$common = new Common();
+			$dir = "media/uploads/profiles";
+			$profilePicture = $common->uploadProfilePicture("profilePicture",$dir);
+			if($profilePicture){
+				$model->profile_picture=$profilePicture;
 			}
 			if($model->save()){
 				$teacher->attributes = $teacherProfileValues;

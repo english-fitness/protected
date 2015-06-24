@@ -34,6 +34,9 @@
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
+	"htmlOptions"=>array(
+		"enctype"=>"multipart/form-data"
+	),
 	'id'=>'user-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
 	// controller action is handling ajax validation correctly.
@@ -134,7 +137,16 @@
 		<?php if(!$model->isNewRecord):?>
 		<label class="hint fR mR20"><span class="error">Click đúp vào các trường dữ  liệu cần sửa, để cho phép thay đổi giá trị</span></label>
 		<?php endif;?>
-	</legend>	
+	</legend>
+	<div class="form-element-container row">
+        <div class="col col-lg-3">
+			<label>Ảnh đại diện</label>
+		</div>
+        <div class="value col-lg-7 loadImageJavascript">
+            <img src="<?php echo Yii::app()->user->getProfilePicture($teacher->user_id); ?>" class="w50" alt="avartar"/>
+            <input type="file" name="profilePicture" style="width: auto;"/>
+        </div>
+    </div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($teacher,'title'); ?>

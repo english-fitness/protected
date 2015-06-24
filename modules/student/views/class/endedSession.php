@@ -3,7 +3,7 @@
 	<label class="tabPage">Buổi học đã hoàn thành</label>
 </div>
 -->
-<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Buổi học đã hoàn thành</p></div>
+<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Lịch học</p></div>
 <?php $this->renderPartial('myCourseTab'); ?>
 <div class="details-class">
     <div class="session">

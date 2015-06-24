@@ -262,5 +262,4 @@ class Teacher extends CActiveRecord
 		$teacherUser = User::model()->findByPk($userId);
 		$teacherUser->delete();//Delete last info of User
 	}
-	
 }

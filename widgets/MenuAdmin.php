@@ -120,7 +120,16 @@ class MenuAdmin extends CWidget
 					array('label'=>'Được ghi âm','url'=>array('/admin/session/recorded')),
                 )
             ),
-            array('title'=>$this->renderTitleCount("Buổi học đang chờ xác nhận: ",$countPendingReminderSession),'label'=>'Nhắc lịch học'.$this->renderItemCount($countPendingReminderSession), 'url'=>array('/admin/session/reminder') )
+            array('title'=>$this->renderTitleCount("Buổi học đang chờ xác nhận: ",$countPendingReminderSession),'label'=>'Nhắc lịch học'.$this->renderItemCount($countPendingReminderSession), 'url'=>array('/admin/session/reminder') ),
+			array(
+                'label'=>'Lịch học '.$this->renderItemCount($countPendingNearestSession),
+                'url'=>'#',
+                'title'=>$this->renderTitleCount("Buổi học gần nhất đang chờ được xác nhận: ",$countPendingNearestSession),
+                'items'=>array(
+                    array('label'=>'Lịch học','url'=>array('/admin/schedule/view')),
+					array('label'=>'Lịch dạy của giáo viên','url'=>array('/admin/schedule/registerSchedule')),
+                )
+            ),
         );
         $this->widget('application.widgets.bootstrap.Menu', array('items'=>$items));
     }

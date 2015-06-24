@@ -8,12 +8,14 @@
 
 <style>
 .reservedSlot{
-	cursor:pointer;
 	-webkit-appearance:button;
 	-moz-appearance:button;
 }
 .ui-autocomplete-input, .ui-menu, .ui-menu-item {
 	z-index: 99999;
+}
+.fc-event{
+	cursor:pointer;
 }
 .fc-time-grid-event .fc-time{
 	display:none;
@@ -54,22 +56,20 @@
 	$minutes = json_encode($registration->minutesInHour());
 	// $timezone = 8;
 ?>
-<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Lịch học</p></div>
-<?php $this->renderPartial('myCourseTab'); ?>
+
 <div class="details-class">
-	<form class="form-inline" role="form" method="get">
-		<div class="form-group" style="margin:0 150px;">
+	<form class="form-inline" role="form" style="margin:0 auto; width:700px">
+		<div class="form-group">
 			<label class="form-label">Tìm giáo viên: </label>
 			<input id="teacherSearchBox" type="text" class="form-control" placeholder="Nhập tên giáo viên để tìm kiếm" style="width:500px;">
-			<input id="teacherId" type="hidden" name="teacher">
+			<input id="searchTeacherId" type="hidden" name="teacher">
 			<input type="submit" value="Tìm" class="btn" style="margin-top: 0px">
 		</div>
-	 </form>
-	<div style='margin:10px auto; text-align:center'>
+	</form>
+	<div style='margin:0 auto; text-align:center'>
 		Trang <?php echo PaginationLinks::create($page, $pageCount)?>
 	</div>
-	<div style='clear:both'></div>
-	<div style='margin:20px auto; text-align:center; width:870px;'>
+	<div style='margin:0 auto; text-align:center; width:870px;'>
 		<button class='week-nav btn btn-primary' nav='prev'><</button>
 		<button class='wday-select btn' day='0'>Thứ hai<br></button>
 		<button class='wday-select btn' day='1'>Thứ ba<br></button>
@@ -90,12 +90,10 @@
 	<div style='margin:0 auto; text-align:center'>
 		Trang <?php echo PaginationLinks::create($page, $pageCount)?>
 	</div>
-	<div style="position:fixed;top:460px;left:10px;width:250px;padding:3px;border:solid 1px #ddd;box-sizing:border-box;background-color:white;box-shadow:1px 1px 1px #ddd;border-radius:3px;">
+	<div style="position:fixed;top:200px;left:10px;width:160px;padding:3px;border:solid 1px #ddd;box-sizing:border-box;background-color:white;box-shadow:1px 1px 1px #ddd;border-radius:3px;">
 		<span style="margin:3px"><b>Color legend</b></span>
 		<div style="clear:both"></div>
 		<div style="width:25px;height:15px;background-color:yellow;float:left;margin:3px"></div><span style="float:left">Available timeslot</span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:dodgerblue;float:left;margin:3px"></div><span style="float:left">Booked timeslot</span>
 		<div style="clear:both"></div>
 		<div style="width:25px;height:15px;background-color:darkgray;float:left;margin:3px"></div><span style="float:left">Closed</span>
 		<div style="clear:both"></div>
@@ -106,8 +104,6 @@
 		<div style="width:25px;height:15px;background-color:turquoise;float:left;margin:3px"></div><span style="float:left">Ongoing Session</span>
 		<div style="clear:both"></div>
 		<div style="width:25px;height:15px;background-color:darkorange;float:left;margin:3px"></div><span style="float:left">Ended Session</span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:red;float:left;margin:3px"></div><span style="float:left">Canceled Session</span>
 		<div style="clear:both"></div>
 	</div>
 </div>
@@ -122,7 +118,6 @@
 	var maxTime = '22:51';
 	
 	var currentWday;
-	var currentWeekStart;
 	//end global variables
 	
 	var allTeachers = <?php echo $teachers?>;
@@ -144,7 +139,7 @@
 	}?>
 	
 	$(document).ready(function(){
-		currentWeekStart = moment().startOf('isoWeek').format('YYYY-MM-DD');
+		currentWeekStart = '<?php echo date('Y/m/d', strtotime('monday this week'))?>';
 		setHeader();
 		$('.wday-select').click(function(){		
 			var targetDate = addDay(currentWeekStart, $(this).attr('day'));
@@ -161,13 +156,11 @@
 			} else if (value == 'next'){
 				currentWeekStart = addDay(currentWeekStart, 7);
 			}
-			loading.created();
 			for (var i = 0; i < teacherGroups.length; i++){
 				reloadCalendar('calendar-'+(i+1), teacherGroups[i], currentWeekStart);
 				$('#calendar-'+(i+1)).fullCalendar('gotoDate', currentWeekStart);
 			}
-			loading.removed();
-		})
+		});
 		bindSearchBoxEvent("teacherSearchBox", searchTeacher);
 	});
 	
@@ -175,7 +168,7 @@
 	function loadCalendar (divId, teachers){
 		$.ajax({
 			type:'get',
-			url:'<?php echo Yii::app()->baseUrl;?>/student/class/getSessions',
+			url:'<?php echo Yii::app()->baseUrl;?>/admin/schedule/getSessions',
 			data:{
 				teachers:JSON.stringify(teachers),
 			},
@@ -200,7 +193,7 @@
 				center: 'title',
 			},
 			viewRender: function(view,element) {
-				currentWday = view.start.weekday();
+				currentWday = (view.start._d.getDay() + 6) % 7;
 				
 				//change weekday selection
 				var currentSelect = $('.wday-select.btn-primary').attr('day');
@@ -212,32 +205,28 @@
 			},
 			eventClick: function(event, jsEvent, view){
 				if (event.className == 'reservedSlot'){
-					var values = {
-						actionUrl: '<?php echo Yii::app()->baseUrl?>/student/class/bookSession',
+					var preset = {
+						action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarCreateSession',
 						teacher: event.teacher,
-						start:event.start.format('YYYY-MM-DD HH:mm:ss'),
+						start: event.start,
 					}
-					$("<div>Bạn có muốn đặt lịch học trong khung giờ này?</div>").dialog({
-						title:"Đặt lịch học",
-						modal:true,
-						resizable:false,
-						buttons:{
-							"Đồng ý": function(){
-								bookSession(values, bookSuccess, bookError);
-								$(this).dialog('close');
-							},
-							"Hủy": function(){
-								$(this).dialog('close');
-							}
-						}
-					});
-				} else if (event.className == 'unbookable'){
-					data = {
-						id:event.id,
-						start:event.start,
-						title:event.subject,
-					};
-					displayDetail(data);
+					CalendarSessionHandler.newSession(preset, createSessionSuccess, createSessionError, options);
+					bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
+				} else if (['approvedSession', 'ongoingSession', 'pendingSession'].indexOf(event.className[0]) > -1){
+					var data = {
+						action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarUpdateSession',
+						sessionId: event.id,
+						teacher: event.teacher,
+						start: event.start,
+						teacherName: event.teacherName,
+						subject: event.subject,
+						course_id: event.course_id,
+						student: event.student,
+						className: event.className,
+						end: event.end,
+					}
+					CalendarSessionHandler.editSession(data, updateSessionSuccess, updateSessionError, options);
+					bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
 				}
 			},
 			minTime: minTime,
@@ -246,8 +235,7 @@
 			defaultView: 'resourceDay',
 			resources: data.teachers,
 			allDaySlot:false,
-			// timezone:'isUTC',
-			now:'<?php echo date('Y-m-d')?>',
+			timezone:"local",
 			axisFormat: 'H:mm',
 			timeFormat: 'H:mm',
 			columnFormat: 'ddd D/M',
@@ -285,13 +273,12 @@
 		}
 	});
 	
-	//may need rework
 	function reloadCalendar(calendarDiv, teachers, weekStart){
 		var calendar = $('#'+calendarDiv);
 		calendar.fullCalendar( 'removeEvents');
 		calendar.fullCalendar('refetchEvents');
 		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/student/class/getSessions',
+			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/getSessions',
 			type:'get',
 			data:{
 				teachers: JSON.stringify(teachers),
@@ -312,23 +299,53 @@
 		});
 	}
 	
-	function bookSuccess(){
-		$("<div>Bạn đã đặt lịch học thành công, buổi học của bạn cần được xác nhận trước khi bạn có thể vào lớp</div>").dialog({
-			modal:true,
-			resizable:false,
-			buttons:{
-				"Đóng": function(){
-					//reload calendar
-					reloadAll();
-					$(this).dialog('close');
-				},
+	function ajaxLoadCourse(studentId){
+		document.getElementById('hiddenStudentId').value = studentId;
+		$.ajax({
+			url:"<?php echo Yii::app()->baseurl; ?>/admin/course/ajaxLoadCourse/student/"+studentId,
+			type:"get",
+			success: function(courses){
+				//clearing old options
+				document.getElementById("courseSelect").innerHTML = "";
+				//setting new options
+				var options = "";
+				for (var i in courses){
+					options += "<option value=" + courses[i].id + ">" + ((courses[i].title != "") ? courses[i].title : courses[i].id) + "</option>";
+				}
+				document.getElementById("courseSelect").innerHTML = options;
 			}
 		});
 	}
 	
-	function bookError(response){
-		if (response.canRebook){
-			$("<div>Bạn đã đăng ký lịch học với một giáo viên khác trong cùng khung giờ. " +
+	function searchStudent(keyword){
+		$.ajax({
+			url:"<?php echo Yii::app()->baseurl; ?>/admin/course/AjaxLoadStudent/keyword/"+keyword,
+			type:"get",
+			success: function(response) {
+				var data = response[0];
+				searchBoxAutocomplete('ajaxSearchStudent', data, ajaxLoadCourse);
+			}
+		});
+	}
+
+	function searchTeacher(keyword){
+		$.ajax({
+			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/ajaxSearchTeacher/keyword/' + keyword,
+			type:'get',
+			success:function(response){
+				var data = response.result;
+				searchBoxAutocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
+			}
+		});
+	}
+	
+	function createSessionSuccess(){
+		reloadAll();
+	}
+	
+	function createSessionError(response){
+		if (response.existingSession){
+			$("<div>Học sinh này đã đặt lịch học với một giáo viên khác trong cùng khung giờ. " +
 			"Bạn có thể thay đổi giáo viên cho buổi học</div>").dialog({
 				modal:true,
 				resizable:false,
@@ -342,99 +359,88 @@
 					}
 				}
 			});
-		} else if (response.canRebook === false){
-			$("<div>Bạn có một buổi học đã được xác nhận với một giáo viên khác trong cùng khung giờ. " +
-			"Bạn không thể đăng ký một buổi học khác trong khung giờ này</div>").dialog({
-				modal:true,
-				resizable:false,
-				buttons:{
-					"Đóng": function(){
-						$(this).dialog('close');
-					},
-				}
-			});
-		} else{
-			$("<div>Có lỗi xảy ra khi đặt lịch học, vui lòng thử lại sau</div>").dialog({
-				modal:true,
-				resizable:false,
-				buttons:{
-					"Đóng": function(){
-						$(this).dialog('close');
-					},
-				}
-			});
+		} else {
+			displayConfirmDialog("Đặt lịch học", "Có lỗi xảy ra khi đặt lịch học, vui lòng thử lại sau", "Đóng");
 		}
+	}
+	
+	function updateSessionSuccess(){
+		reloadAll();
+	}
+	
+	function updateSessionError(response){
+		if (response.existingSession){
+			$("<div>Học sinh này đã đặt lịch học với một giáo viên khác trong cùng khung giờ. " +
+			"Bạn có thể thay đổi giáo viên cho buổi học</div>").dialog({
+				modal:true,
+				resizable:false,
+				buttons:{
+					"Thay đổi giáo viên": function(){
+						duplicateSessionUpdate(response)
+						$(this).dialog('close');
+					},
+					"Hủy": function(){
+						$(this).dialog('close');
+					}
+				}
+			});
+		} else {
+			displayConfirmDialog("Đặt lịch học", "Có lỗi xảy ra khi đặt lịch học, vui lòng thử lại sau", "Đóng");
+		}
+	}
+	
+	function duplicateSessionUpdate(data){
+		$.ajax({
+			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/calendarUpdateSession',
+			type:'post',
+			data:{
+				duplicateSession: true,
+				existingSession: data.existingSession,
+				currentSession: data.currentSession,
+				courseId: data.currentCourse,
+				subject: data.currentSubject,
+				studentId: data.currentStudent,
+			},
+			success:function(response){
+				if (response.success){
+					reloadAll();
+				} else {
+					displayConfirmDialog("Đặt lịch học", "Có lỗi xảy ra khi đặt lịch học, vui lòng thử lại sau", "Đóng");
+				}
+			}
+		});
 	}
 	
 	function changeTeacher(data){
 		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/student/class/changeTeacher',
+			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/calendarUpdateSession',
 			type:'post',
 			data:{
+				changeTeacher: true,
 				session: data.existingSession,
 				teacher: data.teacher
 			},
 			success:function(response){
 				if (response.success){
-					$("<div>Bạn đã đặt lịch học thành công, buổi học của bạn cần được xác nhận trước khi bạn có thể vào lớp</div>").dialog({
-						modal:true,
-						resizable:false,
-						buttons:{
-							"Đóng": function(){
-								//reload calendar
-								reloadAll();
-								$(this).dialog('close');
-							},
-						}
-					});
+					reloadAll();
 				} else {
-					$("<div>Có lỗi xảy ra khi đặt lịch học, vui lòng thử lại sau</div>").dialog({
-						modal:true,
-						resizable:false,
-						buttons:{
-							"Đóng": function(){
-								$(this).dialog('close');
-							},
-						}
-					});
+					displayConfirmDialog("Đặt lịch học", "Có lỗi xảy ra khi đặt lịch học, vui lòng thử lại sau", "Đóng");
 				}
 			}
 		});
 	}
 	
-	function displayDetail(data){
-		var detail = "<div>Buổi học: " + data.title + "</div>";
-		detail += "<div>Ngày học: " + data.start.format('DD-MM-YYYY') + "</div>";
-		detail += "<div>Giờ học: " + data.start.format('HH:mm') + "</div>";
-		detail = "<div>" + detail + "</div>";
-		$(detail).dialog({
-			title:"Chi tiết buổi học",
+	function deleteSession(sessionId){
+		$('<div>Bạn có muốn xóa buổi học này?</div>').dialog({
 			modal:true,
 			resizable:false,
-			buttons:{
-				"Hủy buổi học":function(){
-					unbookSchedule(data.id);
-					$(this).dialog('close');
-				},
-				"Đóng":function(){
-					$(this).dialog('close');
-				}
-			}
-		});
-	}
-	
-	function unbookSchedule(sessionId){
-		$("<div>Bạn có muốn hủy buổi học này?</div>").dialog({
-			title:"Hủy buổi học",
-			modal:true,
-			resizable:false,
-			buttons:{
-				"Có": function(){
+			buttons: {
+				"Xóa": function(){
 					$.ajax({
-						url:'<?php echo Yii::app()->baseUrl?>/student/class/unbookSession',
+						url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/calendarDeleteSession',
 						type:'post',
 						data:{
-							session: sessionId,
+							id:sessionId,
 						},
 						success:function(){
 							reloadAll();
@@ -442,11 +448,104 @@
 					});
 					$(this).dialog('close');
 				},
-				"Không": function(){
+				"Hủy": function(){
 					$(this).dialog('close');
 				}
 			}
 		});
+	}
+	
+	function approveSession(id){
+		$('<div>Bạn có muốn xác nhận buổi học này?</div>').dialog({
+			modal:true,
+			resizable:false,
+			buttons: {
+				"Xác nhận": function(){
+					$.ajax({
+						url:'<?php echo Yii::app()->baseUrl?>/admin/session/ajaxApprove',
+						type:'post',
+						data:{
+							session_id: id,
+						},
+						success:function(response){
+							if (!response.success){
+								displayConfirmDialog('Xác nhận buổi học', 'Đã có lỗi xảy ra, vui lòng thử lại sau', 'Đóng');
+							} else {
+								if (response.pendingCourse){
+									$("<div>Buổi học của khóa học này vẫn chưa được xác nhận"+
+									". Các buổi học của khóa học này sẽ không được nhìn thấy.<br>"+
+									"Bạn có muốn xác nhận khóa học này?</div>").dialog({
+										title:'Xác nhận khóa học',
+										width:500,
+										modal:true,
+										resizable:false,
+										buttons:{
+											"Xác nhận":function(){
+												$.ajax({
+													url:'<?php echo Yii::app()->baseUrl?>/admin/course/ajaxApprove',
+													type:'post',
+													data:{
+														course_id: response.pendingCourse,
+													},
+													success: function(response){
+														if (!response.success){
+															displayConfirmDialog('Xác nhận khóa học', 'Đã có lỗi xảy ra, vui lòng thử lại sau', 'Đóng');
+														}
+													}
+												})
+												$(this).dialog('close');
+											},
+											"Đóng":function(){
+												$(this).dialog('close');
+											},
+										}
+									});
+								}
+								reloadAll();
+							}
+						}
+					});
+					$(this).dialog('close');
+				},
+				"Hủy": function(){
+					$(this).dialog('close');
+				}
+			}
+		});
+	}
+	
+	function endSession(id, endTime){
+		var now = moment();
+		var end = moment(endTime);
+		
+		if (end.diff(now) > 0){
+			displayConfirmDialog("Kết thúc buổi học", "Buổi học vẫn chưa hết thời gian", "Đóng");
+		} else {
+			$('<div>Bạn có muốn kết thúc buổi học này?</div>').dialog({
+				title:"Kết thúc buổi học",
+				modal:true,
+				resizable:false,
+				buttons: {
+					"Kết thúc": function(){
+						$.ajax({
+							url:'<?php echo Yii::app()->baseUrl?>/api/session/end',
+							type:'get',
+							data:{
+								sessionId: id,
+								forceEnd: true,
+							},
+							success:function(){
+								reloadAll();
+							}
+						});
+						$(this).dialog('close');
+					},
+					"Hủy": function(){
+						$(this).dialog('close');
+					}
+				}
+			});
+		}
 	}
 	
 	function setHeader(){
@@ -458,22 +557,22 @@
 		});
 	}
 	
-	function searchTeacher(keyword){
-		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/student/class/ajaxSearchTeacher/keyword/' + keyword,
-			type:'get',
-			success:function(response){
-				var data = response.result;
-				searchBoxAutocomplete('teacherSearchBox', data, function(id){$('#teacherId').val(id);});
-			}
+	function displayConfirmDialog(title, confirmText, confirmButton){
+		var buttons = {};
+		buttons[confirmButton] = function(){
+			$(this).dialog('close');
+		};
+		$("<div>"+confirmText+"</div>").dialog({
+			title:title,
+			modal:true,
+			resizable:false,
+			buttons:buttons,
 		});
 	}
 	
 	function reloadAll(){
-		loading.created();
 		for (var i = 0; i < teacherGroups.length; i++){
 			reloadCalendar('calendar-'+(i+1), teacherGroups[i], currentWeekStart);
 		}
-		loading.removed();
 	}
 </script>

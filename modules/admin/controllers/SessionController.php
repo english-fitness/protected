@@ -30,7 +30,7 @@ class SessionController extends Controller
             array('allow',  // allow all users to perform 'index' and 'view' actions
                 'actions'=>array('index','view','ajaxCreateBoard', 'ajaxApprove', 'ajaxEditInline', 'nearest', 'ended', 'recorded', 'today'
                 , 'ajaxDeleteBoard','unassignStudent','canceled','active','create','update', 'cancel', 'reminder', 'getRecordFile', 'removeRecordFile',
-				'loadSessionsByTeacherAndFilter', 'calendar'),
+				'calendar', 'calendarCreateSession', 'calendarUpdateSession', 'calendarDeleteSession', 'ajaxSearchTeacher', 'calendarTeacherView', 'getSessions'),
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -466,6 +466,12 @@ class SessionController extends Controller
         $model = $this->loadModel($session_id);//Load model
         $model->status = Session::STATUS_APPROVED;//Set status course approve
         $model->save();//Save status
+		if (isset($model->course_id)){
+			$course = Course::model()->findByPk($model->course_id);
+			if ($course->status == Course::STATUS_PENDING){
+				$this->renderJSON(array('success'=>$success, 'pendingCourse'=>$model->course_id));
+			}
+		}
         $this->renderJSON(array('success'=>$success));
     }
 
@@ -540,41 +546,5 @@ class SessionController extends Controller
 			}
 		}
 		$this->redirect("/admin/session/view/id/".$session_id);
-	}
-	
-	public function actionCalendar()
-	{
-		if (isset($_REQUEST['filter']))
-			$filter = $_REQUEST['filter'];
-		$teacherId = $_REQUEST['teacher'];
-		$this->subPageTitle = 'Calendar View';
-        $this->render('calendar',array(
-				"teacher"=>$teacherId,
-            )
-        );
-	}
-	
-	public function actionLoadSessionsByTeacherAndFilter()
-	{
-		if (isset($_REQUEST['filter']))
-			$filter = $_REQUEST['filter'];
-		$teacherId = $_REQUEST['teacher'];
-		$sessions = Session::model()->findAllBySql('SELECT * FROM tbl_session WHERE teacher_id = ' . $teacherId);
-		$sessionDay = array();
-		if ($sessions)
-		{
-			foreach ($sessions as $session)
-			{
-				$sessionDay[] = array(
-                    'id' => $session->id,
-                    'title' => $session->subject,
-                    'content'=>$session->content,
-                    'start' => $session->plan_start,
-                    'end'=> date("Y-m-d H:i:s",strtotime($session->plan_start) + $session->plan_duration*60),
-                    'allDay'=> false
-                );
-			}
-		}
-		echo json_encode($sessionDay);
 	}
 }
