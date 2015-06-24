@@ -64,7 +64,7 @@
 		<div>
 			<a href="<?php echo Yii::app()->baseUrl?>/admin/schedule/view">Tất cả giáo viên</a>
 		</div>
-		<div style="position:fixed;top:200px;left:10px;width:160px;padding:3px;border:solid 1px #ddd;box-sizing:border-box;background-color:white;box-shadow:1px 1px 1px #ddd;border-radius:3px;">
+		<div style="position:fixed;top:500px;left:10px;width:160px;padding:3px;border:solid 1px #ddd;box-sizing:border-box;background-color:white;box-shadow:1px 1px 1px #ddd;border-radius:3px;">
 			<span style="margin:3px"><b>Color legend</b></span>
 			<div style="clear:both"></div>
 			<div style="width:25px;height:15px;background-color:yellow;float:left;margin:3px"></div><span style="float:left">Available timeslot</span>
@@ -94,7 +94,7 @@
 		</select>
 	</div>
 	<div style="text-align:center;">
-		<span style="margin:0 auto; font-size:15px"><b><?php echo $teacherModel->fullname()?></b></span>
+		<span style="margin:0 auto; font-size:15px"><b><?php echo $teacherModel->fullname() . " - " . $teacherModel->username?></b></span>
 	</div>
     <div id="calendar" style="width:1000px; margin:35px auto"></div>
 </div>

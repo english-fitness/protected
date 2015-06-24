@@ -48,23 +48,23 @@
 <?php
 	$teacherModel = User::model()->findByPk($teacher);
 ?>
-<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Lịch học</p></div>
+<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;"><?php echo Yii::t('lang', 'schedule')?></p></div>
 <?php $this->renderPartial('myCourseTab'); ?>
 <div class="details-class">
 	<form class="form-inline form-element-container" role="form" style="margin-left:35px; padding-bottom:0px">
 		<div class="form-group">
-			<label class="form-label">Tìm giáo viên: </label>
-			<input id="teacherSearchBox" type="text" class="form-control" placeholder="Nhập tên giáo viên để tìm kiếm" style="width:500px;">
+			<label class="form-label"><?php echo Yii::t('lang', 'search_teacher')?>: </label>
+			<input id="teacherSearchBox" type="text" class="form-control" placeholder="<?php echo Yii::t('lang', 'student_search_teacher_placeholder')?>" style="width:500px;">
 			<input id="teacherId" type="hidden" name="teacher">
-			<input type="submit" value="Tìm" class="btn" style="margin-top: 0px">
+			<input type="submit" value="<?php echo Yii::t('lang', 'search')?>" class="btn" style="margin-top: 0px">
 		</div>
 		<div>
-			<a href="<?php echo Yii::app()->baseUrl?>/student/class/calendar">Tất cả giáo viên</a>
+			<a href="<?php echo Yii::app()->baseUrl?>/student/class/calendar"><?php echo Yii::t('lang', 'all_teachers')?></a>
 		</div>
 	</form>
 	<form class="form-inline form-element-container" role="form" style="margin-left:35px; padding-top:0px">
 		<div class="form-group">
-			<label class="form-label" for="month-selection">Chọn tháng: </label>
+			<label class="form-label" for="month-selection"><?php echo Yii::t('lang', 'month_selection')?>: </label>
 			<select id="month-selection" class="form-control" style="width:150px">
 				<?php
 					$thisMonth = date('m');
@@ -79,27 +79,27 @@
 	<div style="text-align:center;">
 		<span style="margin:0 auto; font-size:15px"><b><?php echo $teacherModel->fullname()?></b></span>
 		<br>
-		<img src="<?php echo Yii::app()->user->getProfilePicture($teacher)?>" style='margin:3px;width:225px;height:225px'></img>
+		<img src="<?php echo Yii::app()->user->getProfilePicture($teacher)?>" style='margin:3px;width:180px;height:180px'></img>
 	</div>
     <div id="calendar" style="width:1000px; margin:35px"></div>
 	<div style="position:fixed;top:460px;left:10px;width:250px;padding:3px;border:solid 1px #ddd;box-sizing:border-box;background-color:white;box-shadow:1px 1px 1px #ddd;border-radius:3px;">
-		<span style="margin:3px"><b>Color legend</b></span>
+		<span style="margin:3px"><b><?php echo Yii::t('lang', 'color_legend')?></b></span>
 		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:yellow;float:left;margin:3px"></div><span style="float:left">Available timeslot</span>
+		<div style="width:25px;height:15px;background-color:yellow;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'timeslot_available')?></span>
 		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:dodgerblue;float:left;margin:3px"></div><span style="float:left">Booked timeslot</span>
+		<div style="width:25px;height:15px;background-color:dodgerblue;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'timeslot_booked')?></span>
 		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:darkgray;float:left;margin:3px"></div><span style="float:left">Closed</span>
+		<div style="width:25px;height:15px;background-color:darkgray;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'timeslot_closed')?></span>
 		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:lime;float:left;margin:3px"></div><span style="float:left">Approved Session</span>
+		<div style="width:25px;height:15px;background-color:lime;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'session_approved')?></span>
 		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:darkgreen;float:left;margin:3px"></div><span style="float:left">Pending Session</span>
+		<div style="width:25px;height:15px;background-color:darkgreen;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'session_pending')?></span>
 		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:turquoise;float:left;margin:3px"></div><span style="float:left">Ongoing Session</span>
+		<div style="width:25px;height:15px;background-color:turquoise;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'session_ongoing')?></span>
 		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:darkorange;float:left;margin:3px"></div><span style="float:left">Ended Session</span>
+		<div style="width:25px;height:15px;background-color:darkorange;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'session_ended')?></span>
 		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:red;float:left;margin:3px"></div><span style="float:left">Canceled Session</span>
+		<div style="width:25px;height:15px;background-color:red;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'session_canceled')?></span>
 		<div style="clear:both"></div>
 	</div>
 </div>
@@ -186,16 +186,16 @@
 							teacher: event.teacher,
 							start:event.start.format('YYYY-MM-DD HH:mm:ss'),
 						}
-						$("<div>Bạn có muốn đặt lịch học trong khung giờ này?</div>").dialog({
-							title:"Đặt lịch học",
+						$("<div><?php echo Yii::t('lang', 'student_confirm_book_session')?></div>").dialog({
+							title:"<?php echo Yii::t('lang', 'student_book_session')?>",
 							modal:true,
 							resizable:false,
 							buttons:{
-								"Đồng ý": function(){
+								"<?php echo Yii::t('lang', 'button_accept')?>": function(){
 									bookSession(values, bookSuccess, bookError);
 									$(this).dialog('close');
 								},
-								"Hủy": function(){
+								"<?php echo Yii::t('lang', 'button_cancel')?>": function(){
 									$(this).dialog('close');
 								}
 							}
@@ -274,11 +274,11 @@
 		}
 		
 		function bookSuccess(){
-			$("<div>Bạn đã đặt lịch học thành công, buổi học của bạn cần được xác nhận trước khi bạn có thể vào lớp</div>").dialog({
+			$("<div><?php echo Yii::t('lang', 'student_book_success')?></div>").dialog({
 				modal:true,
 				resizable:false,
 				buttons:{
-					"Đóng": function(){
+					"<?php echo Yii::t('lang', 'button_close')?>": function(){
 						//reload calendar
 						reloadCalendar();
 						$(this).dialog('close');
@@ -289,37 +289,35 @@
 		
 		function bookError(response){
 			if (response.canRebook){
-				$("<div>Bạn đã đăng ký lịch học với một giáo viên khác trong cùng khung giờ. " +
-				"Bạn có thể thay đổi giáo viên cho buổi học</div>").dialog({
+				$("<div><?php echo Yii::t('lang', 'student_book_duplicate_pending')?></div>").dialog({
 					modal:true,
 					resizable:false,
 					buttons:{
-						"Thay đổi giáo viên": function(){
+						"<?php echo Yii::t('lang', 'student_change_teacher')?>": function(){
 							changeTeacher(response)
 							$(this).dialog('close');
 						},
-						"Hủy": function(){
+						"<?php echo Yii::t('lang', 'button_cancel')?>": function(){
 							$(this).dialog('close');
 						}
 					}
 				});
 			} else if (response.canRebook === false){
-				$("<div>Bạn có một buổi học đã được xác nhận với một giáo viên khác trong cùng khung giờ. " +
-				"Bạn không thể đăng ký một buổi học khác trong khung giờ này</div>").dialog({
+				$("<div><?php echo Yii::t('lang', 'student_book_duplicate_approved')?></div>").dialog({
 					modal:true,
 					resizable:false,
 					buttons:{
-						"Đóng": function(){
+						"<?php echo Yii::t('lang', 'button_close')?>": function(){
 							$(this).dialog('close');
 						},
 					}
 				});
 			} else{
-				$("<div>Có lỗi xảy ra khi đặt lịch học, vui lòng thử lại sau</div>").dialog({
+				$("<div><?php echo Yii::t('lang', 'book_error')?></div>").dialog({
 					modal:true,
 					resizable:false,
 					buttons:{
-						"Đóng": function(){
+						"<?php echo Yii::t('lang', 'button_close')?>": function(){
 							$(this).dialog('close');
 						},
 					}
@@ -337,11 +335,11 @@
 				},
 				success:function(response){
 					if (response.success){
-						$("<div>Bạn đã đặt lịch học thành công, buổi học của bạn cần được xác nhận trước khi bạn có thể vào lớp</div>").dialog({
+						$("<div><?php echo Yii::t('lang', 'student_book_success')?></div>").dialog({
 							modal:true,
 							resizable:false,
 							buttons:{
-								"Đóng": function(){
+								"<?php echo Yii::t('lang', 'button_close')?>": function(){
 									//reload calendar
 									reloadCalendar();
 									$(this).dialog('close');
@@ -349,11 +347,11 @@
 							}
 						});
 					} else {
-						$("<div>Có lỗi xảy ra khi đặt lịch học, vui lòng thử lại sau</div>").dialog({
+						$("<div><?php echo Yii::t('lang', 'book_error')?></div>").dialog({
 							modal:true,
 							resizable:false,
 							buttons:{
-								"Đóng": function(){
+								"<?php echo Yii::t('lang', 'button_close')?>": function(){
 									$(this).dialog('close');
 								},
 							}
@@ -364,20 +362,20 @@
 		}
 		
 		function displayDetail(data){
-			var detail = "<div>Buổi học: " + data.title + "</div>";
-			detail += "<div>Ngày học: " + data.start.format('DD-MM-YYYY') + "</div>";
-			detail += "<div>Giờ học: " + data.start.format('HH:mm') + "</div>";
+			var detail = "<div><?php echo Yii::t('lang', 'session')?>: " + data.title + "</div>";
+			detail += "<div><?php echo Yii::t('lang', 'session_date')?>: " + data.start.format('DD-MM-YYYY') + "</div>";
+			detail += "<div><?php echo Yii::t('lang', 'session_time')?>: " + data.start.format('HH:mm') + "</div>";
 			detail = "<div>" + detail + "</div>";
 			$(detail).dialog({
-				title:"Chi tiết buổi học",
+				title:"<?php echo Yii::t('lang', 'session_detail')?>",
 				modal:true,
 				resizable:false,
 				buttons:{
-					"Hủy buổi học":function(){
+					"<?php echo Yii::t('lang', 'cancel_session')?>":function(){
 						unbookSchedule(data.id);
 						$(this).dialog('close');
 					},
-					"Đóng":function(){
+					"<?php echo Yii::t('lang', 'button_close')?>":function(){
 						$(this).dialog('close');
 					}
 				}
@@ -385,12 +383,12 @@
 		}
 		
 		function unbookSchedule(sessionId){
-			$("<div>Bạn có muốn hủy buổi học này?</div>").dialog({
+			$("<div><?php echo Yii::t('lang', 'student_unbook_confirm')?></div>").dialog({
 				title:"Hủy buổi học",
 				modal:true,
 				resizable:false,
 				buttons:{
-					"Có": function(){
+					"<?php echo Yii::t('lang', 'button_yes')?>": function(){
 						$.ajax({
 							url:'<?php echo Yii::app()->baseUrl?>/student/class/unbookSession',
 							type:'post',
@@ -398,12 +396,12 @@
 								session: sessionId,
 							},
 							success:function(){
-								reloadCalendar();
+								reloadAll();
 							}
 						});
 						$(this).dialog('close');
 					},
-					"Không": function(){
+					"<?php echo Yii::t('lang', 'button_no')?>": function(){
 						$(this).dialog('close');
 					}
 				}

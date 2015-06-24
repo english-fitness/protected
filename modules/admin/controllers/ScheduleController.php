@@ -334,7 +334,7 @@ class ScheduleController extends Controller
 			$teachers[] = array(
 				"id"=>$teacher->id,
 				"name"=> "<a href=" . Yii::app()->baseUrl . "/admin/schedule/view?teacher=" . $teacher->id . ">
-							<img src=". Yii::app()->user->getProfilePicture($teacher->id) ." style='margin:3px;width:80%;height:80%'></img><br>" . 
+							<img src=". Yii::app()->user->getProfilePicture($teacher->id) ." style='margin:3px;width:180px;height:180px'></img><br>" . 
 							$teacher->fullname() .
 						 "</a>",
 			);

@@ -251,7 +251,7 @@ class ClassController extends Controller
 			$teachers[] = array(
 				"id"=>$teacher->id,
 				"name"=> "<a href=" . Yii::app()->baseUrl . "/student/class/calendar?teacher=" . $teacher->id . ">
-							<img src=". Yii::app()->user->getProfilePicture($teacher->id) ." style='margin:3px;width:80%;height:80%'></img><br>" . 
+							<img src=". Yii::app()->user->getProfilePicture($teacher->id) ." style='margin:3px;width:180px;height:180px'></img><br>" . 
 							$teacher->fullname() .
 						 "</a>",
 			);
@@ -417,6 +417,40 @@ class ClassController extends Controller
 		}
 		$this->renderJSON(array("result"=>$results));
 	}
+	
+    //set languages
+    public function actionLanguage()
+    {
+        
+        if(isset($_POST['lang'])||isset($_GET['lang'])){
+            $userID = Yii::app()->user->id;
+            $languages = User::model()->findByPk($userID);
+            if(isset($_POST['lang'])){
+                $lang=$_POST['lang'];
+                if(isset($lang['vi'])){
+                     Yii::app()->language=$languages->language = 'vi';
+                    $languages->save();
+                }
+                if(isset($lang['en'])){
+                     Yii::app()->language=$languages->language = 'en';
+                    $languages->save();
+                }
+                if($lang=='en'||$lang=='vi'){
+                    Yii::app()->language=$languages->language = $lang;
+                    $languages->save();
+                }
+            }else if(isset($_GET['lang'])){
+                Yii::app()->language=$languages->language = $_GET['lang'];
+                $languages->save();
+            }
+            $ClsSession = new ClsSession();
+            $nearestSessions = $ClsSession->getNearestSessions($userID, 'student', 8);
+            $this->render("nearestSession",array(
+                    "nearestSessions"=>$nearestSessions,
+            ));
+        }
+       
+    }
 }
 
 ?>
