@@ -331,7 +331,10 @@ class ClassController extends Controller
 							 "ON tbl_session_student.session_id = tbl_session.id " .
 							 "WHERE tbl_session_student.student_id = " . $userId . " " .
 							 "AND  tbl_session.course_id = " . $activeCourse['course_id'];
-					$sessionCount = Yii::app()->db->createCommand($query)->queryColumn()[0];
+					//don't use this expression Yii::app()->db->createCommand($query)->queryColumn()[0]
+					//it causes error on main server, may be because of different php version (speakup server still running php 5.3)
+					$result = Yii::app()->db->createCommand($query)->queryColumn();
+					$sessionCount = $result[0];
 				}
 				
 				$session = new Session();
