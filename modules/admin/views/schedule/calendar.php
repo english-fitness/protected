@@ -69,7 +69,7 @@
 	<div style='margin:0 auto; text-align:center'>
 		Trang <?php echo PaginationLinks::create($page, $pageCount)?>
 	</div>
-	<div style='margin:0 auto; text-align:center; width:870px;'>
+	<div style='margin:0 auto; text-align:center; width:871px;'>
 		<button class='week-nav btn btn-primary' nav='prev'><</button>
 		<button class='wday-select btn' day='0'>Thứ hai<br></button>
 		<button class='wday-select btn' day='1'>Thứ ba<br></button>

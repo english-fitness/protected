@@ -73,7 +73,7 @@ return array(
     'Thông báo'=>'Notification',
     'Bạn chưa có thông báo mới'=>'You don\'t have any new notifications',
     'Bạn chưa có thêm tin nhắn mới'=>'You don\'t have any new messages',
-    'Thông báo từ tutor.vn'=>'Notification',
+    'Thông báo từ tutor.vn'=>'Notification from',
     'Hiện tại không có thông báo mới.'=>'You do not have any new notifications',
     
     'Không có tin nhắn gửi đi'=>'You haven\'t sent any sent message',
@@ -113,8 +113,8 @@ return array(
     'Không có buổi học nào đã hoàn thành!'=>'No session completes',
     'Cập nhật thông tin cá nhân'=>'Click here to update account information',
     'Vui lòng cập nhật đầy đủ thông tin cá nhân trước gửi tin nhắn'=>'Please update all informations of your account before sending the message',
-    'Gửi tin nhắn cho tutor.vn'=>'Send message to us',
-    'Thông báo từ'=>'Notification',
+    'Gửi tin nhắn cho tutor.vn'=>'Send us a message',
+    'Thông báo từ'=>'Notification from',
     'Hiện tại không có thông báo mới'=>'You do not have any new notifications',
     'thông báo từ hệ thống speakup.vn được đánh dấu là chưa đọc! Vui lòng xem thông báo và xác nhận đã đọc'=>'notification from Speakup.vn is marked as unread! Please view the notice and confirm as read',
     'Bạn có'=> 'You have',
@@ -154,9 +154,22 @@ return array(
 	
 	//common
 	'all_teachers'=>'All teachers',
+	'search_teacher'=>'Search teacher',
 	'month_selection'=>'Month',
 	'book_error'=>'Unexpected error happened, please try again later',
 	'search'=>'Search',
+	'schedule'=>'Schedule',
+	'page'=>'Page',
+	
+	'color_legend'=>'Color legend',
+	'timeslot_available'=>'Available timeslot',
+	'timeslot_booked'=>'Booked timeslot',
+	'timeslot_closed'=>'Closed timeslot',
+	'session_approved'=>'Approved session',
+	'session_pending'=>'Pending session',
+	'session_ongoing'=>'Ongoing session',
+	'session_ended'=>'Ended session',
+	'session_canceled'=>'Canceled session',
 	
 	'monday'=>'Monday',
 	'tuesday'=>'Tuesday',

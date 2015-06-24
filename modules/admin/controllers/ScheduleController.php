@@ -345,7 +345,13 @@ class ScheduleController extends Controller
 			$availableSlots[] = array("teacher"=>$item["teacher_id"], "weekStart"=>$item["week_start"], "timeslots"=>$item["timeslots"]);
 		}
 		
-		$this->renderJSON(array("teachers"=>$teachers,"sessions"=>$sessionDays, "availableSlots"=>$availableSlots, "start"=>$start, "end"=>$end));
+		$this->renderJSON(array(
+			"teachers"=>$teachers,
+			"sessions"=>$sessionDays,
+			"availableSlots"=>$availableSlots,
+			"start"=>$start,
+			"end"=>$end,
+		));
 	}
 	
 	public function actionRegisterSchedule(){

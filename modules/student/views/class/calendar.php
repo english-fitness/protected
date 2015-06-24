@@ -69,7 +69,7 @@
 		<?php echo Yii::t('lang', 'page')?> <?php echo PaginationLinks::create($page, $pageCount)?>
 	</div>
 	<div style='clear:both'></div>
-	<div style='margin:20px auto; text-align:center; width:870px;'>
+	<div style='margin:20px auto; text-align:center; width:871px;'>
 		<button class='week-nav btn btn-primary' nav='prev'><</button>
 		<button class='wday-select btn' day='0'><?php echo Yii::t('lang', 'monday')?><br></button>
 		<button class='wday-select btn' day='1'><?php echo Yii::t('lang', 'tuesday')?><br></button>

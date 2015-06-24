@@ -262,7 +262,14 @@ class ClassController extends Controller
 			$availableSlots[] = array("teacher"=>$item["teacher_id"], "weekStart"=>$item["week_start"], "timeslots"=>$item["timeslots"]);
 		}
 		
-		$this->renderJSON(array("teachers"=>$teachers,"sessions"=>$sessionDays, "availableSlots"=>$availableSlots,"start"=>$start, "end"=>$end));
+		$this->renderJSON(array(
+			"teachers"=>$teachers,
+			"sessions"=>$sessionDays,
+			"availableSlots"=>$availableSlots,
+			"start"=>$start,
+			"end"=>$end,
+			"language"=>Yii::app()->sourceLanguage,
+		));
 	}
 	
 	public function actionBookSession(){

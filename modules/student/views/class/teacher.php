@@ -396,7 +396,7 @@
 								session: sessionId,
 							},
 							success:function(){
-								reloadAll();
+								reloadCalendar();
 							}
 						});
 						$(this).dialog('close');
