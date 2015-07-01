@@ -30,7 +30,7 @@ class CourseController extends Controller
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view','ajaxLoadSubjects','ajaxLoadTeachers', 'ajaxApprove',
 				'unassignStudent', 'ajaxSuggestSchedules', 'ajaxLoadSuggestion', 'ajaxModifySchedule', 'ajaxLoadUser','create','update', 'ajaxLoadStudent',
-				'ajaxLoadCourse'),
+				'ajaxLoadCourse', 'ajaxLoadSubjectsArray'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -299,6 +299,16 @@ class CourseController extends Controller
 			}
 		}
 		echo $this->renderPartial('widget/classSubjects', $subjectParams);
+	}
+	
+	//normal ajax load subject action
+	public function actionAjaxLoadSubjectsArray(){
+		$class_id = $_REQUEST['class_id'];
+		$subjects = array();//Init subjects
+		if($class_id!=""){
+			$subjects = Subject::model()->findAllByAttributes(array('class_id'=>$class_id));
+			$this->renderJSON(array('subjects'=>$subjects));
+		}
 	}
 
 	/**

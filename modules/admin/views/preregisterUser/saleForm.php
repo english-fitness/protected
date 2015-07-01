@@ -73,22 +73,25 @@
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-4">
-			<label>Người đăng ký:&nbsp;</label>
-			<?php echo $model->userTypeOptions($model->user_type);?>
+			<label>Trạng thái đăng ký:&nbsp;</label>
+			<?php echo $model->statusOptions($model->status);?>
 		</div>
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-4">
-			<label>Địa chỉ:&nbsp;</label><?php echo $model->address;?>
+			<label>Ngày học:&nbsp;</label>
+			<?php echo $model->getWeekdays();?>
 		</div>
 		<div class="col col-lg-4">
-			<label>Trạng thái đăng ký:&nbsp;</label>
-			<?php echo $model->statusOptions($model->status);?>
+			<label>Giờ học:&nbsp;</label>
+			<?php echo $model->timerange;?>
 		</div>
+	</div>
+	<div class="form-element-container row">
 		<div class="col col-lg-4">
-			<label>Thành viên trong hệ thống?:&nbsp;</label>
-			<?php echo ($model->refer_user_id)? User::model()->displayUserById($model->refer_user_id):"";?>
-		</div>		
+			<label>Mã khuyến mại:&nbsp;</label>
+			<?php echo $model->promotion_code;?>
+		</div>
 	</div>
 </fieldset>
 <div class="clearfix h20">&nbsp;</div>	

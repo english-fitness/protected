@@ -287,7 +287,7 @@ class ClassController extends Controller
 			$user = User::model()->findByPk(Yii::app()->user->id);
 			$userId = $user->id;
 			
-			//check for existing sessiong in the same timeslot
+			//check for existing session in the same timeslot
 			$query = "SELECT session_id, tbl_session.status FROM tbl_session JOIN tbl_session_student " .
 					 "ON tbl_session.id = tbl_session_student.session_id " .
 					 "WHERE tbl_session_student.student_id = " . $userId . " " .
@@ -299,47 +299,22 @@ class ClassController extends Controller
 				$query = "SELECT tbl_course.id as course_id, tbl_course.type as type FROM tbl_course_student JOIN tbl_course " .
 						 "ON tbl_course.id = tbl_course_student.course_id " .
 						 "WHERE tbl_course_student.student_id = " . $userId . " ".
+						 "AND tbl_course.status = " . Course::STATUS_WORKING . " " .
 						 "ORDER BY course_id DESC";
 				$currentCourses = Yii::app()->db->createCommand($query)->queryAll();
 				
-				if (empty($currentCourses) || $currentCourses[sizeOf($currentCourses) - 1]['type'] == Course::TYPE_COURSE_TRAINING){
-					if (sizeOf($currentCourses) > 0 
-						&& $currentCourses[sizeOf($currentCourses) - 1]['type'] == Course::TYPE_COURSE_TRAINING 
-						&& $user->status < User::STATUS_OFFICIAL_USER){
-						$activeCourse = $currentCourses[sizeOf($currentCourses) - 1];
-					} else {
-						//hardcoded value here
-						//we try to refrain from it by creating the course before handing the account to the user
-						$course = new Course();
-						$course->created_user_id = $userId;
-						$course->subject_id = 55; //->hardcoded value
-						$course->teacher_id = $_POST['Session']['teacher_id'];
-						$course->status = Course::STATUS_PENDING;
-						
-						if ($user->status < User::STATUS_OFFICIAL_USER){
-							$course->type = Course::TYPE_COURSE_TRAINING;
-							$course->title = "Trial course for " . $user->fullname();
-						} else {
-							$course->type = Course::TYPE_COURSE_NORMAL;
-							$course->title = $user->fullname();
-						}
-						
-						$course->save();
-						$activeCourse = array('course_id'=>$course->getPrimaryKey(), 'type'=>$course->type);
-						$sessionCount = 0;
-					}
-				} else {
-					//latest non-trial course is the active course
+				if (!empty($currentCourses)){
 					$activeCourse = $currentCourses[sizeOf($currentCourses) - 1];
-					
+								
 					$query = "SELECT COUNT(session_id) FROM tbl_session_student JOIN tbl_session " .
 							 "ON tbl_session_student.session_id = tbl_session.id " .
 							 "WHERE tbl_session_student.student_id = " . $userId . " " .
 							 "AND  tbl_session.course_id = " . $activeCourse['course_id'];
-					//don't use this expression Yii::app()->db->createCommand($query)->queryColumn()[0]
-					//it causes error on main server, may be because of different php version (speakup server still running php 5.3)
+					//php 5.3 doesn't allow function array dereference hence the separated statement
 					$result = Yii::app()->db->createCommand($query)->queryColumn();
 					$sessionCount = $result[0];
+				} else {
+					$this->renderJSON(array('success'=>false, "reason"=>"no_active_course"));
 				}
 				
 				$session = new Session();
@@ -365,7 +340,7 @@ class ClassController extends Controller
 					$success = true;
 				}
 				
-				$this->renderJSON(array("success"=>$success, "session"=>$session, "activeCourse"=>$activeCourse));
+				$this->renderJSON(array("success"=>$success, "session"=>$session));
 			} else {
 				if ($existingSession['status'] == Session::STATUS_APPROVED){
 					$this->renderJSON(array(

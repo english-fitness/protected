@@ -145,6 +145,7 @@ return array(
 	'student_book_duplicate_approved'=>'You have an approved session with another teacher at this time. You cannot have another session at this time.',
 	'cancel_session'=>'Cancel Session',
 	'student_unbook_confirm'=>'Are you sure you want to cancel the booked session?',
+	'no_active_course'=>'You currently don\'t have any course. Please contact our supports via the message panel',
 	
 	//session specific
 	'session'=>'Session',

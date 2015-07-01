@@ -29,7 +29,8 @@ class ScheduleController extends Controller
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
                 'actions'=>array('index', 'view', 'calendarCreateSession', 'calendarUpdateSession', 'calendarDeleteSession', 
-				'ajaxSearchTeacher', 'calendarTeacherView', 'getSessions', 'registerSchedule', 'getTeacherSchedule', 'saveSchedule'),
+				'ajaxSearchTeacher', 'calendarTeacherView', 'getSessions', 'registerSchedule', 'getTeacherSchedule', 'saveSchedule',
+				'ajaxLoadCourse', 'countSession', 'changeSchedule'),
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -106,7 +107,7 @@ class ScheduleController extends Controller
 					$course->teacher_id = $_POST['Session']['teacher_id'];
 					$course->status = Course::STATUS_APPROVED;
 					$course->type = $newCourseType;
-					$course->subject_id = 55; //->hardcoded menu
+					$course->subject_id = $_POST['subjectId']; //->hardcoded menu
 					$user = User::model()->findByPk($studentId);
 					if ($newCourseType == Course::TYPE_COURSE_TRAINING){
 						$course->title = "Trial course for " .  $user->fullname();
@@ -152,6 +153,8 @@ class ScheduleController extends Controller
 	public function actionCalendarUpdateSession(){
 		$success = false;
 		
+		//Creating new session encounter another session with another teacher
+		//->change teacher of that session
 		if (isset($_POST['changeTeacher'])){
 			if (isset($_POST['session']) && isset($_POST['teacher'])) {
 				$session = Session::model()->findByPk($_POST['session']);
@@ -162,6 +165,7 @@ class ScheduleController extends Controller
 				}
 			}
 			$this->renderJSON(array("success"=>$success));
+		//editing session encounter another session with another teacher
 		} else if (isset($_POST['duplicateSession'])){
 			if (isset($_POST['existingSession']) && isset($_POST['currentSession']) && isset($_POST['studentId'])){
 				$existingSession = Session::model()->findByPk($_POST['existingSession']);
@@ -178,6 +182,7 @@ class ScheduleController extends Controller
 			}
 			$this->renderJSON(array("success"=>$success));
 		} else {
+			//normal case, change student of the session
 			if (isset($_POST['studentId'])){
 				$studentId = $_POST['studentId'];
 				$query = "SELECT session_id FROM tbl_session JOIN tbl_session_student " .
@@ -267,7 +272,8 @@ class ScheduleController extends Controller
 		$query = "SELECT * FROM tbl_session " . 
 				 "WHERE teacher_id IN (" . implode(', ',$teacherIds) . ") " .
 				 "AND plan_start BETWEEN '" . $start . "' AND '" . $end . "' " .
-				 "AND status <> " . Session::STATUS_CANCELED;
+				 "AND status <> " . Session::STATUS_CANCELED . " " .
+				 "AND deleted_flag <> 1";
 		$sessions = Session::model()->findAllBySql($query);
 		$sessionDays = array();
 		if (!empty($sessions)){
@@ -300,7 +306,14 @@ class ScheduleController extends Controller
 						break;
 				}
 				
-				$title = array_pop($session->getAssignedStudentsArrs());
+				$students = $session->assignedStudents();
+				if (!empty($students)){
+					$studentId = array_pop($students);
+					$student = User::model()->findByPk($studentId);
+					$title = $student->fullname() . ' (' . $studentId . ')';
+				} else {
+					$title = '';
+				}
 				
 				$sessionDays[] = array(
                     'id' => $session->id,
@@ -449,5 +462,87 @@ class ScheduleController extends Controller
 		$this->renderJSON(array(
 			'success'=>$success,
 		));
+	}
+	
+	public function actionAjaxLoadCourse($student){
+		$query = "SELECT id, title, type FROM tbl_course JOIN tbl_course_student " .
+				 "ON tbl_course.id = tbl_course_student.course_id " .
+				 "WHERE tbl_course_student.student_id = " . $student . " " .
+				 "AND tbl_course.status = " . Course::STATUS_WORKING . " " .
+				 "AND deleted_flag <> 1 " . " " .
+				 "ORDER BY course_id DESC";
+		$courses = Course::model()->findAllBySql($query);
+		
+		foreach($courses as $key=>$course){
+			if ($course->title == ""){
+				$courses[$key]['title'] = $course->id;
+			}
+			if ($course->type == Course::TYPE_COURSE_TRAINING){
+				$courses[$key]['title'] .= " (Trial)";
+			}
+		}
+		
+		$student = User::model()->findByPk($student);
+		if (empty($courses) && $student->status < User::STATUS_OFFICIAL_USER){
+			$courseOptions = array(
+				array(
+					"id"=>Course::TYPE_COURSE_TRAINING*-1,
+					"title"=>"Tạo khóa học thử",
+				),
+			);
+		} else {
+			$courseOptions = array(
+				array(
+					"id"=>Course::TYPE_COURSE_NORMAL*-1,
+					"title"=>"Tạo khóa học thường",
+				),
+				array(
+					"id"=>Course::TYPE_COURSE_TRAINING*-1,
+					"title"=>"Tạo khóa học thử",
+				),
+			);
+		}
+		
+		$courseOptions = array_merge($courses, $courseOptions);
+		
+		$this->renderJSON($courseOptions);
+	}
+	
+	public function actionCountSession(){
+		if (isset($_REQUEST['course'])){
+			$query = "SELECT COUNT(id) FROM tbl_session " .
+					 "WHERE course_id = " . $_REQUEST['course'] . " " . 
+					 "AND deleted_flag <> 1";
+			$result = Yii::app()->db->createCommand($query)->queryColumn();
+			$sessionCount = $result[0];
+			
+			$this->renderJSON(array("sessionCount"=>$sessionCount));
+		}
+	}
+	
+	public function actionChangeSchedule(){
+		$success = false;
+		if (isset($_POST['sessionId']) && isset($_POST['teacher']) && isset($_POST['start'])){
+			$session = Session::model()->findByPk($_POST['sessionId']);
+			$students = $session->assignedStudents();
+			$existingSession = false;
+			if (!empty($students)){
+				$query = "SELECT session_id FROM tbl_session JOIN tbl_session_student " .
+						 "ON tbl_session.id = tbl_session_student.session_id " .
+						 "WHERE tbl_session_student.student_id IN (" . implode(',', $students) . ") " .
+						 "AND tbl_session.plan_start = '" . $_POST['start'] . "'";
+				$existingSession = Yii::app()->db->createCommand($query)->queryRow();
+			}
+			if (!$existingSession){
+				$session->teacher_id = $_POST['teacher'];
+				$session->plan_start = $_POST['start'];
+				if ($session->save()){
+					$success = true;
+				}
+			} else {
+				$this->renderJSON(array('success'=>false, 'reason'=>'duplicate_session'));
+			}
+		}
+		$this->renderJSON(array('success'=>$success));
 	}
 }

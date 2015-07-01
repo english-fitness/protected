@@ -15,6 +15,7 @@ return array(
 	'student_book_duplicate_approved'=>'Bạn đã có một buổi học được xác nhận với một giáo viên khác trong cùng khung giờ. Bạn không thể đặt thêm lịch học trong khung giờ này.',
 	'cancel_session'=>'Hủy buổi học',
 	'student_unbook_confirm'=>'Bạn có muốn hủy buổi học này không?',
+	'no_active_course'=>'Bạn hiện không có khóa học nào. Vui lòng liên hệ với chúng tôi thông qua phần tin nhắn để được hỗ trợ',
 	
 	//session specific
 	'session'=>'Buổi học',

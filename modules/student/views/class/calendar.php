@@ -351,6 +351,16 @@
 					},
 				}
 			});
+		} else if(response.reason == "no_active_course"){
+			$("<div><?php echo Yii::t('lang', 'no_active_course')?></div>").dialog({
+				modal:true,
+				resizable:false,
+				buttons:{
+					"<?php echo Yii::t('lang', 'button_close')?>": function(){
+						$(this).dialog('close');
+					},
+				}
+			});
 		} else{
 			$("<div><?php echo Yii::t('lang', 'book_error')?></div>").dialog({
 				modal:true,

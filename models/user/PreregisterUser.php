@@ -61,17 +61,18 @@ class PreregisterUser extends CActiveRecord
 		// will receive user inputs.
 		$modelRules = array(
 			array('fullname, phone, email', 'required'),
-			array('gender, user_type, sale_user_id, refer_user_id, status', 'numerical', 'integerOnly'=>true),
+			array('gender, sale_user_id, status', 'numerical', 'integerOnly'=>true),
+			array('phone', 'match', 'pattern'=>'/^\+{0,1}[0-9\-\s]{8,16}$/'),
 			array('email', 'length', 'max'=>128),
 			array('email', 'email'),
-			array('fullname, address, parent_name, subject_note, objective, care_status', 'length', 'max'=>256),
+			array('fullname', 'length', 'max'=>256),
 			array('phone', 'length', 'max'=>20),
-			array('class_name, parent_phone, sale_status', 'length', 'max'=>80),
+			array('sale_status', 'length', 'max'=>80),
 			array('birthday, last_sale_date', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
-			array('birthday, content_request, teacher_request, status, care_status, sale_note, last_sale_date, created_user_id, modified_user_id, created_date, modified_date, deleted_flag', 'safe'),
+			array('birthday, status, care_status, sale_note, last_sale_date, created_user_id, modified_user_id, created_date, modified_date, deleted_flag', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, email, fullname, birthday, gender, address, phone, class_name, parent_name, parent_phone, subject_note, objective, content_request, teacher_request, user_type, status, care_status, sale_status, sale_note, sale_user_id, last_sale_date, refer_user_id, created_date, modified_date', 'safe', 'on'=>'search'),
+			array('id, email, fullname, birthday, gender, address, phone, promotion_code, status, care_status, sale_status, sale_note, sale_user_id, last_sale_date, created_date, modified_date', 'safe', 'on'=>'search'),
 			array('created_date', 'default', 'value'=>date('Y-m-d H:i:s'), 'setOnEmpty'=>false, 'on'=>'insert'),
 		);
 		//Update model rules: modified date, created user, modified user
@@ -105,23 +106,16 @@ class PreregisterUser extends CActiveRecord
 			'fullname' => 'Tên đầy đủ',
 			'birthday' => 'Ngày sinh',
 			'gender' => 'Giới tính',
-			'address' => 'Địa chỉ',
 			'phone' => 'Số điện thoại',
-			'class_name' => 'Khối lớp',
-			'parent_name' => 'Tên phụ huynh',
-			'parent_phone' => 'ĐT phụ huynh',
-			'subject_note' => 'Môn muốn gia sư',
-			'objective' => 'Mã Code',
-			'content_request' => 'Yêu cầu học tập',
-			'teacher_request' => 'Yêu cầu giáo viên',
-			'user_type' => 'Người đăng ký',
+			'weekday' => 'Ngày học',
+			'timerange' => 'Giờ học',
+			'promotion_code' => 'Mã khuyến mại',
 			'status' => 'Trạng thái',
 			'care_status' => 'Trạng thái chăm sóc',
 			'sale_status' => 'Trạng thái Sale',
 			'sale_note' => 'Ghi chú tư vấn',
 			'sale_user_id' => 'Người tư vấn',
 			'last_sale_date' => 'Ngày tư vấn cuối',
-			'refer_user_id' => 'Mã thành viên (ID)',
 			'created_user_id' => 'Người tạo',
 			'modified_user_id' => 'Người sửa',
 			'deleted_flag' => 'Trạng thái xóa',
@@ -153,23 +147,14 @@ class PreregisterUser extends CActiveRecord
 		$criteria->compare('fullname',$this->fullname,true);
 		$criteria->compare('birthday',$this->birthday,true);
 		$criteria->compare('gender',$this->gender);
-		$criteria->compare('address',$this->address,true);
 		$criteria->compare('phone',$this->phone,true);
-		$criteria->compare('class_name',$this->class_name,true);
-		$criteria->compare('parent_name',$this->parent_name,true);
-		$criteria->compare('parent_phone',$this->parent_phone,true);
-		$criteria->compare('subject_note',$this->subject_note,true);
-		$criteria->compare('objective',$this->objective,true);
-		$criteria->compare('content_request',$this->content_request,true);
-		$criteria->compare('teacher_request',$this->teacher_request,true);
-		$criteria->compare('user_type',$this->user_type);
+		$criteria->compare('promotion_code',$this->promotion_code);
 		$criteria->compare('status',$this->status);
 		$criteria->compare('care_status',$this->care_status,true);
 		$criteria->compare('sale_status',$this->sale_status,true);
 		$criteria->compare('sale_note',$this->sale_note,true);
 		$criteria->compare('sale_user_id',$this->sale_user_id);
 		$criteria->compare('last_sale_date',$this->last_sale_date,true);
-		$criteria->compare('refer_user_id',$this->refer_user_id);
 		$criteria->compare('deleted_flag',$this->deleted_flag);
 		$criteria->compare('created_user_id',$this->created_user_id);
 		$criteria->compare('modified_user_id',$this->modified_user_id);
@@ -197,7 +182,8 @@ class PreregisterUser extends CActiveRecord
 	//Remove html tags of some fields before save Preregister User
 	public function beforeSave()
 	{
-		$stripTagFields = array('fullname','address','phone','class_name','parent_name','parent_phone','subject_note','objective','content_request','teacher_request');
+		$stripTagFields = array('fullname','phone','promotion_code',);
+		
 		foreach($stripTagFields as $textField){
 			$this->$textField = strip_tags($this->$textField, Common::allowHtmlTags());
 		}
@@ -218,24 +204,6 @@ class PreregisterUser extends CActiveRecord
 	{
 		$userActionLog = new UserActionHistory();
 		return $userActionLog->saveActionLog($this->tableName(), $this->id, true, true);
-	}
-	
-	/**
-	 * Preregister User type options
-	 */
-	public function userTypeOptions($type=null)
-	{
-		$typeOptions = array(
-			self::TYPE_USER_STUDENT => 'Học sinh',
-			self::TYPE_USER_TEACHER => 'Giáo viên',
-			self::TYPE_USER_PARENT => 'Phụ huynh',
-		);
-		if($type==null){
-			return $typeOptions;
-		}elseif(isset($typeOptions[$type])){
-			return $typeOptions[$type];
-		}
-		return null;
 	}
 	
 	//Display Status options
@@ -272,4 +240,18 @@ class PreregisterUser extends CActiveRecord
 		return null;
 	}
 	
+	public function getWeekdays(){
+		$weekdays = array("Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy", "Chủ nhật");
+		$weekdayArray = preg_split('/,[\s]*/', $this->weekday);
+		$weekdayString = "";
+		for ($i = 0; $i < count($weekdayArray); $i++){
+			if (is_numeric($weekdayArray[$i])){
+				$weekdayString .= $weekdays[$weekdayArray[$i]];
+				if ($i < count($weekdayArray) - 1){
+					$weekdayString .= ", ";
+				}
+			}
+		}
+		return $weekdayString;
+	}
 }

@@ -24,7 +24,7 @@
 		),
 		array(
 		   'header' => 'Lịch dạy',
-		   'value'=>"CHtml::link('Lịch dạy', Yii::app()->createUrl('admin/schedule/registerSchedule?teacher=5665'))",
+		   'value'=>'CHtml::link("Lịch dạy", Yii::app()->createUrl("admin/schedule/registerSchedule?teacher=$data->id"))',
 		   'type'=>'raw',
 		),
 		// array(

@@ -1,1 +1,0 @@
-<div class="page-title">Trang chủ</div>

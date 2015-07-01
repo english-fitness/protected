@@ -46,10 +46,6 @@
 </style>
 
 <?php
-	$registration = new ClsRegistration();
-	$hours = json_encode($registration->hoursInDay());
-	$minutes = json_encode($registration->minutesInHour());
-	// $timezone = 8;
 	$teacherModel = User::model()->findByPk($teacher);
 ?>
 
@@ -80,6 +76,12 @@
 			<div style="width:25px;height:15px;background-color:darkorange;float:left;margin:3px"></div><span style="float:left">Ended Session</span>
 			<div style="clear:both"></div>
 		</div>
+		<div style="position:fixed;top:330px;left:10px;width:160px;padding:3px;border:solid 1px #ddd;box-sizing:border-box;background-color:white;box-shadow:1px 1px 1px #ddd;border-radius:3px;text-align:justify; display:none"
+		 id="changingSchedule">
+			<p><b>Changing schedule</b></p>
+			<p>Click on an available slot to change schedule. Click the button bellow to cancel</p>
+			<button id="cancelChangeSchedule" class="btn" style="margin-left: 35px">Cancel</button>
+		</div>
 	</form>
 	<div style="margin-left:150px">
 		<label class="form-label" for="month-selection">Chọn tháng: </label>
@@ -101,10 +103,7 @@
 
 <?php if(isset($teacher)):?>
 	<script>
-		var options = {
-			hours: <?php echo $hours;?>,
-			minutes: <?php echo $minutes;?>
-		}
+		var changingSchedule = false;
 	
 		var start = new Date('<?php echo date('Y-m-01')?>');
 		var end = new Date('<?php echo date('Y-m-t')?>');
@@ -129,6 +128,10 @@
 				$('#calendar').fullCalendar('gotoDate', start.format('YYYY-MM-DD'));
 				$(this).blur();
 				clampView($('#calendar').fullCalendar('getView'));
+			});
+			$('#cancelChangeSchedule').click(function(){
+				toggleChangeSchedule(false);
+				return false;
 			});
 		});
 		
@@ -162,29 +165,39 @@
 					clampView(view);
 				},
 				eventClick: function(event, jsEvent, view){
-					if (event.className == 'reservedSlot'){
-						var preset = {
-							action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarCreateSession',
-							teacher: event.teacher,
-							start: event.start,
+					if (changingSchedule){
+						if (event.className == 'reservedSlot'){
+							values = {
+								teacher:event.teacher,
+								start:event.start.format('YYYY-MM-DD HH:mm:ss'),
+							}
+							changeSchedule(pendingChangeSession, values);
 						}
-						CalendarSessionHandler.newSession(preset, createSessionSuccess, createSessionError, options);
-						bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
-					} else if (['approvedSession', 'ongoingSession', 'pendingSession'].indexOf(event.className[0]) > -1){
-						var data = {
-							action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarUpdateSession',
-							sessionId: event.id,
-							teacher: event.teacher,
-							start: event.start,
-							teacherName: event.teacherName,
-							subject: event.subject,
-							course_id: event.course_id,
-							student: event.student,
-							className: event.className,
-							end: event.end,
+					}else {
+						if (event.className == 'reservedSlot'){
+							var preset = {
+								action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarCreateSession',
+								teacher: event.teacher,
+								start: event.start,
+							}
+							CalendarSessionHandler.newSession(preset, createSessionSuccess, createSessionError);
+							bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
+						} else if (['approvedSession', 'ongoingSession', 'pendingSession'].indexOf(event.className[0]) > -1){
+							var data = {
+								action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarUpdateSession',
+								sessionId: event.id,
+								teacher: event.teacher,
+								start: event.start,
+								teacherName: event.teacherName,
+								subject: event.subject,
+								course_id: event.course_id,
+								student: event.student,
+								className: event.className,
+								end: event.end,
+							}
+							CalendarSessionHandler.editSession(data, updateSessionSuccess, updateSessionError);
+							bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
 						}
-						CalendarSessionHandler.editSession(data, updateSessionSuccess, updateSessionError, options);
-						bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
 					}
 				},
 				minTime: minTime,
@@ -268,7 +281,7 @@
 		function ajaxLoadCourse(studentId){
 			document.getElementById('hiddenStudentId').value = studentId;
 			$.ajax({
-				url:"<?php echo Yii::app()->baseurl; ?>/admin/course/ajaxLoadCourse/student/"+studentId,
+				url:"<?php echo Yii::app()->baseurl; ?>/admin/schedule/ajaxLoadCourse/student/"+studentId,
 				type:"get",
 				success: function(courses){
 					//clearing old options
@@ -279,6 +292,20 @@
 						options += "<option value=" + courses[i].id + ">" + ((courses[i].title != "") ? courses[i].title : courses[i].id) + "</option>";
 					}
 					document.getElementById("courseSelect").innerHTML = options;
+					$("#courseSelect").change();
+				}
+			});
+		}
+		
+		function autoFillSessionTitle(courseId){
+			$.ajax({
+				url:"<?php echo Yii::app()->baseUrl?>/admin/schedule/countSession",
+				type:"get",
+				data:{
+					course: courseId,
+				},
+				success:function(response){
+					document.getElementById("sessionTitle").value = "Session " + (parseInt(response.sessionCount) + 1);
 				}
 			});
 		}
@@ -512,6 +539,52 @@
 					}
 				});
 			}
+		}
+		
+		function toggleChangeSchedule(changing, session){
+			changingSchedule = changing;
+			if (changing){
+				pendingChangeSession = session;
+				$('#changingSchedule').show();
+			} else {
+				pendingChangeSession = null;
+				$('#changingSchedule').hide();
+			}
+		}
+		
+		function changeSchedule(session, values){
+			console.log(session);
+			console.log(values);
+			$('<div>Bạn có muốn thay đổi lịch học sang khung giờ này?<br>- '+values.teacher+'<br>- '+values.start+'</div>').dialog({
+				title:"Đổi lịch học",
+				modal:true,
+				resizable:false,
+				buttons:{
+					"Đồng ý": function(){
+						$.ajax({
+							url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/changeSchedule',
+							data:{
+								sessionId: session,
+								teacher:values.teacher,
+								start:values.start,
+							},
+							type:"post",
+							success:function(response){
+								if (response.success){
+									reloadCalendar();
+								} else {
+									displayConfirmDialog("Đổi lịch học", "Đã có lỗi xảy ra, vui lòng thử lại sau", "Đóng");
+								}
+							}
+						});
+						$(this).dialog('close');
+						toggleChangeSchedule(false);
+					},
+					"Hủy": function(){
+						$(this).dialog('close');
+					}
+				}
+			});
 		}
 		
 		function searchTeacherToView(keyword){

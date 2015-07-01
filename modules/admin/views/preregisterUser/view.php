@@ -15,20 +15,16 @@ $this->breadcrumbs=array(
 		'email',
 		'birthday',
 		'gender',
-		'address',
 		'phone',
 		array(
-		   'name'=>'objective',
-		   'value'=>$model->objective,
-		   'type'=>'raw',
+		   'name'=>'weekday',
+		   'value'=>$model->getWeekdays(),
 		),
+		'timerange',
+		'promotion_code',
 		array(
 		   'name'=>'status',
 		   'value'=>$model->statusOptions($model->status),
-		),
-		array(
-		   'name'=>'user_type',
-		   'value'=>$model->userTypeOptions($model->user_type),
 		),
 		'sale_status',
 		array(
@@ -43,10 +39,6 @@ $this->breadcrumbs=array(
 		array(
 		   'name'=>'last_sale_date',
 		   'value'=>($model->last_sale_date)? date('d/m/Y', strtotime($model->last_sale_date)):"",
-		),
-		array(
-		   'name'=>'refer_user_id',
-		   'value'=>($model->refer_user_id)? User::model()->displayUserById($model->refer_user_id):"",
 		),
 		array(
 		   'name'=>'created_user_id',

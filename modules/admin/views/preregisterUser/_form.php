@@ -119,35 +119,6 @@
 	</div>	
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'address'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->textField($model,'address',array_merge($readOnlyAttrs,array('size'=>60,'maxlength'=>256))); ?>
-			<?php echo $form->error($model,'address'); ?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'user_type'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->dropDownList($model,'user_type', $model->userTypeOptions(), array()); ?>
-				<?php echo $form->error($model,'user_type'); ?>
-			</div>
-			<div class="col col-lg-7 pL0i pR0i">
-				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($model,'refer_user_id', array('class'=>'mT10')); ?>
-				</div>
-				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textField($model,'refer_user_id', array_merge($readOnlyAttrs, array('size'=>20,'maxlength'=>80))); ?>
-					<?php echo $form->error($model,'refer_user_id'); ?>
-				</div>
-			</div>
-		</div>
-	</div>
-		<div class="form-element-container row">
-		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'status'); ?>
 		</div>
 		<div class="col col-lg-9">
@@ -161,14 +132,30 @@
 	<legend>Thông tin khác</legend>	
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'objective'); ?>
+			<?php echo $form->labelEx($model,'weekday'); ?>
 		</div>
 		<div class="col col-lg-9">
-			<?php echo $form->textField($model,'objective',array_merge($readOnlyAttrs,array('size'=>60,'maxlength'=>256))); ?>
-			<?php echo $form->error($model,'objective'); ?>
+			<p><?php echo $model->getWeekdays()?></p>
 		</div>
 	</div>
-	
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+			<?php echo $form->labelEx($model,'timerange'); ?>
+		</div>
+		<div class="col col-lg-9">
+			<?php echo $form->textField($model,'timerange',array_merge($readOnlyAttrs,array('size'=>60,'maxlength'=>256))); ?>
+			<?php echo $form->error($model,'timerange'); ?>
+		</div>
+	</div>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+			<?php echo $form->labelEx($model,'promotion_code'); ?>
+		</div>
+		<div class="col col-lg-9">
+			<?php echo $form->textField($model,'promotion_code',array_merge($readOnlyAttrs,array('size'=>60,'maxlength'=>256))); ?>
+			<?php echo $form->error($model,'promotion_code'); ?>
+		</div>
+	</div>
 </fieldset>
 <div class="clearfix h20">&nbsp;</div>	
 <?php $this->endWidget(); ?>

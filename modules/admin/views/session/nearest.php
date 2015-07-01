@@ -19,6 +19,7 @@ $this->breadcrumbs=array(
 <?php 
 	$registration = new ClsRegistration();//New Registration class
 	$startDateFilter = Yii::app()->controller->getQuery('Session[plan_start]', '');
+	$teacherFullname = Yii::app()->controller->getQuery('Session[teacher_fullname]', '');
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$model->searchNearestSession(),

@@ -360,7 +360,7 @@ select.schedule{
 			} else {
 				selection.value = 0;
 			}
-			if (selected >= thisWeek && bookedSessions.indexOf(i) == -1){
+			if (selected > thisWeek && bookedSessions.indexOf(i) == -1){
 				selection.disabled = false;
 			} else if (bookedSessions.indexOf(i) > -1){
 				selection.options[selection.selectedIndex].text = "Booked";

@@ -51,10 +51,11 @@
 </style>
 
 <?php
-	$registration = new ClsRegistration();
-	$hours = json_encode($registration->hoursInDay());
-	$minutes = json_encode($registration->minutesInHour());
-	// $timezone = 8;
+	$classModels = Classes::model()->findAll(array('order'=>'name ASC'));
+	$classes = array();
+	foreach($classModels as $class){
+		$classes[] = json_encode($class->getAttributes());
+	}
 ?>
 
 <div class="details-class">
@@ -106,13 +107,19 @@
 		<div style="width:25px;height:15px;background-color:darkorange;float:left;margin:3px"></div><span style="float:left">Ended Session</span>
 		<div style="clear:both"></div>
 	</div>
+	<div style="position:fixed;top:330px;left:10px;width:160px;padding:3px;border:solid 1px #ddd;box-sizing:border-box;background-color:white;box-shadow:1px 1px 1px #ddd;border-radius:3px;text-align:justify; display:none"
+		 id="changingSchedule">
+		<p><b>Changing schedule</b></p>
+		<p>Click on an available slot to change schedule. Click the button bellow to cancel</p>
+		<button id="cancelChangeSchedule" class="btn" style="margin-left: 35px">Cancel</button>
+	</div>
 </div>
 <script>
 	//global variables
-	var options = {
-		hours: <?php echo $hours;?>,
-		minutes: <?php echo $minutes;?>
-	}
+	var classes = [<?php echo implode(',', $classes)?>];
+	
+	var changingSchedule = false;
+	var pendingChangeSession;
 	
 	var minTime = '09:00';
 	var maxTime = '22:51';
@@ -162,6 +169,9 @@
 			}
 		});
 		bindSearchBoxEvent("teacherSearchBox", searchTeacher);
+		$('#cancelChangeSchedule').click(function(){
+			toggleChangeSchedule(false);
+		});
 	});
 	
 	//functions
@@ -179,7 +189,9 @@
 	}
 
 	function createCalendar(divId, data, size){
-		document.getElementById(divId).setAttribute("style","width:"+1000*(size/4)+"px; height:1300px;margin: 40px auto");
+		var firstColumnWidth = 85;
+		var calendarWidth = firstColumnWidth+(1000-firstColumnWidth)*(size/4);
+		document.getElementById(divId).setAttribute("style","width:"+calendarWidth+"px; height:1300px;margin: 40px auto");
 		var sessions = data.sessions;
 		var availableSlots = data.availableSlots;
 		
@@ -204,29 +216,39 @@
 				
 			},
 			eventClick: function(event, jsEvent, view){
-				if (event.className == 'reservedSlot'){
-					var preset = {
-						action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarCreateSession',
-						teacher: event.teacher,
-						start: event.start,
+				if (changingSchedule){
+					if (event.className == 'reservedSlot'){
+						var values = {
+							teacher: event.teacher,
+							start: event.start.format('YYYY-MM-DD HH:mm:ss'),
+						}
+						changeSchedule(pendingChangeSession, values);
 					}
-					CalendarSessionHandler.newSession(preset, createSessionSuccess, createSessionError, options);
-					bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
-				} else if (['approvedSession', 'ongoingSession', 'pendingSession'].indexOf(event.className[0]) > -1){
-					var data = {
-						action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarUpdateSession',
-						sessionId: event.id,
-						teacher: event.teacher,
-						start: event.start,
-						teacherName: event.teacherName,
-						subject: event.subject,
-						course_id: event.course_id,
-						student: event.student,
-						className: event.className,
-						end: event.end,
+				}else {
+					if (event.className == 'reservedSlot'){
+						var preset = {
+							action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarCreateSession',
+							teacher: event.teacher,
+							start: event.start,
+						}
+						CalendarSessionHandler.newSession(preset, createSessionSuccess, createSessionError);
+						bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
+					} else if (['approvedSession', 'ongoingSession', 'pendingSession'].indexOf(event.className[0]) > -1){
+						var data = {
+							action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarUpdateSession',
+							sessionId: event.id,
+							teacher: event.teacher,
+							start: event.start,
+							teacherName: event.teacherName,
+							subject: event.subject,
+							course_id: event.course_id,
+							student: event.student,
+							className: event.className,
+							end: event.end,
+						}
+						CalendarSessionHandler.editSession(data, updateSessionSuccess, updateSessionError);
+						bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
 					}
-					CalendarSessionHandler.editSession(data, updateSessionSuccess, updateSessionError, options);
-					bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
 				}
 			},
 			minTime: minTime,
@@ -302,7 +324,7 @@
 	function ajaxLoadCourse(studentId){
 		document.getElementById('hiddenStudentId').value = studentId;
 		$.ajax({
-			url:"<?php echo Yii::app()->baseurl; ?>/admin/course/ajaxLoadCourse/student/"+studentId,
+			url:"<?php echo Yii::app()->baseurl; ?>/admin/schedule/ajaxLoadCourse/student/"+studentId,
 			type:"get",
 			success: function(courses){
 				//clearing old options
@@ -310,9 +332,23 @@
 				//setting new options
 				var options = "";
 				for (var i in courses){
-					options += "<option value=" + courses[i].id + ">" + ((courses[i].title != "") ? courses[i].title : courses[i].id) + "</option>";
+					options += "<option value=" + courses[i].id + ">" + courses[i].title + "</option>";
 				}
 				document.getElementById("courseSelect").innerHTML = options;
+				$("#courseSelect").change();
+			}
+		});
+	}
+	
+	function autoFillSessionTitle(courseId){
+		$.ajax({
+			url:"<?php echo Yii::app()->baseUrl?>/admin/schedule/countSession",
+			type:"get",
+			data:{
+				course: courseId,
+			},
+			success:function(response){
+				document.getElementById("sessionTitle").value = "Session " + (parseInt(response.sessionCount) + 1);
 			}
 		});
 	}
@@ -546,6 +582,57 @@
 				}
 			});
 		}
+	}
+	
+	function toggleChangeSchedule(changing, session){
+		changingSchedule = changing;
+		if (changing){
+			pendingChangeSession = session;
+			$('#changingSchedule').show();
+		} else {
+			pendingChangeSession = null;
+			$('#changingSchedule').hide();
+		}
+	}
+	
+	function changeSchedule(session, values){
+		console.log(session);
+		console.log(values);
+		$('<div>Bạn có muốn thay đổi lịch học sang khung giờ này?</div>').dialog({
+			title:"Đổi lịch học",
+			modal:true,
+			resizable:false,
+			buttons:{
+				"Đồng ý": function(){
+					$.ajax({
+						url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/changeSchedule',
+						data:{
+							sessionId: session,
+							teacher:values.teacher,
+							start:values.start,
+						},
+						type:"post",
+						success:function(response){
+							if (response.success){
+								reloadAll();
+							} else {
+								if (response.reason == "duplicate_session"){
+									displayConfirmDialog("Đổi lịch học", "Học sinh trong buổi học này đã có một buổi học"+
+									" với giáo viên khác trong cùng khung giờ. Bạn không thể chuyển buổi học sang khung giờ này", "Đóng");
+								} else {
+									displayConfirmDialog("Đổi lịch học", "Đã có lỗi xảy ra, vui lòng thử lại sau", "Đóng");
+								}
+							}
+						}
+					});
+					$(this).dialog('close');
+					toggleChangeSchedule(false);
+				},
+				"Hủy": function(){
+					$(this).dialog('close');
+				}
+			}
+		});
 	}
 	
 	function setHeader(){
