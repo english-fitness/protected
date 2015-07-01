@@ -299,7 +299,8 @@ class ClassController extends Controller
 				$query = "SELECT tbl_course.id as course_id, tbl_course.type as type FROM tbl_course_student JOIN tbl_course " .
 						 "ON tbl_course.id = tbl_course_student.course_id " .
 						 "WHERE tbl_course_student.student_id = " . $userId . " ".
-						 "AND tbl_course.status = " . Course::STATUS_WORKING . " " .
+						 "AND (tbl_course.status = " . Course::STATUS_WORKING . " " .
+						 "OR tbl_course.status = " . Course::STATUS_APPROVED . ") " .
 						 "ORDER BY course_id DESC";
 				$currentCourses = Yii::app()->db->createCommand($query)->queryAll();
 				

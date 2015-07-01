@@ -468,7 +468,8 @@ class ScheduleController extends Controller
 		$query = "SELECT id, title, type FROM tbl_course JOIN tbl_course_student " .
 				 "ON tbl_course.id = tbl_course_student.course_id " .
 				 "WHERE tbl_course_student.student_id = " . $student . " " .
-				 "AND tbl_course.status = " . Course::STATUS_WORKING . " " .
+				 "AND (tbl_course.status = " . Course::STATUS_WORKING . " " .
+				 "OR tbl_course.status = " . Course::STATUS_APPROVED . ") " .
 				 "AND deleted_flag <> 1 " . " " .
 				 "ORDER BY course_id DESC";
 		$courses = Course::model()->findAllBySql($query);
