@@ -86,7 +86,7 @@ $this->breadcrumbs=array(
             'header' => 'Tài liệu',
             'value'=>'CHtml::link(
                 "xem tài liệu",
-                array("/media/js/filemanager/dialog.php?user_id=".$data->id),
+                array("/media/applications/filemanager/main/dialog.php?user_id=".$data->id),
                 array("class"=>"view-document-from-teacher"))',
             'type'=>'raw',
             'htmlOptions'=>array('style'=>'width:50px;'),

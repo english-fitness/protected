@@ -4,7 +4,7 @@ class PaginationLinks{
 		$page,
 		$numberOfPages,
 		$context    = 1,
-		$linkFormat = '<a href="?page=%d">%d</a>',
+		$linkFormat = '<a class="page-navigation" href="?page=%d">%d</a>',
 		$pageFormat = '<span>%d</span>',
 		$ellipsis   = '&hellip;'){
 			$ranges = array(array(1, 1 + $context));

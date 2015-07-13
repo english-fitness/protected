@@ -127,7 +127,7 @@ class ScheduleController extends Controller
 				$session->course_id = $courseId;
 				$session->plan_start .= ' '.$_POST['startHour'].':'.$_POST['startMin'].':00';
 				$session->status = Session::STATUS_APPROVED;
-				$session->type = Session::TYPE_SESSION_NORMAL;
+				$session->type = isset($course->type) ? $course->type : Session::TYPE_SESSION_NORMAL;
 				if($session->save()){
 					$assignedStudentIds = $course->assignedStudents();
 					if (empty($assignedStudentIds)){

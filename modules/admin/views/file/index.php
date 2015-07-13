@@ -1,0 +1,1 @@
+<iframe style="border:none" width="100%" height="500" src="/media/applications/filemanager/publicLibrary/dialog.php?type=0"></iframe>

@@ -6,7 +6,7 @@ class TestCondition extends Controller {
 	public  $subPageTitle = 'Kiểm tra loa, mic';
     /*  Action Index*/
     public function actionIndex() {
-        $this->render("student.views.testCondition.index");
+        $this->render(Yii::t('lang', 'test_speaker_mic_view'));
     }
 
     /* test mic action */

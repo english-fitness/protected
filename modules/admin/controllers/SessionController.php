@@ -302,13 +302,17 @@ class SessionController extends Controller
 			}
 			if(isset($_GET['Session']['teacher_fullname'])){
 				$keyword = $_GET['Session']['teacher_fullname'];
-				$teachers = array_values(Yii::app()->db->createCommand("select id from tbl_user where CONCAT(`lastname`,' ',`firstname`) LIKE '%".$keyword."%'")->queryAll());
+				$teachers = User::model()->findByFullname($keyword, array('id'));
 				$teacherId = array();
 				foreach ($teachers as $teacher)
 				{
 					array_push($teacherId, $teacher['id']);
 				}
-				$model->getDbCriteria()->addCondition("teacher_id in (" . implode(", ", $teacherId) . ")");
+				$teacherIdString = implode(", ", $teacherId);
+				if ($teacherIdString == ''){
+					$teacherIdString = "''";
+				}
+				$model->getDbCriteria()->addCondition("teacher_id in (" . $teacherIdString . ")");
 			}
         }
         $model->deleted_flag = 0;//not deleted session
@@ -330,13 +334,17 @@ class SessionController extends Controller
 			}
 			if(isset($_GET['Session']['teacher_fullname'])){
 				$keyword = $_GET['Session']['teacher_fullname'];
-				$teachers = array_values(Yii::app()->db->createCommand("select id from tbl_user where CONCAT(`lastname`,' ',`firstname`) LIKE '%".$keyword."%'")->queryAll());
+				$teachers = User::model()->findByFullname($keyword, array('id'));
 				$teacherId = array();
 				foreach ($teachers as $teacher)
 				{
 					array_push($teacherId, $teacher['id']);
 				}
-				$model->getDbCriteria()->addCondition("teacher_id in (" . implode(", ", $teacherId) . ")");
+				$teacherIdString = implode(", ", $teacherId);
+				if ($teacherIdString == ''){
+					$teacherIdString = "''";
+				}
+				$model->getDbCriteria()->addCondition("teacher_id in (" . $teacherIdString . ")");
 			}
 		}
 		$this->render('recorded', array(

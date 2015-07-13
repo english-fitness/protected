@@ -17,6 +17,24 @@ return array(
 	'student_unbook_confirm'=>'Bạn có muốn hủy buổi học này không?',
 	'no_active_course'=>'Bạn hiện không có khóa học nào. Vui lòng liên hệ với chúng tôi thông qua phần tin nhắn để được hỗ trợ',
 	
+	//page title
+	'nearest_session'=>'Buổi học gần nhất',
+	'ended_session'=>'Buổi học đã hoàn thành',
+	'reservation'=>'Đăng ký lịch học',
+	'test_speaker_mic'=>'Kiểm tra loa, mic',
+	'account_info'=>'Thông tin cá nhân',
+	'message'=>'Tin nhắn',
+	'notification'=>'Thông báo',
+	'change_password'=>'Thay đổi mật khẩu',
+	
+	//messages
+	'change_pw_notice_not_enough_input'=>'Vui lòng nhập đầy đủ thông tin',
+	'change_pw_notice_wrong_old_pw'=>'Mật khẩu cũ không chính xác',
+	'change_pw_notice_pw_not_match'=>'Xác nhận lại mật khẩu mới',
+	'change_pw_notice_success'=>'Thay đổi mật khẩu thành công',
+	'message_send_notice_no_recipent'=>'Vui lòng thêm người gửi',
+	'message_view_notice_non_existent'=>'Tin nhắn này không tồn tại',
+	
 	//session specific
 	'session'=>'Buổi học',
 	'session_date'=>'Ngày học',
@@ -57,4 +75,7 @@ return array(
 	'button_yes'=>'Có',
 	'button_no'=>'Không',
 	'button_close'=>'Đóng',
+	
+	//view link
+	'test_speaker_mic_view'=>'student.views.testCondition.index',
 );

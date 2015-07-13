@@ -18,7 +18,7 @@ class AccountController extends Controller
 	//Account information
     public function actionIndex()
     {
-    	$this->subPageTitle = 'Thông tin tài khoản';
+    	$this->subPageTitle = Yii::t('lang','account_info');
     	$uid = Yii::app()->user->id;
     	$model = User::model()->findByPk($uid);
     	$clsNotification = new ClsNotification();
@@ -72,7 +72,7 @@ class AccountController extends Controller
     public function actionChangePassword()
     {
     	//$this->redirect(Yii::app()->baseurl.'/student/account/index');
-		$this->subPageTitle = 'Thay đổi mật khẩu tài khoản';
+		$this->subPageTitle = Yii::t('lang','change_password');
         $model = User::model()->findByPk(Yii::app()->user->id);
         $this->render('changePassword',array("model"=>$model));
     }
@@ -88,7 +88,7 @@ class AccountController extends Controller
     //Ajax change password
     public function actionAjaxChangePassword()
     {
-        $notice = "Vui lòng nhập đầy đủ thông tin";
+        $notice = Yii::t('lang','change_pw_notice_not_enough_input');
         $success = false;
         if(isset($_POST['passwordSave']))
         {
@@ -96,12 +96,12 @@ class AccountController extends Controller
             $user->passwordSave = $_POST['passwordSave'];
             $user->repeatPassword = $_POST['repeatPassword'];
             if($user->password != crypt($_POST['password'],$user->password)){
-                $notice = "Mật khẩu cũ không chính xác";
+                $notice = Yii::t('lang','change_pw_notice_wrong_old_pw');
             }else if($user->passwordSave =="" or $user->passwordSave != $user->repeatPassword){
-                $notice = "Xác nhận lại mật khẩu mới.";
+                $notice = Yii::t('lang','change_pw_notice_pw_not_match');
             }else{
                 if($user->save()) {
-                    $notice = "Sửa mật khẩu thành công";
+                    $notice = Yii::t('lang','change_pw_notice_success');
                     $success = true;
                 } else {
                     $success = false;

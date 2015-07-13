@@ -10,8 +10,14 @@ class FileController extends Controller
      * */
     public function actionIndex($dir = null)
     {
-        $this->subPageTitle = 'File Manager';
+        $this->subPageTitle = 'My documents';
         $this->render('index');
+    }
+	
+	public function actionPublicLibrary($dir = null)
+    {
+        $this->subPageTitle = 'Public library';
+        $this->render('publicLibrary');
     }
 
 }

@@ -68,14 +68,11 @@
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-4">
-			<label>Khối lớp:&nbsp;</label><?php $student->displayClass($model->id);?>
-		</div>
-		<div class="col col-lg-4">
 			<label>Ngày sinh:&nbsp;</label><?php echo ($model->birthday)? date('d/m/Y', strtotime($model->birthday)):"";?>
 		</div>
 		<div class="col col-lg-4">
 			<label>Giới tính:&nbsp;</label>
-			<?php $genderOptions = array(0=>'Nữ', 1=>'Nam');
+			<?php $genderOptions = array(0=>'Chưa xác định', 1=>'Nữ', 2=>'Nam');
 				echo $genderOptions[$model->gender];
 			?>
 		</div>
@@ -83,14 +80,6 @@
 	<div class="form-element-container row">
 		<div class="col col-lg-4">
 			<label>Trạng thái:&nbsp;</label><?php echo $model->statusOptions($model->status);?>
-		</div>
-		<div class="col col-lg-4">
-			<label>Họ tên bố:&nbsp;</label><?php echo $student->father_name;?>
-			(<b>ĐT của bố:&nbsp;</b><?php echo $student->father_phone;?>)
-		</div>
-		<div class="col col-lg-4">
-			<label>Họ tên mẹ:&nbsp;</label><?php echo $student->mother_name;?>
-			(<b>ĐT của mẹ:&nbsp;</b><?php echo $student->mother_phone;?>)
 		</div>
 	</div>
 </fieldset>

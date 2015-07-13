@@ -57,9 +57,9 @@ class MenuAdmin extends CWidget
                 )
             ),
             array(
-                'label'=>'Thành viên '.$this->renderItemCount($countNotActivatedStudent),
+                'label'=>'Thành viên '.$this->renderItemCount($countPendingPreregisterUser),
                 'url'=>'#',
-                'title'=>$this->renderTitleCount("Thành viên chưa được kích hoạt: ",$countNotActivatedStudent),
+                'title'=>$this->renderTitleCount("Đăng ký tư vấn mới: ",$countPendingPreregisterUser),
                 'items'=>array(
                     array('label'=>'Học sinh '.$this->renderItemCount($countNotActivatedStudent),'url'=>array('/admin/student/index')),
                     array('label'=>'Giáo viên '.$this->renderItemCount($countNotActivatedTeacher),'url'=>array('/admin/teacher/index')),
@@ -67,6 +67,7 @@ class MenuAdmin extends CWidget
                     array('label'=>'Lịch sử chăm sóc','url'=>array('/admin/userSalesHistory/index')),
                 )
             ),
+			/*
             array(
                 'label'=>'Đơn xin học '.$this->renderItemCount($countPendingCourseRequest),
                 'url'=>'#',
@@ -89,6 +90,7 @@ class MenuAdmin extends CWidget
                     array('label'=>'Đã hủy/xóa','url'=>array('/admin/presetCourse?deleted_flag=1')),
                 )
             ),
+			*/
             array(
                 'label'=>'Khóa học '.$this->renderItemCount($countPendingCourse),
                 'url'=>'#',
@@ -130,6 +132,14 @@ class MenuAdmin extends CWidget
 					array('label'=>'Lịch dạy của giáo viên','url'=>array('/admin/schedule/registerSchedule')),
                 )
             ),
+			array(
+                'label'=>'Thống kê buổi học',
+                'url'=>'/admin/TeacherPayment',
+            ),
+			array(
+				'label'=>'Thư viện',
+				'url'=>'/admin/file'
+			)
         );
         $this->widget('application.widgets.bootstrap.Menu', array('items'=>$items));
     }

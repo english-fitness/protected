@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
     <!-- Icon system-->
     <link rel="shortcut icon" href="https://speakup.vn/news/wp-content/uploads/2015/06/android-chrome-96x961.png" />
     <!-- Latest compiled and minified CSS -->

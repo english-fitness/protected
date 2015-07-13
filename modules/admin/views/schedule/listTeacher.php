@@ -25,17 +25,9 @@
 		array(
 		   'header' => 'Lịch dạy',
 		   'value'=>'CHtml::link("Lịch dạy", Yii::app()->createUrl("admin/schedule/registerSchedule?teacher=$data->id"))',
+		   //don't write it like this "CHtml::link('Lịch dạy', Yii::app()->createUrl('admin/schedule/registerSchedule?teacher=$data->id'))"
+		   //it won't work. Variables must be wraped in "", not ''
 		   'type'=>'raw',
 		),
-		// array(
-		   // 'header' => 'Khóa học',
-		   // 'value'=>'Teacher::teacher()->displayCourseLink($data->id)',
-		   // 'type'=>'raw',
-		// ),
-		// array(
-			// 'header'=>'Lịch dạy',
-			// 'value'=>CHtml::link('Lịch dạy', Yii::app()->createUrl('admin/schedule/registerSchedule?teacher=$data->id')),
-			// 'type'=>'raw',
-		// ),
 	),
 )); ?>

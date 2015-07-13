@@ -65,7 +65,7 @@ class ClassController extends Controller
     //Display nearest session of Student
     public function actionNearestSession()
     {
-		$this->subPageTitle = 'Buổi học gần nhất';
+		$this->subPageTitle = Yii::t('lang','nearest_session');
     	$studentId = Yii::app()->user->id;
         $ClsSession = new ClsSession();
         $nearestSessions = $ClsSession->getNearestSessions($studentId, 'student', 8);
@@ -77,7 +77,7 @@ class ClassController extends Controller
 	//Display ended session of Student
     public function actionEndedSession()
     {
-		$this->subPageTitle = 'Buổi học đã hoàn thành';
+		$this->subPageTitle = Yii::t('lang','ended_session');
     	$studentId = Yii::app()->user->id;
     	$endedSession = Session::model()->getEndedStudentSessions($studentId, 'student');
 	    $this->render('endedSession', $endedSession);
@@ -85,7 +85,7 @@ class ClassController extends Controller
 
 	public function actionCalendar()
     {
-		$this->subPageTitle = 'Đăng ký lịch học';
+		$this->subPageTitle = Yii::t('lang','reservation');
 		
 		if (isset($_REQUEST['teacher']) && trim($_REQUEST['teacher']) != ''){
 			$view = 'teacher';

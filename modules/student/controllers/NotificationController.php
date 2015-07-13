@@ -5,7 +5,7 @@ class NotificationController extends Controller
 
     public function actionIndex()
     {
-		$this->subPageTitle = 'Thông báo từ hệ thống';
+		$this->subPageTitle = Yii::t('lang', 'notification');
         $notifications = Notification::model()->getNotifications(Yii::app()->user);
         $this->render("index",array("notifications"=>$notifications));
     }

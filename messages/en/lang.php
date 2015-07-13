@@ -79,57 +79,7 @@ return array(
     'Không có tin nhắn gửi đi'=>'You haven\'t sent any sent message',
     'Không có tin nhắn đến'=>'You don\'t have any new message',
     'Kiểm tra loa, microphone'=>'Test Speaker, Microphone',
-    'Để tham gia chương trình học này yêu cầu bạn cần có các điều kiện sau'=>'Computer/laptop Pre-requisites',
-    'Máy tính có kết nối internet ADSL hoặc tốt hơn'=>' ADSL internet connection or better',
-    'Sử dụng trình duyệt Chrome, CờRôm+, hoặc Firefox'=>' Using Google Chrome or Mozilla Firefox browser ',
-    'Loa và Micro sử dụng tốt'=>' Microphone and Speaker works properly',
-    'Nên có webcam'=>' Webcam functions properly',
-    'Kiểm tra mic và loa (với trình duyệt'=>'Test Speaker and Microphone (using',
-    'Trình duyệt bạn đang sử dụng là'=>'You are using',
-    'Đạt yêu cầu để tham gia chương trình'=>'Your browser meets the requirements',
-    'Chú ý'=>'Node',
-    'Kiểm tra mic và loa'=>'Test Speaker and Microphone',
-    'phiên bản'=>' version',
-    'Kiểm tra trình duyệt'=>'Browser check',
-    'Bấm'=>'Click',
-    'ghi âm'=>'record',
-    'Ghi âm'=>'Record',
-    'cho phép'=>'Allow',
-    'nếu trình duyệt hỏi'=>' if the browser asks you to',
-    'Xem ảnh hướng dẫn ở dưới'=>'Please see the instruction below',
-    'Nói gần mic, rõ ràng'=>'Speak to the mic clearly',
-    'Nghe lại để kiểm tra loa'=>'Listen to the playback to make sure \n the speaker funtions properly',
-    'Sau 4 bước trên nếu bạn không gặp lỗi gì thì có thể tham gia chương trình của chúng tôi'=>
-    'After all tests are passed, you can start using our program',
-    'Nếu bạn không ghi âm hoặc nghe lại được vui lòng liên hệ với chúng tôi để được tư vấn cụ thể hơn'=>
-    'If the recording or playback did not goes well, you may contact us for more information',
-    'Bạn có thể gọi vào số hotline 0961.00.50.57 hoặc để lại lời nhắn gồm'=>'Hotline: 0961.00.50.57 or leave us a message',
-    'Tên và số điện thoại'=>'with your name and phone number',
-    'trong ô LiveChat "Cần hỗ trợ?" ở góc dưới bên phải, đội ngũ tư vấn của chúng tôi sẽ gọi điện hỗ trợ bạn'=>
-    'in the LiveChat pannel in the bottom right, our support team will contact you ASAP',
-    'Bạn đang dùng trình duyệt Firefox. Chúng tôi khuyên dùng Google Chrome để có thể tương thích tốt nhất với hệ thống'=>
-    'You are using Firefox browser. We recommend that you use Google Chrome for best compabilities. A download link can be found below',
-    'Tải Google Chrome'=>'Download Google Chrome',
-    'Không có buổi học nào đã hoàn thành!'=>'No session completes',
-    'Cập nhật thông tin cá nhân'=>'Click here to update account information',
-    'Vui lòng cập nhật đầy đủ thông tin cá nhân trước gửi tin nhắn'=>'Please update all informations of your account before sending the message',
-    'Gửi tin nhắn cho tutor.vn'=>'Send us a message',
-    'Thông báo từ'=>'Notification from',
-    'Hiện tại không có thông báo mới'=>'You do not have any new notifications',
-    'thông báo từ hệ thống speakup.vn được đánh dấu là chưa đọc! Vui lòng xem thông báo và xác nhận đã đọc'=>'notification from Speakup.vn is marked as unread! Please view the notice and confirm as read',
-    'Bạn có'=> 'You have',
-    'Xác nhận đã đọc'=> 'Confirm to read',
-    'Nữ'=>'Female',
-    'Nam'=>'Male',
-    'Vào lớp'=>'Enter class',
-    'chia sẻ'=>'share',
-    'nếu như bạn không nghe thấy âm thanh thì hãy kiểm tra lại loa đã hoạt động chưa'=>'if you do not hear the sound, please check your speakers',
-    'Bạn đã kiểm tra loa, microphone thành công. Bạn có thể thử lại lần nữa'=>'You have checked your speaker and microphone successfully. You can try again',
-    'Micrô đang hoạt động tốt'=>'The microphone is working well',
-    'Bấm nghe lại để kiểm tra'=>'Click to listen again for checking',
-    'Trình duyệt không hỗ trợ'=>'The browser is not supported',
-    'Bạn đang trong chế độ nghe lại'=>'You are in playback mode',
-    '(Bạn đã kiểm tra loa và microphone thành công, bạn có thể thử lại lần nữa)'=>'(You have checked your speaker and microphone successfully. You can try again)',
+    
 	
 	//student specific
 	'student_schedule'=>'Schedule',
@@ -146,6 +96,24 @@ return array(
 	'cancel_session'=>'Cancel Session',
 	'student_unbook_confirm'=>'Are you sure you want to cancel the booked session?',
 	'no_active_course'=>'You currently don\'t have any course. Please contact our supports via the message panel',
+	
+	//page title
+	'nearest_session'=>'On-going sessions',
+	'ended_session'=>'Completed sessions',
+	'reservation'=>'Reservations',
+	'test_speaker_mic'=>'Test speaker, microphone',
+	'account_info'=>'Personal information',
+	'message'=>'Messages',
+	'notification'=>'Notifications',
+	'change_password'=>'Change password',
+	
+	//messages
+	'change_pw_notice_not_enough_input'=>'Please fill in all required fields',
+	'change_pw_notice_wrong_old_pw'=>'Current password is not valid',
+	'change_pw_notice_pw_not_match'=>'Your passwords does not match',
+	'change_pw_notice_success'=>'Your password has been successfully changed',
+	'message_send_notice_no_recipent'=>'Please enter a recipent',
+	'message_view_notice_non_existent'=>'This message does not exist',
 	
 	//session specific
 	'session'=>'Session',
@@ -186,4 +154,7 @@ return array(
 	'button_yes'=>'Yes',
 	'button_no'=>'No',
 	'button_close'=>'Close',
+	
+	//view link
+	'test_speaker_mic_view'=>'teacher.views.testCondition.index',
 );
