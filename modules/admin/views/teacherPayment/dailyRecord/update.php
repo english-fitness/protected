@@ -10,5 +10,5 @@
 	if (isset($error)){
 		$params['error'] = $error;
 	}
-	$this->renderPartial('_form', $params);
+	$this->renderPartial('admin.views.teacherPayment.dailyRecord._form', $params);
 ?>

@@ -60,7 +60,7 @@ class DailyRecordController extends Controller
 	public function actionView($id){
 		$this->subPageTitle = 'Thống kê buổi học trong ngày';
 		
-		$this->render('view', array(
+		$this->render('admin.views.teacherPayment.dailyRecord.view', array(
 			'model'=>$this->loadModel($id),
 		));
 	}
@@ -82,7 +82,7 @@ class DailyRecordController extends Controller
 					));
 				}else {
 					$record->attributes = $values;
-					$this->render('create', array(
+					$this->render('admin.views.teacherPayment.dailyRecord.create', array(
 						'model'=>$record,
 						'error'=>'no_teacher_id',
 					));
@@ -102,7 +102,7 @@ class DailyRecordController extends Controller
 				));
 				if ($existingRecord != null){
 					$record->attributes = $values;
-					$this->render('create', array(
+					$this->render('admin.views.teacherPayment.dailyRecord.create', array(
 						'model'=>$record,
 						'payment'=>$payment,
 						'error'=>'record_existed',
@@ -111,7 +111,7 @@ class DailyRecordController extends Controller
 				}
 				else if ($payment->report_status == TeacherPayment::STATUS_CLOSED){
 					$record->attributes = $values;
-					$this->render('create', array(
+					$this->render('admin.views.teacherPayment.dailyRecord.create', array(
 						'model'=>$record,
 						'payment'=>$payment,
 						'error'=>'payment_edit_closed',
@@ -129,12 +129,12 @@ class DailyRecordController extends Controller
 			}
 		}
 		if (isset($_REQUEST['payment_id'])){
-			$this->render('create', array(
+			$this->render('admin.views.teacherPayment.dailyRecord.create', array(
 				'model'=>$record,
 				'payment'=>$this->loadPaymentModel($_REQUEST['payment_id']),
 			));
 		} else {
-			$this->render('create', array(
+			$this->render('admin.views.teacherPayment.dailyRecord.create', array(
 				'model'=>$record,
 			));
 		}
@@ -162,7 +162,7 @@ class DailyRecordController extends Controller
 						$this->redirect('/admin/TeacherPayment/update/id/' . $payment->id);
 					}
 				} else {
-					$this->render('update', array(
+					$this->render('admin.views.teacherPayment.dailyRecord.update', array(
 						'model'=>$record,
 						'payment'=>$payment,
 						'error'=>'record_existed',
@@ -171,7 +171,7 @@ class DailyRecordController extends Controller
 			}
 		}
 		
-		$this->render('update', array(
+		$this->render('admin.views.teacherPayment.dailyRecord.update', array(
 			'model'=>$record,
 			'payment'=>$payment,
 		));
@@ -194,7 +194,7 @@ class DailyRecordController extends Controller
 	public function actionIndex(){
 		$this->subPageTitle = 'Danh sách bản ghi';
 		
-		$this->render('index');
+		$this->render('admin.views.teacherPayment.dailyRecord.index');
 	}
 	
 	public function actionEditLocked(){
@@ -211,7 +211,7 @@ class DailyRecordController extends Controller
 			}
 		}
 		
-		$this->render('update', array(
+		$this->render('admin.views.teacherPayment.dailyRecord.update', array(
 			'record'=>$record,
 			'payment'=>$payment,
 		));
