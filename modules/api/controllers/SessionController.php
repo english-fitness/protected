@@ -23,7 +23,7 @@ class SessionController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('start','end', 'getFeedbackUrls', 'kickUser', 'getSettings', 'setRecordFile'),
+                'actions'=>array('start','end', 'getFeedbackUrls', 'kickUser', 'getSettings', 'setRecordFile', 'getSessionExpiryStatus'),
                 'users'=>array('*'),
             ),
             array('deny',),
@@ -219,5 +219,16 @@ class SessionController extends Controller
 			}
 		}
 		
+	}
+	
+	public function actionGetSessionExpiryStatus(){
+		$sessionId = $_REQUEST['sessionId'];
+		$session = Session::model()->findByPk($sessionId);
+		if ($session != null){
+			$now = time();
+			$sessionEndTime = strtotime($session->plan_start) + $session->plan_duration*60 + 5*60;
+			$status = $now < $sessionEndTime ? 'unexpired' : 'expired';
+			$this->renderJSON(array('status'=>$status));
+		}
 	}
 }
