@@ -60,7 +60,7 @@ class PreregisterUser extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		$modelRules = array(
-			array('fullname, phone, email', 'required'),
+			array('fullname, phone', 'required'),
 			array('gender, sale_user_id, status', 'numerical', 'integerOnly'=>true),
 			array('phone', 'match', 'pattern'=>'/^\+{0,1}[0-9\-\s]{8,16}$/'),
 			array('email', 'length', 'max'=>128),

@@ -23,7 +23,8 @@ class SessionController extends Controller
     {
         return array(
             array('allow',
-                'actions'=>array('start','end', 'getFeedbackUrls', 'kickUser', 'getSettings', 'setRecordFile', 'getSessionExpiryStatus'),
+                'actions'=>array('start','end', 'getFeedbackUrls', 'kickUser', 'getSettings', 'setRecordFile',
+								'getTimeUntilExpiration'),
                 'users'=>array('*'),
             ),
             array('deny',),
@@ -68,8 +69,10 @@ class SessionController extends Controller
 		$forceEnd = Yii::app()->request->getQuery('forceEnd', false);
         $session =  Session::model()->findByPk($sessionId);
 
+		$success = false;
+
         if($session && $session->actual_start) {
-            $session->actual_end = date('Y-m-d H:i:s');
+            $actual_end = date('Y-m-d H:i:s');
             if($actualDuration == 0) {
                 $start= strtotime($session->actual_start);
                 $end = strtotime($session->actual_end);
@@ -83,15 +86,15 @@ class SessionController extends Controller
 			if ($actualDuration >= $session->plan_duration || $currentTime >= $plannedEndTime || $forceEnd)
 			{
 				$session->status = Session::STATUS_ENDED;
+				$session->actual_duration = $actualDuration;
+				$session->actual_end = $actual_end;
+				
+				if ($session->save()){
+					$success = true;
+				}
 			}
-
-            // $session->status = Session::STATUS_ENDED;
-            $session->actual_duration = $actualDuration;
-            $session->save();
-            $this->renderJSON(array('success'=>true));
-        } else {
-            $this->renderJSON(array('success'=>false));
         }
+		$this->renderJSON(array('success'=>$success));
     }
 
     public function actionGetFeedbackUrls()
@@ -221,14 +224,14 @@ class SessionController extends Controller
 		
 	}
 	
-	public function actionGetSessionExpiryStatus(){
+	public function actionGetTimeUntilExpiration(){
 		$sessionId = $_REQUEST['sessionId'];
 		$session = Session::model()->findByPk($sessionId);
 		if ($session != null){
 			$now = time();
 			$sessionEndTime = strtotime($session->plan_start) + $session->plan_duration*60 + 5*60;
-			$status = $now < $sessionEndTime ? 'unexpired' : 'expired';
-			$this->renderJSON(array('status'=>$status));
+			$remainingTime = $sessionEndTime - $now;
+			$this->renderJSON(array('remainingTime'=>$remainingTime));
 		}
 	}
 }
