@@ -2,7 +2,7 @@
 <div class="page-title"><label class="tabPage"> The training was completed</label></div>
 -->
 <div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Register Schedules</p></div>
-<?php $this->renderPartial('myCourseTab'); ?>
+<?php $this->renderPartial('teacher.views.class.myCourseTab'); ?>
 <div class="details-class">
 <link rel="stylesheet" type="text/css" href="/media/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
@@ -301,9 +301,14 @@ select.schedule{
 				week_start: weekStart,
 				timeslots:timeslots,
 			},
-			success:function(){
-				$('#saving').hide();
-				$('#saved').show();
+			success:function(response){
+				if (response.success){
+					$('#saving').hide();
+					$('#saved').show();
+				} else {
+					$('#saving').hide();
+					$('#saveError').show();
+				}
 				modifying = false;
 			}
 		});

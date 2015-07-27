@@ -631,4 +631,48 @@ class User extends CActiveRecord
 			return Yii::app()->db->createCommand($query)->queryAll();
 		}
 	}
+	
+	public function getProfilePictureHtml($htmlOptions = null, $externalLink = null, $caption = null){
+		$dir = "media/uploads/profiles";
+		$profilePictureDefault = Yii::app()->baseurl."/media/images/photo.jpg";
+		$profilePicture = $dir."/".$this->profile_picture;
+		if(!(file_exists($profilePicture) && strlen($this->profile_picture)>3)){
+            $profilePictureDir = $profilePictureDefault;
+        } else {
+			$profilePictureDir =Yii::app()->baseurl."/".$profilePicture;
+		}
+		
+		$attributes = '';
+		if ($htmlOptions != null){
+			foreach($htmlOptions as $key=>$value){
+				$attributes .= ' ' . $key . '="' . $value . '"';
+			}
+		}
+		
+		$html = '<img src="' . $profilePictureDir . '"' . $attributes . '></img>';
+		if ($caption != null){
+			$html .= '<br>' . $caption;
+		}
+		if ($externalLink != null){
+			$html = '<a href="' . $externalLink . '">' .
+						$html .
+					'</a>';
+		}
+		
+		return $html;
+	}
+	
+	public function getLink($id){
+		$model = self::model()->findByPk($id);
+		switch ($model->role){
+			case self::ROLE_STUDENT:
+				return '<a href="' . Yii::app()->baseUrl . '/admin/student/view/id/' . $model->id . '">' . $model->fullname() . '</a>';
+				break;
+			case self::ROLE_TEACHER:
+				return '<a href="' . Yii::app()->baseUrl . '/admin/teacher/view/id/' . $model->id . '">' . $model->fullname() . '</a>';
+				break;
+			default:
+				break;
+		}
+	}
 }

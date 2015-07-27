@@ -90,7 +90,7 @@ class DailyRecordController extends Controller
 			}
 			if ($payment == null){
 				$payment = new TeacherPayment;
-				if ($values['platform_session'] != null && $values['non_platform_session']){
+				if ($values['platform_session'] != null && $values['non_platform_session'] != null){
 					$payment->teacher_id = $values['teacher_id'];
 					$payment->month = $month;
 					$payment->save();
@@ -147,10 +147,14 @@ class DailyRecordController extends Controller
 		$payment = TeacherPayment::model()->findByPk($record->payment_id);
 		if ($payment->report_status == TeacherPayment::STATUS_OPEN) {
 			if (isset($_POST['Record'])){
-				$existingRecord = TeachingDay::model()->findByAttributes(array(
-					'day'=>$_POST['Record']['day'],
-					'payment_id'=>$payment->id,
-				));
+				if (isset($_POST['Record']['day']) && $record->day != $_POST['Record']['day']){
+					$existingRecord = TeachingDay::model()->findByAttributes(array(
+						'day'=>$_POST['Record']['day'],
+						'payment_id'=>$payment->id,
+					));
+				} else {
+					$existingRecord = null;
+				}
 				if ($existingRecord == null){
 					$oldPlatformSessionCount = $record->platform_session;
 					$oldNonPlatformSessionCount = $record->non_platform_session;
@@ -162,19 +166,19 @@ class DailyRecordController extends Controller
 						$this->redirect('/admin/TeacherPayment/update/id/' . $payment->id);
 					}
 				} else {
-					$this->render('admin.views.teacherPayment.dailyRecord.update', array(
+					$this->render('admin.views.teacherPayment.dailyRecord.create', array(
 						'model'=>$record,
 						'payment'=>$payment,
 						'error'=>'record_existed',
 					));
 				}
+			} else {
+				$this->render('admin.views.teacherPayment.dailyRecord.update', array(
+					'model'=>$record,
+					'payment'=>$payment,
+				));
 			}
 		}
-		
-		$this->render('admin.views.teacherPayment.dailyRecord.update', array(
-			'model'=>$record,
-			'payment'=>$payment,
-		));
 	}
 	
 	public function actionDelete($id){

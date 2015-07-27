@@ -55,7 +55,7 @@
 	// $timezone = 8;
 ?>
 <div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;"><?php echo Yii::t('lang', 'schedule')?></p></div>
-<?php $this->renderPartial('myCourseTab'); ?>
+<?php $this->renderPartial('student.views.class.myCourseTab'); ?>
 <div class="details-class">
 	<form class="form-inline" role="form" method="get">
 		<div class="form-group" style="margin:0 150px;">
@@ -68,19 +68,7 @@
 	<div style='margin:10px auto; text-align:center'>
 		<?php echo Yii::t('lang', 'page')?> <?php echo PaginationLinks::create($page, $pageCount)?>
 	</div>
-	<div style='clear:both'></div>
-	<div style='margin:20px auto; text-align:center; width:871px;'>
-		<button class='week-nav btn btn-primary' nav='prev'><</button>
-		<button class='wday-select btn' day='0'><?php echo Yii::t('lang', 'monday')?><br></button>
-		<button class='wday-select btn' day='1'><?php echo Yii::t('lang', 'tuesday')?><br></button>
-		<button class='wday-select btn' day='2'><?php echo Yii::t('lang', 'wednesday')?><br></button>
-		<button class='wday-select btn' day='3'><?php echo Yii::t('lang', 'thursday')?><br></button>
-		<button class='wday-select btn' day='4'><?php echo Yii::t('lang', 'friday')?><br></button>
-		<button class='wday-select btn' day='5'><?php echo Yii::t('lang', 'saturday')?><br></button>
-		<button class='wday-select btn' day='6'><?php echo Yii::t('lang', 'sunday')?><br></button>
-		<button class='week-nav btn btn-primary' nav='next'>></button>
-	</div>
-	<div style='clear:both'></div>
+	<?php $this->renderPartial('daySelectionWidget');?>
 	<?php if ($page > $pageCount)
 			echo "<div>" . Yii::t('lang', '') . "</div>"?>
     <div id="calendar-1" style="width:1000px; margin:35px"></div>
@@ -90,26 +78,7 @@
 	<div style='margin:0 auto; text-align:center'>
 		<?php echo Yii::t('lang', 'page')?> <?php echo PaginationLinks::create($page, $pageCount)?>
 	</div>
-	<div style="position:fixed;bottom:5px;left:10px;width:250px;padding:3px;border:solid 1px #ddd;box-sizing:border-box;background-color:white;box-shadow:1px 1px 1px #ddd;border-radius:3px;">
-		<span style="margin:3px"><b><?php echo Yii::t('lang', 'color_legend')?></b></span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:yellow;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'timeslot_available')?></span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:dodgerblue;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'timeslot_booked')?></span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:darkgray;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'timeslot_closed')?></span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:lime;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'session_approved')?></span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:darkgreen;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'session_pending')?></span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:turquoise;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'session_ongoing')?></span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:darkorange;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'session_ended')?></span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:red;float:left;margin:3px"></div><span style="float:left"><?php echo Yii::t('lang', 'session_canceled')?></span>
-		<div style="clear:both"></div>
-	</div>
+	<?php $this->renderPartial('colorLegendWidget');?>
 </div>
 <script>
 	//global variables	
@@ -175,7 +144,7 @@
 	function loadCalendar (divId, teachers){
 		$.ajax({
 			type:'get',
-			url:'<?php echo Yii::app()->baseUrl;?>/student/class/getSessions',
+			url:'<?php echo Yii::app()->baseUrl;?>/student/schedule/getSessions',
 			data:{
 				teachers:JSON.stringify(teachers),
 			},
@@ -213,7 +182,7 @@
 			eventClick: function(event, jsEvent, view){
 				if (event.className == 'reservedSlot'){
 					var values = {
-						actionUrl: '<?php echo Yii::app()->baseUrl?>/student/class/bookSession',
+						actionUrl: '<?php echo Yii::app()->baseUrl?>/student/schedule/bookSession',
 						teacher: event.teacher,
 						start:event.start.format('YYYY-MM-DD HH:mm:ss'),
 					}
@@ -291,7 +260,7 @@
 		calendar.fullCalendar( 'removeEvents');
 		calendar.fullCalendar('refetchEvents');
 		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/student/class/getSessions',
+			url:'<?php echo Yii::app()->baseUrl?>/student/schedule/getSessions',
 			type:'get',
 			data:{
 				teachers: JSON.stringify(teachers),
@@ -376,7 +345,7 @@
 	
 	function changeTeacher(data){
 		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/student/class/changeTeacher',
+			url:'<?php echo Yii::app()->baseUrl?>/student/schedule/changeTeacher',
 			type:'post',
 			data:{
 				session: data.existingSession,
@@ -439,7 +408,7 @@
 			buttons:{
 				"<?php echo Yii::t('lang', 'button_yes')?>": function(){
 					$.ajax({
-						url:'<?php echo Yii::app()->baseUrl?>/student/class/unbookSession',
+						url:'<?php echo Yii::app()->baseUrl?>/student/schedule/unbookSession',
 						type:'post',
 						data:{
 							session: sessionId,
@@ -468,7 +437,7 @@
 	
 	function searchTeacher(keyword){
 		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/student/class/ajaxSearchTeacher/keyword/' + keyword,
+			url:'<?php echo Yii::app()->baseUrl?>/student/schedule/ajaxSearchTeacher/keyword/' + keyword,
 			type:'get',
 			success:function(response){
 				var data = response.result;

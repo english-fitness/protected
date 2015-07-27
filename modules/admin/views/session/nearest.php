@@ -7,9 +7,6 @@ $this->breadcrumbs=array(
 	'Manage',
 );
 ?>
-<script type="text/javascript">
-   	setTimeout(function(){window.location.href="/admin/session/nearest"},60000);
-</script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/session.js"></script>
 <div class="page-header-toolbar-container row">
     <div class="col col-lg-12">
@@ -22,6 +19,7 @@ $this->breadcrumbs=array(
 	$teacherFullname = Yii::app()->controller->getQuery('Session[teacher_fullname]', '');
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
+	'id'=>'gridView',
 	'dataProvider'=>$model->searchNearestSession(),
 	'filter'=>$model,
 	'enableHistory'=>true,
@@ -113,3 +111,6 @@ $this->breadcrumbs=array(
 		),
 	),
 )); ?>
+<script>
+	setInterval(function(){$.fn.yiiGridView.update("gridView");}, 60000);
+</script>

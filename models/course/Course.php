@@ -597,4 +597,15 @@ class Course extends CActiveRecord
 			$sessions[$i]->save();
 		}
 	}
+	
+	public static function findByStudent($student){
+		$query = "SELECT id, title, type FROM tbl_course JOIN tbl_course_student " .
+				 "ON tbl_course.id = tbl_course_student.course_id " .
+				 "WHERE tbl_course_student.student_id = " . $student . " " .
+				 "AND (tbl_course.status = " . Course::STATUS_WORKING . " " .
+				 "OR tbl_course.status = " . Course::STATUS_APPROVED . ") " .
+				 "AND deleted_flag = 0 " . " " .
+				 "ORDER BY course_id DESC";
+		return Course::model()->findAllBySql($query);
+	}
 }

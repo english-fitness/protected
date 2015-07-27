@@ -622,4 +622,27 @@ class Session extends CActiveRecord
 		
 		return $html;
 	}
+	
+	public function findStudentExistingSession($student, $time, $returnId=true){
+		if ($returnId){
+			$columns = 'session_id';
+		} else {
+			$columns = 'count(*) AS existingSession';
+		}
+		
+		if (is_array($student)){
+			$match = "IN (" . implode(',', $student) . ")";
+		} else {
+			$match = "= " . $student;
+		}
+		
+		$query = "SELECT " . $columns . " FROM tbl_session JOIN tbl_session_student " .
+				 "ON tbl_session.id = tbl_session_student.session_id " .
+				 "WHERE tbl_session_student.student_id " . $match . " " .
+				 "AND tbl_session.plan_start = '" . $time . "' " .
+				 "AND tbl_session.status <> " . Session::STATUS_CANCELED . " " .
+				 "AND tbl_session.deleted_flag = 0";
+		
+		return Yii::app()->db->createCommand($query)->queryRow();
+	}
 }

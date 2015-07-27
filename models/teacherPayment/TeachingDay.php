@@ -39,7 +39,7 @@ class TeachingDay extends CActiveRecord
 	public function beforeSave()
 	{
 		parent::beforeSave();
-		$stripTagFields = array('platform_session', 'non_platform_session');
+		$stripTagFields = array('platform_session', 'non_platform_session', 'note');
 		foreach($stripTagFields as $textField){
 			$this->$textField = strip_tags($this->$textField);
 		}

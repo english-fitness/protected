@@ -65,14 +65,19 @@ class ScheduleController extends Controller
 				$page = 1;
 			}
 			
+			$teacherCount = User::model()->countByAttributes(array(
+				'role'=>User::ROLE_TEACHER,
+				'status'=>User::STATUS_OFFICIAL_USER
+			));
+			
+			$pageCount = ceil($teacherCount / 12);
+			
 			$query = "SELECT id FROM tbl_user " .
 					 "WHERE role = '" . User::ROLE_TEACHER . "' ".
-					 "AND status = " . User::STATUS_OFFICIAL_USER;
-			$result = Yii::app()->db->createCommand($query)->queryColumn();
-			$pageCount = ceil(sizeOf($result) / 12);
+					 "AND status = " . User::STATUS_OFFICIAL_USER . " " .
+					 "LIMIT 12 OFFSET " . (($page - 1) * 12);
+			$teachers = Yii::app()->db->createCommand($query)->queryColumn();
 						
-			$teachers = array_slice($result, ($page - 1) * 12, 12, true);
-			
 			$this->render('calendar', array(
 				"teachers"=>json_encode(array_values($teachers)),
 				"pageCount"=>$pageCount,
@@ -91,11 +96,8 @@ class ScheduleController extends Controller
 		if (isset($_POST['Session'])){
 			if (isset($_POST['studentId'])){
 				$studentId = $_POST['studentId'];
-				$query = "SELECT session_id FROM tbl_session JOIN tbl_session_student " .
-						 "ON tbl_session.id = tbl_session_student.session_id " .
-						 "WHERE tbl_session_student.student_id = " . $studentId . " " .
-						 "AND tbl_session.plan_start = '" . $_POST['Session']['plan_start'] . ' '.$_POST['startHour'].':'.$_POST['startMin'].":00'";
-				$existingSession = Yii::app()->db->createCommand($query)->queryRow();
+				$start_time = $_POST['Session']['plan_start'] . ' '.$_POST['startHour'].':'.$_POST['startMin'].":00";
+				$existingSession = Session::model()->findStudentExistingSession($studentId, $start_time);
 			}
 			
 			if (!$existingSession){
@@ -185,11 +187,7 @@ class ScheduleController extends Controller
 			//normal case, change student of the session
 			if (isset($_POST['studentId'])){
 				$studentId = $_POST['studentId'];
-				$query = "SELECT session_id FROM tbl_session JOIN tbl_session_student " .
-						 "ON tbl_session.id = tbl_session_student.session_id " .
-						 "WHERE tbl_session_student.student_id = " . $studentId . " " .
-						 "AND tbl_session.plan_start = '" . $_POST['Session']['plan_start'] . "'";
-				$existingSession = Yii::app()->db->createCommand($query)->queryRow();
+				$existingSession = Session::model()->findStudentExistingSession($studentId,  $_POST['Session']['plan_start']);
 			}
 			
 			if (!$existingSession){
@@ -269,13 +267,15 @@ class ScheduleController extends Controller
 			}
 		}
 		
+		
 		$query = "SELECT * FROM tbl_session " . 
 				 "WHERE teacher_id IN (" . implode(', ',$teacherIds) . ") " .
 				 "AND plan_start BETWEEN '" . $start . "' AND '" . $end . "' " .
 				 "AND status <> " . Session::STATUS_CANCELED . " " .
-				 "AND deleted_flag <> 1";
+				 "AND deleted_flag = 0";
 		$sessions = Session::model()->findAllBySql($query);
 		$sessionDays = array();
+		
 		if (!empty($sessions)){
 			foreach ($sessions as $session){
 				$backgroundColor;
@@ -335,14 +335,10 @@ class ScheduleController extends Controller
 		}
 		
 		if ($view == 'week'){
-			$query = "SELECT * FROM tbl_teacher_timeslots " . 
-					 "WHERE teacher_id IN (" . implode(', ', $teacherIds) . ") AND week_start = '" . $start . "'";
+			$availableSlots = TeacherTimeslots::model()->getMultipleSchedules($teacherIds, $start);
 		} else {
-			$query = "SELECT * FROM tbl_teacher_timeslots " . 
-					 "WHERE teacher_id IN (" . implode(', ', $teacherIds) . ") " .
-					 "AND week_start BETWEEN '" . $start . "' AND '" . $end . "'";
+			$availableSlots = TeacherTimeslots::model()->getMultipleSchedules($teacherIds, $start, $end);
 		}
-		$result = Yii::app()->db->createCommand($query)->queryAll();
 		
 		$tempTeachers = User::model()->findAllBySql('SELECT id, firstname, lastname, profile_picture FROM tbl_user WHERE id IN (' . implode(', ', $teacherIds) . ")");
 		
@@ -351,16 +347,12 @@ class ScheduleController extends Controller
 		foreach($tempTeachers as $teacher){
 			$teachers[] = array(
 				"id"=>$teacher->id,
-				"name"=> "<a href=" . Yii::app()->baseUrl . "/admin/schedule/view?teacher=" . $teacher->id . ">
-							<img src=". Yii::app()->user->getProfilePicture($teacher->id) ." style='margin:3px;width:180px;height:180px'></img><br>" . 
-							$teacher->fullname() .
-						 "</a>",
+				"name"=>$teacher->getProfilePictureHtml(
+					array('style'=>'margin:3px;width:180px;height:180px'),
+					Yii::app()->baseUrl . "/admin/schedule/view?teacher=" . $teacher->id ,
+					$teacher->fullname()
+				),
 			);
-		}
-		
-		$availableSlots = array();
-		foreach ($result as $item){
-			$availableSlots[] = array("teacher"=>$item["teacher_id"], "weekStart"=>$item["week_start"], "timeslots"=>$item["timeslots"]);
 		}
 		
 		$this->renderJSON(array(
@@ -371,6 +363,8 @@ class ScheduleController extends Controller
 			"end"=>$end,
 		));
 	}
+	
+	//actions for registering teacher schedule
 	
 	public function actionRegisterSchedule(){
 		$this->subPageTitle = 'Lịch dạy của giáo viên';
@@ -405,10 +399,7 @@ class ScheduleController extends Controller
 		if (isset($_REQUEST['teacher'])){
 			$teacherId = $_REQUEST['teacher'];
 			if (isset($_REQUEST['week_start'])){
-				$query = "SELECT timeslots FROM tbl_teacher_timeslots WHERE teacher_id = " . $teacherId . " AND week_start = '" . $_REQUEST['week_start'] . "'";
-			
-				$result = Yii::app()->db->createCommand($query)->queryRow();
-				$timeslots = $result['timeslots'];
+				$timeslots = TeacherTimeslots::model()->getSchedule($teacherId, $_REQUEST['week_start']);
 				
 				$weekEnd = date('Y-m-d', strtotime('+6 days', strtotime($_REQUEST['week_start'])));
 				
@@ -449,14 +440,8 @@ class ScheduleController extends Controller
 	public function actionSaveSchedule(){
 		$success = false;
 		if (isset($_POST['teacher']) && isset($_POST['week_start']) && isset($_POST['timeslots'])){
-			$query = "INSERT INTO tbl_teacher_timeslots (teacher_id, week_start, timeslots) " . 
-					 "VALUES(" . $_POST['teacher'] . ", '" . $_POST['week_start'] . "', '" . $_POST['timeslots'] . "')" . " " .
-					 "ON DUPLICATE KEY UPDATE timeslots = VALUES(timeslots)";
-			try {
+			if (TeacherTimeslots::model()->saveSchedule($_POST['teacher'], $_POST['week_start'], $_POST['timeslots'])){
 				$success = true;
-				Yii::app()->db->createCommand($query)->query();
-			} catch (Exception $ex){
-				$success = false;
 			}
 		}
 		$this->renderJSON(array(
@@ -464,15 +449,10 @@ class ScheduleController extends Controller
 		));
 	}
 	
+	//end of actions for registering teacher schedule
+	
 	public function actionAjaxLoadCourse($student){
-		$query = "SELECT id, title, type FROM tbl_course JOIN tbl_course_student " .
-				 "ON tbl_course.id = tbl_course_student.course_id " .
-				 "WHERE tbl_course_student.student_id = " . $student . " " .
-				 "AND (tbl_course.status = " . Course::STATUS_WORKING . " " .
-				 "OR tbl_course.status = " . Course::STATUS_APPROVED . ") " .
-				 "AND deleted_flag <> 1 " . " " .
-				 "ORDER BY course_id DESC";
-		$courses = Course::model()->findAllBySql($query);
+		$courses = Course::model()->findByStudent($student);
 		
 		foreach($courses as $key=>$course){
 			if ($course->title == ""){
@@ -488,18 +468,18 @@ class ScheduleController extends Controller
 			$courseOptions = array(
 				array(
 					"id"=>Course::TYPE_COURSE_TRAINING*-1,
-					"title"=>"Tạo khóa học thử",
+					"title"=>"Tạo khóa học thử mới",
 				),
 			);
 		} else {
 			$courseOptions = array(
 				array(
 					"id"=>Course::TYPE_COURSE_NORMAL*-1,
-					"title"=>"Tạo khóa học thường",
+					"title"=>"Tạo khóa học thường mới",
 				),
 				array(
 					"id"=>Course::TYPE_COURSE_TRAINING*-1,
-					"title"=>"Tạo khóa học thử",
+					"title"=>"Tạo khóa học thử mới",
 				),
 			);
 		}
@@ -511,11 +491,10 @@ class ScheduleController extends Controller
 	
 	public function actionCountSession(){
 		if (isset($_REQUEST['course'])){
-			$query = "SELECT COUNT(id) FROM tbl_session " .
-					 "WHERE course_id = " . $_REQUEST['course'] . " " . 
-					 "AND deleted_flag <> 1";
-			$result = Yii::app()->db->createCommand($query)->queryColumn();
-			$sessionCount = $result[0];
+			$sessionCount = Session::model()->countByAttributes(array(
+				'course_id'=>$_REQUEST['course'],
+				'deleted_flag'=>0,
+			));
 			
 			$this->renderJSON(array("sessionCount"=>$sessionCount));
 		}
@@ -526,13 +505,8 @@ class ScheduleController extends Controller
 		if (isset($_POST['sessionId']) && isset($_POST['teacher']) && isset($_POST['start'])){
 			$session = Session::model()->findByPk($_POST['sessionId']);
 			$students = $session->assignedStudents();
-			$existingSession = false;
 			if (!empty($students)){
-				$query = "SELECT session_id FROM tbl_session JOIN tbl_session_student " .
-						 "ON tbl_session.id = tbl_session_student.session_id " .
-						 "WHERE tbl_session_student.student_id IN (" . implode(',', $students) . ") " .
-						 "AND tbl_session.plan_start = '" . $_POST['start'] . "'";
-				$existingSession = Yii::app()->db->createCommand($query)->queryRow();
+				$existingSession = Session::model()->findStudentExistingSession($students, $_POST['start'], false)['existingSession'];
 			}
 			if (!$existingSession){
 				$session->teacher_id = $_POST['teacher'];

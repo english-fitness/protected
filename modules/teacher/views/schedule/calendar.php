@@ -25,7 +25,7 @@
 }
 </style>
 <div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Schedule</p></div>
-<?php $this->renderPartial('myCourseTab'); ?>
+<?php $this->renderPartial('teacher.views.class.myCourseTab'); ?>
 <div class="details-class">
 	<form class="form-inline" role="form" style="padding-top:10px">
 		<div class="form-group">

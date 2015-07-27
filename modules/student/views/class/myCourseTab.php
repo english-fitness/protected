@@ -7,7 +7,7 @@ $menuLeftStudent  =  array(
     array("label"=>Yii::t('nav','Khóa học đã đăng ký'),"url"=>$baseurl."/courseRequest/list"),	
 	*/
 	array("label"=>Yii::t('lang','Buổi học đã hoàn thành'),"url"=>$baseurl."/class/endedSession"),
-	array("label"=>Yii::t('lang','student_schedule_calendar_view'),"url"=>$baseurl."/class/calendar"),
+	array("label"=>Yii::t('lang','student_schedule_calendar_view'),"url"=>$baseurl."/schedule/calendar"),
 );
 echo Html::createNavMenu($menuLeftStudent,array('class'=>'nav nav-tabs'));
 ?>

@@ -52,7 +52,25 @@
 		<div class="col col-lg-3">&nbsp;</div>
 		<div class="col col-lg-9 errorMessage">Người dùng này đã bị hủy bỏ, để xóa hoàn toàn người dùng này & các thông tin, lịch sử liên quan, bạn hãy vui lòng nhấn tiếp "Xóa người dùng"!</div>
 	</div>
-	<?php endif;?>	
+	<?php endif;?>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+            <?php echo $form->labelEx($model,'username'); ?>
+        </div>
+        <div class="col col-lg-9">
+        	<?php $changeStatus = Yii::app()->request->getPost('changeStatus', "0");?>
+        	<?php $emailAttrs = (!$model->isNewRecord)? array('readonly'=>'readonly'): array();?>
+            <?php echo $form->textField($model,'username',array_merge(array('size'=>60,'maxlength'=>128))); ?>
+			<?php echo $form->error($model,'username'); ?>
+			<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
+			<?php $chanPassAttrs = ($model->role==User::ROLE_ADMIN)? 'dpn': '';?>
+			<div class="fR <?php echo $chanPassAttrs;?>">
+				<a class="fs12 errorMessage" href="javascript: changePassword();">Cho phép admin thay đổi mật khẩu của người dùng này?</a>
+				<input type="hidden" id="changePasswordStatus" name="changeStatus" value="<?php echo $changeStatus;?>"/>
+			</div>
+			<?php endif;?>
+        </div>		
+	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
             <?php echo $form->labelEx($model,'email'); ?>
@@ -62,13 +80,6 @@
         	<?php $emailAttrs = (!$model->isNewRecord)? array('readonly'=>'readonly'): array();?>
             <?php echo $form->textField($model,'email',array_merge(array('size'=>60,'maxlength'=>128), $emailAttrs)); ?>
 			<?php echo $form->error($model,'email'); ?>
-			<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
-			<?php $chanPassAttrs = ($model->role==User::ROLE_ADMIN)? 'dpn': '';?>
-			<div class="fR <?php echo $chanPassAttrs;?>">
-				<a class="fs12 errorMessage" href="javascript: changePassword();">Cho phép admin thay đổi mật khẩu của người dùng này?</a>
-				<input type="hidden" id="changePasswordStatus" name="changeStatus" value="<?php echo $changeStatus;?>"/>
-			</div>
-			<?php endif;?>
         </div>		
 	</div>
 	<div id="changePassword" class="form-element-container row" style="<?php echo (!$model->isNewRecord && $changeStatus==0)? 'display:none;': "";?>">

@@ -29,8 +29,7 @@ class SessionController extends Controller
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
                 'actions'=>array('index','view','ajaxCreateBoard', 'ajaxApprove', 'ajaxEditInline', 'nearest', 'ended', 'recorded', 'today'
-                , 'ajaxDeleteBoard','unassignStudent','canceled','active','create','update', 'cancel', 'reminder', 'getRecordFile', 'removeRecordFile',
-				'calendar', 'calendarCreateSession', 'calendarUpdateSession', 'calendarDeleteSession', 'ajaxSearchTeacher', 'calendarTeacherView', 'getSessions'),
+                , 'ajaxDeleteBoard','unassignStudent','canceled','active','create','update', 'cancel', 'reminder', 'getRecordFile', 'removeRecordFile',),
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions

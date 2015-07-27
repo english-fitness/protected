@@ -135,13 +135,26 @@ class MenuAdmin extends CWidget
 			array(
                 'label'=>'Thống kê buổi học',
                 'url'=>'/admin/TeacherPayment',
+				'items'=>array(
+                    array('label'=>'Học sinh', 'url'=>array('#')),
+					array(
+						'label'=>'Giáo viên',
+						'url'=>array('#'),
+						'items'=>array(
+							array('label'=>'Buổi học','url'=>array('/admin/TeacherPayment')),
+							array('label'=>'Điểm phạt', 'url'=>array('/admin/teacherFine/fineRecords')),
+							array('label'=>'Các lần trừ điểm', 'url'=>array('/admin/teacherFine/fineChargeRecords')),
+							array('label'=>'Giáo viên bị trừ điểm', 'url'=>array('/admin/teacherFine/fineChargeList?view=all')),
+						),
+					),
+                )
             ),
 			array(
 				'label'=>'Thư viện',
 				'url'=>'/admin/file'
-			)
+			),
         );
-        $this->widget('application.widgets.bootstrap.Menu', array('items'=>$items));
+        $this->widget('application.widgets.bootstrap.SuAdminMenu', array('items'=>$items));
     }
 
     /**
