@@ -66,6 +66,12 @@ $this->breadcrumbs=array(
 		   'filter'=>Subject::model()->generateSubjectFilters(),
 		),
 		array(
+		   'name'=>'type',
+		   'value'=>'Course::typeOptions()[$data->type]',
+		   'filter'=>Course::typeOptions(),
+		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
+		),
+		array(
 		   'header' => 'Số buổi',
 		   'value'=>'CHtml::link($data->countSessions(null, true)." buổi", Yii::app()->createUrl("admin/session?course_id=$data->id"))',
 		   'htmlOptions'=>array('style'=>'width:60px; text-align:center;'),
@@ -74,7 +80,7 @@ $this->breadcrumbs=array(
 		array(
 		   'name'=>'total_of_student',
 		   'value'=>'"1-".$data->total_of_student',
-		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
+		   'htmlOptions'=>array('style'=>'width:60px; text-align:center;'),
 		   'filter'=>$registration->totalStudentOptions(6, true),
 		   'type' => 'raw',		   
 		),
@@ -87,7 +93,7 @@ $this->breadcrumbs=array(
 		   'name'=>'payment_status',
 		   'value'=>'$data->getPaymentStatus()',
 		   'filter'=>ClsCourse::paymentStatuses(),
-		   'htmlOptions'=>array('style'=>'width:120px;'),
+		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
 		),
 		array(
 		   'header'=>'Giáo viên',
@@ -103,17 +109,18 @@ $this->breadcrumbs=array(
 		array(
 		   'header' => 'Ngày bắt đầu',
 		   'value'=>'$data->getFirstDateInList("ASC")',
-		   'htmlOptions'=>array('style'=>'width:100px;'), 
+		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'), 
 		),
 		array(
 		   'header' => 'Ngày kết thúc',
 		   'value'=>'$data->getFirstDateInList("DESC")',
-		   'htmlOptions'=>array('style'=>'width:100px;'), 
+		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'), 
 		),
 		array(
 		   'name'=>'status',
 		   'value'=>'ClsAdminHtml::displayCourseStatus($data->id, $data->status)',
-		   'filter'=>Course::statusOptions(),	
+		   'filter'=>Course::statusOptions(),
+		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
 		),
 		/*
 		'created_date',

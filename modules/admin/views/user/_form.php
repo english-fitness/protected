@@ -20,6 +20,15 @@
 			$("#changePasswordStatus").val('1');
 		}
 	}
+	function changeRole(){
+		var checkConfirm = confirm("Bạn có chắc chắn muốn thay đổi vai trò của người dùng này?");
+		if(checkConfirm){
+			$("#User_role").removeAttr('disabled');
+		}
+	}
+	function allowEdit(htmlObject){
+		$(htmlObject).removeAttr('readonly');
+	}
 </script>
 <div class="form">
 
@@ -46,6 +55,7 @@
 	    </div>
 	</div>
 <fieldset>
+	<?php $readonlyAttr = (!$model->isNewRecord)? array('readonly'=>'readonly', 'ondblclick'=>'allowEdit(this)'): array();?>
 	<legend>Thông tin tài khoản</legend>
 	<?php if(!$model->isNewRecord && $model->deleted_flag==1):?>
 	<div class="form-element-container row">
@@ -59,8 +69,7 @@
         </div>
         <div class="col col-lg-9">
         	<?php $changeStatus = Yii::app()->request->getPost('changeStatus', "0");?>
-        	<?php $emailAttrs = (!$model->isNewRecord)? array('readonly'=>'readonly'): array();?>
-            <?php echo $form->textField($model,'username',array_merge(array('size'=>60,'maxlength'=>128))); ?>
+            <?php echo $form->textField($model,'username',array_merge(array('size'=>60,'maxlength'=>128), $readonlyAttr)); ?>
 			<?php echo $form->error($model,'username'); ?>
 			<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
 			<?php $chanPassAttrs = ($model->role==User::ROLE_ADMIN)? 'dpn': '';?>
@@ -69,17 +78,6 @@
 				<input type="hidden" id="changePasswordStatus" name="changeStatus" value="<?php echo $changeStatus;?>"/>
 			</div>
 			<?php endif;?>
-        </div>		
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-            <?php echo $form->labelEx($model,'email'); ?>
-        </div>
-        <div class="col col-lg-9">
-        	<?php $changeStatus = Yii::app()->request->getPost('changeStatus', "0");?>
-        	<?php $emailAttrs = (!$model->isNewRecord)? array('readonly'=>'readonly'): array();?>
-            <?php echo $form->textField($model,'email',array_merge(array('size'=>60,'maxlength'=>128), $emailAttrs)); ?>
-			<?php echo $form->error($model,'email'); ?>
         </div>		
 	</div>
 	<div id="changePassword" class="form-element-container row" style="<?php echo (!$model->isNewRecord && $changeStatus==0)? 'display:none;': "";?>">
@@ -96,10 +94,19 @@
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
+            <?php echo $form->labelEx($model,'email'); ?>
+        </div>
+        <div class="col col-lg-9">
+            <?php echo $form->textField($model,'email',array_merge(array('size'=>60,'maxlength'=>128), $readonlyAttr)); ?>
+			<?php echo $form->error($model,'email'); ?>
+        </div>		
+	</div>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'lastname'); ?>
 		</div>
 		<div class="col col-lg-9">
-			<?php echo $form->textField($model,'lastname',array('size'=>60,'maxlength'=>128)); ?>
+			<?php echo $form->textField($model,'lastname',array_merge(array('size'=>60,'maxlength'=>128), $readonlyAttr)); ?>
 			<?php echo $form->error($model,'lastname'); ?>
 		</div>
 	</div>
@@ -109,12 +116,12 @@
 			<?php echo $form->labelEx($model,'firstname'); ?>
 		</div>
 		<div class="col col-lg-9">
-			<?php echo $form->textField($model,'firstname',array('size'=>60,'maxlength'=>128)); ?>
+			<?php echo $form->textField($model,'firstname',array_merge(array('size'=>60,'maxlength'=>128), $readonlyAttr)); ?>
 			<?php echo $form->error($model,'firstname'); ?>
 		</div>
 	</div>
 	<?php if($model->isNewRecord || $model->role==User::ROLE_MONITOR || $model->role==User::ROLE_SUPPORT):?>
-	<?php $disabledAttrs = (!$model->isNewRecord)? array('disabled'=>'disabled'):array();?>
+	<?php $disabledAttrs = (!$model->isNewRecord)? array('disabled'=>'disabled','ondblclick'=>'enableEdit(this)'):array();?>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'role'); ?>
@@ -123,6 +130,9 @@
 			<?php $userRoleOptions = array(User::ROLE_MONITOR=>User::ROLE_MONITOR, User::ROLE_SUPPORT=>User::ROLE_SUPPORT);?>
 			<?php echo $form->dropDownList($model,'role', $userRoleOptions, $disabledAttrs); ?>
 			<?php echo $form->error($model,'role'); ?>
+			<div class="fR <?php echo $chanPassAttrs;?>">
+				<a class="fs12 errorMessage" href="javascript: changeRole();">Cho phép thay đổi vai trò</a>
+			</div>
 		</div>
 	</div>
 	<?php endif;?>

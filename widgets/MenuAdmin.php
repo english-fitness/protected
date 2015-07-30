@@ -136,7 +136,7 @@ class MenuAdmin extends CWidget
                 'label'=>'Thống kê buổi học',
                 'url'=>'/admin/TeacherPayment',
 				'items'=>array(
-                    array('label'=>'Học sinh', 'url'=>array('#')),
+                    array('label'=>'Học sinh', 'url'=>array('/admin/sessionMonitor')),
 					array(
 						'label'=>'Giáo viên',
 						'url'=>array('#'),
@@ -145,6 +145,7 @@ class MenuAdmin extends CWidget
 							array('label'=>'Điểm phạt', 'url'=>array('/admin/teacherFine/fineRecords')),
 							array('label'=>'Các lần trừ điểm', 'url'=>array('/admin/teacherFine/fineChargeRecords')),
 							array('label'=>'Giáo viên bị trừ điểm', 'url'=>array('/admin/teacherFine/fineChargeList?view=all')),
+							array('label'=>'Điểm phạt đã hết hạn', 'url'=>array('/admin/teacherFine/expiredFine')),
 						),
 					),
                 )

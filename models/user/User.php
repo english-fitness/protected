@@ -619,10 +619,12 @@ class User extends CActiveRecord
 		
 		if ($returnModels){
 			$query = "SELECT * FROM tbl_user " .
-					 "WHERE CONCAT(`lastname`,' ',`firstname`) LIKE '%".$fullname."%'";
+					 "WHERE `firstname` LIKE '%".$fullname."%' " .
+					 "OR `lastname` LIKE '%".$fullname."%'";
 		} else {
 			$query = "SELECT " . implode(',', $returnAttributes) . " FROM tbl_user " .
-					 "WHERE CONCAT(`lastname`,' ',`firstname`) LIKE '%".$fullname."%'";
+					 "WHERE `firstname` LIKE '%".$fullname."%' " .
+					 "OR `lastname` LIKE '%".$fullname."%'";
 		}
 		
 		if ($returnModels){

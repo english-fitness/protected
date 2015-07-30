@@ -262,6 +262,30 @@ class Student extends CActiveRecord
 		return $displayLink;
 	}
 	
+	public function displayCourseMonitorLink($studentId, $shortLabel="", $type=null){
+		$displayLink = "";
+		
+		if ($type == null){
+			$count = CourseStudent::model()->countByAttributes(array('student_id'=>$studentId));
+		} else {
+			$query = "SELECT COUNT(*) FROM tbl_course JOIN tbl_course_student " .
+					 "ON tbl_course.id = tbl_course_student.course_id " .
+					 "WHERE tbl_course_student.student_id = " . $studentId . " " .
+					 "AND tbl_course.type = " . $type;
+			$count = Yii::app()->db->createCommand($query)->queryScalar();
+		}
+		
+		if($count>0){
+			$params = "sid=" . $studentId;
+			if ($type != null){
+				$params .= "&Course[type]=" . $type;
+			}
+			
+			$displayLink = CHtml::link($count.$shortLabel, Yii::app()->createUrl("admin/sessionMonitor/courseView?" .  $params));
+		}
+		return $displayLink;
+	}
+	
 	/**
 	 * Count pre register course of a student to display
 	 */

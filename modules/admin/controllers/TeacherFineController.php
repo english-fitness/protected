@@ -85,7 +85,7 @@ class TeacherFineController extends Controller
 		if (isset($_REQUEST['TeacherFineCharge'])){
 			$teacherFineCharge->attributes = $_REQUEST['TeacherFineCharge'];
 			if (isset($_REQUEST['TeacherFineCharge']['teacher_fullname'])){
-				$teachers = User::model()->findByFullname($_REQUEST['teacherFineCharge']['teacher_fullname'], array('id'));
+				$teachers = User::model()->findByFullname($_REQUEST['TeacherFineCharge']['teacher_fullname'], array('id'));
 				$teacherId = array();
 				foreach ($teachers as $teacher)
 				{

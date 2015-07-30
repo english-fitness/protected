@@ -35,9 +35,15 @@ class WebUser extends CWebUser
 		$user = $this->loadUser(Yii::app()->user->id);
 		return $user->fullName();
 	}
-    function getFullNameById($id){
-        $user = $this->loadUser($id);
-        return $user->fullName();
+    function getFullNameById($id, $userViewLink=''){
+        $user = User::model()->findByPk($id);
+		$fullName = $user->fullName();
+		
+		if ($userViewLink !== ''){
+			return '<a href="' . $userViewLink . '/' . $id . '">'.$fullName.'</a>';
+		} else {
+			return $user->fullName();
+		}
     }
 	function getData(){
 		$user = $this->loadUser(Yii::app()->user->id);

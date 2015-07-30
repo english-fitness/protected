@@ -97,7 +97,7 @@
 		bindSearchBoxEvent('teacher_search', searchTeacher);
 		$('#fine_record_form').submit(function(){
 			var teacher_id = $('#hidden_teacher_id');
-			if (teacher_id.val() == ""){
+			if (teacher_id.prop('disabled') == false && teacher_id.val() == ""){
 				$('#teacher_id_warning').show();
 				return false;
 			} else {

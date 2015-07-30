@@ -177,6 +177,35 @@ class Course extends CActiveRecord
 		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}
+	
+	public function searchByStudent($studentId, $order=null){
+		$criteria = new CDbCriteria;
+		
+		$criteria->alias = "tbl_course";
+		$criteria->join = "JOIN tbl_course_student ON tbl_course.id = tbl_course_student.course_id";
+		$criteria->condition = "tbl_course_student.student_id = $studentId";
+		
+		$criteria->compare('id',$this->id);
+		$criteria->compare('created_user_id',$this->created_user_id);
+		$criteria->compare('teacher_id',$this->teacher_id);
+		$criteria->compare('subject_id',$this->subject_id);
+		$criteria->compare('title',$this->title,true);
+		$criteria->compare('content',$this->content,true);
+		$criteria->compare('status',$this->status);
+		$criteria->compare('deleted_flag',$this->deleted_flag);
+		$criteria->compare('type',$this->type);
+		$criteria->compare('total_of_student',$this->total_of_student);
+		$criteria->compare('payment_status',$this->payment_status);
+		$criteria->compare('final_price',$this->final_price, true);
+		$criteria->compare('created_date',$this->created_date,true);
+		$criteria->compare('modified_date',$this->modified_date,true);
+		if($order!==null) $criteria->order = $order;
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+			'pagination'=>array('pageVar'=>'page'),
+		    'sort'=>array('sortVar'=>'sort'),
+		));
+	}
 
 	/**
 	 * Returns the static model of the specified AR class.

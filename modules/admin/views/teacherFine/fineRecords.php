@@ -38,6 +38,14 @@
 			'headerHtmlOptions'=>array('style'=>'width:100px;'),
 		),
 		array(
+			'header'=>'Điểm còn lại',
+			'name'=>'points_to_be_fined',
+			'value'=>'$data->points_to_be_fined',
+			'filter'=>'',
+			'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
+			'headerHtmlOptions'=>array('style'=>'width:100px;'),
+		),
+		array(
 			'name'=>'notes',
 			'value'=>'$data->notes',
 			'filter'=>'',
