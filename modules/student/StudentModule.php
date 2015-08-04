@@ -30,6 +30,9 @@ class StudentModule extends CWebModule{
         	if(!(in_array(Yii::app()->user->role, $otherAccessRoles) && $controller->id=='quiz')){
             	$controller->redirect(Yii::app()->homeUrl);
         	}
+        }elseif(isset(Yii::app()->user->id)){
+        	Yii::app()->session['loggedUserId'] = Yii::app()->user->id;
+        	Yii::app()->session['checkAccessUploadUsers'] = false;
         }
         //Redirect to status param page to tracking
     	// if(!(isset($_GET['status']) || strpos(Yii::app()->request->requestUri, "?")>0)){

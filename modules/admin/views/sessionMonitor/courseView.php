@@ -13,9 +13,17 @@
     	?>
         <h2 class="page-title mT10"><?php echo $pageTitle;?></h2>
     </div>
+	<div class="col col-lg-12 pB10">
+    	<p>
+    		<div class="col col-lg-3 pL0i">
+    			<span class="fL"><b>Học sinh:</b>&nbsp;<?php echo $student->fullname()?></span>
+    		</div>
+    	</p>
+    </div>
 </div>
+
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'dataProvider'=>$model->searchByStudent($studentId, "created_date DESC"),
+	'dataProvider'=>$model->searchByStudent($student->id, "created_date DESC"),
 	'filter'=>$model,
 	'enableHistory'=>true,
 	'ajaxVar'=>'',

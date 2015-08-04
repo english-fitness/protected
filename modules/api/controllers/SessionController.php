@@ -24,7 +24,7 @@ class SessionController extends Controller
         return array(
             array('allow',
                 'actions'=>array('start','end', 'getFeedbackUrls', 'kickUser', 'getSettings', 'setRecordFile',
-								'getTimeUntilExpiration'),
+								'getTimeUntilExpiration', 'addComment'),
                 'users'=>array('*'),
             ),
             array('deny',),
@@ -227,11 +227,36 @@ class SessionController extends Controller
 	public function actionGetTimeUntilExpiration(){
 		$sessionId = $_REQUEST['sessionId'];
 		$session = Session::model()->findByPk($sessionId);
-		if ($session != null){
+		if ($session != null && $session->status != Session::STATUS_ENDED){
 			$now = time();
 			$sessionEndTime = strtotime($session->plan_start) + $session->plan_duration*60 + 5*60;
 			$remainingTime = $sessionEndTime - $now;
-			$this->renderJSON(array('remainingTime'=>$remainingTime));
+		} else {
+			$remainingTime = 0;
 		}
+		$this->renderJSON(array('remainingTime'=>$remainingTime));
+	}
+	
+	public function actionAddComment(){
+		$sessionId = $_POST['session_id'];
+		$userId = $_POST['user_id'];
+		$comment = SessionComment::model()->findByAttributes(array('session_id'=>$sessionId, 'user_id'=>$userId));
+		if ($comment == null){
+			$comment = new SessionComment;
+			$comment->session_id = $sessionId;
+			$comment->user_id = $userId;
+			$comment->created_date = date('Y-m-d H:i:s');
+		}
+		if (isset($_POST['rating'])){
+			$comment->rating = $_POST['rating'];
+		}
+		$comment->comment = $_POST['comment'];
+		if ($comment->save()){
+			$success = true;
+		} else {
+			$this->renderJSON(array('error'=>$comment->getErrors()));
+			// $success = false;
+		}
+		$this->renderJSON(array('success'=>$success));
 	}
 }

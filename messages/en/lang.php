@@ -121,6 +121,10 @@ return array(
 	'session_time'=>'Time',
 	'session_detail'=>'Session Detail',
 	
+	//documents
+	'student_documents'=>'My documents',
+	'public_library'=>'Public Library',
+	
 	//common
 	'all_teachers'=>'All teachers',
 	'search_teacher'=>'Search teacher',

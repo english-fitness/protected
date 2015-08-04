@@ -75,9 +75,11 @@ class SessionMonitorController extends Controller
 			$course->attributes = $_GET['Course'];
 		}
 		
+		$student = User::model()->findByPk($_GET['sid']);
+		
 		$this->render('courseView', array(
 			'model'=>$course,
-			'studentId'=>$_GET['sid'],
+			'student'=>$student,
 		));
 	}
 	

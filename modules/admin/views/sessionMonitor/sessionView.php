@@ -8,6 +8,40 @@
     <div class="col col-lg-12">
         <h2 class="page-title mT10">Các buổi học trong khóa</h2>
     </div>
+	<div class="col col-lg-12 pB10">
+    	<p>
+    		<div class="col col-lg-3 pL0i">
+    			<span class="fL"><b>Môn học:</b>&nbsp;<?php echo Subject::model()->displayClassSubject($course->subject_id);?></span>
+    		</div>
+    		<div class="col col-lg-8 pL0i">
+    			<span class="fL"><b>Chủ đề khóa học:</b>&nbsp;<?php echo $course->title;?></span>
+    			<span class="fL"><a class="btn-edit mL15" href="/admin/course/update/id/<?php echo $course->id?>" title=""></a></span>
+    			<span class="fL"><a class="btn-view mL15" href="/admin/course/view/id/<?php echo $course->id?>" title=""></a></span>
+    		</div>
+    	</p>
+    </div>    
+    <div class="col col-lg-12">
+    	<div class="col col-lg-3 pL0i">
+    		<b>Giáo viên:</b>&nbsp;<?php $teacher = $course->getTeacher("/admin/teacher/view/id");?>
+    		<?php echo ($teacher)? $teacher: "Chưa gán giáo viên";?>
+    	</div>
+    	<div class="col col-lg-8 pL0i"><b>Học sinh:</b>&nbsp;
+	        <?php $courseStudentValues = array_values($course->getAssignedStudentsArrs("/admin/student/view/id"));?>
+			<?php $students = implode(', ', $courseStudentValues);?>
+			<?php echo ($students!="")? $students: "Chưa gán học sinh";?>
+		</div>
+	</div>
+	<div class="col col-lg-12">
+    	<p>
+    		<div class="col col-lg-3 pL0i">
+    			<span class="fL"><b>Kiểu khóa học:</b>&nbsp;
+    			<?php $typeOptions = $course->typeOptions(); echo $typeOptions[$course->type];?></span>
+    		</div>
+    		<div class="col col-lg-8 pL0i">
+    			<span class="fL"><b>Trạng thái:</b>&nbsp;<?php echo $course->getStatus();?></span>
+    		</div>
+    	</p>
+    </div>
 </div>
 <?php
 	$courseId = $course->id;
@@ -30,6 +64,20 @@
 				"onclick"=>$onclick,
 			)
 		);
+	}
+	
+	function getStatusDisplay($session){
+		//session is an array since we are using CSqlDataProvider
+		$endTime = date('Y-m-d H:i', strtotime('+' . $session['plan_duration'] . ' minutes', strtotime($session['plan_start'])));
+		$now = date('Y-m-d H:i');
+		$status = $session['status'];
+		if($status != Session::STATUS_ENDED && $status != Session::STATUS_CANCELED && $endTime < $now){
+			return '<a href="#" onclick="endSession(' . $session['id'] . '); return false;" class="changeStatusLink">' .
+						Session::statusOptions()[$status] . '<br>(Hết giờ)' .
+					'</a>';
+		} else {
+			return ClsAdminHtml::displaySessionStatus($session['id'], $status);
+		}
 	}
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
@@ -68,8 +116,9 @@
 		),
 		array(
 		   'header' => 'Trạng thái',
-		   'value'=>'ClsAdminHtml::displaySessionStatus($data["id"], $data["status"])',
+		   'value'=>'getStatusDisplay($data)',
 		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
+		   'type'=>'raw',
 		),
 		array(
 		   'header' => 'Buổi học trên hệ thống',
@@ -134,10 +183,6 @@
 		});
 	}
 	
-	function createSessionNote(){
-		
-	}
-	
 	function updateSessionNote(sessionId){
 		$.ajax({
 			url: "/admin/sessionMonitor/update/id/" + sessionId,
@@ -159,5 +204,21 @@
 				}
 			},
 		});
+	}
+	
+	function endSession(sessionId){
+		if (confirm('Buổi học này đã kết thúc. Chuyển trạng thái thành kết thúc?')){
+			$.ajax({
+				url:'/admin/session/ajaxChangeStatus',
+				type:'post',
+				data:{
+					sessionId:sessionId,
+					status:<?php echo Session::STATUS_ENDED?>,
+				},
+				success:function(){
+					$.fn.yiiGridView.update("gridView");
+				}
+			});
+		}
 	}
 </script>

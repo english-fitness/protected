@@ -31,14 +31,7 @@ class SessionCommentController extends Controller
 				'actions'=>array('index','view'),
 				'users'=>array('*'),
 			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('*'),
-			),
+			
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
@@ -49,118 +42,31 @@ class SessionCommentController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
-	public function actionView($id)
+	public function actionView()
 	{
-		$this->render('view',array(
-			'model'=>$this->loadModel($id),
-		));
-	}
-
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
-	public function actionCreate()
-	{
-		$model=new SessionComment;
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-		$sessions = CHtml::listData(Session::model()->findAll(), 'id', 'subject');
-		if(isset($_POST['SessionComment']))
-		{
-			$model->attributes=$_POST['SessionComment'];
-			$model->created_date=new CDbExpression("NOW()");
-			$model->user_id=Yii::app()->user->getId();
-			if($model->save())
-				$this->redirect(array('index'));
-		}
-
-		$this->render('create',array(
-			'model'=>$model,
-			'sessions'=>$sessions
-		));
-	}
-
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
-	public function actionUpdate($id)
-	{
-		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-		$sessions = CHtml::listData(Session::model()->findAll(), 'id', 'subject');
-		if(isset($_POST['SessionComment']))
-		{
-			$model->attributes=$_POST['SessionComment'];
-			if($model->save())
-				$this->redirect(array('index'));
-		}
-
-		$this->render('update',array(
-			'model'=>$model,
-			'sessions'=>$sessions
-		));
-	}
-
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
-	public function actionDelete($id)
-	{
-		$this->loadModel($id)->delete();
-
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$model=new SessionComment('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['SessionComment']))
-			$model->attributes=$_GET['SessionComment'];
-
-		$this->render('index',array(
-			'model'=>$model,
-		));
-	}
-
-	/**
-	 * Returns the data model based on the primary key given in the GET variable.
-	 * If the data model is not found, an HTTP exception will be raised.
-	 * @param integer $id the ID of the model to be loaded
-	 * @return SessionComment the loaded model
-	 * @throws CHttpException
-	 */
-	public function loadModel($id)
-	{
-		$model=SessionComment::model()->findByPk($id);
-		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
-		return $model;
-	}
-
-	/**
-	 * Performs the AJAX validation.
-	 * @param SessionComment $model the model to be validated
-	 */
-	protected function performAjaxValidation($model)
-	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='session-comment-form')
-		{
-			echo CActiveForm::validate($model);
-			Yii::app()->end();
+		$this->subPageTitle = 'Đánh giá buổi học';
+		if (isset($_REQUEST['sessionId'])){
+			$sessionId = $_REQUEST['sessionId'];
+			$session = Session::model()->findByPk($sessionId);
+			
+			$query = "SELECT * FROM tbl_session_comment ".
+					 "WHERE session_id = " . $sessionId . " " .
+					 "AND user_id = " . $session->teacher_id;
+			
+			$teacherComment = SessionComment::model()->findBySql($query);
+			
+			$query = "SELECT c.* FROM tbl_session_comment c JOIN tbl_session_student s " .
+					 "ON c.session_id = s.session_id " .
+					 "AND c.user_id = s.student_id " .
+					 "WHERE c.session_id = " . $sessionId;
+			
+			$studentComment = SessionComment::model()->findAllBySql($query);
+			
+			$this->render('view', array(
+				'session'=>$session,
+				'teacherComment'=>$teacherComment,
+				'studentComment'=>$studentComment,
+			));
 		}
 	}
 }

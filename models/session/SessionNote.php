@@ -146,7 +146,8 @@ class SessionNote extends CActiveRecord
 				 "FROM (tbl_session " . $joinType . " tbl_session_note " .
 				 "ON tbl_session.id = tbl_session_note.session_id) " .
 				 "JOIN tbl_session_student ON tbl_session.id = tbl_session_student.session_id " .
-				 "WHERE tbl_session.course_id = " . $courseId . $otherFilter;
+				 "WHERE tbl_session.course_id = " . $courseId . $otherFilter . " " .
+				 "ORDER BY plan_start ASC";
 		
 		return new CSqlDataProvider($query, array(
 			'totalItemCount'=>$count,

@@ -45,6 +45,8 @@ $this->breadcrumbs=array(
 	'columns'=>array(
 		'fullname',
 		'phone',		
+		'email',
+		'promotion_code',
 		array(
 		   'name'=>'created_date',
 		   'value'=>'date("d/m/Y, H:i", strtotime($data->created_date))',

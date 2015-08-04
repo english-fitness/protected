@@ -29,7 +29,8 @@ class SessionController extends Controller
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
                 'actions'=>array('index','view','ajaxCreateBoard', 'ajaxApprove', 'ajaxEditInline', 'nearest', 'ended', 'recorded', 'today'
-                , 'ajaxDeleteBoard','unassignStudent','canceled','active','create','update', 'cancel', 'reminder', 'getRecordFile', 'removeRecordFile',),
+                , 'ajaxDeleteBoard','unassignStudent','canceled','active','create','update', 'cancel', 'reminder', 'getRecordFile', 'removeRecordFile',
+				'ajaxChangeStatus'),
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -553,5 +554,11 @@ class SessionController extends Controller
 			}
 		}
 		$this->redirect("/admin/session/view/id/".$session_id);
+	}
+	
+	public function actionAjaxChangeStatus(){
+		$session = Session::model()->findByPk($_POST['sessionId']);
+		$session->status = $_POST['status'];
+		$session->save();
 	}
 }

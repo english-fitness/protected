@@ -33,12 +33,13 @@ class SessionComment extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('session_id, user_id, comment, created_date', 'required'),
+			array('session_id, user_id, created_date', 'required'),
 			array('session_id, user_id', 'numerical', 'integerOnly'=>true),
-			array('modified_date', 'safe'),
+			array('session_id, user_id, comment, created_date, modified_date', 'safe'),
+			array('created_date', 'default', 'value'=>date('Y-m-d H:i:s'), 'setOnEmpty'=>false, 'on'=>'insert'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, session_id, user_id, comment, created_date, modified_date', 'safe', 'on'=>'search'),
+			array('id, session_id, user_id, created_date, modified_date', 'safe', 'on'=>'search'),
 		);
 	}
 

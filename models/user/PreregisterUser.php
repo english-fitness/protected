@@ -15,7 +15,6 @@
  * @property string $parent_name
  * @property string $parent_phone
  * @property string $subject_note
- * @property string $objective
  * @property string $content_request
  * @property string $teacher_request
  * @property integer $user_type
@@ -69,7 +68,7 @@ class PreregisterUser extends CActiveRecord
 			array('phone', 'length', 'max'=>20),
 			array('sale_status', 'length', 'max'=>80),
 			array('birthday, last_sale_date', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
-			array('birthday, status, care_status, sale_note, last_sale_date, created_user_id, modified_user_id, created_date, modified_date, deleted_flag', 'safe'),
+			array('birthday, status, care_status, sale_note, last_sale_date, created_user_id, modified_user_id, created_date, promotion_code, modified_date, deleted_flag', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, email, fullname, birthday, gender, address, phone, promotion_code, status, care_status, sale_status, sale_note, sale_user_id, last_sale_date, created_date, modified_date', 'safe', 'on'=>'search'),

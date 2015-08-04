@@ -41,6 +41,10 @@ return array(
 	'session_time'=>'Thời gian',
 	'session_detail'=>'Chi tiết buổi học',
 	
+	//documents
+	'student_documents'=>'Tài liệu',
+	'public_library'=>'Thư viện',
+	
 	//common
 	'all_teachers'=>'Tất cả giáo viên',
 	'search_teacher'=>'Tìm giáo viên',
