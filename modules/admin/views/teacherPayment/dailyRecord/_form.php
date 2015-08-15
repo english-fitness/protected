@@ -9,6 +9,19 @@
 }
 </style>
 <div class="form">
+<?php
+	if(isset($payment)){
+		$currentMonth = date('Y-m');
+		$paymentMonth = date('Y-m', strtotime($payment->month));
+		$minSelectableDate = date($paymentMonth . '-01');
+		$maxSelectableDate = date($paymentMonth . '-t');
+		if($currentMonth == $paymentMonth){
+			$defaultDate = date('Y-m-d');
+		} else {
+			$defaultDate = date($paymentMonth . '-01');
+		}
+	}
+?>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'daily_record_form',
 	// Please note: When you enable ajax validation, make sure the corresponding
@@ -61,7 +74,13 @@
 		</div>
 		<div class="col col-lg-9">
 			<?php
-				$day = isset($model['day'])? $model['day']: date('Y-m-d');
+				if (isset($model['day'])){
+					$day = $model['day'];
+				} else if (isset($payment)){
+					$day = $defaultDate;
+				} else {
+					$day = date('Y-m-d');
+				}
 			?>
 			<input type="text" class="datepicker" name="Record[day]" id="day" value="<?php echo $day?>" readonly>
 			<?php echo $form->error($model,'day'); ?>
@@ -118,12 +137,13 @@
 		window.location = daykemBaseUrl+'/admin/TeacherPayment<?php echo (isset($payment)) ? '/update/id/' . $payment->id : ''?>';
 	}
 	$(document).ready(function() {
-		$(document).on("click",".datepicker",function(){
+		$(".datepicker").on("click",function(){
             $(this).datepicker({
-                "dateFormat":"yy-mm-dd",
+                dateFormat:"yy-mm-dd",
 				<?php if(isset($payment)):?>
-				minDate:'<?php echo date('Y-m-01')?>',
-				maxDate:'<?php echo date('Y-m-t')?>',
+				minDate:'<?php echo $minSelectableDate?>',
+				maxDate:'<?php echo $maxSelectableDate?>',
+				defaultDate: new Date('<?php echo $defaultDate?>'),
 				<?php endif;?>
             }).datepicker("show");
         });

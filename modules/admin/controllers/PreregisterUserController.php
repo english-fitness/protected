@@ -28,7 +28,7 @@ class PreregisterUserController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','create', 'saleUpdate'),
+				'actions'=>array('index','view','create', 'update', 'saleUpdate'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions

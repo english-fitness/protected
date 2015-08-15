@@ -77,5 +77,28 @@ class ClsMailer
 		);		
 		$emailQueue->save();      
     }
+    
+    public function sendSessionReminder($students, $content, $translation, $date, $time){
+        foreach($students as $student){
+            $mail = new YiiMailer();
+            $mail->setSubject("Ghi nhớ cho buổi học ngày " . $date);
+            $mail->setFrom("phuongth@hocmai.com.vn", "Speak up");
+            $mail->setTo(array($student->email=>$student->fullname()));
+            $body = $mail->renderView('application.views.mail.sessionReminder', array(
+                "name"=>$student->fullname(),
+                "content"=>$content,
+                "translation"=>$translation,
+                "date"=>$date,
+                "time"=>$time
+            ));
+            $mail->setBody($body);
+            try {
+                $mail->send();
+                return true;
+            } catch(Exception $e){
+                return false;
+            }
+        }
+    }
 }
 ?>

@@ -28,7 +28,7 @@ class SessionCommentController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','send', 'sendToStudents'),
 				'users'=>array('*'),
 			),
 			
@@ -47,26 +47,58 @@ class SessionCommentController extends Controller
 		$this->subPageTitle = 'Đánh giá buổi học';
 		if (isset($_REQUEST['sessionId'])){
 			$sessionId = $_REQUEST['sessionId'];
-			$session = Session::model()->findByPk($sessionId);
+            $session = Session::model()->findByPk($sessionId);
 			
-			$query = "SELECT * FROM tbl_session_comment ".
-					 "WHERE session_id = " . $sessionId . " " .
-					 "AND user_id = " . $session->teacher_id;
-			
-			$teacherComment = SessionComment::model()->findBySql($query);
-			
-			$query = "SELECT c.* FROM tbl_session_comment c JOIN tbl_session_student s " .
-					 "ON c.session_id = s.session_id " .
-					 "AND c.user_id = s.student_id " .
-					 "WHERE c.session_id = " . $sessionId;
-			
-			$studentComment = SessionComment::model()->findAllBySql($query);
+            $comments = SessionComment::findBySession($session);
 			
 			$this->render('view', array(
 				'session'=>$session,
-				'teacherComment'=>$teacherComment,
-				'studentComment'=>$studentComment,
+				'teacherComment'=>$comments['teacherComments'],
+				'studentComment'=>$comments['studentComments'],
 			));
-		}
+		} else {
+            throw new CHttpException(400, 'Bad request');
+        }
 	}
+    
+    public function actionSend(){
+        $this->subPageTitle = 'Gửi nhận xét';
+        if (isset($_REQUEST['sessionId'])){
+            $sessionId = $_REQUEST['sessionId'];
+            $session = Session::model()->findByPk($sessionId);
+            
+            $students = $session->assignedStudents(true);
+            $comments = SessionComment::findBySession($session);
+            
+            $this->render('send', array(
+                'session'=>$session,
+                'students'=>$students,
+                'teacherComment'=>$comments['teacherComments'],
+				'studentComment'=>$comments['studentComments'],
+            ));
+        } else {
+            throw new CHttpException(400, 'Bad request');
+        }
+    }
+    
+    public function actionSendToStudents(){
+        $studentIds = $_POST['students'];
+        $students = User::model()->findAllByAttributes(array("id"=>$studentIds));
+        $content = nl2br($_POST['content']);
+        $translation = nl2br($_POST['translation']);
+        $date = $_POST['date'];
+        $time = $_POST['time'];
+        
+        $mailer = new ClsMailer;
+        
+        if ($mailer->sendSessionReminder($students, $content, $translation, $date, $time)){
+            $this->renderJSON(array(
+                "success"=>true,
+            ));
+        } else {
+            $this->renderJSON(array(
+                "success"=>false,
+            ));
+        }
+    }
 }

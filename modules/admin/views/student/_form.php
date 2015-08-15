@@ -201,7 +201,7 @@
 		<div class="col col-lg-9">
 			<?php echo $form->dropDownList($model,'status', $model->statusOptions(), $disabledAttrs); ?>
 			<?php echo $form->error($model,'status'); ?>
-			<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
+			<?php if(!$model->isNewRecord):?>
 			<div class="fR">
 				<a class="fs12 errorMessage" href="javascript: openStudentStatus();">Thay đổi trạng thái của học sinh (thủ công)!</a>
 			</div>

@@ -1,10 +1,13 @@
 <!-- not using tab anymore
 <div class="page-title"><label class="tabPage"> The training was completed</label></div>
 -->
-<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Completed Sessions</p></div>
-<?php $this->renderPartial('myCourseTab'); ?>
+<div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Unfilled Reminders</p></div>
+<?php $this->renderPartial('teacher.views.class.myCourseTab'); ?>
 <div class="details-class">
     <div class="session">
+    <?php if(count($sessions)>0):?>
+        <p style="color:red">Please add reminders for the following sessions</p>
+    <?php endif;?>
     <table class="table table-bordered table-striped data-grid">
         <thead>
         <tr>
@@ -40,11 +43,7 @@
                     </div>
 				</td>
 				<td>
-                    <?php if(SessionComment::checkReminderExistence($session->id)):?>
-                    <a href="/teacher/sessionComment/view?sessionId=<?php echo $session->id?>">Reminders</a>
-                    <?php else:?>
                     <a href="/teacher/sessionComment/update?sessionId=<?php echo $session->id?>">Add Reminders</a>
-                    <?php endif;?>
                 </td>
             </tr>
         	<?php endforeach; ?>

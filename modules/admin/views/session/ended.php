@@ -26,17 +26,26 @@ $this->breadcrumbs=array(
 	'rowHtmlOptionsExpression'=>'($data->course->type==Course::TYPE_COURSE_TESTING)?array("class"=>"testingSession"):array()',
 	'columns'=>array(
 		array(
+			'name'=>'id',
+			'value'=>'$data->id',
+			'htmlOptions'=>array('style'=>'text-align:center; width:60px'),
+		),
+		array(
 		   'name'=>'course_id',
 		   'value'=>'CHtml::link($data->course->id, Yii::app()->createUrl("admin/session?course_id=$data->course_id"))',
 		   'type'=>'raw', 'filter'=>false,
-		   'htmlOptions'=>array('style'=>'text-align:center;'),
+		   'htmlOptions'=>array('style'=>'text-align:center;width:60px;'),
 		),
 		array(
 		   'header'=>'Môn học',
 		   'value'=>'Subject::model()->displayClassSubject($data->course->subject_id)',
 		   'htmlOptions'=>array('style'=>'min-width:100px;'),
 		),
-		'subject',
+		array(
+            'name'=>'subject',
+            'value'=>'$data->subject',
+            'htmlOptions'=>array('style'=>'width:100px;'),
+        ),
 		/*
 		array(
 		   'name'=>'total_of_student',
@@ -49,7 +58,7 @@ $this->breadcrumbs=array(
 		   'name'=>'teacher_id',
 		   'value'=>'$data->getTeacher("/admin/teacher/view/id", true)',
 		   'filter'=>'<input type="text" value="'.$teacherFullname.'" name="Session[teacher_fullname]">',
-		   'htmlOptions'=>array('style'=>'width:150px;'),
+		   'htmlOptions'=>array('style'=>'width:120px;'),
 		   'type'  => 'raw',
 		),
 		array(
@@ -62,7 +71,7 @@ $this->breadcrumbs=array(
 		   'header'=>'Ngày học',
 		   'value'=>'date("d/m/Y", strtotime($data->plan_start))',
 		   'filter'=>'<input type="text" value="'.$startDateFilter.'" name="Session[plan_start]">',
-		   'htmlOptions'=>array('style'=>'width:100px;'),
+		   'htmlOptions'=>array('style'=>'width:80px;text-align:center'),
 		),
 		array(
 		   'header' => 'Giờ học',
@@ -73,6 +82,11 @@ $this->breadcrumbs=array(
 		   'name'=>'whiteboard',
 		   'value'=>'ClsAdminHtml::displayBoard($data)',
 		   'filter'=>false,
+		),
+		array(
+			'header'=>'Nhận xét',
+			'value'=>'CHtml::link("Xem nhận xét", Yii::app()->createUrl("/admin/sessionComment/view?sessionId=$data->id"))',
+			'type'=>'raw',
 		),
 		array(
 			'class'=>'CButtonColumn',

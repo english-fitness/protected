@@ -129,6 +129,7 @@ class Course extends CActiveRecord
 			'payment_status' => 'Trạng thái thanh toán',
 			'payment_type' => 'Kiểu thu phí',
 			'final_price' => 'Học phí khóa học (VND)',
+			'number_of_sessions'=>'Số buổi',
 			'student_form_url' => 'Học sinh feedback url',
 			'teacher_form_url' => 'Giáo viên feedback url',
 			'created_date' => 'Ngày tạo',
@@ -636,5 +637,13 @@ class Course extends CActiveRecord
 				 "AND deleted_flag = 0 " . " " .
 				 "ORDER BY course_id DESC";
 		return Course::model()->findAllBySql($query);
+	}
+	
+	public function getNumberOfSessionsAvailable(){
+		$query = "SELECT sum(number_of_sessions) FROM tbl_course_payment " . 
+				 "WHERE course_id = " . $this->id;
+		$additionalSessions = Yii::app()->db->createCommand($query)->queryScalar();
+		
+		return $this->number_of_sessions + $additionalSessions;
 	}
 }

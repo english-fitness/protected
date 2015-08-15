@@ -36,6 +36,9 @@ class Session extends CActiveRecord
     const TYPE_SESSION_TIMER = 2;//Type normal timer
     const TYPE_SESSION_TRAINING = 3;//Type normal training
     const TYPE_SESSION_PRESET = 4;//Type normal preset
+	
+	const STATUS_TEACHER_PAID = 1;
+	const STATUS_TEACHER_UNPAID = 0;
 
 	/**
 	 * @return string the associated database table name
@@ -468,11 +471,19 @@ class Session extends CActiveRecord
 	/**
 	 * Get assigned students of Course
 	 */
-	public function assignedStudents()
+	public function assignedStudents($returnModel = false)
 	{
 		$query = "SELECT student_id FROM tbl_session_student WHERE session_id=".$this->id;
 		$studentIds = Yii::app()->db->createCommand($query)->queryColumn();
-		return $studentIds;
+        if($returnModel){
+            $students = array();
+            foreach($studentIds as $id){
+                $students[] = User::model()->findByPk($id);
+            }
+            return $students;
+        } else {
+            return $studentIds;
+        }
 	}
 
 	public function getAttendedUserIds()

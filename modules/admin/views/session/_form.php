@@ -51,7 +51,7 @@
 	        	<?php $btnValue = $model->isNewRecord ? 'Create' : 'Save';?>
 	        	<button class="btn btn-primary" name="form_action" type="submit"><i class="icon-save"></i>Lưu lại</button>
 	        	<button class="btn btn-default cancel" name="form_action" type="button" onclick="cancel();"><i class="icon-undo"></i>Bỏ qua</button>
-	        	<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin() && $model->status<Session::STATUS_APPROVED):?>
+	        	<?php if(!$model->isNewRecord && $model->status<Session::STATUS_APPROVED):?>
         			<button class="btn btn-default remove" name="form_action" type="button" onclick="removeSession(<?php echo $model->id;?>);"><i class="btn-remove"></i>Xóa buổi học</button>
 	        	<?php endif;?>
 	        	<?php if(!$model->isNewRecord && $model->status==Session::STATUS_APPROVED):?>

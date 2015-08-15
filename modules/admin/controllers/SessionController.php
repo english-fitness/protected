@@ -68,8 +68,44 @@ class SessionController extends Controller
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
         if(isset($_REQUEST['cid'])){
-            $modelCourse = Course::model()->findByPk($_REQUEST['cid']);
-        }
+            $modelCourse = $this->loadCourseModel($_REQUEST['cid']);
+        } else {
+			throw new CHttpException(400, 'Invalid request');
+		}
+		
+        /*
+		//check if the number of session
+		$no_session_available = false;
+		$sessionCount = Session::model()->countByAttributes(array('course_id'=>$modelCourse->id, 'deleted_flag'=>0));
+		$availableSessions = $modelCourse->getNumberOfSessionsAvailable();
+		// exit("session count: " . $sessionCount . " /available: " . $availableSessions);
+		if ($availableSessions != 0){
+			if($sessionCount >= $availableSessions){
+				$reservableSession = Session::model()->countByAttributes(array(
+					'course_id'=>$modelCourse->id,
+					'teacher_paid'=>Session::STATUS_TEACHER_PAID,
+					'status'=>Session::STATUS_CANCELED,
+				));
+				if ($reservableSession > 2){
+					$reservableSession = 2;
+				}
+				if ($sessionCount >= $availableSessions + $reservableSession){
+					$no_session_available = true;
+				}
+			}
+		} else {
+			$no_session_available = true;
+		}
+		
+		if ($no_session_available){
+			$this->render('create', array(
+				'error'=>'no_session_available',
+				'course_id'=>$_REQUEST['cid'],
+			));
+			exit();
+		}
+        */
+		
         if(isset($_POST['Session']))
         {
             $model->attributes = $_POST['Session'];
@@ -402,6 +438,13 @@ class SessionController extends Controller
             throw new CHttpException(404,'The requested page does not exist.');
         return $model;
     }
+	
+	public function loadCourseModel($id){
+		$model=Course::model()->findByPk($id);
+        if($model===null)
+            throw new CHttpException(404,'The requested page does not exist.');
+        return $model;
+	}
 
     /**
      * Performs the AJAX validation.

@@ -32,6 +32,11 @@
 </script>
 <div class="form">
 
+<?php
+	$isAdmin = Yii::app()->user->isAdmin();
+	$isNewRecord = $model->isNewRecord;
+?>
+
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'user-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
@@ -42,22 +47,22 @@
 )); ?>
 	<div class="page-header-toolbar-container row">
 	    <div class="col col-lg-6">
-	        <h2 class="page-title mT10"><?php echo $model->isNewRecord ? 'Thêm người dùng' : 'Sửa thông tin người dùng';?></h2>
+	        <h2 class="page-title mT10"><?php echo $isNewRecord ? 'Thêm người dùng' : 'Sửa thông tin người dùng';?></h2>
 	    </div>
 	    <div class="col col-lg-6 for-toolbar-buttons">
 	        <div class="btn-group">
 	        	<button class="btn btn-primary" name="form_action" type="submit"><i class="icon-save"></i>Lưu lại</button>
 	        	<button class="btn btn-default cancel" name="form_action" type="button" onclick="cancel();"><i class="icon-undo"></i>Bỏ qua</button>
-	        	<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
+	        	<?php if(!$isNewRecord && $isAdmin):?>
 	        	<button class="btn btn-default remove" name="form_action" type="button" onclick="removeUser(<?php echo $model->id;?>);"><i class="btn-remove"></i>Xóa người dùng</button>
 	        	<?php endif;?>
 	        </div>
 	    </div>
 	</div>
 <fieldset>
-	<?php $readonlyAttr = (!$model->isNewRecord)? array('readonly'=>'readonly', 'ondblclick'=>'allowEdit(this)'): array();?>
+	<?php $readonlyAttr = (!$isNewRecord)? array('readonly'=>'readonly', 'ondblclick'=>'allowEdit(this)'): array();?>
 	<legend>Thông tin tài khoản</legend>
-	<?php if(!$model->isNewRecord && $model->deleted_flag==1):?>
+	<?php if(!$isNewRecord && $model->deleted_flag==1):?>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">&nbsp;</div>
 		<div class="col col-lg-9 errorMessage">Người dùng này đã bị hủy bỏ, để xóa hoàn toàn người dùng này & các thông tin, lịch sử liên quan, bạn hãy vui lòng nhấn tiếp "Xóa người dùng"!</div>
@@ -71,8 +76,8 @@
         	<?php $changeStatus = Yii::app()->request->getPost('changeStatus', "0");?>
             <?php echo $form->textField($model,'username',array_merge(array('size'=>60,'maxlength'=>128), $readonlyAttr)); ?>
 			<?php echo $form->error($model,'username'); ?>
-			<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
 			<?php $chanPassAttrs = ($model->role==User::ROLE_ADMIN)? 'dpn': '';?>
+			<?php if(!$isNewRecord && $isAdmin):?>
 			<div class="fR <?php echo $chanPassAttrs;?>">
 				<a class="fs12 errorMessage" href="javascript: changePassword();">Cho phép admin thay đổi mật khẩu của người dùng này?</a>
 				<input type="hidden" id="changePasswordStatus" name="changeStatus" value="<?php echo $changeStatus;?>"/>
@@ -80,14 +85,14 @@
 			<?php endif;?>
         </div>		
 	</div>
-	<div id="changePassword" class="form-element-container row" style="<?php echo (!$model->isNewRecord && $changeStatus==0)? 'display:none;': "";?>">
+	<div id="changePassword" class="form-element-container row" style="<?php echo (!$isNewRecord && $changeStatus==0)? 'display:none;': "";?>">
 		<div class="col col-lg-3">
             <?php echo $form->labelEx($model,'password'); ?>
         </div>
 		 <div class="col col-lg-9">
             <?php echo $form->passwordField($model,'password',array('size'=>60,'maxlength'=>128, 'value'=>'')); ?>
 			<?php echo $form->error($model,'password'); ?>
-			<?php if(!$model->isNewRecord):?>
+			<?php if(!$isNewRecord):?>
 			<label class="hint">Nhập mật khẩu mới cho tài khoản của người dùng này!</label>
 			<?php endif;?>
         </div>		
@@ -120,8 +125,8 @@
 			<?php echo $form->error($model,'firstname'); ?>
 		</div>
 	</div>
-	<?php if($model->isNewRecord || $model->role==User::ROLE_MONITOR || $model->role==User::ROLE_SUPPORT):?>
-	<?php $disabledAttrs = (!$model->isNewRecord)? array('disabled'=>'disabled','ondblclick'=>'enableEdit(this)'):array();?>
+	<?php if($isNewRecord || $model->role==User::ROLE_MONITOR || $model->role==User::ROLE_SUPPORT):?>
+	<?php $disabledAttrs = (!$isNewRecord)? array('disabled'=>'disabled','ondblclick'=>'enableEdit(this)'):array();?>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'role'); ?>
@@ -130,13 +135,15 @@
 			<?php $userRoleOptions = array(User::ROLE_MONITOR=>User::ROLE_MONITOR, User::ROLE_SUPPORT=>User::ROLE_SUPPORT);?>
 			<?php echo $form->dropDownList($model,'role', $userRoleOptions, $disabledAttrs); ?>
 			<?php echo $form->error($model,'role'); ?>
+			<?php if(!$isNewRecord && $isAdmin):?>
 			<div class="fR <?php echo $chanPassAttrs;?>">
 				<a class="fs12 errorMessage" href="javascript: changeRole();">Cho phép thay đổi vai trò</a>
 			</div>
+			<?php endif;?>
 		</div>
 	</div>
 	<?php endif;?>
-	<?php if(!$model->isNewRecord && $model->deleted_flag==1):?>
+	<?php if(!$isNewRecord && $model->deleted_flag==1):?>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'status'); ?>
