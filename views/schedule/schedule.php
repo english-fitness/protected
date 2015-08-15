@@ -75,10 +75,31 @@
                 background-color: rgba(250,250,250,0.7);
                 z-index: 99999;
             }
+            .header{
+                padding:15px;
+                display:table-cell;
+                vertical-align:middle;
+                background-color:#245ba7;
+                width:100%;
+                height:60px;
+                position:absolute;
+                top:0;
+                left:0;
+                font-size:25px;
+                font-weight:bold;
+            }
+            .su-logo{
+                float:left;
+                height:40px;
+                margin-left:40px;
+            }
         </style>
 
 
-        <div class="details-class">
+        <div class="header text-center">
+            <p style="color:white">Teacher Schedule</p>
+        </div>
+        <div class="details-class" style="padding:100px 0 50px">
             <?php $this->renderPartial('widgets/colorLegend')?>
             <?php $this->renderPartial('widgets/searchBox')?>
             <div style='margin:0 auto; text-align:center'>
@@ -151,7 +172,7 @@
             function createCalendar(divId, data, size){
                 var firstColumnWidth = 85;
                 var calendarWidth = firstColumnWidth+(1000-firstColumnWidth)*(size/4);
-                document.getElementById(divId).setAttribute("style","width:"+calendarWidth+"px; height:1300px;margin: 40px auto");
+                document.getElementById(divId).setAttribute("style","width:"+calendarWidth+"px; height:1220px;margin: 40px auto");
                 var sessions = data.sessions;
                 var availableSlots = data.availableSlots;
                 

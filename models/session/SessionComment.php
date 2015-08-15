@@ -19,7 +19,7 @@ class SessionComment extends CActiveRecord
 {
     //the date when we started implementing the session comment
     //use this so we can ignore older sessions
-    const MIN_DATE = "2015-08-08 00:00:00";
+    const MIN_DATE = "2015-08-17 00:00:00";
     
     /**
      * @return string the associated database table name
@@ -170,10 +170,12 @@ class SessionComment extends CActiveRecord
         $query = "SELECT count(*) FROM tbl_session " .
                  "WHERE teacher_id = " . $teacherId . " " .
                  "AND plan_start > '" . self::MIN_DATE . "' ".
+                 "AND status = 3 " .
                  "AND id NOT IN (" .
                     "SELECT s.id FROM tbl_session s JOIN tbl_session_comment c " .
                     "ON s.id = c.session_id " .
-                    "WHERE teacher_id = " . $teacherId . " " .
+                    "AND s.teacher_id = c.user_id " .
+                    "WHERE s.teacher_id = " . $teacherId . " " .
                  ")";
                  
         return Yii::app()->db->createCommand($query)->queryScalar();
@@ -185,9 +187,11 @@ class SessionComment extends CActiveRecord
         $query = "SELECT * FROM tbl_session " .
                  "WHERE teacher_id = " . $teacherId . " " .
                  "AND plan_start > '" . self::MIN_DATE . "' ".
+                 "AND status = 3 " .
                  "AND id NOT IN (" .
                     "SELECT s.id FROM tbl_session s JOIN tbl_session_comment c " .
                     "ON s.id = c.session_id " .
+                    "AND s.teacher_id = c.user_id " .
                     "WHERE teacher_id = " . $teacherId . " " .
                  ")";
         

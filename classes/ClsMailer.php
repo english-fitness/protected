@@ -82,7 +82,7 @@ class ClsMailer
         foreach($students as $student){
             $mail = new YiiMailer();
             $mail->setSubject("Ghi nhớ cho buổi học ngày " . $date);
-            $mail->setFrom("phuongth@hocmai.com.vn", "Speak up");
+            $mail->setFrom("no-reply@speakup.vn", "Speak up");
             $mail->setTo(array($student->email=>$student->fullname()));
             $body = $mail->renderView('application.views.mail.sessionReminder', array(
                 "name"=>$student->fullname(),
