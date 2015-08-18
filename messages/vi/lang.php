@@ -3,6 +3,8 @@
 return array(
 	//student specific
 	'student_schedule'=>'Lịch học',
+    'whiteboard_link'=>'Xem lại buổi học',
+    'view_comment'=>'Ghi chú',
 	
 	//reservation
 	'student_schedule_calendar_view'=>'Đăng ký lịch học',

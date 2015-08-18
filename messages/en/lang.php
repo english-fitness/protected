@@ -83,6 +83,8 @@ return array(
 	
 	//student specific
 	'student_schedule'=>'Schedule',
+    'whiteboard_link'=>'Revisit class',
+    'view_comment'=>'Reminders',
 	
 	//reservation
 	'student_schedule_calendar_view'=>'Reservation',
