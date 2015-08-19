@@ -154,6 +154,10 @@ class MenuAdmin extends CWidget
 				'label'=>'Thư viện',
 				'url'=>'/admin/file'
 			),
+            array(
+                'label'=>'Báo cáo',
+                'url'=>'/admin/report/session',
+            ),
         );
         $this->widget('application.widgets.bootstrap.SuAdminMenu', array('items'=>$items));
     }

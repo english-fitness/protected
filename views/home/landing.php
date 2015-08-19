@@ -4,7 +4,28 @@
 <head>
     <meta charset="utf-8" />
     <title>Speak up - Học tiếng Anh online</title>
-    <link rel="stylesheet" href="/media/css/bootstrap/bootstrap.min.css" />
+    <!--favicon-->
+    <link rel="apple-touch-icon" sizes="57x57" href="/media/images/favicons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/media/images/favicons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/media/images/favicons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/media/images/favicons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/media/images/favicons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/media/images/favicons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/media/images/favicons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/media/images/favicons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/media/images/favicons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/media/images/favicons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/media/images/favicons/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/media/images/favicons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/media/images/favicons/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="/media/images/favicons/manifest.json">
+    <link rel="shortcut icon" href="/media/images/favicons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-TileImage" content="/media/images/favicons/mstile-144x144.png">
+    <meta name="msapplication-config" content="/media/images/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <!--favicon-->
+    <link rel="stylesheet" href="/media/css/bootstrap.min.css" />
     <script src="/media/js/jquery/jquery-1.9.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/flick/jquery-ui.css">
@@ -20,9 +41,9 @@
     <script src="/media/home/js/jquery.lightbox/html5lightbox.js"></script>
     <link rel="stylesheet" href="/media/css/jquery/jquery.weekLine.css">
 	<script src="/media/js/bootstrap/bootstrap-dialog.min.js"></script>
-	<link rel="stylesheet" href="/media/home/style/bootstrap/bootstrap-dialog.min.css">
-    <script src="/media/uploads/home/landing/data/testimonials.js"></script>
-    <script src="/media/uploads/home/landing/data/teachers.js"></script>
+	<link rel="stylesheet" href="/media/css/bootstrap/bootstrap-dialog.min.css">
+    <script src="/media/uploads/home/data/testimonials.js"></script>
+    <script src="/media/uploads/home/data/teachers.js"></script>
     <link rel="stylesheet" href="/media/home/style/landing.css" />
 </head>
 <body>
@@ -232,6 +253,9 @@
             <!--register-->
             <!--registration form-->
             <div id="registration" class="body-content">
+                <div class="close-button">
+                    <a href='#'><img src="./img/close-button.png"/></a>
+                </div>
                 <div class="form-container" id="main-form">
                     <div class="inner-form">
                         <!--main form-->
@@ -245,7 +269,7 @@
                                             <small><i></i></small>
                                         </span>
                                     </label>
-                                    <input class="form-attr" data-attr="fullname" type="text" name="PreregisterUser[fullname]" />
+                                    <input class="form-attr" data-attr="fullname" type="text" name="PreregisterUser[fullname]" placeholder="Họ tên"/>
                                 </div>
                                 <div class="form-input">
                                     <label>
@@ -254,7 +278,7 @@
                                             <small><i></i></small>
                                         </span>
                                     </label>
-                                    <input class="form-attr" data-attr="phone" type="text" name="PreregisterUser[phone]" />
+                                    <input class="form-attr" data-attr="phone" type="text" name="PreregisterUser[phone]" placeholder="Số điện thoại"/>
                                 </div>
                                 <div class="form-input">
                                     <label>
@@ -263,7 +287,7 @@
                                             <small><i></i></small>
                                         </span>
                                     </label>
-                                    <input class="form-attr" data-attr="email" type="text" name="PreregisterUser[email]" />
+                                    <input class="form-attr" data-attr="email" type="text" name="PreregisterUser[email]" placeholder="Email"/>
                                 </div>
                                 <div class="form-input text-center" style="padding-top:30px">
                                     <a href="#" class="orange-btn large submit-btn" data-form="main-registration-form" data-validator="validate">ĐĂNG KÝ</a>
@@ -303,7 +327,7 @@
 								</div>
 								<div class="form-input">
 									<label>Mã khuyến mại</label>
-									<input type="text" class="form-attr" name="PreregisterUser[promotion_code]" />
+									<input type="text" class="form-attr" name="PreregisterUser[promotion_code]" placeholder="Mã khuyến mại"/>
 									<p style="font-size:15px"><small><i>Nếu bạn có mã khuyến mại, bạn có thể nhập vào đây để nhận ưu đãi từ speakup.vn</i></small></p>
 								</div>
 							</div>

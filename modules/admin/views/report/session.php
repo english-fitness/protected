@@ -84,9 +84,15 @@
     </div>
 </div>
 <div style="margin-top:10px">
-    <button class="btn btn-primary" id="report_btn">Report</button>
-    <?php if(isset($sessions)):?>
-    <button class="btn btn-primary" style="margin-left:10px" id="report-button">Export</button>
+    <button class="btn btn-primary" id="report_btn">View</button>
+    <?php if(isset($sessions) && $sessions->totalItemCount > 0):?>
+        <?php if($sessions->totalItemCount < 500):?>
+        <button class="btn btn-primary" style="margin-left:10px" id="export-button">Export</button>
+        <?php else:?>
+        <div style="margin-top:10px">
+            <p><i>Export to Excel file is not available due to massive number of records.</i></p>
+        </div>
+        <?php endif;?>
     <?php endif;?>
 </div>
 <?php if(isset($sessions)):?>
@@ -165,64 +171,55 @@
             setParams(requestParams);
         }
         $('#type').change(function(){
-            switch (this.value){
-                case '1':
-                    $('.selector').hide();
-                    $('#dateSelector').show();
-                    break;
-                case '2':
-                    $('.selector').hide();
-                    $('#weekSelector').show();
-                    break;
-                case '3':
-                    $('.selector').hide();
-                    $('#monthSelector').show();
-                    break;
-                case '4':
-                    $('.selector').hide();
-                    $('#dateRangeSelector').show();
-                    break;
-                default:
-                    break;
-            }
+            setSelector(true);
         });
-        $('#type').change();
-        $('#report_btn').click(function(e){
-            e.preventDefault();
-            var type = $('#type').val();
-            switch (type){
-                case '1':
-                    var requestParams = {
-                        type:"date",
-                        date:$('#date').val(),
-                    }
-                    break;
-                case '2':
-                    var requestParams = {
-                        type:"week",
-                        week:$('#week').val(),
-                    }
-                    break;
-                case '3':
-                    var requestParams = {
-                        type:"month",
-                        month:$('#month').val(),
-                        year:$('#year').val(),
-                    }
-                    break;
-                case '4':
-                    var requestParams = {
-                        type:"range",
-                        dateFrom:$('#date_from').val(),
-                        dateTo:$('#date_to').val(),
-                    }
-                    break;
-                default:
-                    break;
+        setSelector(false);
+        
+        
+        $('#report_btn').click(function(){
+            var params = createRequestParams();
+            
+            if (typeof requestParams !== 'undefined' && requestParamsEqual(requestParams, params)){
+                return;
             }
-            window.location.href = "/admin/report/session?" + $.param(requestParams);
+            
+            window.location.href = "/admin/report/session?" + $.param(params);
+        });
+        $('#export-button').click(function(){
+            var params = createRequestParams();
+            
+            params.report = 'session';
+            
+            window.location.href = "/admin/report/export?" + $.param(params);
         });
     });
+    
+    function setSelector(hideExportButton){
+        if(hideExportButton){
+            $('#export-button').hide();
+        }
+        
+        switch (document.getElementById('type').value){
+            case '1':
+                $('.selector').hide();
+                $('#dateSelector').show();
+                break;
+            case '2':
+                $('.selector').hide();
+                $('#weekSelector').show();
+                break;
+            case '3':
+                $('.selector').hide();
+                $('#monthSelector').show();
+                break;
+            case '4':
+                $('.selector').hide();
+                $('#dateRangeSelector').show();
+                break;
+            default:
+                break;
+        }
+    }
     
     function setParams(params){
         switch (params.type){
@@ -247,5 +244,55 @@
             default:
                 break;
         }
+    }
+    
+    function createRequestParams(){
+        var type = $('#type').val();
+        switch (type){
+            case '1':
+                var params = {
+                    type:"date",
+                    date:$('#date').val(),
+                }
+                break;
+            case '2':
+                var params = {
+                    type:"week",
+                    week:$('#week').val(),
+                }
+                break;
+            case '3':
+                var params = {
+                    type:"month",
+                    month:$('#month').val(),
+                    year:$('#year').val(),
+                }
+                break;
+            case '4':
+                var params = {
+                    type:"range",
+                    dateFrom:$('#date_from').val(),
+                    dateTo:$('#date_to').val(),
+                }
+                break;
+            default:
+                break;
+        }
+        
+        return params;
+    }
+    
+    function requestParamsEqual(param1, param2){
+        for (var property in param1) {
+            if (param1.hasOwnProperty(property) && param2.hasOwnProperty(property)) {
+                if (param1[property] != param2[property]){
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        
+        return true
     }
 </script>

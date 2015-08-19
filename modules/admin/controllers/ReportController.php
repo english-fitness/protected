@@ -28,7 +28,7 @@ class ReportController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','session', 'test'),
+				'actions'=>array('index','session', 'test', 'export'),
 				'users'=>array('*'),
 			),
 			
@@ -37,6 +37,27 @@ class ReportController extends Controller
 			),
 		);
 	}
+    
+    private static function getReportHeader($report){
+        switch($report){
+            case 'session':
+                return array(
+                    array('name'=>'Session ID','width'=>'10'),
+                    array('name'=>'Date','width'=>'15'),
+                    array('name'=>'Session Time (Hanoi)','width'=>'20'),
+                    array('name'=>'Session Time (PH)','width'=>'20'),
+                    array('name'=>'Tutor name','width'=>'15'),
+                    array('name'=>'Student name','width'=>'25'),
+                    array('name'=>'Lession Type','width'=>'15'),
+                    array('name'=>'Status','width'=>'12'),
+                    array('name'=>'Tools','width'=>'10'),
+                    array('name'=>'Remarks','width'=>'25'),
+                );
+                break;
+            default:
+                break;
+        }
+    }
 
 	public function actionIndex(){
         $this->subPageTitle = "Báo cáo";
@@ -48,126 +69,82 @@ class ReportController extends Controller
         $this->subPageTitle = "Buổi học";
         
         if (isset($_REQUEST['type'])){
-            $type= $_REQUEST['type'];
-            switch ($type){
-                case 'date':
-                    $dateTimestamp =  strtotime($_REQUEST['date']);
-                    $date = date('Y-m-d 00:00:00', $dateTimestamp);
-                    $dateAfter = date('Y-m-d 00:00:00', strtotime('+1 days', $dateTimestamp));
-                    $dateConstraint = "AND sessions.plan_start >= '" . $date . "' AND sessions.plan_start < '" . $dateAfter . "'";
-                    $requestParams = array(
-                        "type"=>"date",
-                        "date"=>$_REQUEST['date'],
-                    );
-                    break;
-                case 'week':
-                    $week = $_REQUEST['week'];
-                    $year = date('Y');
-                    if ($week < 10){
-                        $week = "0" . $week;
-                    }
-                    $dateStartTimestamp = strtotime($year . 'W' . $week);
-                    $dateStart = date('Y-m-d 00:00:00', $dateStartTimestamp);
-                    $dateEnd = date('Y-m-d 00:00:00', strtotime('+7 days', $dateStartTimestamp));
-                    $dateConstraint = "AND sessions.plan_start >= '" . $dateStart . "' AND sessions.plan_start < '" . $dateEnd . "'";
-                    $requestParams = array(
-                        "type"=>"week",
-                        "week"=>$_REQUEST['week'],
-                    );
-                    break;
-                case 'month':
-                    $month = $_REQUEST['month'];
-                    $year = $_REQUEST['year'];
-                    if ($month < 10){
-                        $month = "0" . $month;
-                    }
-                    $monthStart = date('Y-' . $month . '-01 00:00:00');
-                    $monthEnd = date('Y-' . $month . '-t 00:00:00');
-                    $dateConstraint = "AND sessions.plan_start >= '" . $monthStart . "' AND sessions.plan_start < '" . $monthEnd . "'";
-                    $requestParams = array(
-                        "type"=>"month",
-                        "month"=>$_REQUEST['month'],
-                        "year"=>$_REQUEST['year'],
-                    );
-                    break;
-                case 'range':
-                    $dateFrom = date('Y-m-d 00:00:00', strtotime($_REQUEST['dateFrom']));
-                    $dateTo = date('Y-m-d 00:00:00', strtotime($_REQUEST['dateTo']));
-                    $dateConstraint = "AND sessions.plan_start >= '" . $dateFrom . "' AND sessions.plan_start < '" . $dateTo . "'";
-                    $requestParams = array(
-                        "type"=>"range",
-                        "dateFrom"=>$_REQUEST['dateFrom'],
-                        "dateTo"=>$_REQUEST['dateTo'],
-                    );
+            $sessions = ReportBuilder::getSessionReport($_REQUEST);
+            $requestParams = array_splice($_REQUEST, 0, 1);
+            $this->render('session', array(
+                "sessions"=>$sessions,
+                "requestParams"=>$_REQUEST,
+            ));
+        } else {
+            $this->render('session');
+        }
+    }
+    
+    public function actionExport(){
+        if (isset($_REQUEST['report'])){
+            $report = $_REQUEST['report'];
+            
+            switch ($report){
+                case 'session':
+                    self::sendSessionReport($_REQUEST);
                     break;
                 default:
                     break;
             }
         } else {
-            $this->render('session');
-            exit();
+            throw new CHttpException(400, 'Bad request');
         }
-        
-        $countQuery =   "SELECT count(sessions.id) FROM tbl_session sessions JOIN tbl_course c
-                        ON sessions.course_id = c.id
-                        WHERE c.subject_id = 55
-                        AND sessions.deleted_flag = 0 " . $dateConstraint;
-                        
-        $count = Yii::app()->db->createCommand($countQuery)->queryScalar();
-        
-        $query = "SELECT
-                    sessions.id AS 'session_id',
-                    DATE_FORMAT(sessions.plan_start, '%d/%m/%Y') AS 'session_date',
-                    DATE_FORMAT(sessions.plan_start, '%H:%i') AS 'session_time_hn',
-                    DATE_FORMAT(sessions.plan_start  + INTERVAL 1 HOUR, '%H:%i') AS 'session_time_ph',
-                    teacher.firstname AS 'session_tutor',
-                    CONCAT(student.lastname, ' ' ,student.firstname) AS 'session_student',
-                    CASE
-                        WHEN sessions.type = 1 THEN 'Regular session'
-                        ELSE 'Trial session'
-                    END AS 'session_type',
-                    CASE
-                        WHEN sessions.status = 0 THEN 'Pending'
-                        WHEN sessions.status = 1 THEN 'Approved'
-                        WHEN sessions.status = 2 THEN 'Active'
-                        WHEN sessions.status = 3 THEN 'Ended'
-                        WHEN sessions.status = 4 THEN 'Cancelled'
-                        ELSE 'N/a'
-                    END AS 'session_status',
-                    CASE
-                        WHEN sessions.status = 4 OR note.note = NULL THEN 'X'
-                        WHEN note.using_platform = 1 THEN 'Platform'
-                        ELSE 'Skype'
-                    END AS 'session_tool',
-                    CASE
-                        WHEN note.note <> NULL THEN note.note
-                        ELSE ''
-                    END AS 'session_remarks'
-                FROM tbl_session as sessions JOIN (tbl_session_student JOIN tbl_user student ON tbl_session_student.student_id = student.id)
-                ON sessions.id = tbl_session_student.session_id
-                JOIN tbl_user teacher ON sessions.teacher_id = teacher.id
-                JOIN tbl_course course ON sessions.course_id = course.id
-                LEFT JOIN tbl_session_note note ON sessions.id = note.session_id
-                WHERE course.subject_id = 55 " .
-                $dateConstraint . " " .
-                "AND sessions.deleted_flag = 0
-                ORDER BY sessions.plan_start ASC";
-                
-        $dataProvider = new CSqlDataProvider($query, array(
-            'totalItemCount'=>$count,
-			'pagination'=>array(
-				'pageSize'=>20,
-			),
-            'keyField'=>'session_id',
-        ));
-        
-        $this->render('session', array(
-            "sessions"=>$dataProvider,
-            "requestParams"=>$requestParams,
-        ));
     }
     
-    public function actionTest(){
+    public function sendSessionReport($requestParams){
+        $data = ReportBuilder::getSessionReportExportData($requestParams);
+        
+        $phpExcel = new PHPExcel();
+        
+        $phpExcel->setActiveSheetIndex(0);
+        
+        $col = 0;
+        //remember row index is 1-based
+        $row = 1;
+        
+        $headers = self::getReportHeader('session');
+        
+        $activeSheet = $phpExcel->getActiveSheet();
+        
+        foreach($headers as $header){
+            $activeSheet->setCellValueByColumnAndRow($col, $row, $header['name']);
+            $activeSheet->getColumnDimensionByColumn($col)->setWidth($header['width']);
+            
+            $col++;
+        }
+        
+        $row = 2;
+        foreach($data as $record){
+            $col = 0;
+            foreach ($record as $value){
+                $activeSheet->setCellValueByColumnAndRow($col, $row, $value);
+                $col++;
+            }
+            $row++;
+        }
+        
+        $activeSheet->getStyle( $phpExcel->getActiveSheet()->calculateWorksheetDimension() )
+        ->getAlignment()
+        ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        
+        $activeSheet->setSelectedCells('A1');
+        
+        ob_end_clean();
+        ob_start();
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . ReportBuilder::getReportDate($requestParams) . '.xls"');
+        header('Cache-Control: max-age=0');
+        $writer = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel5');
+        $writer->save('php://output');
+    }
+    
+    public function actionModules(){
         $ex = '';
         foreach (get_loaded_extensions() as $key=>$val){
             $ex .= $key . ": " . $val . "<br>";
