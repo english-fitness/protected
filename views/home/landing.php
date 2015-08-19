@@ -254,7 +254,7 @@
             <!--registration form-->
             <div id="registration" class="body-content">
                 <div class="close-button">
-                    <a href='#'><img src="./img/close-button.png"/></a>
+                    <a href='#'><img src="./media/images/icon/close-button.png"/></a>
                 </div>
                 <div class="form-container" id="main-form">
                     <div class="inner-form">
