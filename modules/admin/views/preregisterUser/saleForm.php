@@ -143,6 +143,24 @@
 			</div>
 		</div>
 	</div>
+    <div class="form-element-container row">
+        <div class="col col-lg-3">
+            <?php echo $form->labelEx($model,'planned_schedule')?>
+        </div>
+        <div class="col col-lg-9">
+            <div class="col col-lg-5 pL0i pR0i">
+				<?php echo $form->textArea($model,'planned_schedule', array('style'=>'height: 100px', 'maxlength'=>"200")); ?>
+			</div>
+			<div class="col col-lg-7 pL0i pR0i">
+				<div class="col col-lg-4 pL0i text-right">
+					<?php echo $form->labelEx($model,'planned_course_package', array('class'=>'mT10')); ?>
+				</div>
+				<div class="col col-lg-8 pL0i pR0i">
+					<?php echo $form->textArea($model,'planned_course_package', array('style'=>'height: 100px', 'maxlength'=>"200")); ?>
+				</div>
+			</div>
+        </div>
+    </div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'sale_note'); ?>
@@ -158,7 +176,7 @@
                 ),
 			)); ?>
 		<?php echo $form->error($model,'sale_note'); ?>
-		</div>	
+		</div>
 	</div>
 	
 </fieldset>
