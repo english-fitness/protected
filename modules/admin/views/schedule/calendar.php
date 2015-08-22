@@ -5,7 +5,7 @@
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/calendar.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/schedule.js"></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.js'></script>
+<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
 
 <style>
 .reservedSlot{
@@ -258,7 +258,7 @@
 			defaultView: 'resourceDay',
 			resources: data.teachers,
 			allDaySlot:false,
-			timezone:"local",
+			timezone:false,
 			axisFormat: 'H:mm',
 			timeFormat: 'H:mm',
 			columnFormat: 'ddd D/M',

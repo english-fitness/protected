@@ -156,7 +156,7 @@ class MenuAdmin extends CWidget
 			),
             array(
                 'label'=>'Báo cáo',
-                'url'=>'/admin/report/session',
+                'url'=>'/admin/report',
             ),
         );
         $this->widget('application.widgets.bootstrap.SuAdminMenu', array('items'=>$items));

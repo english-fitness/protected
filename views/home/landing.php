@@ -47,6 +47,13 @@
     <link rel="stylesheet" href="/media/home/style/landing.css" />
 </head>
 <body>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.4";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
     <div id="main">
         <!--banner-->
         <div id="main-banner">
@@ -63,6 +70,9 @@
                 </div>
             </div>
             <div id="body-banner">
+                <div style="float:right; margin-top:65px; margin-right:50px;">
+                    <div class="fb-like" data-href="https://www.facebook.com/vnspeakup" data-width="450" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
+                </div>
                 <h2 class="banner-title">
                     <span style="color:#245ba7">BẠN MUỐN</span>
                     <span style="color:#fa5a00">GIAO TIẾP TỐT TIẾNG ANH?</span>
@@ -71,10 +81,10 @@
                     <span>NHƯNG BẠN CÒN THIẾU:</span>
                 </h2>
                 <ul id="banner-benefits" class="clearfix">
-					<li>Sự tự tin khi giao tiếp với người nước ngoài</li>
-                    <li>Giảng viên quốc tế giàu kinh nghiệm</li>
-                    <li>Lộ trình học riêng phù hợp nhu cầu sử dụng</li>
-                    <li>Thời gian học tập linh hoạt</li>
+					<li>Môi trường luyện tập với người nước ngoài</li>
+                    <li>Không có người chỉnh cho các lỗi thông thường</li>
+                    <li>Không có người khuyến khích nói tiếng Anh</li>
+                    <li>Sự tự tin khi học tiếng Anh giao tiếp</li>
                 </ul>
                 <div class="text-center" style="padding-top:40px">
                     <a href="#" class="orange-btn large teleporter" data-waypoint="content-start">"Speak up" tiếng Anh 1-1 sẽ giúp bạn</a>
@@ -98,10 +108,10 @@
             <div id="introduction" class="body-content">
                 <div id="benefit-title">
                     <div class="larger-title accent">
-                        <p><span class="orange-darker">"Speak Up"</span><span> là:</span></p>
+                        <p><span class="orange-darker">"Speak up"</span><span> là:</span></p>
                     </div>
                     <div class="smaller-title accent-bg">
-                        <p>hình thức học tiếng Anh giao tiếp trực tuyến 1-1 của Hocmai.vn</p>
+                        <p>hình thức học tiếng Anh giao tiếp trực tuyến 1 thầy 1 trò của Hocmai.vn</p>
                     </div>
                 </div>
                 <div>
@@ -110,32 +120,32 @@
                             <div class="benefit-img">
                                 <img src="/media/home/img/su-benefit-11.png" />
                             </div>
-                            <div class="benefit-txt accent">
-                                <p>1 GIÁO VIÊN DẠY<br>1 MÌNH BẠN</p>
+                            <div class="benefit-txt orange-darker">
+                                <p>100% GIÁO VIÊN QUỐC TẾ<br><span class="accent">sẽ đem lại môi trường tuyệt vời cho bạn nói tiếng anh</span></p>
                             </div>
                         </li>
                         <li>
                             <div class="benefit-img">
                                 <img src="/media/home/img/su-benefit-teacher.png" />
                             </div>
-                            <div class="benefit-txt accent">
-                                <p>100% GIẢNG VIÊN QUỐC TẾ</p>
+                            <div class="benefit-txt orange-darker">
+                                <p>TIẾNG ANH 1-1<br><span class="accent">là điều kiện để giáo viên tập trung sửa cho bạn từng lỗi nhỏ</span></p>
                             </div>
                         </li>
                         <li>
                             <div class="benefit-img">
                                 <img src="/media/home/img/su-benefit-personalize.png" />
                             </div>
-                            <div class="benefit-txt accent">
-                                <p>GIÁO TRÌNH RIÊNG CHO TỪNG HỌC VIÊN</p>
+                            <div class="benefit-txt orange-darker">
+                                <p>TIẾNG ANH 1-1<br><span class="accent">giúp bạn luôn được giáo viên khuyến khích nói trong lớp</span></p>
                             </div>
                         </li>
                         <li>
                             <div class="benefit-img">
                                 <img src="/media/home/img/su-benefit-everywhere.png" />
                             </div>
-                            <div class="benefit-txt accent">
-                                <p>HỌC MỌI LÚC, MỌI NƠI</p>
+                            <div class="benefit-txt orange-darker">
+                                <p>TIẾNG ANH 1-1<br><span class="accent">sẽ xóa bỏ rào cản ngại giao tiếp Tiếng Anh do sợ nói sai của bạn</span></p>
                             </div>
                         </li>
                     </ul>
@@ -197,7 +207,7 @@
                                 </tr>
                             </table>
                             <div class="text-center" style="margin-top:20px; font-size:20px;">
-                                <a href="#" class="orange-btn sm teleporter form-trigger" data-waypoint="register"><strong>HỌC THỬ MIỄN PHÍ</strong></a>
+                                <a href="#" class="orange-btn sm slow-teleporter form-trigger" data-waypoint="register"><strong>HỌC THỬ MIỄN PHÍ</strong></a>
                             </div>
                         </div>
                     </div>
@@ -335,12 +345,15 @@
                         <!--end optional form-->
                     </div>
                 </div>
+                <div class="text-center" style="margin-top:70px; margin-left:-70px">
+                    <a href="#" class="orange-btn large teleporter" data-waypoint="testimonials"><strong>HỌC VIÊN NÓI GÌ VỀ SPEAK UP</strong></a>
+                </div>
             </div>
             <!--end registration form-->
             <!--testimonials-->
             <div id="testimonials" class="body-content">
                 <div class="content-title testimonial-title">
-                    <p style="padding-left:150px">★ ★ ★ HỌC VIÊN NÓI VỀ <span style=" color:#fa5a00">SPEAK UP</span> ★ ★ ★</p>
+                    <p style="padding-left:250px">★ ★ ★ HỌC VIÊN NÓI VỀ <span style=" color:#fa5a00">SPEAK UP</span> ★ ★ ★</p>
                 </div>
                 <div id="testimonial-container">
                 </div>

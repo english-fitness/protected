@@ -207,18 +207,67 @@
 	}
 	
 	function endSession(sessionId){
-		if (confirm('Buổi học này đã kết thúc. Chuyển trạng thái thành kết thúc?')){
-			$.ajax({
+        popup({
+            title:"Kết thúc buổi học",
+            width:"500px",
+            content:function(formCreator){
+                var elementCreator = formCreator.popupForm();
+                var form = formCreator.getForm({id:"sessionEndForm",method:"post","class":"myFormPopup"});
+                
+                var statusOptions = elementCreator.option(<?php echo Session::STATUS_ENDED?>, "Đã kết thúc");
+                statusOptions += elementCreator.option(<?php echo Session::STATUS_CANCELED?>, "Đã hủy");
+                
+                form += formCreator.newRow(
+                    'Trạng thái',
+                    elementCreator.select({id:"status", name:"status"}, statusOptions)
+                );
+                
+                var paidOptions = elementCreator.option(1, "Có");
+                paidOptions += elementCreator.option(0, "Không");
+                
+                form += formCreator.newRow(
+                    'Tính tiền',
+                    elementCreator.select({id:"teacher_paid", name:"teacher_paid"}, paidOptions)
+                );
+                
+                form += formCreator.newRow("&nbsp;","<button id='saveStatus'>Lưu lại</button>" +
+													 "<button id='cancel' onclick='removePopupByID"+'("popupAll")'+";return false;'>Đóng</button>");
+                                                     
+				form += '</form>';
+                
+                return form;
+            }
+        });
+        
+        $('#saveStatus').click(function(e){
+            e.preventDefault();
+            var form = document.getElementById('sessionEndForm');
+            $.ajax({
 				url:'/admin/session/ajaxChangeStatus',
 				type:'post',
 				data:{
 					sessionId:sessionId,
-					status:<?php echo Session::STATUS_ENDED?>,
+					status:document.getElementById('status').value,
 				},
 				success:function(){
 					$.fn.yiiGridView.update("gridView");
+                    removePopupByID('popupAll');
 				}
 			});
-		}
+        });
+        
+		// if (confirm('Buổi học này đã kết thúc. Chuyển trạng thái thành kết thúc?')){
+			// $.ajax({
+				// url:'/admin/session/ajaxChangeStatus',
+				// type:'post',
+				// data:{
+					// sessionId:sessionId,
+					// status:<?php echo Session::STATUS_ENDED?>,
+				// },
+				// success:function(){
+					// $.fn.yiiGridView.update("gridView");
+				// }
+			// });
+		// }
 	}
 </script>

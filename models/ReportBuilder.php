@@ -1,11 +1,19 @@
 <?php
 class ReportBuilder {
+    public static function reportOptions(){
+        return array(
+            'session'=>'Buổi học',
+            'userRegistration'=>'Học sinh đăng ký',
+        );
+    }
+    
     public static function getSessionReport($requestParams){
-        $dateConstraint = self::getDateConstraint($requestParams);
+        $dateConstraint = self::getDateConstraint($requestParams, 'sessions.plan_start');
         $countQuery =   "SELECT count(sessions.id) FROM tbl_session sessions JOIN tbl_course c
                         ON sessions.course_id = c.id
                         WHERE c.subject_id = 55
-                        AND sessions.deleted_flag = 0 " . $dateConstraint;
+                        AND sessions.deleted_flag = 0 
+                        AND " . $dateConstraint;
         
         $count = Yii::app()->db->createCommand($countQuery)->queryScalar();
         
@@ -21,8 +29,34 @@ class ReportBuilder {
     }
     
     public static function getSessionReportExportData($requestParams){
-        $dateConstraint = self::getDateConstraint($requestParams);
+        $dateConstraint = self::getDateConstraint($requestParams, 'sessions.plan_start');
         $query = self::getSessionReportQuery($dateConstraint);
+        
+        return Yii::app()->db->createCommand($query)->queryAll();
+    }
+    
+    public static function getUserRegistrationReport($requestParams){
+        $dateConstraint = self::getDateConstraint($requestParams, 'created_date');
+        $countQuery = "SELECT count(id) FROM tbl_preregister_user
+                       WHERE deleted_flag = 0
+                       AND " . $dateConstraint;
+                       
+        $count = Yii::app()->db->createCommand($countQuery)->queryScalar();
+        
+        $query = self::getUserRegistrationReportQuery($dateConstraint);
+        
+        return new CSqlDataProvider($query, array(
+            'totalItemCount'=>$count,
+            'pagination'=>array(
+                'pageSize'=>20,
+            ),
+            'keyField'=>'email',
+        ));
+    }
+    
+    public static function getUserRegistrationReportExportData($requestParams){
+        $dateConstraint = self::getDateConstraint($requestParams, 'created_date');
+        $query = self::getUserRegistrationReportQuery($dateConstraint);
         
         return Yii::app()->db->createCommand($query)->queryAll();
     }
@@ -54,14 +88,14 @@ class ReportBuilder {
         }
     }
     
-    private static function getDateConstraint($requestParams){
+    private static function getDateConstraint($requestParams, $columnName){
         $type= $requestParams['type'];
         switch ($type){
             case 'date':
                 $dateTimestamp =  strtotime($requestParams['date']);
                 $date = date('Y-m-d 00:00:00', $dateTimestamp);
                 $dateAfter = date('Y-m-d 00:00:00', strtotime('+1 days', $dateTimestamp));
-                $dateConstraint = "AND sessions.plan_start >= '" . $date . "' AND sessions.plan_start < '" . $dateAfter . "'";
+                $dateConstraint = $columnName . " >= '" . $date . "' AND " . $columnName . " < '" . $dateAfter . "'";
                 break;
             case 'week':
                 $week = $requestParams['week'];
@@ -72,7 +106,7 @@ class ReportBuilder {
                 $dateStartTimestamp = strtotime($year . 'W' . $week);
                 $dateStart = date('Y-m-d 00:00:00', $dateStartTimestamp);
                 $dateEnd = date('Y-m-d 00:00:00', strtotime('+7 days', $dateStartTimestamp));
-                $dateConstraint = "AND sessions.plan_start >= '" . $dateStart . "' AND sessions.plan_start < '" . $dateEnd . "'";
+                $dateConstraint = $columnName . " >= '" . $dateStart . "' AND " . $columnName . " < '" . $dateEnd . "'";
                 break;
             case 'month':
                 $month = $requestParams['month'];
@@ -82,12 +116,12 @@ class ReportBuilder {
                 }
                 $monthStart = $year . '-' . $month . '-01 00:00:00';
                 $monthEnd = date($year . '-' . $month . '-t 00:00:00');
-                $dateConstraint = "AND sessions.plan_start >= '" . $monthStart . "' AND sessions.plan_start < '" . $monthEnd . "'";
+                $dateConstraint = $columnName . " >= '" . $monthStart . "' AND " . $columnName . " < '" . $monthEnd . "'";
                 break;
             case 'range':
                 $dateFrom = date('Y-m-d 00:00:00', strtotime($requestParams['dateFrom']));
                 $dateTo = date('Y-m-d 00:00:00', strtotime($requestParams['dateTo']));
-                $dateConstraint = "AND sessions.plan_start >= '" . $dateFrom . "' AND sessions.plan_start < '" . $dateTo . "'";
+                $dateConstraint = $columnName . " >= '" . $dateFrom . "' AND " . $columnName . " < '" . $dateTo . "'";
                 break;
             default:
                 break;
@@ -130,10 +164,17 @@ class ReportBuilder {
                 JOIN tbl_user teacher ON sessions.teacher_id = teacher.id
                 JOIN tbl_course course ON sessions.course_id = course.id
                 LEFT JOIN tbl_session_note note ON sessions.id = note.session_id
-                WHERE course.subject_id = 55 " .
-                $dateConstraint . " " .
+                WHERE course.subject_id = 55
+                AND " . $dateConstraint . " " .
                 "AND sessions.deleted_flag = 0
                 ORDER BY sessions.plan_start ASC";
+    }
+    
+    private static function getUserRegistrationReportQuery($dateConstraint){
+        return  "SELECT fullname, phone, email, sale_note FROM tbl_preregister_user
+                WHERE deleted_flag = 0
+                AND " . $dateConstraint . " " .
+                "ORDER BY created_date DESC";
     }
 }
 ?>
