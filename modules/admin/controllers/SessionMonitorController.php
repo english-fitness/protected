@@ -28,7 +28,7 @@ class SessionMonitorController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index', 'courseView', 'sessionView', 'update'),
+                'actions'=>array('index', 'courseView', 'sessionView', 'update', 'student'),
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions

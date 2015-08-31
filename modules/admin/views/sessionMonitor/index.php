@@ -75,6 +75,12 @@ function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $no
                    'type'  => 'raw',
                 ),
                 array(
+                   'header' => 'Học sinh',
+                   'value'=>'implode(", ", Session::model()->findByPk($data["id"])->getAssignedStudentsArrs("/admin/student/view/id"))',
+                   'type'  => 'raw',
+                   'htmlOptions'=>array('style'=>'min-width:150px; max-width:400px;'),
+                ),
+                array(
                    'header'=>'Ngày học',
                    'value'=>'date("d/m/Y", strtotime($data["plan_start"]))',
                    'htmlOptions'=>array('style'=>'width:100px; text-align:center;vertical-align:top;'),
