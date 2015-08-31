@@ -13,14 +13,10 @@
 	text-align: center;
 	background: buttonface;
 }
-button.schedule{
+select.schedule{
 	border-radius:0px !important;
 	-moz-appearance:none !important;
 	-webkit-appearance:none !important;
-    width: 100%;
-    height: 35px;
-    outline: none;
-    border: solid rgba(120,120,120,0.35) 1px;
 }
 .bulk-select{
 	cursor:pointer !important;
@@ -32,7 +28,6 @@ button.schedule{
 }
 .booked{
 	background-color:lime !important;
-    cursor:not-allowed !important;
 }
 </style>
 
@@ -74,6 +69,18 @@ button.schedule{
 			<button id='next-week' class='btn' style='float:left; height:36px'>Next</button>
 		</div>
 	</div>
+	<!--
+	<div class="form-group" style='float:right'>
+		<div style='margin-top:25px'>
+			<button id='bulk-action-activate' class='btn' style='float:left; height:36px'>Multiple Select</button>
+			<select id='bulk-select' class="form-control" style="width:120px; float:left; margin: 0px 10px 10px 10px; display:none">
+				<option value='0'>N/a</option>
+				<option value='1' style='background-color:yellow'>Available</option>
+			</select>
+			<button id='bulk-action-confirm' class='btn' style='float:left; height:36px; display:none'>OK</button>
+		</div>
+	</div>
+	-->
 	<div>
 		<table id="scheduleRegistration" class="table-calendar" style="clear:both">
 			<?php
@@ -102,7 +109,14 @@ button.schedule{
 					echo "<tr>";
 					echo "<td class='calendar-td calendar-time'>" . $startTime[$i] . " - " . $endTime[$i] . "</td>";
 					for ($d = 0; $d < 7; $d++){
-						echo "<td class='calendar-td'><button id='" . ($timeslotCount*$d + $i) . "' class='schedule' disabled></button></td>";
+						echo "<td class='calendar-td'>
+								<div class='bulk-select' timeslot=" . ($timeslotCount*$d + $i) . ">
+									<select id='" . ($timeslotCount*$d + $i) . "' class='schedule' disabled>
+										<option value='0'>N/a</option>
+										<option value='1' style='background-color:yellow'>Available</option>
+									</select>
+								</div>
+							 </td>";
 					}
 					echo "</tr>";
 				}
@@ -124,26 +138,8 @@ button.schedule{
 	</div>
 </div>
 <script>
-    var options = [
-        {
-            text:'N/a',
-            color:'white',
-        },
-        {
-            text:'Available',
-            color:'yellow',
-        }
-    ];
 	var modifying = false;
 	var currentWeekSelection;
-    
-    function array_rotate(array, index){
-        if (index == array.length - 1){
-            return 0;
-        } else {
-            return parseInt(index) + 1;
-        }
-    }
 	
 	$(document).ready(function(){
 		setHeader()
@@ -156,12 +152,12 @@ button.schedule{
 			return false;
 		});
 		
-		$('.schedule').on('click', function(){
-            nextValue = array_rotate(options, this.value);
-            nextOption = options[nextValue];
-            this.value = nextValue;
-            this.innerHTML = nextOption.text;
-            $(this).css("background-color", nextOption.color);
+		$('.schedule').on('change', function(){
+			if ($(this).val() == 1){
+				$(this).css("background-color", "yellow");
+			} else {
+				$(this).css("background-color", "white");
+			}
 			modifying = true;
 		});
 		
@@ -221,6 +217,39 @@ button.schedule{
 			return false;
 		};
 		bindSearchBoxEvent("teacherSearchBox", searchTeacher);
+		// $('.bulk-select').click(function(){
+			// console.log('ya');
+			// var select = $(this);
+			// if (!select.hasClass('bulk-selected')){
+				// select.addClass('bulk-selected');
+			// } else {
+				// select.removeClass('bulk-selected');
+			// }
+		// });
+		// $('#bulk-action-activate').click(function(e){
+			// e.preventDefault();
+			// if (!$(this).hasClass('btn-primary')){
+				// $(this).html('Close');
+				// $(this).addClass('btn-primary');
+				// $('#bulk-select').show();
+				// $('#bulk-action-confirm').zIndex(999999);
+				
+				// for (var i = 0; i < 147; i++){
+					// var select = $('#'+i);
+					// if (!select.hasClass('booked')){
+						// select.prop('disabled', true);
+						// $('.bulk-select[timeslot='+select.attr('id')+']').show();
+					// }
+				// }
+			// } else {
+				// $(this).html('Multiple Select');
+				// $(this).removeClass('btn-primary');
+				// $('#bulk-select').hide();
+				// $('#bulk-action-confirm').zIndex(-999);
+				
+			// }
+			// return false;
+		// });
 	});
 	
 	$("a").on('click', function(e){
@@ -266,7 +295,7 @@ button.schedule{
 				}
 			}
 		}
-        
+		
 		$('#saved').hide();
 		$('#saving').show();
 		$.ajax({
@@ -302,9 +331,16 @@ button.schedule{
 		loading.created();
 		for (var i = 0; i < 147; i++){
 			var selection = document.getElementById(i);
+			selection.disabled = true;
 			selection.style.background = '';
-            selection.disabled = true;
-            $(selection).removeClass('booked');
+			var options = selection.options;
+			for (var j in options){
+				if (options[j].value == 0){
+					options[j].text = 'N/a';
+				} else {
+					options[j].text = 'Available';
+				}
+			}
 		}
 		$.ajax({
 			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/getTeacherSchedule',
@@ -332,28 +368,22 @@ button.schedule{
 			slotNumbers = [];
 		} else {
 			slotNumbers = data.timeslots.split(/[,;]\s*/);
-            console.log(slotNumbers);
 		}
 		
 		var selected = document.getElementById('week_start').value.replace(/-/g, '/');
 		var thisWeek = '<?php echo $thisWeek;?>'.replace(/-/g, '/');
 		for (var i = 0; i < 147; i++){
 			var selection = document.getElementById(i);
-            if (selected >= thisWeek){
-                selection.disabled = false;
-                selection.style.background = "white";
-            }
-			if (slotNumbers.indexOf(""+i) > -1){
+			if (slotNumbers.indexOf(''+i) > -1){
 				selection.value = 1;
 				selection.style.background = "yellow";
-                selection.innerHTML = "Available";
 			} else {
 				selection.value = 0;
-                selection.innerHTML = "N/a";
 			}
-			if (bookedSessions.indexOf(i) > -1){
-                selection.disabled = true;
-                selection.innerHTML = "Booked";
+			if (selected >= thisWeek && bookedSessions.indexOf(i) == -1){
+				selection.disabled = false;
+			} else if (bookedSessions.indexOf(i) > -1){
+				selection.options[selection.selectedIndex].text = "Booked";
 				$(selection).addClass('booked');
 			}
 		}
@@ -379,7 +409,7 @@ button.schedule{
 		return day + '-' + month + '-' + result.getFullYear();
 	}
 	
-	//display loading message, copy from student.js
+	//display loading message, copy from student js
 	var loading =[];
 	loading.created = function(message)
 	{

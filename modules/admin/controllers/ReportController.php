@@ -38,6 +38,17 @@ class ReportController extends Controller
 		);
 	}
     
+    private function sendReportFile($phpExcel, $filename){
+        ob_end_clean();
+        ob_start();
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
+        header('Cache-Control: max-age=0');
+        $writer = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel5');
+        $writer->save('php://output');
+    }
+    
     private static function getReportHeader($report){
         switch($report){
             case 'session':
@@ -59,7 +70,9 @@ class ReportController extends Controller
                     array('name'=>'Họ tên','width'=>'30'),
                     array('name'=>'Số điện thoại','width'=>'20'),
                     array('name'=>'Email','width'=>'35'),
-                    array('name'=>'Ghi chú','width'=>'60'),
+                    array('name'=>'Ghi chú','width'=>'40'),
+                    array('name'=>'Lịch học', 'width'=>'40'),
+                    array('name'=>'Học phí', 'width'=>'30'),
                 );
                 break;
             default:
@@ -166,14 +179,7 @@ class ReportController extends Controller
         
         $activeSheet->setSelectedCells('A1');
         
-        ob_end_clean();
-        ob_start();
-        
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="session_' . ReportBuilder::getReportDate($requestParams) . '.xls"');
-        header('Cache-Control: max-age=0');
-        $writer = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel5');
-        $writer->save('php://output');
+        $this->sendReportFile($phpExcel, 'session_' . ReportBuilder::getReportDate($requestParams));
     }
     
     public function sendUserRegistrationReport($requestParams){
@@ -222,14 +228,7 @@ class ReportController extends Controller
         
         $activeSheet->setSelectedCells('A1');
         
-        ob_end_clean();
-        ob_start();
-        
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="user_registration_' . ReportBuilder::getReportDate($requestParams) . '.xls"');
-        header('Cache-Control: max-age=0');
-        $writer = PHPExcel_IOFactory::createWriter($phpExcel, 'Excel5');
-        $writer->save('php://output');
+        $this->sendReportFile($phpExcel, 'user_registration_' . ReportBuilder::getReportDate($requestParams));
     }
     
     public function actionModules(){

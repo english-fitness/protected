@@ -4,13 +4,10 @@ class RegisterController extends Controller
 {
     public  function  init()
     {
-        Yii::app()->language = 'vi';//Config admin language is Vietnamese
-        $this->layout = '//layouts/login';
+        Yii::app()->language = 'vi';
+        $this->layout = '//layouts/blank';
     }
-	/**
-	 * This is the default 'index' action that is invoked
-	 * when an action is not explicitly requested by users.
-	 */
+
 	public function actionContact()
 	{
 		$success = false;
@@ -53,5 +50,11 @@ class RegisterController extends Controller
 		
 		$this->renderJSON(array("success"=>$success, "model"=>$model));
 	}
-	
+    
+    public function actionGetPreregisterUser(){
+        if (isset($_REQUEST['id'])){
+            $user = PreregisterUser::model()->findByPk($_REQUEST['id']);
+            $this->renderJSON(array('user'=>$user));
+        }
+    }
 }

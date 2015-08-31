@@ -163,13 +163,11 @@
 			<div id="divAssignedStudents" class="class-subjects">
 				<?php 
 					foreach($availableStudents as $student):
-						$className = Student::model()->displayClass($student->id);
-						if($className==null) $className = 'Lớp chưa xác định';
 				?>
 					<div class="assignStudents">
 						<span class="fL w10">&nbsp;</span><input type="checkbox" checked="checked" disabled="disabled"
 						 class="fL mL10" name="assignStudents[]" value="<?php echo $student->id?>"/>
-						<span class="fL">&nbsp;<?php echo $student->lastname.' '.$student->firstname.' ('.$student->email.') - '.$className;?></span>
+						<span class="fL">&nbsp;<?php echo $student->lastname.' '.$student->firstname.' ('.$student->email.')';?></span>
 						<?php if($model->status!=Course::STATUS_ENDED):?>
 						<a class="pL20 errorMessage" href="javascript: unassignStudent(<?php echo $student->id.','.$model->id?>);" con>Hủy gán học sinh</a>
 						<?php endif;?>

@@ -11,8 +11,8 @@ $this->breadcrumbs=array(
 <h2 class="mT10">Chi tiết giáo viên</h2>
 <?php 
 	$gender = array(0=>'Chưa xác định', 1=>'Nữ', 2=>'Nam');//Gender options
-	$tokenCode = sha1($model->id.$model->role.$model->email);
-	$loginByUrl = Yii::app()->getRequest()->getBaseUrl(true)."/login/byUrl?email=".$model->email."&token=".$tokenCode;
+	$tokenCode = sha1($model->id.$model->role.$model->username);
+	$loginByUrl = Yii::app()->getRequest()->getBaseUrl(true)."/login/byUrl?username=".$model->username."&token=".$tokenCode;
 ?>
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,

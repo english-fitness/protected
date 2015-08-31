@@ -77,26 +77,37 @@ class StudentController extends Controller
 		if(isset($_POST['User']))
 		{
 			$student_values = $_POST['User'];
-			$student_profile_values = $_POST['Student'];//Student profile values
+			// $student_profile_values = $_POST['Student'];//Student profile values
 			$student_values['role'] = User::ROLE_STUDENT;
 			if(trim($student_values['birthday'])==''){
 				unset($student_values['birthday']);
 			}
 			$model->attributes= $student_values;
 			$model->passwordSave = $student_values['password'];
+            if ($model->attributes['status'] == User::STATUS_OFFICIAL_USER){
+                $student->official_start_date = date('Y-m-d');
+            }
 			if($model->save()){
-				$student->attributes = $student_profile_values;
+				// $student->attributes = $student_profile_values;
+                if (isset($_REQUEST['preregisterId'])){
+                    $student->preregister_id = $_REQUEST['preregisterId'];
+                }
 				$student->user_id = $model->id;
 				if($student->save()){
 					$this->redirect(array('index'));
 				}
 			}
 		}
-
-		$this->render('create',array(
-			'model'=>$model,
+        
+        $params = array(
+            'model'=>$model,
 			'student'=>$student,
-		));
+        );
+        if(isset($_REQUEST['preregisterId'])){
+            $preregisterUser = PreregisterUser::model()->findByPk($_REQUEST['preregisterId']);
+            $params['preregisterUser'] = $preregisterUser;
+        }
+		$this->render('create',$params);
 	}
 
 	/**
@@ -114,7 +125,7 @@ class StudentController extends Controller
 		if(isset($_POST['User']))
 		{
 			$studentValues = $_POST['User'];
-			$studentProfileValues = $_POST['Student'];//Student profile values
+			// $studentProfileValues = $_POST['Student'];//Student profile values
 			if(trim($studentValues['birthday'])==''){
 				unset($studentValues['birthday']);
 			}
@@ -123,13 +134,20 @@ class StudentController extends Controller
 				$changePassStatus = false;
 				unset($studentValues['password']);//Not save password
 			}
-			$model->attributes = $studentValues;			
+            $unofficialUser = false;
+            if ($model->status != User::STATUS_OFFICIAL_USER){
+                $unofficialUser = true;
+            }
+			$model->attributes = $studentValues;
+            if ($unofficialUser && $model->attributes['status'] == User::STATUS_OFFICIAL_USER){
+                $student->official_start_date = date('Y-m-d');
+            }
 			if($changePassStatus){
 				$model->passwordSave = $model->password;
 				$model->repeatPassword = $model->passwordSave;
 			}
 			if($model->save()){
-				$student->attributes = $studentProfileValues;
+				// $student->attributes = $studentProfileValues;
 				$student->user_id = $model->id;
 				if($student->save()){
 					$this->redirect(array('index'));

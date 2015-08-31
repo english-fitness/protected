@@ -241,6 +241,7 @@ class User extends CActiveRecord
 			'sessionAttendees' => array(self::HAS_MANY, 'SessionAttendee', 'user_id'),
 			'sessionComments' => array(self::HAS_MANY, 'SessionComment', 'user_id'),
 			'tblSubjects' => array(self::MANY_MANY, 'Subject', 'tbl_teacher_ability(user_id, subject_id)'),
+            'student'=>array(self::HAS_ONE, 'Student', 'user_id'),
 		);
 	}
 
@@ -535,10 +536,6 @@ class User extends CActiveRecord
         if(count($users)>0){
         	foreach($users as $user){
         		$className = "";//Default class name
-        		if($userRole==User::ROLE_STUDENT){
-	            	$className = Student::model()->displayClass($user->id);
-		            $className = ($className!=NULL)? " - ".$className: " - Lớp ---";
-        		}
 	            $UsersToAssign[] = array(
                     'role' => $user->role,
 	           		'id' => $user->id,

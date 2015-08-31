@@ -45,13 +45,13 @@
 </div>
 <?php
 	$courseId = $course->id;
-	function createEditButton($sessionId, $status, $usingPlatform, $note){
+	function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $note){
 		if ($status != Session::STATUS_ENDED){
 			return "";
 		}
 		
 		if ($usingPlatform != ""){
-			$onclick = "editSessionNote(" . $sessionId . "," . $usingPlatform . "," . json_encode($note) . "); return false;";
+			$onclick = "editSessionNote(" . $sessionId . "," . $usingPlatform . "," . $paidSession . "," . json_encode($note) . "); return false;";
 		} else {
 			$onclick = "editSessionNote(" . $sessionId . "); return false;";
 		}
@@ -125,6 +125,11 @@
 		   'value'=>'$data["using_platform"] ? "Yes" : ($data["using_platform"] === "0" ? "No" : "")',
 		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
 		),
+        array(
+           'header' => 'Trạng thái tính tiền',
+           'value'=>'$data["paid_session"] ? "Paid" : ($data["paid_session"] === "0" ? "Unpaid" : "")',
+           'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
+        ),
 		array(
 		   'header' => 'Ghi chú',
 		   'value'=>'nl2br($data["note"])',
@@ -133,14 +138,14 @@
 		),
 		array(
 			'header'=>'',
-			'value'=>'createEditButton($data["id"], $data["status"], $data["using_platform"], $data["note"])',
+			'value'=>'createEditButton($data["id"], $data["status"], $data["using_platform"], $data["paid_session"], $data["note"])',
 			'type'=>'raw',
 			'htmlOptions'=>array('style'=>'width:40px; text-align:center;vertical-align:top;'),
 		),
 	),
 )); ?>
 <script>
-	function editSessionNote(sessionId, using_platform, note){
+	function editSessionNote(sessionId, using_platform, paid_session, note){
 		if (using_platform == undefined){
 			var title = "Ghi chú mới"
 			using_platform = 1;
@@ -164,6 +169,15 @@
 					"Buổi học trên hệ thống",
 					elementCreator.select({id:"using_platform",name:"SessionNote[using_platform]"},using_platform_options)
 				);
+                
+                var paidOptions = elementCreator.option(1, "Có", paid_session == 1 ? "selected" : "");
+                paidOptions += elementCreator.option(0, "Không", paid_session == 0 ? "selected" : "");
+                
+                form += formCreator.newRow(
+                    'Tính tiền',
+                    elementCreator.select({id:"teacher_paid", name:"SessionNote[paid_session]"}, paidOptions)
+                );
+                
 				form += formCreator.newHtmlRow(
 					'<div class="label" style="vertical-align:top">Ghi chú</div>' +
 					'<div class="value">' + elementCreator.textarea({id:"note",name:"SessionNote[note]"}, note) + "</div>"
@@ -220,14 +234,6 @@
                 form += formCreator.newRow(
                     'Trạng thái',
                     elementCreator.select({id:"status", name:"status"}, statusOptions)
-                );
-                
-                var paidOptions = elementCreator.option(1, "Có");
-                paidOptions += elementCreator.option(0, "Không");
-                
-                form += formCreator.newRow(
-                    'Tính tiền',
-                    elementCreator.select({id:"teacher_paid", name:"teacher_paid"}, paidOptions)
                 );
                 
                 form += formCreator.newRow("&nbsp;","<button id='saveStatus'>Lưu lại</button>" +

@@ -24,7 +24,7 @@
     <meta name="msapplication-TileImage" content="/media/images/favicons/mstile-144x144.png">
     <meta name="msapplication-config" content="/media/images/favicons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
-    <!--favicon-->
+    <!--end favicon-->
     <link rel="stylesheet" href="/media/css/bootstrap.min.css" />
     <script src="/media/js/jquery/jquery-1.9.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
@@ -129,7 +129,7 @@
                                 <img src="/media/home/img/su-benefit-teacher.png" />
                             </div>
                             <div class="benefit-txt orange-darker">
-                                <p>TIẾNG ANH 1-1<br><span class="accent">là điều kiện để giáo viên tập trung sửa cho bạn từng lỗi nhỏ</span></p>
+                                <p>GIÁO VIÊN LUÔN SÁT CÁNH<br><span class="accent">giúp bạn sửa lỗi nhanh</span></p>
                             </div>
                         </li>
                         <li>
@@ -137,7 +137,7 @@
                                 <img src="/media/home/img/su-benefit-personalize.png" />
                             </div>
                             <div class="benefit-txt orange-darker">
-                                <p>TIẾNG ANH 1-1<br><span class="accent">giúp bạn luôn được giáo viên khuyến khích nói trong lớp</span></p>
+                                <p>GIÁO TRÌNH THIẾT KẾ RIÊNG<br><span class="accent">phù hợp với trình độ của từng học viên</span></p>
                             </div>
                         </li>
                         <li>
@@ -145,7 +145,7 @@
                                 <img src="/media/home/img/su-benefit-everywhere.png" />
                             </div>
                             <div class="benefit-txt orange-darker">
-                                <p>TIẾNG ANH 1-1<br><span class="accent">sẽ xóa bỏ rào cản ngại giao tiếp Tiếng Anh do sợ nói sai của bạn</span></p>
+                                <p>GIÁO VIÊN TÂM HUYẾT<br><span class="accent">tạo không gian cởi mở giúp bạn tự tin khi giao tiếp tiếng Anh</span></p>
                             </div>
                         </li>
                     </ul>
@@ -256,13 +256,13 @@
                         </div>
                     </div>
                     <div class="text-center" style="padding-top:40px;">
-                        <a href="#" class="orange-btn large teleporter" data-waypoint="registration">ĐĂNG KÝ NGAY</a>
+                        <a href="#" class="orange-btn large slow-teleporter form-trigger" data-waypoint="testimonials">ĐĂNG KÝ NGAY</a>
                     </div>
                 </div>
             </div>
             <!--register-->
             <!--registration form-->
-            <div id="registration" class="body-content">
+            <div id="registration" class="body-content" style="display:none">
                 <div class="form-container" id="main-form">
                     <div class="close-button">
                         <a href='#'><img src="./media/images/icon/close-button.png"/></a>
@@ -315,6 +315,7 @@
                             </div>
 							<!--end main form-->
 							<!--optional form-->
+                            <!--
 							<div class="optional-form">
 								<div class="title">Thông tin thêm (không bắt buộc)</div>
 								<div class="form-input">
@@ -341,8 +342,9 @@
 									<p style="font-size:15px"><small><i>Nếu bạn có mã khuyến mại, bạn có thể nhập vào đây để nhận ưu đãi từ speakup.vn</i></small></p>
 								</div>
 							</div>
+                            -->
+                            <!--end optional form-->
 						</form>
-                        <!--end optional form-->
                     </div>
                 </div>
                 <div class="text-center" style="margin-top:70px; margin-left:-70px">

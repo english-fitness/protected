@@ -53,6 +53,11 @@
                     'htmlOptions'=>array('style'=>'text-align:center'),
                 ),
                 array(
+                    'header'=>'Payment Status',
+                    'value'=>'$data["paid_session"]',
+                    'htmlOptions'=>array('style'=>'text-align:center'),
+                ),
+                array(
                     'header'=>'Remarks',
                     'value'=>'$data["session_remarks"]',
                     'htmlOptions'=>array('style'=>'text-align:center; width:300px'),

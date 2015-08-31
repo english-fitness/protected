@@ -3,9 +3,17 @@
 /* @var $model User */
 /* @var $form CActiveForm */
 ?>
+
+<?php
+$createFromRegistration = ($this->action->id == 'create' && isset($preregisterUser));
+?>
 <script type="text/javascript">
 	function cancel(){
+        <?php if($createFromRegistration):?>
+        window.location = '<?php echo Yii::app()->baseUrl; ?>/admin/preregisterUser';
+        <?php else:?>
 		window.location = '<?php echo Yii::app()->baseUrl; ?>/admin/student/';
+        <?php endif;?>
 	}
 	//Remove student
 	function removeStudent(studentId){
@@ -48,7 +56,6 @@
     });
 </script>
 <div class="form">
-
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'user-form',
 	// Please note: When you enable ajax validation, make sure the corresponding
@@ -216,25 +223,24 @@
 		</div>
 	</div>
 	<?php endif;?>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($student,'short_description'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->textArea($student,'short_description',array_merge($readonlyAttrs, array('rows'=>6, 'cols'=>5, 'style'=>'height:6em;'))); ?>
-			<?php echo $form->error($student,'short_description'); ?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($student,'description'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->textArea($student,'description',array_merge($readonlyAttrs, array('rows'=>6, 'cols'=>50, 'style'=>'height:10em'))); ?>
-			<?php echo $form->error($student,'description'); ?>
-		</div>
-	</div>
 </fieldset>
-<?php $this->endWidget(); ?>
-
 </div><!-- form -->
+<?php $this->endWidget(); ?>
+<?php if ($createFromRegistration):
+    $fullname = $preregisterUser->fullname;
+    $firstSpace = strpos($fullname, ' ');
+    if ($firstSpace > -1){
+        $lastname = substr($fullname, 0, $firstSpace);
+        $firstname = substr($fullname, $firstSpace + 1);
+    } else {
+        $firstname = $fullname;
+        $lastname = '';
+    }
+?>
+    <script>
+        document.getElementById('User_email').value = '<?php echo $preregisterUser->email?>';
+        document.getElementById('User_lastname').value = '<?php echo $lastname?>';
+        document.getElementById('User_firstname').value = '<?php echo $firstname?>';
+        document.getElementById('User_phone').value = '<?php echo $preregisterUser->phone?>';
+    </script>
+<?php endif;?>

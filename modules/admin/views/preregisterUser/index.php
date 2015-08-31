@@ -67,7 +67,7 @@ $this->breadcrumbs=array(
 		array(
 		   'name'=>'sale_user_id',
 		   'value'=>'($data->sale_user_id)? User::model()->displayUserById($data->sale_user_id):""',
-		   'filter'=>Student::model()->getSalesUserOptions(false, "", false),
+           'filter'=>Student::model()->getSalesUserOptions(false, "", false),
 		   'htmlOptions'=>array('style'=>'width:150px;'),
 		),
 		array(

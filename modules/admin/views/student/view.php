@@ -13,6 +13,7 @@ $this->breadcrumbs=array(
 	$gender = array(0=>'Chưa xác định', 1=>'Nữ', 2=>'Nam');//Gender options
 	$tokenCode = sha1($model->id.$model->role.$model->email);
 	$loginByUrl = Yii::app()->getRequest()->getBaseUrl(true)."/login/byUrl?email=".$model->email."&token=".$tokenCode;
+    $student = Student::model()->findByAttributes(array('user_id'=>$model->id))
 ?>
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
@@ -61,24 +62,10 @@ $this->breadcrumbs=array(
 		   'name'=>'Đăng nhập từ URL',
 		   'value'=>(Yii::app()->user->isAdmin())?$loginByUrl:"Bạn ko được phép xem!",
 		),
-		array(
-		   'name'=>'Trạng thái Sale',
-		   'value'=>$studentProfile->sale_status,
-		   'type'=>'raw',
-		),		
-		array(
-		   'name'=>'Người tư vấn',
-		   'value'=>$studentProfile->displaySaleUser($studentProfile->sale_user_id),
-		),
-		array(
-		   'name'=>'Ngày tư vấn cuối',
-		   'value'=>($studentProfile->last_sale_date)? date('d/m/Y', strtotime($studentProfile->last_sale_date)):"",
-		),
-		array(
-		   'name'=>'Ghi chú tư vấn',
-		   'value'=>$studentProfile->sale_note,
-		   'type'=>'raw',
-		),
+        array(
+            'name'=>'Thành viên chính thức từ ngày',
+            'value'=>date('d-m-Y', strtotime($student->official_start_date)),
+        ),
 		array(
 		   'name'=>'created_user_id',
 		   'value'=>($model->created_user_id)? User::model()->displayUserById($model->created_user_id):"",

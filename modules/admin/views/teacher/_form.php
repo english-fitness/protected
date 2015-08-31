@@ -14,7 +14,7 @@
 		}
 	}
 	function changePassword(){
-		var checkConfirm = confirm("Bạn có chắc chắn muốn thay đổi mật khẩu của học sinh này?");
+		var checkConfirm = confirm("Bạn có chắc chắn muốn thay đổi mật khẩu của tài khoản này?");
 		if(checkConfirm){
 			$("#changePassword").show();
 			$("#changePasswordStatus").val('1');
@@ -72,13 +72,13 @@
 			<?php echo $form->error($model,'username'); ?>
 			<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
 			<div class="fL">
-				<a class="fs12 errorMessage" href="javascript: changeToStudent(<?php echo $model->id;?>);">Chuyển giáo viên này thành role học sinh?</a>
-			</div>
-			<div class="fR">
-				<a class="fs12 errorMessage" href="javascript: changePassword();">Cho phép admin thay đổi mật khẩu của giáo viên này?</a>
-				<input type="hidden" id="changePasswordStatus" name="changeStatus" value="<?php echo $changeStatus;?>"/>
+				<a class="fs12 errorMessage" href="javascript: changeToStudent(<?php echo $model->id;?>);">Chuyển giáo viên này thành học sinh</a>
 			</div>
 			<?php endif;?>
+            <div class="fR">
+				<a class="fs12 errorMessage" href="javascript: changePassword();">Cho phép thay đổi mật khẩu</a>
+				<input type="hidden" id="changePasswordStatus" name="changeStatus" value="<?php echo $changeStatus;?>"/>
+			</div>
         </div>		
 	</div>
 	<div class="form-element-container row">

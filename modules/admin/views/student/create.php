@@ -8,4 +8,13 @@ $this->breadcrumbs=array(
 );
 ?>
 
-<?php $this->renderPartial('_form', array('model'=>$model, 'student'=>$student)); ?>
+<?php 
+$params = array(
+    'model'=>$model,
+    'student'=>$student,
+);
+if(isset($preregisterUser)){
+    $params['preregisterUser'] = $preregisterUser;
+}
+$this->renderPartial('_form', $params);
+?>

@@ -40,8 +40,31 @@ class SessionMonitorController extends Controller
             ),
         );
     }
+    
+    public function actionIndex(){
+        $this->subPageTitle = "Theo dõi buổi học";
+        
+        if (isset($_REQUEST['type'])){
+            try {
+                $sessions = SessionNote::getSessionNote($_REQUEST);
+                
+                $requestParams = $_REQUEST;
+                array_splice($requestParams, 0, 1);
+                
+                $this->render('index', array(
+                    'sessions'=>$sessions,
+                    'requestParams'=>$requestParams,
+                ));
+            } catch (Exception $e){
+                throw new CHttpException('500', 'Internal Server Error');
+            }
+        }
+        else {
+            $this->render('index');
+        }
+    }
 	
-	public function actionIndex(){
+	public function actionStudent(){
 		$this->subPageTitle = "Theo dõi buổi học";
 		$this->loadJQuery = false;
 		
@@ -59,7 +82,7 @@ class SessionMonitorController extends Controller
 			}
 		}
 		
-		$this->render('index', array(
+		$this->render('student', array(
 			'model'=>$student,
 		));
 	}
@@ -99,7 +122,7 @@ class SessionMonitorController extends Controller
 			$ended = false;
 		}
 		
-		$sessions = SessionNote::getSessionNote($_GET['cid'], $using_platform, $ended);
+		$sessions = SessionNote::getSessionNoteByCourse($_GET['cid'], $using_platform, $ended);
 		$course = Course::model()->findByPk($_GET['cid']);
 		
 		$this->render('sessionView', array(

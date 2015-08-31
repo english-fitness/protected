@@ -41,6 +41,9 @@
         	<button class="btn btn-primary" name="form_action" type="submit"><i class="icon-save"></i>Lưu lại</button>
         	<button class="btn btn-default cancel" name="form_action" type="button" onclick="cancel();"><i class="icon-undo"></i>Bỏ qua</button>
         </div>
+        <a href="/admin/student/create?preregisterId=<?php echo $model->id?>">
+            <button class="btn btn-default" name="form_action" type="button"><i class="icon-plus"></i>Tạo tài khoản</button>
+        </a>
     </div>
 </div>
 <?php 

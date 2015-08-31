@@ -136,7 +136,8 @@ class MenuAdmin extends CWidget
                 'label'=>'Thống kê buổi học',
                 'url'=>'/admin/TeacherPayment',
 				'items'=>array(
-                    array('label'=>'Học sinh', 'url'=>array('/admin/sessionMonitor')),
+                    array('label'=>'Buổi học', 'url'=>array('/admin/sessionMonitor')),
+                    array('label'=>'Học sinh', 'url'=>array('/admin/sessionMonitor/student')),
 					array(
 						'label'=>'Giáo viên',
 						'url'=>array('#'),

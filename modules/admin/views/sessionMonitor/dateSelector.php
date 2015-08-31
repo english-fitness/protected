@@ -13,14 +13,7 @@
     }
 </style>
 <div id="reportParameter" class="clearfix">
-    <div id="reportSelector" style="float:left">
-        <select id="reportType" style="width:200px">
-            <?php foreach(ReportBuilder::reportOptions() as $key=>$value):?>
-            <option value="<?php echo $key?>"><?php echo $value?></option>
-            <?php endforeach;?>
-        </select>
-    </div>
-    <div id="param" style="width:150px; float:left; margin-left:20px;">
+    <div id="param" style="width:150px; float:left">
         <select name="type" id="type">
             <option value="1">Ngày</option>
             <option value="2">Tuần</option>
@@ -89,15 +82,6 @@
 </div>
 <div style="margin-top:10px">
     <button class="btn btn-primary" id="report_btn">View</button>
-    <?php if(isset($recordCount) && $recordCount > 0):?>
-        <?php if($recordCount < $maxRecordNumber || !isset($maxRecordNumber)):?>
-        <button class="btn btn-primary" style="margin-left:10px" id="export-button">Export</button>
-        <?php else:?>
-        <div style="margin-top:10px">
-            <p><i>Export to Excel file is not available due to massive number of records.</i></p>
-        </div>
-        <?php endif;?>
-    <?php endif;?>
 </div>
 <script>
     <?php if(isset($requestParams)):?>
@@ -115,9 +99,9 @@
             setParams(requestParams);
         }
         $('#type').change(function(){
-            setSelector(true);
+            setSelector();
         });
-        setSelector(false);
+        setSelector();
         
         
         $('#report_btn').click(function(){
@@ -127,20 +111,11 @@
                 return;
             }
             
-            window.location.href = "/admin/report?" + $.param(params);
-        });
-        $('#export-button').click(function(){
-            var params = createRequestParams();
-            
-            window.location.href = "/admin/report/export?" + $.param(params);
+            window.location.href = "/admin/sessionMonitor?" + $.param(params);
         });
     });
     
-    function setSelector(hideExportButton){
-        if(hideExportButton){
-            $('#export-button').hide();
-        }
-        
+    function setSelector(){
         switch (document.getElementById('type').value){
             case '1':
                 $('.selector').hide();
@@ -190,25 +165,21 @@
     
     function createRequestParams(){
         var type = $('#type').val();
-        var report = document.getElementById('reportType').value;
         switch (type){
             case '1':
                 var params = {
-                    report: report,
                     type:"date",
                     date:$('#date').val(),
                 }
                 break;
             case '2':
                 var params = {
-                    report: report,
                     type:"week",
                     week:$('#week').val(),
                 }
                 break;
             case '3':
                 var params = {
-                    report: report,
                     type:"month",
                     month:$('#month').val(),
                     year:$('#year').val(),
@@ -216,7 +187,6 @@
                 break;
             case '4':
                 var params = {
-                    report: report,
                     type:"range",
                     dateFrom:$('#date_from').val(),
                     dateTo:$('#date_to').val(),

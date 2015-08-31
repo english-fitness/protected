@@ -108,12 +108,18 @@ class LoginController extends Controller
 	//Connect & login by studentUrl
 	public function actionByUrl()
 	{
-		if(isset($_GET['email']) && isset($_GET['token'])){
-			$user = User::model()->findByAttributes(array('email'=>$_GET['email']));
+		if(isset($_GET['username']) && isset($_GET['token'])){
+			$user = User::model()->findByAttributes(array('username'=>$_GET['username']));
 			if(isset($user->id) && $user->role){
-				$tokenCode = sha1($user->id.$user->role.$user->email);
+				$tokenCode = sha1($user->id.$user->role.$user->username);
+                // exit($_GET['token']==$tokenCode ? "access granted" : "access denied");
 				if($_GET['token']==$tokenCode){
+                    // exit(User::model()->UserApiIdentity($user->id) ? "access granted" : "access denied");
 					if(User::model()->UserApiIdentity($user->id)){
+                        $user->active_session = $_COOKIE['PHPSESSID'];
+                        $user->save();
+                        
+                        $_SESSION['active_session'] = $user->active_session;
 						$this->redirect('/site/loggedRedirect');
 					}
 				}

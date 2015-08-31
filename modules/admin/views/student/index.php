@@ -21,13 +21,8 @@ $this->breadcrumbs=array(
 </div>
 <?php 
 	$statusOptions = $model->statusOptions(); unset($statusOptions['-1']);
-	$careStatusOptions = array(""=>"") + Student::model()->careStatusOptions();
 	$createdDateFilter = Yii::app()->controller->getQuery('User[created_date]', '');
 	$birthdayFilter = Yii::app()->controller->getQuery('User[birthday]', '');
-	$classId = Yii::app()->controller->getQuery('Student[class_id]', '');
-	$saleStatusFilter = Yii::app()->controller->getQuery('Student[sale_status]', '');
-	$selectedSaleUserId = Yii::app()->controller->getQuery('Student[sale_user_id]', '');
-	$selectedCareStatus = Yii::app()->controller->getQuery('Student[care_status]', '');
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$model->search(),
@@ -76,6 +71,11 @@ $this->breadcrumbs=array(
 		   'filter'=>'<input type="text" value="'.$createdDateFilter.'" name="User[created_date]">',
 		   'htmlOptions'=>array('style'=>'width:100px;'),
 		),
+        array(
+            'header'=>'Học viên chính thức từ ngày',
+            'value'=>'$data->student->official_start_date',
+            'htmlOptions'=>array('style'=>'text-align:center;width:100px'),
+        ),
 		/*
 		array(
 		   'header'=>'Đơn',
@@ -85,11 +85,12 @@ $this->breadcrumbs=array(
 		),
 		*/
 		array(
-		   'header'=>'Khóa',
-		   'value'=>'Student::model()->displayCourseLink($data->id, "")',
-		   'htmlOptions'=>array('style'=>'width:20px; text-align:center;'),
+		   'header'=>'Khóa học',
+		   'value'=>'Student::model()->displayCourseLink($data->id, "khóa học")',
+		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
 		   'type' => 'raw',
 		),
+        /*
 		array(
 		   'header'=>'Trạng thái Sale',
 		   'value'=>'Student::model()->displaySaleStatus($data->id)',
@@ -107,7 +108,7 @@ $this->breadcrumbs=array(
 		   'value'=>'Student::model()->displaySaleUser($data->id)',
 		   'filter'=>CHtml::dropDownList('Student[sale_user_id]', $selectedSaleUserId, Student::model()->getSalesUserOptions(false), array()),
 		   'htmlOptions'=>array('style'=>'width:120px;'),
-		),
+		),*/
 		array(
 			'class'=>'CButtonColumn',
 			'buttons'=>array (
@@ -124,11 +125,13 @@ $this->breadcrumbs=array(
 		        ),
     		),
 		),
+        /*
 		array(
 		   'header'=>'Tư vấn',
 		   'value'=>'CHtml::link("Tư vấn", "/admin/student/saleUpdate/id/".$data->id, array("class"=>"icon-plus pL20", "style"=>"width:75px;"))',
 		   'filter'=>false, 'type'  => 'raw',
 		   'htmlOptions'=>array('style'=>'width:60px;'),
 		),
+        */
 	),
 )); ?>
