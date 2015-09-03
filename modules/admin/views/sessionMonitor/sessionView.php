@@ -72,12 +72,16 @@
 		$now = date('Y-m-d H:i');
 		$status = $session['status'];
         $teacher_paid = !empty($session['teacher_paid']) ? $session['teacher_paid'] : 1;
-		if($status != Session::STATUS_ENDED && $status != Session::STATUS_CANCELED && $endTime < $now){
-			return '<a href="#" onclick="endSession(' . $session['id'] . '); return false;" class="changeStatusLink" style="color:orange>' .
+		if($status != Session::STATUS_ENDED && $status != Session::STATUS_CANCELED){
+            if ($endTime < $now){
+                return '<a href="#" onclick="endSession(' . $session['id'] . '); return false;" class="changeStatusLink" style="color:orange">' .
 						Session::statusOptions()[$status] . '<br>(Hết giờ)' .
 					'</a>';
+            } else {
+                return Session::statusOptions()[$status];
+            }
 		} else {
-			$redText = $status == Session::STATUS_CANCELED ? 'style="color:red"' : '';
+            $redText = $status == Session::STATUS_CANCELED ? 'style="color:red"' : '';
 			return '<a href="#" onclick="endSession(' . $session['id'] . ', ' . $session['status'] . ', ' . $teacher_paid . '); return false;" class="changeStatusLink" ' . $redText . '>' .
 						Session::statusOptions()[$status] .
 					'</a>';
