@@ -116,7 +116,7 @@ class LoginController extends Controller
 				if($_GET['token']==$tokenCode){
                     // exit(User::model()->UserApiIdentity($user->id) ? "access granted" : "access denied");
 					if(User::model()->UserApiIdentity($user->id)){
-                        $user->active_session = $_COOKIE['PHPSESSID'];
+                        $user->active_session = uniqid("", true);
                         $user->save();
                         
                         $_SESSION['active_session'] = $user->active_session;

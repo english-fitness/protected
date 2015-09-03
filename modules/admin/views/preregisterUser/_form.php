@@ -47,7 +47,7 @@
         <div class="btn-group">
         	<button class="btn btn-primary" name="form_action" type="submit"><i class="icon-save"></i>Lưu lại</button>
         	<button class="btn btn-default cancel" name="form_action" type="button" onclick="cancel();"><i class="icon-undo"></i>Bỏ qua</button>
-        	<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin() && $model->status==PreregisterUser::STATUS_PENDING):?>
+        	<?php if(!$model->isNewRecord):?>
         	<button class="btn btn-default remove" name="form_action" type="button" onclick="removePreUser(<?php echo $model->id;?>);"><i class="btn-remove"></i>Xóa đăng ký</button>
         	<?php endif;?>
         </div>
@@ -116,16 +116,18 @@
 					<?php echo $form->error($model,'phone'); ?>
 			</div>
 		</div>
-	</div>	
-	<div class="form-element-container row">
+	</div>
+    <div class="form-element-container row">
 		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'status'); ?>
+			<?php echo $form->labelEx($model,'source'); ?>
 		</div>
 		<div class="col col-lg-9">
-			<?php echo $form->dropDownList($model,'status', $model->statusOptions(), array()); ?>
-			<?php echo $form->error($model,'status'); ?>
+			<div class="col col-lg-5 pL0i pR0i">
+				<?php echo $form->textField($model,'source', array_merge($readOnlyAttrs, array('size'=>30,'maxlength'=>30))); ?>
+					<?php echo $form->error($model,'source'); ?>
+			</div>
 		</div>
-	</div>
+	</div>	
 </fieldset>
 <div class="clearfix h20">&nbsp;</div>	
 <fieldset>

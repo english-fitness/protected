@@ -88,6 +88,7 @@ class SessionController extends Controller
 				$session->status = Session::STATUS_ENDED;
 				$session->actual_duration = $actualDuration;
 				$session->actual_end = $actual_end;
+                $session->teacher_paid = true;
 				
 				if ($session->save()){
 					$success = true;

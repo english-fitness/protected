@@ -156,11 +156,11 @@ class ReportBuilder {
                         ELSE 'Skype'
                     END AS 'session_tool',
                     CASE
-                        WHEN note.paid_session = 1 THEN 'Paid'
+                        WHEN sessions.teacher_paid = 1 THEN 'Paid'
                         ELSE 'Unpaid'
                     END AS 'paid_session',
                     CASE
-                        WHEN note.note <> NULL THEN note.note
+                        WHEN note.note IS NOT NULL THEN note.note
                         ELSE ''
                     END AS 'session_remarks'
                 FROM tbl_session as sessions JOIN (tbl_session_student JOIN tbl_user student ON tbl_session_student.student_id = student.id)

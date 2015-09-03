@@ -11,7 +11,7 @@ function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $no
 		}
 		
 		if ($usingPlatform != ""){
-			$onclick = "editSessionNote(" . $sessionId . "," . $usingPlatform . "," . $paidSession . "," . json_encode($note) . "); return false;";
+			$onclick = "editSessionNote(" . $sessionId . "," . $usingPlatform . "," . json_encode($note) . "); return false;";
 		} else {
 			$onclick = "editSessionNote(" . $sessionId . "); return false;";
 		}
@@ -31,12 +31,16 @@ function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $no
 		$endTime = date('Y-m-d H:i', strtotime('+' . $session['plan_duration'] . ' minutes', strtotime($session['plan_start'])));
 		$now = date('Y-m-d H:i');
 		$status = $session['status'];
+        $teacher_paid = !empty($session['teacher_paid']) ? $session['teacher_paid'] : 1;
 		if($status != Session::STATUS_ENDED && $status != Session::STATUS_CANCELED && $endTime < $now){
-			return '<a href="#" onclick="endSession(' . $session['id'] . '); return false;" class="changeStatusLink">' .
+			return '<a href="#" onclick="endSession(' . $session['id'] . '); return false;" class="changeStatusLink" style="color:orange">' .
 						Session::statusOptions()[$status] . '<br>(Hết giờ)' .
 					'</a>';
 		} else {
-			return ClsAdminHtml::displaySessionStatus($session['id'], $status);
+            $redText = $status == Session::STATUS_CANCELED ? 'style="color:red"' : '';
+			return '<a href="#" onclick="endSession(' . $session['id'] . ', ' . $session['status'] . ', ' . $teacher_paid . '); return false;" class="changeStatusLink" ' . $redText . '>' .
+						Session::statusOptions()[$status] .
+					'</a>';
 		}
 	}
 ?>
@@ -98,12 +102,12 @@ function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $no
                 ),
                 array(
                    'header' => 'Buổi học trên hệ thống',
-                   'value'=>'$data["using_platform"] ? "Yes" : ($data["using_platform"] === "0" ? "No" : "")',
+                   'value'=>'$data["using_platform"] ? "Có" : ($data["using_platform"] === "0" ? "Không" : "")',
                    'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
                 ),
                 array(
-                   'header' => 'Trạng thái tính tiền',
-                   'value'=>'$data["paid_session"] ? "Paid" : ($data["paid_session"] === "0" ? "Unpaid" : "")',
+                   'header' => 'Tính tiền cho giáo viên',
+                   'value'=>'$data["teacher_paid"] ? "Paid" : ($data["teacher_paid"] === "0" ? "Unpaid" : "")',
                    'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
                 ),
                 array(
@@ -114,7 +118,7 @@ function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $no
                 ),
                 array(
                     'header'=>'',
-                    'value'=>'createEditButton($data["id"], $data["status"], $data["using_platform"], $data["paid_session"], $data["note"])',
+                    'value'=>'createEditButton($data["id"], $data["status"], $data["using_platform"], $data["teacher_paid"], $data["note"])',
                     'type'=>'raw',
                     'htmlOptions'=>array('style'=>'width:40px; text-align:center;vertical-align:top;'),
                 ),
@@ -123,7 +127,7 @@ function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $no
     }
 ?>
 <script>
-	function editSessionNote(sessionId, using_platform, paid_session, note){
+	function editSessionNote(sessionId, using_platform, note){
 		if (using_platform == undefined){
 			var title = "Ghi chú mới"
 			using_platform = 1;
@@ -141,20 +145,12 @@ function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $no
 				
 				var form = formCreator.getForm({id:"sessionNoteForm",method:"post","class":"myFormPopup"});
 				
-				var using_platform_options = elementCreator.option("1", "Yes", using_platform == 1 ? "selected" : "");
-				using_platform_options += elementCreator.option("0", "No", using_platform == 0 ? "selected" : "");
+				var using_platform_options = elementCreator.option("1", "Có", using_platform == 1 ? "selected" : "");
+				using_platform_options += elementCreator.option("0", "Không", using_platform == 0 ? "selected" : "");
 				form += formCreator.newRow(
 					"Buổi học trên hệ thống",
 					elementCreator.select({id:"using_platform",name:"SessionNote[using_platform]"},using_platform_options)
 				);
-                console.log(paid_session);
-                var paidOptions = elementCreator.option(1, "Có", paid_session == 1 ? "selected" : "");
-                paidOptions += elementCreator.option(0, "Không", paid_session == 0 ? "selected" : "");
-                
-                form += formCreator.newRow(
-                    'Tính tiền',
-                    elementCreator.select({id:"teacher_paid", name:"SessionNote[paid_session]"}, paidOptions)
-                );
                 
 				form += formCreator.newHtmlRow(
 					'<div class="label" style="vertical-align:top">Ghi chú</div>' +
@@ -198,7 +194,7 @@ function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $no
 		});
 	}
 	
-	function endSession(sessionId){
+	function endSession(sessionId, status, teacher_paid){
         popup({
             title:"Kết thúc buổi học",
             width:"500px",
@@ -206,19 +202,27 @@ function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $no
                 var elementCreator = formCreator.popupForm();
                 var form = formCreator.getForm({id:"sessionEndForm",method:"post","class":"myFormPopup"});
                 
-                var statusOptions = elementCreator.option(<?php echo Session::STATUS_ENDED?>, "Đã kết thúc");
-                statusOptions += elementCreator.option(<?php echo Session::STATUS_CANCELED?>, "Đã hủy");
+                var statusOptions = elementCreator.option(<?php echo Session::STATUS_ENDED?>, "Đã kết thúc", status == <?php echo Session::STATUS_ENDED?> ? 'selected' : '');
+                statusOptions += elementCreator.option(<?php echo Session::STATUS_CANCELED?>, "Đã hủy", status == <?php echo Session::STATUS_CANCELED?> ? 'selected' : '');
                 
                 form += formCreator.newRow(
                     'Trạng thái',
                     elementCreator.select({id:"status", name:"status"}, statusOptions)
                 );
                 
+                var paidOptions = elementCreator.option(1, "Có", teacher_paid == 1 ? 'selected' : '');
+                paidOptions += elementCreator.option(0, "Không", teacher_paid == 0 ? 'selected' : '');
+                
+                form += formCreator.newRow(
+                    'Tính tiền cho giáo viên?',
+                    elementCreator.select({id:"teacher_paid", name:"teacher_paid"}, paidOptions)
+                );
+                
                 form += formCreator.newRow("&nbsp;","<button id='saveStatus'>Lưu lại</button>" +
 													 "<button id='cancel' onclick='removePopupByID"+'("popupAll")'+";return false;'>Hủy</button>");
                                                      
-				form += '</form>';
-                
+                form += '</form>';
+                 
                 return form;
             }
         });
@@ -231,6 +235,7 @@ function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $no
 				type:'post',
 				data:{
 					sessionId:sessionId,
+                    teacher_paid:document.getElementById('teacher_paid').value,
 					status:document.getElementById('status').value,
 				},
 				success:function(){

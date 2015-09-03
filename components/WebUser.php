@@ -7,6 +7,15 @@ class WebUser extends CWebUser
 
 	public $loginDuration;
 
+    function init(){
+        parent::init();
+        
+        $this->_model = User::model()->findByPk($this->id);
+    }
+    
+    function getModel(){
+        return $this->_model;
+    }
 	// Return first name.
 	// access it by Yii::app()->user->first_name
 	function getFirstName()
@@ -73,11 +82,11 @@ class WebUser extends CWebUser
 	
 	// Load user model.
 	protected function loadUser($id=null) {
-		if($this->_model===null)
-		{
-			if($id!==null)
-				$this->_model=User::model()->findByPk($id);
-		}
+		// if($this->_model===null)
+		// {
+			// if($id!==null)
+				// $this->_model=User::model()->findByPk($id);
+		// }
 		return $this->_model;
 	}
 

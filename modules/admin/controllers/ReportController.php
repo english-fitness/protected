@@ -62,6 +62,7 @@ class ReportController extends Controller
                     array('name'=>'Lession Type','width'=>'15'),
                     array('name'=>'Status','width'=>'12'),
                     array('name'=>'Tools','width'=>'10'),
+                    array('name'=>'Payment Status','width'=>'25'),
                     array('name'=>'Remarks','width'=>'25'),
                 );
                 break;

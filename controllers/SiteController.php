@@ -141,7 +141,7 @@ class SiteController extends Controller
 				$success = true;
 				
 				$user = User::model()->findByPk(Yii::app()->user->id);
-				$user->active_session = $_COOKIE['PHPSESSID'];
+				$user->active_session = uniqid("", true);
 				$user->save();
 				
 				$_SESSION['active_session'] = $user->active_session;

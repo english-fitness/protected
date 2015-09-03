@@ -28,7 +28,7 @@ class PreregisterUserController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','create', 'update', 'saleUpdate'),
+				'actions'=>array('index','view','create', 'update', 'saleUpdate', 'importData'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -68,6 +68,7 @@ class PreregisterUserController extends Controller
 		{
 			$preUserValues = $_POST['PreregisterUser'];
 			$model->attributes = $preUserValues;
+            $model->sale_user_id = Yii::app()->user->id;
 			if($model->save()){
 				$this->redirect(array('index'));
 			}
@@ -173,6 +174,89 @@ class PreregisterUserController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    public function actionImportData(){
+        $columns = array(
+            'fullname',
+            'birthday',
+            'source',
+            'phone',
+            'email',
+            'sale_note',
+            'planned_schedule',
+            'planned_course_package',
+        );
+        
+        if (isset($_FILES['spreadsheet'])){
+            if ($_FILES['spreadsheet']['name'] && !$_FILES['spreadsheet']['error']){
+                $uploadedFile = $_FILES['spreadsheet']['name'];
+                $extension = strtoupper(pathinfo($uploadedFile, PATHINFO_EXTENSION));
+                if ($extension == 'XLS' || $extension == 'XLSX'){
+                    try{
+                        $spreadsheet = $_FILES['spreadsheet']['tmp_name'];
+                        $inputFileType = PHPExcel_IOFactory::identify($spreadsheet);
+                        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+                        $phpExcel = $objReader->load($spreadsheet);
+                        
+                        $sheet = $phpExcel->getSheet(0);
+                        $highestRow = $sheet->getHighestRow();
+                        $highestColumn = $sheet->getHighestColumn();
+                        $colCount = sizeof($columns);
+                        
+                        if (PHPExcel_Cell::columnIndexFromString($highestColumn) >= $colCount){
+                            $transaction = Yii::app()->db->beginTransaction();
+                            
+                            try{
+                                $rowData = $sheet->rangeToArray('A2:' . $highestColumn . $highestRow, NULL, TRUE, FALSE);
+                                foreach ($rowData as $row){
+                                    $attributes = array();
+                                    for ($i = 0; $i < $colCount; $i++){
+                                        $attributes[$columns[$i]] = $row[$i];
+                                    }
+                                    $preregisterUser = new PreregisterUser;
+                                    $preregisterUser->attributes = $attributes;
+                                    
+                                    if (!$preregisterUser->save()){
+                                        throw new Exception("Error saving records");
+                                    }
+                                }
+                                $transaction->commit();
+                                $this->renderJSON(array(
+                                    'success'=>true,
+                                ));
+                            } catch (Exception $se){
+                                $transaction->rollBack();
+                                $this->renderJSON(array(
+                                    'success'=>false,
+                                    'error'=>'error_saving_records',
+                                ));
+                            }
+                        }
+                    } catch (Exception $e){
+                        $this->renderJSON(array(
+                            'success'=>false,
+                            'error'=>'error_processing_file',
+                        ));
+                    }
+                } else {
+                    $this->renderJSON(array(
+                        'success'=>false,
+                        'error'=>'file_extension_not_allowed',
+                    ));
+                }
+            } else {
+                $this->renderJSON(array(
+                    'success'=>false,
+                    'error'=>$_FILES['spreadsheet']['error'],
+                ));
+            }
+        } else {
+            $this->renderJSON(array(
+                'success'=>false,
+                'error'=>'no_file_found',
+            ));
+        }
+    }
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.

@@ -22,10 +22,6 @@ $this->breadcrumbs=array(
 		),
 		'timerange',
 		'promotion_code',
-		array(
-		   'name'=>'status',
-		   'value'=>$model->statusOptions($model->status),
-		),
 		'sale_status',
 		array(
 		   'name'=>'sale_note',

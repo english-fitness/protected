@@ -18,8 +18,8 @@ class SessionNote extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('using_platform, paid_session', 'required'),
-			array('using_platform, paid_session', 'numerical', 'integerOnly'=>true),
+			array('using_platform', 'required'),
+			array('using_platform', 'numerical', 'integerOnly'=>true),
 			array('note', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -172,7 +172,7 @@ class SessionNote extends CActiveRecord
                         
         $count = Yii::app()->db->createCommand($countQuery)->queryScalar();
         
-        $query = "  SELECT s.id, subject, teacher_id, plan_start, plan_duration, status, note, using_platform, paid_session
+        $query = "  SELECT s.id, subject, teacher_id, plan_start, plan_duration, status, note, using_platform, teacher_paid
                     FROM (
                         tbl_session s LEFT JOIN tbl_session_note n ON s.id = n.session_id
                     ) JOIN tbl_session_student ss ON s.id = ss.session_id
@@ -211,7 +211,7 @@ class SessionNote extends CActiveRecord
 					  
 		$count = Yii::app()->db->createCommand($countQuery)->queryScalar();
 		
-		$query = "SELECT tbl_session.id, subject, teacher_id, plan_start, plan_duration, status, note, using_platform, paid_session " .
+		$query = "SELECT tbl_session.id, subject, teacher_id, plan_start, plan_duration, status, note, using_platform, teacher_paid " .
 				 "FROM (tbl_session " . $joinType . " tbl_session_note " .
 				 "ON tbl_session.id = tbl_session_note.session_id) " .
 				 "JOIN tbl_session_student ON tbl_session.id = tbl_session_student.session_id " .

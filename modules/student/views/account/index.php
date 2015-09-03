@@ -94,20 +94,6 @@
             </div>
         </div>
 		
-		<!-- PENDING REMOVE
-        <div class="row">
-            <label  class="col-sm-2 control-label">Mô tả ngắn về bản thân: </label>
-            <div class=" col-sm-7">
-				<p> <?php echo $student->short_description;?></p>
-            </div>
-        </div>
-        <div class="row">
-            <label  class="col-sm-2 control-label">Mô tả chi tiết bản thân: </label>
-            <div class=" col-sm-7">
-				<p> <?php echo $student->description;?></p>
-            </div>
-        </div>
-		-->
         <div class="row">
             <label class=" col-sm-1" style="min-width:120px;">&nbsp;</label>
             <div class=" col-sm-7">

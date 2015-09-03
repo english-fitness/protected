@@ -59,7 +59,7 @@ class Session extends CActiveRecord
 			array('course_id, subject, plan_start', 'required'),
 			array('course_id, teacher_id, plan_duration, status, type, payment_type, payment_status, final_price, total_of_student, record', 'numerical', 'integerOnly'=>true),
 			array('subject', 'length', 'max'=>256),
-			array('content, whiteboard, actual_start, actual_end, actual_duration, modified_date, payment_status, final_price, total_of_student, deleted_flag, teacher_entered_time, status_note,created_user_id,modified_user_id', 'safe'),
+			array('content, whiteboard, actual_start, actual_end, actual_duration, modified_date, payment_status, final_price, total_of_student, deleted_flag, teacher_entered_time, status_note,created_user_id,modified_user_id, teacher_paid', 'safe'),
 			
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

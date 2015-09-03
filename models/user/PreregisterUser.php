@@ -28,10 +28,6 @@
  */
 class PreregisterUser extends CActiveRecord
 {
-	//Const for status of PreUser
-    const STATUS_PENDING = 0;//Pending status
-    const STATUS_APPROVED = 1;//Approved status
-    
 	//Const for role of user
 	const TYPE_USER_STUDENT = 0;//Type Student  user
 	const TYPE_USER_TEACHER = 1;//Type teacher user
@@ -68,7 +64,7 @@ class PreregisterUser extends CActiveRecord
 			array('phone', 'length', 'max'=>20),
 			array('sale_status', 'length', 'max'=>80),
 			array('birthday, last_sale_date', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
-			array('birthday, status, care_status, sale_note, planned_schedule, planned_course_package, last_sale_date, created_user_id, modified_user_id, created_date, promotion_code, modified_date, deleted_flag', 'safe'),
+			array('birthday, status, care_status, sale_note, planned_schedule, planned_course_package, last_sale_date, created_user_id, modified_user_id, created_date, promotion_code, modified_date, deleted_flag, source', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, email, fullname, birthday, gender, address, phone, promotion_code, status, care_status, sale_status, sale_note, sale_user_id, last_sale_date, created_date, modified_date', 'safe', 'on'=>'search'),
@@ -103,13 +99,13 @@ class PreregisterUser extends CActiveRecord
 			'id' => 'ID',
 			'email' => 'Email',
 			'fullname' => 'Tên đầy đủ',
+            'source'=>'Nguồn',
 			'birthday' => 'Ngày sinh',
 			'gender' => 'Giới tính',
 			'phone' => 'Số điện thoại',
 			'weekday' => 'Ngày học',
 			'timerange' => 'Giờ học',
 			'promotion_code' => 'Mã khuyến mại',
-			'status' => 'Trạng thái',
 			'care_status' => 'Trạng thái chăm sóc',
 			'sale_status' => 'Trạng thái Sale',
 			'sale_note' => 'Ghi chú tư vấn',
@@ -146,11 +142,11 @@ class PreregisterUser extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('fullname',$this->fullname,true);
+        $criteria->compare('source',$this->source,true);
 		$criteria->compare('birthday',$this->birthday,true);
 		$criteria->compare('gender',$this->gender);
 		$criteria->compare('phone',$this->phone,true);
 		$criteria->compare('promotion_code',$this->promotion_code);
-		$criteria->compare('status',$this->status);
 		$criteria->compare('care_status',$this->care_status,true);
 		$criteria->compare('sale_status',$this->sale_status,true);
 		$criteria->compare('sale_note',$this->sale_note,true);
@@ -207,21 +203,6 @@ class PreregisterUser extends CActiveRecord
 		return $userActionLog->saveActionLog($this->tableName(), $this->id, true, true);
 	}
 	
-	//Display Status options
-	public function statusOptions($status=null)
-	{
-		$statusOptions = array(
-			self::STATUS_PENDING => 'Đang chờ',
-			self::STATUS_APPROVED => 'Đã xác nhận',
-		);
-		if($status==null){
-			return $statusOptions;
-		}elseif(isset($statusOptions[$status])){
-			return $statusOptions[$status];
-		}
-		return null;
-	}
-	
 	/**
 	 * Care status label statuses
 	 */
@@ -255,4 +236,16 @@ class PreregisterUser extends CActiveRecord
 		}
 		return $weekdayString;
 	}
+    
+    public static function getSelectFilter($column){
+        $query = "SELECT DISTINCT(" . $column . ") FROM tbl_preregister_user WHERE " . $column . " IS NOT NULL";
+        $results = Yii::app()->db->createCommand($query)->queryColumn();
+        
+        $options = array();
+        foreach($results as $item){
+            $options[$item] = $item;
+        }
+        
+        return $options;
+    }
 }

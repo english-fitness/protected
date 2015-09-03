@@ -117,7 +117,7 @@
 					<?php $salesUserOptions = Student::model()->getSalesUserOptions(true, "---Người tư vấn---");?>
 					<?php echo $form->dropDownList($model,'sale_user_id', $salesUserOptions, $disabledAttrs); ?>
 					<?php echo $form->error($model,'sale_user_id'); ?>
-					<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
+					<?php if(!$model->isNewRecord):?>
 					<div class="fR">
 						<a class="fs12 errorMessage" href="javascript: allowChangeSaleUser();">Thay đổi người chăm sóc, tư vấn!</a>
 					</div>
