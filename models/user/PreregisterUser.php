@@ -56,7 +56,7 @@ class PreregisterUser extends CActiveRecord
 		// will receive user inputs.
 		$modelRules = array(
 			array('fullname, phone', 'required'),
-			array('gender, sale_user_id, status', 'numerical', 'integerOnly'=>true),
+			array('gender, sale_user_id', 'numerical', 'integerOnly'=>true),
 			array('phone', 'match', 'pattern'=>'/^\+{0,1}[0-9\-\s]{8,16}$/'),
 			array('email', 'length', 'max'=>128),
 			array('email', 'email'),
@@ -64,10 +64,10 @@ class PreregisterUser extends CActiveRecord
 			array('phone', 'length', 'max'=>20),
 			array('sale_status', 'length', 'max'=>80),
 			array('birthday, last_sale_date', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
-			array('birthday, status, care_status, sale_note, planned_schedule, planned_course_package, last_sale_date, created_user_id, modified_user_id, created_date, promotion_code, modified_date, deleted_flag, source', 'safe'),
+			array('birthday, care_status, sale_note, planned_schedule, planned_course_package, last_sale_date, created_user_id, modified_user_id, created_date, promotion_code, modified_date, deleted_flag, source', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, email, fullname, birthday, gender, address, phone, promotion_code, status, care_status, sale_status, sale_note, sale_user_id, last_sale_date, created_date, modified_date', 'safe', 'on'=>'search'),
+			array('id, email, fullname, birthday, gender, address, phone, promotion_code, care_status, sale_status, sale_note, sale_user_id, last_sale_date, created_date, modified_date', 'safe', 'on'=>'search'),
 			array('created_date', 'default', 'value'=>date('Y-m-d H:i:s'), 'setOnEmpty'=>false, 'on'=>'insert'),
 		);
 		//Update model rules: modified date, created user, modified user
@@ -247,5 +247,10 @@ class PreregisterUser extends CActiveRecord
         }
         
         return $options;
+    }
+    
+    public function hasExistingUser(){
+        $query = "SELECT COUNT(*) FROM tbl_student WHERE preregister_id = " . $this->id;
+        return Yii::app()->db->createCommand($query)->queryScalar() > 0;
     }
 }

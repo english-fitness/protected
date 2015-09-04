@@ -19,7 +19,7 @@
 	$(document).on("click",".datepicker",function(){
         $(this).datepicker({
             "dateFormat":"yy-mm-dd"
-        }).datepicker("show");;
+        }).datepicker("show");
     });
 </script>
 <div class="form">
@@ -41,9 +41,11 @@
         	<button class="btn btn-primary" name="form_action" type="submit"><i class="icon-save"></i>Lưu lại</button>
         	<button class="btn btn-default cancel" name="form_action" type="button" onclick="cancel();"><i class="icon-undo"></i>Bỏ qua</button>
         </div>
+        <?php if(!$model->hasExistingUser()):?>
         <a href="/admin/student/create?preregisterId=<?php echo $model->id?>">
             <button class="btn btn-default" name="form_action" type="button"><i class="icon-plus"></i>Tạo tài khoản</button>
         </a>
+        <?php endif;?>
     </div>
 </div>
 <?php 
@@ -72,12 +74,6 @@
 			<?php $genderOptions = array(0=>'Nữ', 1=>'Nam');
 				echo ($model->gender)? $genderOptions[$model->gender]:"";
 			?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-4">
-			<label>Trạng thái đăng ký:&nbsp;</label>
-			<?php echo $model->statusOptions($model->status);?>
 		</div>
 	</div>
 	<div class="form-element-container row">
@@ -126,6 +122,7 @@
 			</div>
 		</div>
 	</div>
+    <!--
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'sale_status'); ?>
@@ -146,6 +143,24 @@
 			</div>
 		</div>
 	</div>
+    -->
+    <div class="form-element-container row">
+        <div class="col col-lg-3">
+        </div>
+        <div class="col col-lg-9">
+            <div class="col col-lg-5 pL0i pR0i">
+			</div>
+            <div class="col col-lg-7 pL0i pR0i">
+				<div class="col col-lg-4 pL0i text-right">
+					<?php echo $form->labelEx($model,'last_sale_date', array('class'=>'mT10')); ?>
+				</div>
+				<div class="col col-lg-8 pL0i pR0i">
+					<?php echo $form->textField($model,'last_sale_date', array('class'=>'datepicker','placeholder'=>'Định dạng ngày tư vấn cuối yyyy-mm-dd')); ?>
+					<?php echo $form->error($model,'last_sale_date'); ?>
+				</div>
+			</div>
+        </div>
+    </div>
     <div class="form-element-container row">
         <div class="col col-lg-3">
             <?php echo $form->labelEx($model,'planned_schedule')?>

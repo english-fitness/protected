@@ -13,7 +13,7 @@
 	}
 	//Allow change html object field
 	function allowChangeSaleUser(){
-		$("#Student_sale_user_id").removeAttr("disabled");
+		$("#PreregisterUser_sale_user_id").removeAttr("disabled");
 	}
 	function checkNewHistory(){
 		if($('#chkAddNewHistory').prop('checked')){
@@ -22,11 +22,13 @@
 			$('.addNewSaleHistory').css('display', 'none');
 		}
 	}
-	$(document).on("click",".datepicker",function(){
-        $(this).datepicker({
-            "dateFormat":"yy-mm-dd"
-        }).datepicker("show");;
-    });
+    $(function(){
+        $('.datepicker').on("click",function(){
+            $(this).datepicker({
+                "dateFormat":"yy-mm-dd"
+            }).datepicker("show");;
+        });
+    })
 </script>
 <div class="form">
 
@@ -51,42 +53,56 @@
 	</div>
 <fieldset>
 	<?php 
-		$readonlyAttrs = (!$model->isNewRecord)? array('readonly'=>'readonly','ondblclick'=>'allowEdit(this)'): array();
-		$disabledAttrs = (!$model->isNewRecord)? array('disabled'=>'disabled'):array();
+		$readonlyAttrs = (!$preregisterUser->isNewRecord)? array('readonly'=>'readonly','ondblclick'=>'allowEdit(this)'): array();
+		$disabledAttrs = (!$preregisterUser->isNewRecord)? array('disabled'=>'disabled'):array();
 	?>
 	<legend>Thông tin cá nhân</legend>
 	<div class="form-element-container row">
 		<div class="col col-lg-4">
-			<label>Họ và tên:&nbsp;</label><?php echo $model->fullName();?>
+			<label>Họ và tên:&nbsp;</label><?php echo $user->fullName();?>
 		</div>
 		<div class="col col-lg-4">
-			<label>Email:&nbsp;</label><?php echo $model->email;?>
+			<label>Email:&nbsp;</label><?php echo $user->email;?>
 		</div>
 		<div class="col col-lg-4">
-			<label>Điện thoại:&nbsp;</label><?php echo $model->phone;?>
+			<label>Điện thoại:&nbsp;</label><?php echo $user->phone;?>
 		</div>
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-4">
-			<label>Ngày sinh:&nbsp;</label><?php echo ($model->birthday)? date('d/m/Y', strtotime($model->birthday)):"";?>
+			<label>Ngày sinh:&nbsp;</label><?php echo ($user->birthday)? date('d/m/Y', strtotime($user->birthday)):"";?>
 		</div>
 		<div class="col col-lg-4">
 			<label>Giới tính:&nbsp;</label>
 			<?php $genderOptions = array(0=>'Chưa xác định', 1=>'Nữ', 2=>'Nam');
-				echo $genderOptions[$model->gender];
+				echo $genderOptions[$user->gender];
 			?>
 		</div>
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-4">
-			<label>Trạng thái:&nbsp;</label><?php echo $model->statusOptions($model->status);?>
+			<label>Trạng thái:&nbsp;</label><?php echo $user->statusOptions($user->status);?>
+		</div>
+        <div class="col col-lg-4">
+			<label>Học viên chính thức từ ngày:&nbsp;</label>
+            <?php
+                echo $student->official_start_date != '' ? date('d-m-Y', strtotime($student->official_start_date)) : '';
+            ?>
 		</div>
 	</div>
+    <div class="form-element-container row">
+        <div class="col col-lg-4">
+			<label>Lịch sử trạng thái:</label><br>
+            <?php
+                echo $user->displayHistoryStatus();
+            ?>
+		</div>
+    </div>
 </fieldset>
 <div class="clearfix h20">&nbsp;</div>	
 <fieldset>
 	<legend>Ghi chú chăm sóc, tư vấn
-		<?php if(!$model->isNewRecord):?>
+		<?php if(!$preregisterUser->isNewRecord):?>
 			<label class="hint fR mR20"><span class="clrRed">Click đúp vào các trường dữ  liệu cần sửa, để cho phép thay đổi giá trị</span></label>
 		<?php endif;?>
 	</legend>
@@ -96,18 +112,18 @@
 		</div>
 		<div class="col col-lg-9">
 			<div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->dropDownList($student,'care_status', $student->careStatusOptions(), array()); ?>
-				<?php echo $form->error($student,'care_status'); ?>
+				<?php echo $form->dropDownList($preregisterUser,'care_status', $preregisterUser->careStatusOptions(), array()); ?>
+				<?php echo $form->error($preregisterUser,'care_status'); ?>
 			</div>
 			<div class="col col-lg-7 pL0i pR0i">
 				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($student,'sale_user_id', array('class'=>'mT10')); ?>
+					<?php echo $form->labelEx($preregisterUser,'sale_user_id', array('class'=>'mT10')); ?>
 				</div>
 				<div class="col col-lg-8 pL0i pR0i">
 					<?php $salesUserOptions = Student::model()->getSalesUserOptions(true, "---Người tư vấn---");?>
-					<?php echo $form->dropDownList($student,'sale_user_id', $salesUserOptions, $disabledAttrs); ?>
-					<?php echo $form->error($student,'sale_user_id'); ?>
-					<?php if(!$student->isNewRecord && Yii::app()->user->isAdmin()):?>
+					<?php echo $form->dropDownList($preregisterUser,'sale_user_id', $salesUserOptions, $disabledAttrs); ?>
+					<?php echo $form->error($preregisterUser,'sale_user_id'); ?>
+					<?php if(!$preregisterUser->isNewRecord):?>
 					<div class="fR">
 						<a class="fs12 errorMessage" href="javascript: allowChangeSaleUser();">Thay đổi người chăm sóc, tư vấn!</a>
 					</div>
@@ -127,22 +143,22 @@
 			</div>
 			<div class="col col-lg-7 pL0i pR0i">
 				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($student,'last_sale_date', array('class'=>'mT10')); ?>
+					<?php echo $form->labelEx($preregisterUser,'last_sale_date', array('class'=>'mT10')); ?>
 				</div>
 				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textField($student,'last_sale_date', array('class'=>'datepicker','placeholder'=>'Định dạng ngày tư vấn cuối yyyy-mm-dd')); ?>
-					<?php echo $form->error($student,'last_sale_date'); ?>
+					<?php echo $form->textField($preregisterUser,'last_sale_date', array('class'=>'datepicker','placeholder'=>'Định dạng ngày tư vấn cuối yyyy-mm-dd')); ?>
+					<?php echo $form->error($preregisterUser,'last_sale_date'); ?>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
-			<?php echo $form->labelEx($student,'sale_note'); ?>
+			<?php echo $form->labelEx($preregisterUser,'sale_note'); ?>
 		</div>
 		<div class="col col-lg-9">
-			<?php echo $form->textArea($student,'sale_note',array_merge($readonlyAttrs, array('rows'=>6, 'cols'=>5, 'style'=>'height:4em;'))); ?>
-			<?php echo $form->error($student,'sale_note'); ?>
+			<?php echo $form->textArea($preregisterUser,'sale_note',array_merge($readonlyAttrs, array('rows'=>6, 'cols'=>5, 'style'=>'height:4em;'))); ?>
+			<?php echo $form->error($preregisterUser,'sale_note'); ?>
 		</div>	
 	</div>
 </fieldset>

@@ -101,16 +101,7 @@ $createFromRegistration = ($this->action->id == 'create' && isset($preregisterUs
 			<?php endif;?>
         </div>	
 	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'email'); ?>
-		</div>
-		<div class="col col-lg-9">        	
-			<?php echo $form->textField($model,'email',array_merge(array('size'=>60,'maxlength'=>128), $readonlyAttrs)); ?>
-			<?php echo $form->error($model,'email'); ?>
-		</div>
-	</div>
-	<div id="changePassword" class="form-element-container row" style="<?php echo (!$model->isNewRecord && $changeStatus==0)? 'display:none;': "";?>">
+    <div id="changePassword" class="form-element-container row" style="<?php echo (!$model->isNewRecord && $changeStatus==0)? 'display:none;': "";?>">
 		<div class="col col-lg-3">
             <?php echo $form->labelEx($model,'password'); ?>
         </div>
@@ -121,6 +112,15 @@ $createFromRegistration = ($this->action->id == 'create' && isset($preregisterUs
 			<label class="hint">Nhập mật khẩu mới cho tài khoản của học sinh này!</label>
 			<?php endif;?>
         </div>		
+	</div>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+			<?php echo $form->labelEx($model,'email'); ?>
+		</div>
+		<div class="col col-lg-9">        	
+			<?php echo $form->textField($model,'email',array_merge(array('size'=>60,'maxlength'=>128), $readonlyAttrs)); ?>
+			<?php echo $form->error($model,'email'); ?>
+		</div>
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">

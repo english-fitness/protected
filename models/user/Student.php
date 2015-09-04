@@ -41,6 +41,7 @@ class Student extends CActiveRecord
 		return array(
 			array('user_id', 'required'),
 			array('user_id, preregister_id', 'numerical', 'integerOnly'=>true),
+            array('sale_status', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('user_id, official_start_date, created_date, modified_date', 'safe', 'on'=>'search'),
@@ -77,6 +78,7 @@ class Student extends CActiveRecord
 			'user_id' => 'Mã học sinh',
             'preregister_id'=>'Tư vấn',
             'official_start_date'=>'Ngày học chính thức',
+            'sale_status'=>'Trạng thái sale',
 			'created_date' => 'Ngày tạo',
 			'modified_date' => 'Ngày sửa',
 		);

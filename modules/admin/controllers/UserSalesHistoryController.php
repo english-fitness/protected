@@ -28,11 +28,11 @@ class UserSalesHistoryController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','create'),
+				'actions'=>array('index','view','create', 'update'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','update'),
+				'actions'=>array('admin','delete'),
 				'users'=>array('*'),
 				'expression' => 'Yii::app()->user->isAdmin()',
 			),

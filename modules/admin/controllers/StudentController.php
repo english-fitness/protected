@@ -166,35 +166,68 @@ class StudentController extends Controller
 	 */
 	public function actionSaleUpdate($id)
 	{
-		$model = $this->loadModel($id);
-		$student = Student::model()->findByPk($id);
-		$saleHistory = new UserSalesHistory();
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-		$this->subPageTitle = 'Sửa thông tin chăm sóc, tư vấn';
-		$saleUserHistories = UserSalesHistory::model()->getSaleHistory($id);
-		if(isset($_POST['Student']))
-		{
-			$studentValues = $_POST['Student'];
-			$student->attributes = $studentValues;
-			$student->user_id = $model->id;
-			if($student->save()){
-				if(isset($_POST['chkAddNewHistory']) && isset($_POST['UserSalesHistory'])){
-					$saleValues = $_POST['UserSalesHistory'];
-					$saleHistory->attributes = $saleValues;
-					$saleHistory->user_id = $model->id;
-					if($saleHistory->save()){
-						$this->redirect(array('/admin/userSalesHistory/index?student_id='.$id));
-					}
-				}else{
-					$this->redirect(array('index'));
-				}
-			}
-		}
-		$this->render('saleForm',array(
-			'model'=>$model,
+        $this->subPageTitle = 'Thông tin chăm sóc, tư vấn';
+        
+        $student = Student::model()->findByPk($id);
+        $user = User::model()->findByPk($student->user_id);
+        if (isset($student->preregister_id)){
+            $preregisterUser = PreregisterUser::model()->findByPk($student->preregister_id);
+        } else {
+            $preregisterUser = new PreregisterUser;
+        }
+        $saleHistory = new UserSalesHistory();
+        $saleUserHistories = UserSalesHistory::model()->getSaleHistory($id);
+        
+        $updatePreUser = isset($_POST['PreregisterUser']);
+        $updateSaleHistory = isset($_POST['chkAddNewHistory']) && isset($_POST['UserSalesHistory']);
+        $updateStudent = isset($_POST['Student']);
+        if ($updatePreUser || $updateSaleHistory || $updateStudent){
+            $transaction = Yii::app()->db->beginTransaction();
+            try {
+                if ($updatePreUser){
+                    $attributes = $_POST['PreregisterUser'];
+                
+                    $preregisterUser->attributes = $attributes;
+                    
+                    if ($preregisterUser->save()){
+                        if (isset($student->preregister_id)){
+                            $student->preregister_id = $preregisterUser->id;
+                            $updateStudent = true;
+                        }
+                    } else {
+                        throw new Exception('Error saving model: PreregisterUser');
+                    }
+                    
+                    if ($updateStudent){
+                        if (isset($_POST['Student'])){
+                            $student->attributes = $_POST['Student'];
+                        }
+                        if (!$student->save()){
+                            throw new Exception('Error saving model: Student');
+                        }
+                    }
+                }
+                
+                if ($updateSaleHistory){
+                    $saleHistory->attributes = $_POST['UserSalesHistory'];
+                    $saleHistory->user_id = $user->id;
+                    if (!$saleHistory->save()){
+                        throw new Exception('Error saving model: UserSalesHistory');
+                    }
+                }
+                
+                $transaction->commit();
+                $this->redirect(array('index'));
+            } catch (Exception $e) {
+                $transaction->rollback();
+            }
+        }
+        
+        $this->render('saleForm',array(
+            'preregisterUser'=>$preregisterUser,
+            'user'=>$user,
 			'student'=>$student,
-			'saleHistory'=>$saleHistory,
+            'saleHistory'=>$saleHistory,
 			'saleUserHistories' => $saleUserHistories,
 		));
 	}

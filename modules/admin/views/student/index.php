@@ -23,6 +23,14 @@ $this->breadcrumbs=array(
 	$statusOptions = $model->statusOptions(); unset($statusOptions['-1']);
 	$createdDateFilter = Yii::app()->controller->getQuery('User[created_date]', '');
 	$birthdayFilter = Yii::app()->controller->getQuery('User[birthday]', '');
+    
+    function normalizeDate($d){
+        if ($d == ''){
+            return '';
+        }
+        $date = new DateTime($d);
+        return $date->format('d-m-Y');
+    }
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$model->search(),
@@ -73,7 +81,7 @@ $this->breadcrumbs=array(
 		),
         array(
             'header'=>'Học viên chính thức từ ngày',
-            'value'=>'$data->student->official_start_date',
+            'value'=>'normalizeDate($data->student->official_start_date)',
             'htmlOptions'=>array('style'=>'text-align:center;width:100px'),
         ),
 		/*
@@ -125,13 +133,12 @@ $this->breadcrumbs=array(
 		        ),
     		),
 		),
-        /*
 		array(
 		   'header'=>'Tư vấn',
 		   'value'=>'CHtml::link("Tư vấn", "/admin/student/saleUpdate/id/".$data->id, array("class"=>"icon-plus pL20", "style"=>"width:75px;"))',
 		   'filter'=>false, 'type'  => 'raw',
 		   'htmlOptions'=>array('style'=>'width:60px;'),
 		),
-        */
+       
 	),
 )); ?>
