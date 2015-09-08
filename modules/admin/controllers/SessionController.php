@@ -196,7 +196,7 @@ class SessionController extends Controller
 	            	if(isset($_POST['planStart']['date'])){
 	                	$planStart = $_POST['planStart']['date'].' '.$_POST['planStart']['hour'].':'.$_POST['planStart']['min'].':00';
 	            	}
-            		$model->addSessionEndOfCourse($planStart);//Add extra pending session at the end of course
+            		$model->addCompensationSession($planStart);//Add extra pending session at the end of course
             	}
                 $this->redirect(array('/admin/session?course_id='.$model->course_id));
             }

@@ -87,7 +87,7 @@ $createFromRegistration = ($this->action->id == 'create' && isset($preregisterUs
             <?php echo $form->labelEx($model,'username'); ?>
         </div>
 		<?php $changeStatus = Yii::app()->request->getPost('changeStatus', "0");?>
-		<div class="col col-lg-9">        	
+		<div class="col col-lg-9">
             <?php echo $form->textField($model,'username',array_merge(array('size'=>60,'maxlength'=>30), $disabledAttrs)); ?>
 			<?php echo $form->error($model,'username'); ?>
 			<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>

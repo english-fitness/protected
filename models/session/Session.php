@@ -587,7 +587,7 @@ class Session extends CActiveRecord
 	/**
 	 * Create new pending session after course
 	 */
-	public function addSessionEndOfCourse($planStart=NULL)
+	public function addCompensationSession($planStart=NULL)
 	{
 		$course = Course::model()->findByPk($this->course_id);
 		$lastPlanStart = $course->getFirstDateInList("DESC", 'Y-m-d H:i:s');
@@ -596,7 +596,7 @@ class Session extends CActiveRecord
 		$newSession->attributes = array(
 			'course_id' => $this->course_id,
 			'teacher_id' => $this->teacher_id,
-			'subject' => $this->subject.' (buổi học bù)',
+			'subject' => $this->subject.' (Compensation)',
 			'content' => $this->content,
 			'type' => $this->type,
 			'total_of_student' => $this->total_of_student,

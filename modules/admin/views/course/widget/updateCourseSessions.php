@@ -3,6 +3,22 @@
 	$registration = new ClsRegistration();//Init register session
 	$session = Yii::app()->request->getPost('Session', array());//Get session
 ?>
+<div id="number_of_session" class="form-element-container row dpn">
+	<div class="col col-lg-3">
+		<label>Số buổi học</label>
+	</div>
+	<div class="col col-lg-9">
+        <input type="text" name="Session[numberOfSession]" value="1" />
+	</div>
+</div>
+<div id="start_date" class="form-element-container row dpn">
+    <div class="col col-lg-3">
+		<label>Ngày bắt đầu&nbsp;</label>
+	</div>
+	<div class="col col-lg-9">
+		<input type="text" class="datepicker" name="Session[startDate]">
+	</div>
+</div>
 <div class="form-element-container row">
 	<div class="col col-lg-3">
 		<label>Thời lượng 1 buổi học (phút)</label>

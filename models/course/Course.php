@@ -615,7 +615,7 @@ class Course extends CActiveRecord
 		$sessions = $this->getSessions(true);
 		
 		$schedule['numberOfSession'] = count($sessions);
-		$schedule['startDate'] = date('Y-m-d', strtotime('-1 day'));
+		$schedule['startDate'] = date('Y-m-d');
 		
 		$newSchedule = ClsCourse::generateSchedules($schedule);
 		
@@ -627,6 +627,83 @@ class Course extends CActiveRecord
 			$sessions[$i]->save();
 		}
 	}
+    
+    public function addSchedule($schedule, $students){
+        $today = new DateTime;
+        $query = "SELECT plan_start FROM tbl_session
+                  WHERE course_id = " . $this->id . " " .
+                 "ORDER BY plan_start DESC LIMIT 1";
+        $lastSessionDate = Yii::app()->db->createCommand($query)->queryScalar();
+        $lastDate = DateTime::createFromFormat('Y-m-d H:i:s', $lastSessionDate);
+        
+        if (isset($schedule['startDate']) && ($startDate = DateTime::createFromFormat('Y-m-d', $schedule['startDate'])) != false){
+            $dateChoices = array($today, $lastDate, $startDate);
+            usort($dateChoices, function($d1, $d2){
+                if ($d1 == $d2){
+                    return 0;
+                } else if ($d1 > $d2){
+                    return -1;
+                } else {
+                    return 1;
+                }
+            });
+            
+            if ($dateChoices[0] == $lastDate){
+                $schedule['startDate'] = $dateChoices[0]->modify('+1 day')->format('Y-m-d H:i:s');
+            } else {
+                $schedule['startDate'] = $dateChoices[0]->format('Y-m-d H:i:s');
+            }
+        } else {
+            if ($lastDate < $today){
+                $schedule['startDate'] = $today->format('Y-m-d H:i:s');
+            } else {
+                $schedule['startDate'] = $lastDate->format('Y-m-d H:i:s');
+            }
+        }
+        
+        $schedule['course_id'] = $this->id;
+        if ($this->teacher_id != null){
+            $schedule['teacher_id'] = $this->teacher_id;
+        }
+        $newSchedule = ClsCourse::generateSchedules($schedule);
+        
+        $query = "SELECT COUNT(*) FROM tbl_session " .
+                 "WHERE course_id = " . $this->id . " " .
+                 "AND status <> " . Session::STATUS_CANCELED . " " .
+                 "AND deleted_flag = 0";
+        $sessionCount = Yii::app()->db->createCommand($query)->queryScalar() + 1;
+        
+        //apply new schedule
+        $transaction = Yii::app()->db->beginTransaction();
+        try{
+            $assignStudentSql = "INSERT INTO `tbl_session_student` (`student_id`, `session_id`) VALUES ";
+            
+            foreach ($newSchedule as $sessionAttributes){
+                $session = new Session;
+                $session->attributes = $sessionAttributes;
+                $session->subject = "Session " . $sessionCount;
+                if (!$session->save()){
+                    throw new Exception("Error creating session: " . $session->getErrors());
+                } else {
+                    foreach($students as $student){
+                        $assignStudentSql .= "('" . $student . "', '" . $session->id . "'), ";
+                    }
+                }
+                
+                $sessionCount++;
+            }
+            
+            $assignStudentSql = rtrim($assignStudentSql, ", ") . ";";
+            Yii::app()->db->createCommand($assignStudentSql)->execute();
+            
+            $transaction->commit();
+        } catch (Exception $e){
+            $transaction->rollback();
+            return false;
+        }
+        
+        return true;
+    }
 	
 	public static function findByStudent($student){
 		$query = "SELECT id, title, type FROM tbl_course JOIN tbl_course_student " .
@@ -646,4 +723,12 @@ class Course extends CActiveRecord
 		
 		return $this->number_of_sessions + $additionalSessions;
 	}
+    
+    public function countCurrentSession(){
+        $query = "SELECT COUNT(*) FROM tbl_session " .
+                 "WHERE course_id = " . $this->id . " " .
+                 "AND status <> " . Session::STATUS_CANCELED . " " .
+                 "AND deleted_flag = 0";
+        return Yii::app()->db->createCommand($query)->queryScalar();
+    }
 }

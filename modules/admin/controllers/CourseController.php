@@ -154,7 +154,7 @@ class CourseController extends Controller
 				$model->resetStatusSessions($changeStatus);//Reset status of sessions
 				// $this->redirect(array('index?type='.$model->type));
 			}
-			if (isset($_POST['Session']))
+			if (isset($_POST['scheduleChange']) && isset($_POST['Session']))
 			{
 				$sessionValues = $_POST['Session'];
 				$planSet = isset($sessionValues['plan_duration']) 
@@ -163,7 +163,20 @@ class CourseController extends Controller
 						&& isset($sessionValues['startMin']);
 				if ($planSet)
 				{
-					$model->changeSchedule($sessionValues);
+                    switch ($_POST['scheduleChange']){
+                        case 'add':
+                            $students = $_POST['Student'];
+                            if (count($extraUserIds) > 0){
+                                array_push($students, $extraUserIds);
+                            }
+                            $model->addSchedule($sessionValues, $students);
+                            break;
+                        case 'change':
+                            $model->changeSchedule($sessionValues);
+                            break;
+                        default:
+                            break;
+                    }
 				}
 			}
 			$this->redirect(array('index?type='.$model->type));

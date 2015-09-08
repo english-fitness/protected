@@ -24,21 +24,62 @@
 			window.location = daykemBaseUrl + '/admin/course/delete/id/'+courseId;
 		}
 	}
-	function toggleChangeSchedule(show)
+	function toggleChangeSchedule(show, mode)
 	{
 		if (show)
 		{
 			$("#update_schedule").removeAttr("disabled");
-			$("#update_schedule").show();
-			$("#toggle_schedule_link").hide();
+			$(".toggle_schedule_link").hide();
+            switch (mode){
+                case 'change':
+                    console.log('change');
+                    $("#update_schedule > legend").html("Sửa lịch học (Lịch học của tất cả các buổi học còn lại sẽ được sửa như lịch học dưới đây)");
+                    $("#number_of_session").prop("disabled", true).hide();
+                    $("#start_date").prop("disabled", true).hide();
+                    $(".assignedStudent").prop("disabled", true);
+                    $("#switch_schedule_mode_link").html("Thêm buổi học").attr("href", "javascript: toggleChangeSchedule(true, 'add')");
+                    $("#switch_schedule_mode").show();
+                    $("#change_schedule_mode").val("change");
+                    break;
+                case 'add':
+                    console.log('add');
+                    $("#update_schedule > legend").html("Thêm buổi học (Các buổi học mới sẽ được thêm vào sau buổi học cuối cùng theo lịch học dưới đây)");
+                    $("#number_of_session").prop("disabled", false).show();
+                    $("#start_date").prop("disabled", false).show();
+                    $(".assignedStudent").prop("disabled", false);
+                    $("#switch_schedule_mode_link").html("Sửa lịch học").attr("href", "javascript: toggleChangeSchedule(true, 'change')");
+                    $("#switch_schedule_mode").show();
+                    $("#change_schedule_mode").val("add");
+                    break;
+                default:
+                    break;
+            }
+            $("#update_schedule").show();
+            $(".assignedStudent").each(function(){
+                console.log($(this).prop("disabled"));
+            });
+            console.log($("#number_of_session").prop("disabled"));
+            console.log($("#start_date").prop("disabled"));
 		}
 		else
 		{
 			$("#update_schedule").attr("disabled", true);
+            $("#change_schedule_mode").hide();
 			$("#update_schedule").hide();
-			$("#toggle_schedule_link").show();
+			$(".toggle_schedule_link").show();
+            $("#switch_schedule_mode").hide();
 		}
+        
+        return false;
 	}
+    
+    $(document).ready(function(){
+        $(document).on("click",".datepicker",function(){
+            $(this).datepicker({
+                "dateFormat":"yy-mm-dd"
+            }).datepicker("show");;
+        });
+    });
 </script>
 <div class="form">
 <?php $registration = new ClsRegistration();?>
@@ -238,8 +279,20 @@
 </fieldset>
 <?php if ($action == 'update'):?>
 <div class="clearfix h20">&nbsp;</div>
-<div class="fR"><a id="toggle_schedule_link" class="fs12 errorMessage <?php echo $endedDisplayCss;?>" href="javascript: toggleChangeSchedule(true);">Thay đổi lịch học</a></div>
+<div class="fR toggle_schedule_link">
+    <a id="add_schedule_link" class="fs12 errorMessage <?php echo $endedDisplayCss;?>" href="javascript: toggleChangeSchedule(true, 'add');">Thêm buổi học</a>
+    |
+    <a id="change_schedule_link" class="fs12 errorMessage <?php echo $endedDisplayCss;?>" href="javascript: toggleChangeSchedule(true, 'change');">Thay đổi lịch học</a>
+</div>
+<div class="fR dpn" id="switch_schedule_mode">
+    <a id="switch_schedule_mode_link" class="fs12 errorMessage <?php echo $endedDisplayCss;?>" href="javascript: toggleChangeSchedule(true);"></a>
+</div>
+<div class="clearfix"></div>
 <fieldset id="update_schedule" style="display:none" disabled>
+    <input id="change_schedule_mode" name="scheduleChange" type="hidden"/>
+    <?php foreach($availableStudents as $student):?>
+        <input type="hidden" name="Student[]" class="assignedStudent" disabled value="<?php echo $student->id?>">
+    <?php endforeach;?>
 	<legend>Kế hoạch các buổi học trong khóa</legend>
 	<div class="col col-lg-12">
 		<?php

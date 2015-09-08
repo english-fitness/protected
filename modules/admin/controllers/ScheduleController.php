@@ -491,10 +491,7 @@ class ScheduleController extends Controller
 	
 	public function actionCountSession(){
 		if (isset($_REQUEST['course'])){
-			$sessionCount = Session::model()->countByAttributes(array(
-				'course_id'=>$_REQUEST['course'],
-				'deleted_flag'=>0,
-			));
+            $sessionCount = Course::model()->findByPk($_REQUEST['course'])->countCurrentSession();
 			
 			$this->renderJSON(array("sessionCount"=>$sessionCount));
 		}
