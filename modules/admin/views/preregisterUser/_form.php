@@ -6,13 +6,21 @@
 <script type="text/javascript">
 	//Cancel button
 	function cancel(){
-		window.location = '<?php echo Yii::app()->baseUrl.'/admin/preregisterUser';?>';
+        <?php if(Yii::app()->request->urlReferrer != null):?>
+		window.location = '<?php echo Yii::app()->request->urlReferrer;?>';
+        <?php else:?>
+        window.location = '<?php echo Yii::app()->baseUrl.'/admin/preregisterUser';?>';
+        <?php endif?>
 	}
 	//Remove preset course
 	function removePreUser(preUserId){
 		var checkConfirm = confirm("Bạn có chắc chắn xóa đăng ký tư vấn này?");
 		if(checkConfirm){
-			window.location = '/admin/preregisterUser/delete/id/'+preUserId;
+            var removeUrl = '/admin/preregisterUser/delete/id/'+preUserId;
+            <?php if(Yii::app()->request->urlReferrer != null):?>
+                removeUrl += '?urlReferrer=<?php echo Yii::app()->request->urlReferrer?>';
+            <?php endif?>
+			window.location = removeUrl;
 		}
 	}
 	//Allow edit html object field
@@ -28,6 +36,15 @@
             "dateFormat":"yy-mm-dd"
         }).datepicker("show");;
     });
+    <?php if(Yii::app()->request->urlReferrer != null):?>
+    $(function(){
+        $("#preregister-user-form").append($('<input>')
+            .attr("type", "hidden")
+            .attr("name", "urlReferrer")
+            .val('<?php echo Yii::app()->request->urlReferrer?>')
+        );
+    });
+    <?php endif;?>
 </script>
 <div class="form">
 

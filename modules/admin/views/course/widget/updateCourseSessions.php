@@ -8,7 +8,7 @@
 		<label>Số buổi học</label>
 	</div>
 	<div class="col col-lg-9">
-        <input type="text" name="Session[numberOfSession]" value="1" />
+        <input type="text" name="Session[numberOfSession]" value="0" />
 	</div>
 </div>
 <div id="start_date" class="form-element-container row dpn">
@@ -16,7 +16,7 @@
 		<label>Ngày bắt đầu&nbsp;</label>
 	</div>
 	<div class="col col-lg-9">
-		<input type="text" class="datepicker" name="Session[startDate]">
+		<input type="text" class="datepicker" name="Session[startDate]" readonly style="background-color:white">
 	</div>
 </div>
 <div class="form-element-container row">

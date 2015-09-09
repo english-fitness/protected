@@ -69,11 +69,11 @@ class ReportController extends Controller
             case 'userRegistration':
                 return array(
                     array('name'=>'Họ tên','width'=>'30'),
+                    array('name'=>'Người liên hệ/Nguồn','width'=>'30'),
                     array('name'=>'Số điện thoại','width'=>'20'),
                     array('name'=>'Email','width'=>'35'),
-                    array('name'=>'Ghi chú','width'=>'40'),
-                    array('name'=>'Lịch học', 'width'=>'40'),
-                    array('name'=>'Học phí', 'width'=>'30'),
+                    array('name'=>'Trạng thái chăm sóc','width'=>'30'),
+                    array('name'=>'Ghi chú','width'=>'60'),
                 );
                 break;
             default:
@@ -218,8 +218,7 @@ class ReportController extends Controller
             $row++;
         }
         
-        $currentSheetAlignment = $activeSheet->getStyle( $phpExcel->getActiveSheet()->calculateWorksheetDimension() )
-        ->getAlignment();
+        $currentSheetAlignment = $activeSheet->getStyle( $phpExcel->getActiveSheet()->calculateWorksheetDimension() )->getAlignment();
         $currentSheetAlignment->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $currentSheetAlignment->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
         $currentSheetAlignment->setWrapText(true);

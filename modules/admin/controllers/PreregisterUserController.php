@@ -94,7 +94,11 @@ class PreregisterUserController extends Controller
 			$preUserValues = $_POST['PreregisterUser'];
 			$model->attributes = $preUserValues;
 			if($model->save()){
-				$this->redirect(array('index'));
+                if (isset($_REQUEST['urlReferrer'])){
+                    $this->redirect($_REQUEST['urlReferrer']);
+                } else {
+                    $this->redirect(array('index'));
+                }
 			}
 		}
 		$this->render('update',array(
@@ -119,7 +123,11 @@ class PreregisterUserController extends Controller
 			}
 			$model->attributes = $preUserValues;
 			if($model->save()){
-				$this->redirect(array('index'));
+                if (isset($_POST['urlReferrer'])){
+                    $this->redirect($_POST['urlReferrer']);
+                } else {
+                    $this->redirect(array('index'));
+                }
 			}
 		}
 		$this->render('saleForm',array(
@@ -138,7 +146,11 @@ class PreregisterUserController extends Controller
 		if($model->deleted_flag==0){
 			$model->deleted_flag = 1;//Set deleted flag before delete
 			$model->save();
-			$this->redirect(array('/admin/preregisterUser'));
+            if (isset($_REQUEST['urlReferrer'])){
+                $this->redirect($_REQUEST['urlReferrer']);
+            } else {
+                $this->redirect(array('/admin/preregisterUser'));
+            }
 		}else{
 			$model->delete();//Delete forever this User
 		}

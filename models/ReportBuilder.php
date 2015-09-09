@@ -175,7 +175,7 @@ class ReportBuilder {
     }
     
     private static function getUserRegistrationReportQuery($dateConstraint){
-        return  "SELECT fullname, phone, email, sale_note, planned_schedule, planned_course_package FROM tbl_preregister_user
+        return  "SELECT fullname, source, phone, email, care_status, sale_note FROM tbl_preregister_user
                 WHERE deleted_flag = 0
                 AND " . $dateConstraint . " " .
                 "ORDER BY created_date DESC";

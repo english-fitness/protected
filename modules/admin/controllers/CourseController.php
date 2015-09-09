@@ -165,11 +165,13 @@ class CourseController extends Controller
 				{
                     switch ($_POST['scheduleChange']){
                         case 'add':
-                            $students = $_POST['Student'];
-                            if (count($extraUserIds) > 0){
-                                array_push($students, $extraUserIds);
+                            if ($_POST['Session']['numberOfSession'] > 0){
+                                $students = $_POST['Student'];
+                                if (count($extraUserIds) > 0){
+                                    array_push($students, $extraUserIds);
+                                }
+                                $model->addSchedule($sessionValues, $students);
                             }
-                            $model->addSchedule($sessionValues, $students);
                             break;
                         case 'change':
                             $model->changeSchedule($sessionValues);

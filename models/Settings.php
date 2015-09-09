@@ -208,4 +208,9 @@ class Settings extends CActiveRecord
         }
     }
 	
+    public static function getPresetOptions($name){
+        $query= "SELECT value FROM tbl_preset_options
+                WHERE name = '" . $name . "'";
+        return Yii::app()->db->createCommand($query)->queryColumn();
+    }
 }

@@ -84,13 +84,16 @@ class StudentController extends Controller
 			}
 			$model->attributes= $student_values;
 			$model->passwordSave = $student_values['password'];
-            if ($model->attributes['status'] == User::STATUS_OFFICIAL_USER){
+            if ($model->attributes['status'] >= Student::STATUS_NEW_STUDENT){
                 $student->official_start_date = date('Y-m-d');
             }
 			if($model->save()){
 				// $student->attributes = $student_profile_values;
                 if (isset($_REQUEST['preregisterId'])){
                     $student->preregister_id = $_REQUEST['preregisterId'];
+                    $preregisterUser = PreregisterUser::model()->findByPk($_REQUEST['preregisterId']);
+                    $preregisterUser->care_status = PreregisterUser::CARE_STATUS_REGISTERED;
+                    $preregisterUser->save();
                 }
 				$student->user_id = $model->id;
 				if($student->save()){
@@ -134,12 +137,9 @@ class StudentController extends Controller
 				$changePassStatus = false;
 				unset($studentValues['password']);//Not save password
 			}
-            $unofficialUser = false;
-            if ($model->status != User::STATUS_OFFICIAL_USER){
-                $unofficialUser = true;
-            }
+            $unofficialUser = ($model->status <= Student::STATUS_NEW_STUDENT);
 			$model->attributes = $studentValues;
-            if ($unofficialUser && $model->attributes['status'] == User::STATUS_OFFICIAL_USER){
+            if ($unofficialUser && $model->attributes['status'] >= Student::STATUS_NEW_STUDENT){
                 $student->official_start_date = date('Y-m-d');
             }
 			if($changePassStatus){
@@ -172,7 +172,8 @@ class StudentController extends Controller
         $user = User::model()->findByPk($student->user_id);
         if (isset($student->preregister_id)){
             $preregisterUser = PreregisterUser::model()->findByPk($student->preregister_id);
-        } else {
+        } 
+        if (!isset($preregisterUser) || $preregisterUser == null){
             $preregisterUser = new PreregisterUser;
         }
         $saleHistory = new UserSalesHistory();
@@ -241,8 +242,13 @@ class StudentController extends Controller
 	{
 		$this->subPageTitle = 'Xóa học sinh';
 		$model = $this->loadModel($id);
-		if($model->status==User::STATUS_PENDING){
+		if($model->status==Student::STATUS_NEW_REGISTER){
 			$model->deleted_flag = 1;//Deleted flag
+            $student = Student::model()->findByPk($id);
+            if ($student != null){
+                $student->preregister_id = null;
+                $student->save();
+            }
 			$model->save();
 		}
 		$this->redirect(array('/admin/student/index'));

@@ -21,6 +21,15 @@
             "dateFormat":"yy-mm-dd"
         }).datepicker("show");
     });
+    <?php if(Yii::app()->request->urlReferrer != null):?>
+    $(function(){
+        $("#preregister-user-form").append($('<input>')
+            .attr("type", "hidden")
+            .attr("name", "urlReferrer")
+            .val('<?php echo Yii::app()->request->urlReferrer?>')
+        );
+    });
+    <?php endif;?>
 </script>
 <div class="form">
 
@@ -122,60 +131,14 @@
 			</div>
 		</div>
 	</div>
-    <!--
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'sale_status'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->textField($model,'sale_status', array_merge($readOnlyAttrs, array('size'=>60,'maxlength'=>80))); ?>
-				<?php echo $form->error($model,'sale_status'); ?>
-			</div>
-			<div class="col col-lg-7 pL0i pR0i">
-				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($model,'last_sale_date', array('class'=>'mT10')); ?>
-				</div>
-				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textField($model,'last_sale_date', array('class'=>'datepicker','placeholder'=>'Định dạng ngày tư vấn cuối yyyy-mm-dd')); ?>
-					<?php echo $form->error($model,'last_sale_date'); ?>
-				</div>
-			</div>
-		</div>
-	</div>
-    -->
     <div class="form-element-container row">
         <div class="col col-lg-3">
+            <?php echo $form->labelEx($model,'last_sale_date', array('class'=>'mT10')); ?>
         </div>
         <div class="col col-lg-9">
             <div class="col col-lg-5 pL0i pR0i">
-			</div>
-            <div class="col col-lg-7 pL0i pR0i">
-				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($model,'last_sale_date', array('class'=>'mT10')); ?>
-				</div>
-				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textField($model,'last_sale_date', array('class'=>'datepicker','placeholder'=>'Định dạng ngày tư vấn cuối yyyy-mm-dd')); ?>
+                <?php echo $form->textField($model,'last_sale_date', array('class'=>'datepicker','placeholder'=>'Định dạng ngày tư vấn cuối yyyy-mm-dd')); ?>
 					<?php echo $form->error($model,'last_sale_date'); ?>
-				</div>
-			</div>
-        </div>
-    </div>
-    <div class="form-element-container row">
-        <div class="col col-lg-3">
-            <?php echo $form->labelEx($model,'planned_schedule')?>
-        </div>
-        <div class="col col-lg-9">
-            <div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->textArea($model,'planned_schedule', array('style'=>'height: 100px', 'maxlength'=>"200")); ?>
-			</div>
-			<div class="col col-lg-7 pL0i pR0i">
-				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($model,'planned_course_package', array('class'=>'mT10')); ?>
-				</div>
-				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textArea($model,'planned_course_package', array('style'=>'height: 100px', 'maxlength'=>"200")); ?>
-				</div>
 			</div>
         </div>
     </div>

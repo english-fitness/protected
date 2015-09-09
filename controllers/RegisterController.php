@@ -33,12 +33,20 @@ class RegisterController extends Controller
 				}
 			}
 			
+            $timerangeRegex = '/([01]?[0-9]|2[0-3]):[0-5][0-9]/';
+            
 			if (isset ($preUserValues['timerange_from']) && ($preUserValues['timerange_to'])){
-				if (preg_match('/([01]?[0-9]|2[0-3]):[0-5][0-9]/' ,$preUserValues['timerange_from']) && 
-					preg_match('/([01]?[0-9]|2[0-3]):[0-5][0-9]/', $preUserValues['timerange_to'])){
+				if (preg_match($timerangeRegex ,$preUserValues['timerange_from']) && 
+					preg_match($timerangeRegex, $preUserValues['timerange_to'])){
 					$model->timerange = $preUserValues['timerange_from'] . " - " . $preUserValues['timerange_to'];
 				}
 			}
+            
+            // if (isset($_POST['referer'])){
+                // $model->source = $_REQUEST['referrer'];
+            // } else {
+                // $model->source = 'Online - Website';
+            // }
 			
 			if ($model->save()){
 				$success = true;

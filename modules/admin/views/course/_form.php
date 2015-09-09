@@ -3,6 +3,7 @@
 /* @var $model Course */
 /* @var $form CActiveForm */
 ?>
+<script src="/media/js/moment.min.js"></script>
 <script type="text/javascript">
 	function cancel(){
 		<?php $type = (!$model->isNewRecord)? $model->type: 1;?>
@@ -32,7 +33,6 @@
 			$(".toggle_schedule_link").hide();
             switch (mode){
                 case 'change':
-                    console.log('change');
                     $("#update_schedule > legend").html("Sửa lịch học (Lịch học của tất cả các buổi học còn lại sẽ được sửa như lịch học dưới đây)");
                     $("#number_of_session").prop("disabled", true).hide();
                     $("#start_date").prop("disabled", true).hide();
@@ -42,7 +42,6 @@
                     $("#change_schedule_mode").val("change");
                     break;
                 case 'add':
-                    console.log('add');
                     $("#update_schedule > legend").html("Thêm buổi học (Các buổi học mới sẽ được thêm vào sau buổi học cuối cùng theo lịch học dưới đây)");
                     $("#number_of_session").prop("disabled", false).show();
                     $("#start_date").prop("disabled", false).show();
@@ -55,11 +54,6 @@
                     break;
             }
             $("#update_schedule").show();
-            $(".assignedStudent").each(function(){
-                console.log($(this).prop("disabled"));
-            });
-            console.log($("#number_of_session").prop("disabled"));
-            console.log($("#start_date").prop("disabled"));
 		}
 		else
 		{
@@ -74,11 +68,21 @@
 	}
     
     $(document).ready(function(){
-        $(document).on("click",".datepicker",function(){
-            $(this).datepicker({
-                "dateFormat":"yy-mm-dd"
-            }).datepicker("show");;
-        });
+        <?php if (!$model->isNewRecord):?>
+            var now = moment('<?php echo date('Y-m-d')?>');
+            var lastSessionDate = moment('<?php echo date('Y-m-d', strtotime($model->getLastSessionDate()))?>');
+            console.log(now);
+            console.log(lastSessionDate);
+            var minDate = lastSessionDate > now ? lastSessionDate : now;
+            $("#start_date > .col > .datepicker").val(minDate.format("YYYY-MM-DD"));
+            
+            $(document).on("click","#start_date > .col > .datepicker",function(){
+                $(this).datepicker({
+                    dateFormat:"yy-mm-dd",
+                    minDate:minDate.format("YYYY-MM-DD"),
+                }).datepicker("show");;
+            });
+        <?php endif;?>
     });
 </script>
 <div class="form">

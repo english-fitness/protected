@@ -100,6 +100,9 @@ class User extends CActiveRecord
 	 */
 	public function statusOptions($status=null)
 	{
+        if ($this->role == self::ROLE_STUDENT){
+            return Student::statusOptions($status);
+        }
 		$statusOptions = array(
 			self::STATUS_PENDING => 'Đang chờ',
 			self::STATUS_APPROVED => 'Đã xác nhận',

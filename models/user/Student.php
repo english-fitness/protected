@@ -17,11 +17,29 @@
  */
 class Student extends CActiveRecord
 {
-	//Const for care status of user
-    const CARE_STATUS_PENDING = 0;//Pending status
-    const CARE_STATUS_APPROVED = 1;//Approved status
-    const CARE_STATUS_WORKING = 2;//Working status
-    const CARE_STATUS_DISABLED = 3;//Disabled status
+    const STATUS_NEW_REGISTER = 0;
+    const STATUS_TRIAL_TEST = 5;
+    const STATUS_TRIAL_TEACHER = 6;
+    const STATUS_TRIAL_COMPLETE = 4;
+    const STATUS_NEW_STUDENT = 7;
+    const STATUS_OLD_STUDENT = 8;
+    
+    public static function statusOptions($status=null){
+        $statusOptions = array(
+            self::STATUS_NEW_REGISTER => 'Mới đăng ký',
+			self::STATUS_TRIAL_TEST => 'Đang học thử/Test',
+			self::STATUS_TRIAL_TEACHER => 'Đang học thử/GV',
+			self::STATUS_TRIAL_COMPLETE => 'Học viên/Quản lý',
+			self::STATUS_NEW_STUDENT => 'Học viên mới',
+			self::STATUS_OLD_STUDENT => 'Học viên VIP',
+		);
+		if($status==null){
+			return $statusOptions;
+		}elseif(isset($statusOptions[$status])){
+			return $statusOptions[$status];
+		}
+		return null;
+    }
     
 	/**
 	 * @return string the associated database table name
@@ -125,30 +143,6 @@ class Student extends CActiveRecord
 		return parent::model($className);
 	}
 	
-	
-	/**
-	 * Display step follow for new student
-	 */
-	public function getMainFollowingSteps()
-	{
-		$userId = Yii::app()->user->id;
-    	$user = User::model()->findByPk($userId);
-		$followingSteps = array(
-			User::STATUS_ENOUGH_PROFILE => array(
-				'title'=>'Bước 2: Cập nhật thông tin cá nhân',
-				'link'=>'/student/account/index',
-			),
-			User::STATUS_ENOUGH_AUDIO => array(
-				'title'=>'Bước 3: Kiểm tra loa, mic',
-				'link'=>'/student/testCondition/index',
-			),
-			User::STATUS_REGISTERED_COURSE => array(
-				'title'=>'Bước 4: Đăng ký khóa học',
-				'link'=>'/student/courseRequest/index',
-			),
-		);
-		return $followingSteps;		
-	}
 	
 	/**
 	 * Load & filter student from user

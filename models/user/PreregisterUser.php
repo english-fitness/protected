@@ -38,6 +38,7 @@ class PreregisterUser extends CActiveRecord
     const CARE_STATUS_APPROVED = 1;//Approved status
     const CARE_STATUS_WORKING = 2;//Working status
     const CARE_STATUS_DISABLED = 3;//Disabled status
+    const CARE_STATUS_REGISTERED = 4;
 	
 	/**
 	 * @return string the associated database table name
@@ -212,7 +213,8 @@ class PreregisterUser extends CActiveRecord
 			self::CARE_STATUS_PENDING => 'Chưa chăm sóc',
 			self::CARE_STATUS_APPROVED => 'Hẹn chăm sóc',
 			self::CARE_STATUS_WORKING => 'Đang chăm sóc',
-			self::CARE_STATUS_DISABLED => 'Dừng chăm sóc',
+            self::CARE_STATUS_REGISTERED => 'Đăng ký hệ thống',
+			self::CARE_STATUS_DISABLED => 'Hủy chăm sóc',
 		);
 		if($careStatus==null){
 			return $careStatusOptions;
@@ -238,7 +240,9 @@ class PreregisterUser extends CActiveRecord
 	}
     
     public static function getSelectFilter($column){
-        $query = "SELECT DISTINCT(" . $column . ") FROM tbl_preregister_user WHERE " . $column . " IS NOT NULL";
+        $query = "SELECT DISTINCT(" . $column . ") FROM tbl_preregister_user " .
+                 "WHERE " . $column . " IS NOT NULL " . 
+                 "AND " . $column . "<> ''";
         $results = Yii::app()->db->createCommand($query)->queryColumn();
         
         $options = array();

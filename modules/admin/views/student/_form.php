@@ -6,6 +6,11 @@
 
 <?php
 $createFromRegistration = ($this->action->id == 'create' && isset($preregisterUser));
+$usernamePrefixesOptions = Settings::getPresetOptions("student_prefix");
+$nextUserIndices = array();
+foreach ($usernamePrefixesOptions as $prefix){
+    $nextUserIndices[$prefix] = ClsUser::getNextUserIndex($prefix);
+}
 ?>
 <script type="text/javascript">
 	function cancel(){
@@ -54,6 +59,46 @@ $createFromRegistration = ($this->action->id == 'create' && isset($preregisterUs
             "dateFormat":"yy-mm-dd"
         }).datepicker("show");;
     });
+    
+    $(function(){
+        var usePrefix = $("#use_prefix_checkbox").is(":checked");
+        var nextUserIndices = {
+            <?php foreach($nextUserIndices as $prefix=>$index){
+                if ($index < 10){
+                    $index = "00" . $index;
+                } else if ($index <100){
+                    $index = "0" . $index;
+                }
+                echo "'" . $prefix . "': '" . $index . "',";
+            }?>
+        };
+        
+        $("#username_prefix").change(function(){
+            $("#username_index").val(nextUserIndices[this.value]).change();
+        });
+        
+        $("#username_index").change(function(){
+            if (usePrefix){
+                $("#User_username").val($("#username_prefix").val() + this.value);
+            } else {
+                $("#User_username").val(this.value);
+            }
+        });
+        
+        $("#use_prefix_checkbox").change(function(){
+            if ($(this).is(":checked")){
+                usePrefix = true;
+                $("#username_prefix").change().parent().show();
+                $("#username_index").parent().addClass("col-lg-9");
+            } else {
+                usePrefix = false;
+                $("#username_prefix").parent().hide();
+                $("#username_index").val("").change().parent().removeClass("col-lg-9");
+            }
+        });
+        
+        $("#username_prefix").change();
+    });
 </script>
 <div class="form">
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -88,8 +133,27 @@ $createFromRegistration = ($this->action->id == 'create' && isset($preregisterUs
         </div>
 		<?php $changeStatus = Yii::app()->request->getPost('changeStatus', "0");?>
 		<div class="col col-lg-9">
-            <?php echo $form->textField($model,'username',array_merge(array('size'=>60,'maxlength'=>30), $disabledAttrs)); ?>
-			<?php echo $form->error($model,'username'); ?>
+            <?php if ($model->isNewRecord):?>
+                <div style="margin-bottom:5px;margin-top:-20px">
+                    <input type="checkbox" id="use_prefix_checkbox" checked> Dùng tên tài khoản định sẵn
+                </div>
+                <div class="col col-lg-3" style="padding-left:0">
+                    <select id="username_prefix">
+                    <?php foreach($usernamePrefixesOptions as $prefix):?>
+                        <option value="<?php echo $prefix?>"><?php echo $prefix?></option>
+                    <?php endforeach;?>
+                    </select>
+                </div>
+                <div class="col col-lg-9" style="padding-right:0; padding-left:0">
+                    <input type="text" id="username_index">
+                </div>
+                <?php echo $form->hiddenField($model,'username'); ?>
+                <?php echo $form->error($model,'username'); ?>
+            <?php else:
+                echo $form->textField($model,'username',array_merge(array('size'=>60,'maxlength'=>30, 'disabled'=>true)));
+                echo $form->error($model,'username');
+            endif;?>
+            
 			<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
 			<div class="fL">
 				<a class="fs12 errorMessage" href="javascript: changeToTeacher(<?php echo $model->id;?>);">Chuyển học sinh này thành role giáo viên?</a>
@@ -206,7 +270,7 @@ $createFromRegistration = ($this->action->id == 'create' && isset($preregisterUs
 			<?php echo $form->labelEx($model,'status'); ?>
 		</div>
 		<div class="col col-lg-9">
-			<?php echo $form->dropDownList($model,'status', $model->statusOptions(), $disabledAttrs); ?>
+			<?php echo $form->dropDownList($model,'status', Student::statusOptions(), $disabledAttrs); ?>
 			<?php echo $form->error($model,'status'); ?>
 			<?php if(!$model->isNewRecord):?>
 			<div class="fR">

@@ -731,4 +731,11 @@ class Course extends CActiveRecord
                  "AND deleted_flag = 0";
         return Yii::app()->db->createCommand($query)->queryScalar();
     }
+    
+    public function getLastSessionDate(){
+        $query = "SELECT plan_start FROM tbl_session
+                  WHERE course_id = " . $this->id . " " .
+                 "ORDER BY plan_start DESC LIMIT 1";
+        return Yii::app()->db->createCommand($query)->queryScalar();
+    }
 }
