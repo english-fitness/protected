@@ -124,7 +124,7 @@ $this->breadcrumbs=array(
 		        ),
 		        'view'=>array(
 		            'label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'btn-view' ),
+		            'options'=>array( 'class'=>'dpn' ),
 		        ),
 		        'delete'=>array(
 		            'label'=>'', 'imageUrl'=>'',

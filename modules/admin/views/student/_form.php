@@ -170,10 +170,12 @@ foreach ($usernamePrefixesOptions as $prefix){
             <?php echo $form->labelEx($model,'password'); ?>
         </div>
 		<div class="col col-lg-9">
-            <?php echo $form->passwordField($model,'password',array('size'=>60,'maxlength'=>128,'value'=>'')); ?>
+            <?php echo $form->textField($model,'password',array('size'=>60,'maxlength'=>128,'value'=>$model->isNewRecord ? 'hocmai.vn' : '')); ?>
 			<?php echo $form->error($model,'password'); ?>
 			<?php if(!$model->isNewRecord):?>
 			<label class="hint">Nhập mật khẩu mới cho tài khoản của học sinh này!</label>
+            <?php else:?>
+            <label class="hint">Mật khẩu mặc định là "hocmai.vn"</label>
 			<?php endif;?>
         </div>		
 	</div>

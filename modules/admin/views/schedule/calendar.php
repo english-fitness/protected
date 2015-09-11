@@ -6,6 +6,7 @@
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/schedule.js"></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
+<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/lang_vi.js'></script>
 
 <style>
 .reservedSlot{
@@ -49,6 +50,21 @@
 	font-size: 20px;
 	font-weight: bold;
 }
+.calendar-holder{
+	margin:35px;
+	position:relative;
+}
+.calendar-loading-indicator{
+	display:none;
+	width:100%;
+	height:1170px;
+	position:absolute;
+	top:49px;
+	left:0;
+	background: url("/media/images/icon/large-loader-128.gif") no-repeat center center;
+	background-color: rgba(250,250,250,0.7);
+	z-index: 99999;
+}
 </style>
 
 <?php
@@ -60,131 +76,75 @@
 ?>
 
 <div class="details-class">
-	<form class="form-inline" role="form" style="margin:0 auto; width:700px">
-		<div class="form-group">
-			<label class="form-label">Tìm giáo viên: </label>
-			<input id="teacherSearchBox" type="text" class="form-control" placeholder="Nhập tên giáo viên để tìm kiếm" style="width:500px;">
-			<input id="searchTeacherId" type="hidden" name="teacher">
-			<input type="submit" value="Tìm" class="btn" style="margin-top: 0px">
-		</div>
-	</form>
+	<?php $this->renderPartial('widgets/searchBox')?>
+	<?php $this->renderPartial('widgets/colorLegend')?>
 	<div style='margin:0 auto; text-align:center'>
 		Trang <?php echo PaginationLinks::create($page, $pageCount)?>
 	</div>
-	<div style='margin:0 auto; text-align:center; width:871px;'>
-		<button class='week-nav btn btn-primary' nav='prev'><</button>
-		<button class='wday-select btn' day='0'>Thứ hai<br></button>
-		<button class='wday-select btn' day='1'>Thứ ba<br></button>
-		<button class='wday-select btn' day='2'>Thứ tư<br></button>
-		<button class='wday-select btn' day='3'>Thứ năm<br></button>
-		<button class='wday-select btn' day='4'>Thứ sáu<br></button>
-		<button class='wday-select btn' day='5'>Thứ bảy<br></button>
-		<button class='wday-select btn' day='6'>Chủ nhật<br></button>
-		<button class='week-nav btn btn-primary' nav='next'>></button>
-	</div>
+	<?php $this->renderPartial('widgets/wdaySelector', array('current_day'=>$current_day)) ?>
 	<div style='clear:both'></div>
 	<?php if ($page > $pageCount)
 			echo "<div>Không có dữ liệu</div>"?>
-    <div id="calendar-1" style="width:1000px; margin:35px"></div>
-	<div id="calendar-2" style="width:1000px; margin:35px"></div>
-	<div id="calendar-3" style="width:1000px; margin:35px"></div>
-	<div id="calendar-4" style="width:1000px; margin:35px"></div>
+			<div id="calendar-1" class="calendar-holder">
+				<div class="calendar-loading-indicator"></div>
+			</div>
+			<div id="calendar-2" class="calendar-holder">
+				<div class="calendar-loading-indicator"></div>
+			</div>
+			<div id="calendar-3" class="calendar-holder">
+				<div class="calendar-loading-indicator"></div>
+			</div>
 	<div style='margin:0 auto; text-align:center'>
 		Trang <?php echo PaginationLinks::create($page, $pageCount)?>
-	</div>
-	<div style="position:fixed;bottom:10px;left:10px;width:160px;padding:3px;border:solid 1px #ddd;box-sizing:border-box;background-color:white;box-shadow:1px 1px 1px #ddd;border-radius:3px;">
-		<span style="margin:3px"><b>Color legend</b></span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:yellow;float:left;margin:3px"></div><span style="float:left">Available timeslot</span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:darkgray;float:left;margin:3px"></div><span style="float:left">Closed</span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:lime;float:left;margin:3px"></div><span style="float:left">Approved Session</span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:darkgreen;float:left;margin:3px"></div><span style="float:left">Pending Session</span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:turquoise;float:left;margin:3px"></div><span style="float:left">Ongoing Session</span>
-		<div style="clear:both"></div>
-		<div style="width:25px;height:15px;background-color:darkorange;float:left;margin:3px"></div><span style="float:left">Ended Session</span>
-		<div style="clear:both"></div>
-	</div>
-	<div style="position:fixed;top:330px;left:10px;width:160px;padding:3px;border:solid 1px #ddd;box-sizing:border-box;background-color:white;box-shadow:1px 1px 1px #ddd;border-radius:3px;text-align:justify; display:none"
-		 id="changingSchedule">
-		<p><b>Changing schedule</b></p>
-		<p>Click on an available slot to change schedule. Click the button bellow to cancel</p>
-		<button id="cancelChangeSchedule" class="btn" style="margin-left: 35px">Cancel</button>
 	</div>
 </div>
 <script>
 	//global variables
 	var classes = [<?php echo implode(',', $classes)?>];
-	
+
 	var changingSchedule = false;
 	var pendingChangeSession;
-	
+
 	var minTime = '09:00';
 	var maxTime = '22:51';
-	
-	var currentWday;
+
 	//end global variables
-	
 	var allTeachers = <?php echo $teachers?>;
 	var teacherGroups = [];
 	for (var i = 0; i < allTeachers.length; i+=4){
 		var group = allTeachers.slice(i, i + 4);
-		
+
 		teacherGroups.push(group);
 	}
-	
+
 	for (var i = 0; i < teacherGroups.length; i++){
 		loadCalendar('calendar-'+(i+1), teacherGroups[i]);
 	}
-	
+
 	<?php if (isset($timezone)){
 		echo 	'var convertedRange = convertRangeByTimezone(minTime, maxTime, 7, '. $timezone . ');
 				minTime = convertedRange.minTime;
 				maxTime = convertedRange.maxTime;';
 	}?>
-	
-	$(document).ready(function(){
-		currentWeekStart = '<?php echo date('Y/m/d', strtotime('monday this week'))?>';
-		setHeader();
-		$('.wday-select').click(function(){		
-			var targetDate = addDay(currentWeekStart, $(this).attr('day'));
-			
-			for (var i = 1; i <= 4; i++){
-				var calendar = $('#calendar-'+i);
-				calendar.fullCalendar('gotoDate', targetDate);
-			}
-		});
-		$('.week-nav').click(function(){
-			var value = $(this).attr('nav');
-			if (value == 'prev'){
-				currentWeekStart = addDay(currentWeekStart, -7);
-			} else if (value == 'next'){
-				currentWeekStart = addDay(currentWeekStart, 7);
-			}
-			for (var i = 0; i < teacherGroups.length; i++){
-				reloadCalendar('calendar-'+(i+1), teacherGroups[i], currentWeekStart);
-				$('#calendar-'+(i+1)).fullCalendar('gotoDate', currentWeekStart);
-			}
-		});
-		bindSearchBoxEvent("teacherSearchBox", searchTeacher);
-		$('#cancelChangeSchedule').click(function(){
-			toggleChangeSchedule(false);
-		});
-	});
-	
+
 	//functions
-	function loadCalendar (divId, teachers){
+	function loadCalendar (divId, teachers, date){
+		if (!date){
+			var date = currentDate;
+			var weekStart = currentWeekStart;
+		} else {
+			var weekStart = moment(date).startOf('isoWeek').format('YYYY-MM-DD');
+		}
 		$.ajax({
 			type:'get',
-			url:'<?php echo Yii::app()->baseUrl;?>/admin/schedule/getSessions',
+			url:'<?php echo Yii::app()->baseUrl;?>/schedule/getSessions',
 			data:{
 				teachers:JSON.stringify(teachers),
+				week_start:weekStart,
 			},
 			success:function(response){
 				createCalendar(divId, response, teachers.length);
+				$('#'+divId).fullCalendar('gotoDate', date);
 			}
 		});
 	}
@@ -195,9 +155,9 @@
 		document.getElementById(divId).setAttribute("style","width:"+calendarWidth+"px; height:1300px;margin: 40px auto");
 		var sessions = data.sessions;
 		var availableSlots = data.availableSlots;
-		
+
 		var calendarDiv = $('#'+divId);
-		
+
 		calendarDiv.fullCalendar({
 			height: 'auto',
 			header: {
@@ -207,14 +167,22 @@
 			},
 			viewRender: function(view,element) {
 				currentWday = (view.start._d.getDay() + 6) % 7;
-				
+
 				//change weekday selection
-				var currentSelect = $('.wday-select.btn-primary').attr('day');
+				var currentSelect = $('.wday-select.selected').attr('day');
 				if (currentSelect != currentWday){
-					$('.wday-select.btn-primary').removeClass('btn-primary');
-					$('.wday-select[day='+currentWday+']').addClass('btn-primary');
+					var selected = $('.wday-select.selected');
+					selected.removeClass('btn-primary selected');
+					$('.wday-select[day='+currentWday+']').addClass('btn-primary selected');
 				}
-				
+				setPaginationLinkDate(addDay(currentWeekStart, currentWday));
+
+				if (view.start.format('YYYY-MM-DD') == today){
+					$('#today-select').addClass('btn-primary');
+				} else {
+					$('#today-select').removeClass('btn-primary');
+				}
+
 			},
 			eventClick: function(event, jsEvent, view){
 				if (changingSchedule){
@@ -264,8 +232,9 @@
 			columnFormat: 'ddd D/M',
 			firstDay: 1,
 			events: sessions,
+            lang:'vi',
 		});
-		
+
 		<?php
 			if (!isset($timezone)){
 				echo "$('#'+divId).fullCalendar('addEventSource', getAvailableTimeslot(availableSlots));";
@@ -274,10 +243,10 @@
 			}
 		?>
 	}
-	
+
 	$('body').css('overflow-x', 'hidden');
 	$('.fc-title').css('cursor','default');
-	
+
 	$(document).keyup(function(e) {
 		switch(e.which) {
 			case 37: // left
@@ -295,13 +264,16 @@
 			default: return;
 		}
 	});
-	
-	function reloadCalendar(calendarDiv, teachers, weekStart){
+
+	function reloadCalendar(calendarDiv, teachers, date){
 		var calendar = $('#'+calendarDiv);
+		var loadingIndicator = calendar.children('.calendar-loading-indicator');
+		loadingIndicator.show();
 		calendar.fullCalendar( 'removeEvents');
 		calendar.fullCalendar('refetchEvents');
+		var weekStart = moment(date).startOf('isoWeek').format('YYYY-MM-DD');
 		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/getSessions',
+			url:'/schedule/getSessions',
 			type:'get',
 			data:{
 				teachers: JSON.stringify(teachers),
@@ -314,14 +286,12 @@
 				calendar.fullCalendar('addEventSource', newEvents);
 				calendar.fullCalendar('addEventSource', getAvailableTimeslot(newSlots));
 				calendar.fullCalendar('refetchEvents');
-				if (weekStart){
-					calendar.fullCalendar('gotoDate', addDay(currentWeekStart, currentWday));
-					setHeader();
-				}
+				loadingIndicator.hide();
+				calendar.fullCalendar('gotoDate', moment(date).format('YYYY-MM-DD'));
 			}
 		});
 	}
-	
+
 	function ajaxLoadCourse(studentId){
 		document.getElementById('hiddenStudentId').value = studentId;
 		$.ajax({
@@ -340,8 +310,9 @@
 			}
 		});
 	}
-	
+
 	function autoFillSessionTitle(courseId){
+        $("#sessionTitle").prop('disabled', true).val("Generating...");
 		$.ajax({
 			url:"<?php echo Yii::app()->baseUrl?>/admin/schedule/countSession",
 			type:"get",
@@ -349,11 +320,12 @@
 				course: courseId,
 			},
 			success:function(response){
+                document.getElementById("sessionTitle").disabled = false;
 				document.getElementById("sessionTitle").value = "Session " + (parseInt(response.sessionCount) + 1);
 			}
 		});
 	}
-	
+
 	function searchStudent(keyword){
 		$.ajax({
 			url:"<?php echo Yii::app()->baseurl; ?>/admin/course/AjaxLoadStudent/keyword/"+keyword,
@@ -364,22 +336,67 @@
 			}
 		});
 	}
+    
+    //we'll look into it later
+    // //bind scroll function
+    // var calendarPos = [];
+    // //cache those variable so we dont need to go grab them every scroll
+    // var currentCalendarIndex = -1;
+    // var currentCalendar;
+    // var currentHeader = $("<div></div>");
+    
+    // function onScroll(){
+        // var currentPos = window.pageYOffset;
+        // var calendarId;
+        
+        // for (calendarId = 1; calendarId < 4; ++calendarId){
+            // var calendarPosition = calendarPos[calendarId];
+            // if (currentPos >= calendarPosition.top && currentPos <= calendarPosition.bottom){
+                // break;
+            // }
+        // }
+        
+        // if (calendarId != 4){
+            // if (currentCalendarIndex != calendarId){
+                // currentCalendarIndex = calendarId;
+                // currentHeader.css("position", "relative").css("top", "").css("width", "").css("margin-left","").find(".fc-axis").show();
+                // currentCalendar = calendarPos[currentCalendarIndex];
+                // currentHeader = $("#calendar-"+currentCalendarIndex).find(".fc-widget-header").first();
+            // }
+            // var currentHeaderTop = currentHeader.offset().top;
+            // if ((currentHeaderTop <= currentPos ) && (currentHeaderTop + currentHeader.height() <= currentCalendar.bottom)){
+                // console.log(currentHeader);
+                // currentHeader.attr("style", "position:fixed; top:0; width:914px;margin-left:85px;background-color:white;z-index:999").find(".fc-axis").hide();
+            // }
+        // } else {
+            // currentHeader.css("position", "relative").css("top", "").css("width", "").css("margin-left","").find(".fc-axis").show();
+        // }
+    // }
+    
+    // $(window).load(function(){
+        // for (var i = 1; i < 4; i++){
+            // var calendar = $('#calendar-'+i);
+            // var calendarTop = calendar.offset().top;
+            // var calendarBottom = calendarTop + calendar.height();
+            
+            // calendarPos[i] = {
+                // top:calendarTop,
+                // bottom:calendarBottom,
+            // }
+        // }
+        
+        // $(window).scroll(function(e){
+            // onScroll();
+        // });
+        // onScroll();
+    // });
+    
+    //calendar actions event handlers
 
-	function searchTeacher(keyword){
-		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/ajaxSearchTeacher/keyword/' + keyword,
-			type:'get',
-			success:function(response){
-				var data = response.result;
-				searchBoxAutocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
-			}
-		});
-	}
-	
 	function createSessionSuccess(){
 		reloadAll();
 	}
-	
+
 	function createSessionError(response){
 		if (response.existingSession){
 			$("<div>Học sinh này đã đặt lịch học với một giáo viên khác trong cùng khung giờ. " +
@@ -400,11 +417,11 @@
 			displayConfirmDialog("Đặt lịch học", "Có lỗi xảy ra khi đặt lịch học, vui lòng thử lại sau", "Đóng");
 		}
 	}
-	
+
 	function updateSessionSuccess(){
 		reloadAll();
 	}
-	
+
 	function updateSessionError(response){
 		if (response.existingSession){
 			$("<div>Học sinh này đã đặt lịch học với một giáo viên khác trong cùng khung giờ. " +
@@ -425,7 +442,7 @@
 			displayConfirmDialog("Đặt lịch học", "Có lỗi xảy ra khi đặt lịch học, vui lòng thử lại sau", "Đóng");
 		}
 	}
-	
+
 	function duplicateSessionUpdate(data){
 		$.ajax({
 			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/calendarUpdateSession',
@@ -447,7 +464,7 @@
 			}
 		});
 	}
-	
+
 	function changeTeacher(data){
 		$.ajax({
 			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/calendarUpdateSession',
@@ -466,7 +483,7 @@
 			}
 		});
 	}
-	
+
 	function deleteSession(sessionId){
 		$('<div>Bạn có muốn xóa buổi học này?</div>').dialog({
 			modal:true,
@@ -491,7 +508,7 @@
 			}
 		});
 	}
-	
+
 	function approveSession(id){
 		$('<div>Bạn có muốn xác nhận buổi học này?</div>').dialog({
 			modal:true,
@@ -550,11 +567,11 @@
 			}
 		});
 	}
-	
+
 	function endSession(id, endTime){
 		var now = moment();
 		var end = moment(endTime);
-		
+
 		if (end.diff(now) > 0){
 			displayConfirmDialog("Kết thúc buổi học", "Buổi học vẫn chưa hết thời gian", "Đóng");
 		} else {
@@ -584,7 +601,7 @@
 			});
 		}
 	}
-	
+
 	function toggleChangeSchedule(changing, session){
 		changingSchedule = changing;
 		if (changing){
@@ -595,7 +612,7 @@
 			$('#changingSchedule').hide();
 		}
 	}
-	
+
 	function changeSchedule(session, values){
 		console.log(session);
 		console.log(values);
@@ -635,16 +652,7 @@
 			}
 		});
 	}
-	
-	function setHeader(){
-		$('.wday-select').each(function(){
-			var thisOne = $(this);
-			var day = thisOne.attr('day');
-			var html = thisOne.html();
-			thisOne.html(html.substr(0, html.indexOf('<br>') + 4) + ' ' + addDay(currentWeekStart, parseInt(day)));
-		});
-	}
-	
+
 	function displayConfirmDialog(title, confirmText, confirmButton){
 		var buttons = {};
 		buttons[confirmButton] = function(){
@@ -657,7 +665,7 @@
 			buttons:buttons,
 		});
 	}
-	
+
 	function reloadAll(){
 		for (var i = 0; i < teacherGroups.length; i++){
 			reloadCalendar('calendar-'+(i+1), teacherGroups[i], currentWeekStart);

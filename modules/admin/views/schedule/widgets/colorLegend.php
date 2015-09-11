@@ -20,3 +20,10 @@
 	<p>Click on an available slot to change schedule. Click the button bellow to cancel</p>
 	<button id="cancelChangeSchedule" class="btn" style="margin-left: 35px">Cancel</button>
 </div>
+<script>
+$(function(){
+	$('#cancelChangeSchedule').click(function(){
+		toggleChangeSchedule(false);
+	});
+});
+</script>

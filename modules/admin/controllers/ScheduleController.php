@@ -28,7 +28,7 @@ class ScheduleController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index', 'view', 'calendarCreateSession', 'calendarUpdateSession', 'calendarDeleteSession', 
+                'actions'=>array('index', 'view', 'calendarCreateSession', 'calendarUpdateSession', 'calendarDeleteSession',
 				'ajaxSearchTeacher', 'calendarTeacherView', 'getSessions', 'registerSchedule', 'getTeacherSchedule', 'saveSchedule',
 				'ajaxLoadCourse', 'countSession', 'changeSchedule'),
                 'users'=>array('*'),
@@ -47,59 +47,66 @@ class ScheduleController extends Controller
 	public function actionView()
 	{
 		$this->subPageTitle = 'Lịch học';
-		
-		if (isset($_REQUEST['teacher']) && trim($_REQUEST['teacher']) != ''){
+
+        if (isset($_REQUEST['teacher']) && trim($_REQUEST['teacher']) != ''){
 			$view = 'teacher';
 		} else {
 			$view = 'day';
+
+            if (isset($_REQUEST['date'])){
+                $currentDay = $_REQUEST['date'];
+            } else {
+                $currentDay = date('Y-m-d');
+            }
 		}
-		
+
 		if ($view == 'day'){
 			//get teacher id
 			//render the day view page
 			//do some pagination
-			
+
 			if (isset($_REQUEST['page'])){
 				$page = $_REQUEST['page'];
 			} else {
 				$page = 1;
 			}
-			
+
 			$teacherCount = User::model()->countByAttributes(array(
 				'role'=>User::ROLE_TEACHER,
 				'status'=>User::STATUS_OFFICIAL_USER
 			));
-			
+
 			$pageCount = ceil($teacherCount / 12);
-			
+
 			$query = "SELECT id FROM tbl_user " .
 					 "WHERE role = '" . User::ROLE_TEACHER . "' ".
 					 "AND status = " . User::STATUS_OFFICIAL_USER . " " .
 					 "LIMIT 12 OFFSET " . (($page - 1) * 12);
 			$teachers = Yii::app()->db->createCommand($query)->queryColumn();
-						
+
 			$this->render('calendar', array(
 				"teachers"=>json_encode(array_values($teachers)),
 				"pageCount"=>$pageCount,
 				"page"=>$page,
+                "current_day"=>$currentDay,
 			));
 		} else {
 			$this->render('teacher', $_REQUEST);
 		}
 		//remember to do some timezone too
 	}
-	
+
 	public function actionCalendarCreateSession()
 	{
 		$success = false;
-		
+
 		if (isset($_POST['Session'])){
 			if (isset($_POST['studentId'])){
 				$studentId = $_POST['studentId'];
 				$start_time = $_POST['Session']['plan_start'] . ' '.$_POST['startHour'].':'.$_POST['startMin'].":00";
 				$existingSession = Session::model()->findStudentExistingSession($studentId, $start_time);
 			}
-			
+
 			if (!$existingSession){
 				$courseId = $_POST['Session']['course_id'];
 				if ($courseId < 0){
@@ -122,9 +129,9 @@ class ScheduleController extends Controller
 				if (!isset($course)){
 					$course = Course::model()->findByPk($courseId);
 				}
-				
+
 				$session = new Session();
-				
+
 				$session->attributes = $_POST['Session'];
 				$session->course_id = $courseId;
 				$session->plan_start .= ' '.$_POST['startHour'].':'.$_POST['startMin'].':00';
@@ -151,10 +158,10 @@ class ScheduleController extends Controller
 			$this->renderJSON(array("success"=>$success));
 		}
 	}
-	
+
 	public function actionCalendarUpdateSession(){
 		$success = false;
-		
+
 		//Creating new session encounter another session with another teacher
 		//->change teacher of that session
 		if (isset($_POST['changeTeacher'])){
@@ -172,7 +179,7 @@ class ScheduleController extends Controller
 			if (isset($_POST['existingSession']) && isset($_POST['currentSession']) && isset($_POST['studentId'])){
 				$existingSession = Session::model()->findByPk($_POST['existingSession']);
 				$existingSession->delete();
-				
+
 				$currentSession = Session::model()->findByPk($_POST['currentSession']);
 				$currentSession->deleteAssignedStudents();
 				$currentSession->assignStudentsToSession(array($_POST['studentId']));
@@ -189,7 +196,7 @@ class ScheduleController extends Controller
 				$studentId = $_POST['studentId'];
 				$existingSession = Session::model()->findStudentExistingSession($studentId,  $_POST['Session']['plan_start']);
 			}
-			
+
 			if (!$existingSession){
 				$session = Session::model()->findByPk($_POST['sessionId']);
 				$session->deleteAssignedStudents();
@@ -209,11 +216,11 @@ class ScheduleController extends Controller
 					"currentStudent"=>$_POST['studentId'],
 				));
 			}
-			
+
 			$this->renderJSON(array("success"=>$success));
 		}
 	}
-	
+
 	public function actionCalendarDeleteSession(){
 		$session = Session::model()->findByPk($_POST['id']);
 		$course_id = $session->course_id;
@@ -228,28 +235,28 @@ class ScheduleController extends Controller
 			}
 		}
 	}
-	
+
 	public function actionAjaxSearchTeacher($keyword){
 		$teacherAttributes = User::model()->searchUsersToAssign($keyword, 'role_teacher');
 		$this->renderJSON(array("result"=>$teacherAttributes));
 	}
-	
+
 	public function actionGetSessions(){
 		$teacherIds = json_decode($_REQUEST["teachers"]);
-		
+
 		if (isset($_REQUEST['view'])){
 			$view = $_REQUEST['view'];
 		} else {
 			$view = 'week';
 		}
-		
+
 		if ($view == 'month'){
 			if (isset($_REQUEST['month'])){
 				$month = $_REQUEST['month'];
 			} else {
 				$month = date('m');
 			}
-			
+
 			$year = date('Y');
 			$startWeek = date('W', mktime(0, 0, 0, $month, 1, $year));
 			$start = date('Y-m-d', strtotime($year.'W'.$startWeek));
@@ -266,16 +273,16 @@ class ScheduleController extends Controller
 				$end = date('Y-m-d', strtotime('sunday this week'));
 			}
 		}
-		
-		
-		$query = "SELECT * FROM tbl_session " . 
+
+
+		$query = "SELECT * FROM tbl_session " .
 				 "WHERE teacher_id IN (" . implode(', ',$teacherIds) . ") " .
 				 "AND plan_start BETWEEN '" . $start . "' AND '" . $end . "' " .
 				 "AND status <> " . Session::STATUS_CANCELED . " " .
 				 "AND deleted_flag = 0";
 		$sessions = Session::model()->findAllBySql($query);
 		$sessionDays = array();
-		
+
 		if (!empty($sessions)){
 			foreach ($sessions as $session){
 				$backgroundColor;
@@ -305,7 +312,7 @@ class ScheduleController extends Controller
 						$className = 'unknownSessionStatus';
 						break;
 				}
-				
+
 				$students = $session->assignedStudents();
 				if (!empty($students)){
 					$studentId = array_pop($students);
@@ -314,7 +321,7 @@ class ScheduleController extends Controller
 				} else {
 					$title = '';
 				}
-				
+
 				$sessionDays[] = array(
                     'id' => $session->id,
                     'title' => (($title != '') ? $title : $session->subject) . (($session->type == Session::TYPE_SESSION_TRAINING) ? '(Trial)' : ''),
@@ -333,17 +340,17 @@ class ScheduleController extends Controller
                 );
 			}
 		}
-		
+
 		if ($view == 'week'){
 			$availableSlots = TeacherTimeslots::model()->getMultipleSchedules($teacherIds, $start);
 		} else {
 			$availableSlots = TeacherTimeslots::model()->getMultipleSchedules($teacherIds, $start, $end);
 		}
-		
+
 		$tempTeachers = User::model()->findAllBySql('SELECT id, firstname, lastname, profile_picture FROM tbl_user WHERE id IN (' . implode(', ', $teacherIds) . ")");
-		
+
 		$teachers = array();
-		
+
 		foreach($tempTeachers as $teacher){
 			$teachers[] = array(
 				"id"=>$teacher->id,
@@ -354,7 +361,7 @@ class ScheduleController extends Controller
 				),
 			);
 		}
-		
+
 		$this->renderJSON(array(
 			"teachers"=>$teachers,
 			"sessions"=>$sessionDays,
@@ -363,9 +370,9 @@ class ScheduleController extends Controller
 			"end"=>$end,
 		));
 	}
-	
+
 	//actions for registering teacher schedule
-	
+
 	public function actionRegisterSchedule(){
 		$this->subPageTitle = 'Lịch dạy của giáo viên';
 		if (!isset($_REQUEST['teacher'])){
@@ -394,21 +401,21 @@ class ScheduleController extends Controller
 			));
 		}
 	}
-	
+
 	public function actionGetTeacherSchedule(){
 		if (isset($_REQUEST['teacher'])){
 			$teacherId = $_REQUEST['teacher'];
 			if (isset($_REQUEST['week_start'])){
 				$timeslots = TeacherTimeslots::model()->getSchedule($teacherId, $_REQUEST['week_start']);
-				
+
 				$weekEnd = date('Y-m-d', strtotime('+6 days', strtotime($_REQUEST['week_start'])));
-				
+
 				$query = "SELECT plan_start FROM tbl_session ".
 						 "WHERE teacher_id = " . $teacherId . " ".
 						 "AND plan_start BETWEEN '" . $_REQUEST['week_start'] . "' AND '" . $weekEnd . "' ".
 						 "AND status <> " . Session::STATUS_CANCELED;
 				$bookedSlots = Yii::app()->db->createCommand($query)->queryColumn();
-				
+
 				//converting booked session time to timeslot number
 				//OMG too long, should I use an array instead
 				$startHour = 9;
@@ -416,22 +423,22 @@ class ScheduleController extends Controller
 				$slotDuration = 40;
 				$slotCount = 21;
 				$start = $startHour * 60 + $startMin;
-				
+
 				$bookedSessions = array();
 				if (!empty($bookedSlots)){
 					foreach ($bookedSlots as $slot){
 						$weekday = (date('w', strtotime($slot)) + 6) % 7;
-						
+
 						$slotHour = (int)substr($slot, -8, 2);
 						$slotMin = (int)substr($slot, -5, 2);
-						
+
 						$slotTime = $slotHour * 60 + $slotMin;
 						if ($slotTime < $start) continue;
 						$slotNumber = (int) (($slotTime - $start) / $slotDuration);
 						$bookedSessions[] = $weekday * $slotCount + $slotNumber;
 					}
 				}
-				
+
 				$this->renderJSON(array("timeslots"=>$timeslots, "bookedSessions"=>$bookedSessions));
 			}
 		}
@@ -448,12 +455,12 @@ class ScheduleController extends Controller
 			'success'=>$success,
 		));
 	}
-	
+
 	//end of actions for registering teacher schedule
-	
+
 	public function actionAjaxLoadCourse($student){
 		$courses = Course::model()->findByStudent($student);
-		
+
 		foreach($courses as $key=>$course){
 			if ($course->title == ""){
 				$courses[$key]['title'] = $course->id;
@@ -462,7 +469,7 @@ class ScheduleController extends Controller
 				$courses[$key]['title'] .= " (Trial)";
 			}
 		}
-		
+
 		$student = User::model()->findByPk($student);
 		if (empty($courses) && $student->status < User::STATUS_OFFICIAL_USER){
 			$courseOptions = array(
@@ -483,20 +490,20 @@ class ScheduleController extends Controller
 				),
 			);
 		}
-		
+
 		$courseOptions = array_merge($courses, $courseOptions);
-		
+
 		$this->renderJSON($courseOptions);
 	}
-	
+
 	public function actionCountSession(){
 		if (isset($_REQUEST['course'])){
             $sessionCount = Course::model()->findByPk($_REQUEST['course'])->countCurrentSession();
-			
+
 			$this->renderJSON(array("sessionCount"=>$sessionCount));
 		}
 	}
-	
+
 	public function actionChangeSchedule(){
 		$success = false;
 		if (isset($_POST['sessionId']) && isset($_POST['teacher']) && isset($_POST['start'])){

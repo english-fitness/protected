@@ -6,7 +6,12 @@
 <script type="text/javascript">
 	//Cancel button
 	function cancel(){
-		window.location = '<?php echo Yii::app()->baseUrl.'/admin/preregisterUser';?>';
+		<?php if(Yii::app()->request->urlReferrer != null){
+            echo "window.location = '" . Yii::app()->request->urlReferrer . "';";
+        } else {
+            echo "window.location = '" . Yii::app()->baseUrl."/admin/preregisterUser';";
+        }
+        ?>
 	}
 	//Allow edit html object field
 	function allowEdit(htmlObject){
