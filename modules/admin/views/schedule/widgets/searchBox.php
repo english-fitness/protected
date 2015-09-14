@@ -8,7 +8,7 @@
 </form>
 <script>
     $(function(){
-        bindSearchBoxEvent("teacherSearchBox", searchTeacher);
+        SearchBox.bindSearchEvent("teacherSearchBox", searchTeacher);
     });
 
     function searchTeacher(keyword){
@@ -17,7 +17,7 @@
 			type:'get',
 			success:function(response){
 				var data = response.result;
-				searchBoxAutocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
+				SearchBox.autocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
 			}
 		});
 	}

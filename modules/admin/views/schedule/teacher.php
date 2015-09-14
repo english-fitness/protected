@@ -4,8 +4,10 @@
 <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/calendar.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/schedule.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/util.js"></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.js'></script>
+<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
+<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/lang_vi.js'></script>
 
 <style>
 .reservedSlot{
@@ -96,7 +98,7 @@
 				$thisMonth = date('m');
 				for ($i = 1; $i <= 12; $i++){
 					$highlight = ($thisMonth == $i) ? "selected style='background-color:rgba(50, 93, 167, 0.2)'" : "";
-					echo "<option value=" . $i . " " . $highlight . ">" . date('F', strtotime('2000-'.$i.'-01')) . "</option>";
+					echo "<option value=" . $i . " " . $highlight . ">Tháng " . $i . "</option>";
 				}
 			?>
 		</select>
@@ -125,7 +127,7 @@
 		}?>
 		
 		$(document).ready(function(){
-			bindSearchBoxEvent("teacherSearchBox", searchTeacher);
+			SearchBox.bindSearchEvent("teacherSearchBox", searchTeacher);
 			loadCalendar();
 			$('#month-selection').on('change', function(){
 				var thisMonth = moment($(this).val(), 'MM');
@@ -188,7 +190,7 @@
 								start: event.start,
 							}
 							CalendarSessionHandler.newSession(preset, createSessionSuccess, createSessionError);
-							bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
+							SearchBox.bindSearchEvent("ajaxSearchStudent", searchStudent);
 						} else if (['approvedSession', 'ongoingSession', 'pendingSession'].indexOf(event.className[0]) > -1){
 							var data = {
 								action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarUpdateSession',
@@ -203,7 +205,7 @@
 								end: event.end,
 							}
 							CalendarSessionHandler.editSession(data, updateSessionSuccess, updateSessionError);
-							bindSearchBoxEvent("ajaxSearchStudent", searchStudent);
+							SearchBox.bindSearchEvent("ajaxSearchStudent", searchStudent);
 						}
 					}
 				},
@@ -323,7 +325,7 @@
 				type:"get",
 				success: function(response) {
 					var data = response[0];
-					searchBoxAutocomplete('ajaxSearchStudent', data, ajaxLoadCourse);
+					SearchBox.autocomplete('ajaxSearchStudent', data, ajaxLoadCourse);
 				}
 			});
 		}
@@ -334,7 +336,7 @@
 				type:'get',
 				success:function(response){
 					var data = response.result;
-					searchBoxAutocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
+					SearchBox.autocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
 				}
 			});
 		}
@@ -600,7 +602,7 @@
 				type:'get',
 				success:function(response){
 					var data = response.result;
-					searchBoxAutocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
+					SearchBox.autocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
 				}
 			});
 		}

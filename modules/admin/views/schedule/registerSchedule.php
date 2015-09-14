@@ -1,4 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
+<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
+<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/util.js"></script>
 <style>
 .calendar-td{
 	border: 1px solid;
@@ -52,9 +54,9 @@ button.schedule{
 		<span style="margin:0 auto; font-size:15px"><b><?php echo $teacherModel->fullname() . " - " . $teacherModel->username?></b></span>
 	</div>
 	<div class="form-group">
-		<label class="form-label">Week:</label>
+		<label class="form-label">Tuần:</label>
 		<div>
-			<button id='prev-week' class='btn' style='float:left; height:36px'>Previous</button>
+			<button id='prev-week' class='btn' style='float:left; height:36px'>Tuần trước</button>
 			<select name='week_start' id='week_start' class="form-control" style="width:300px; float:left; margin: 0px 10px 10px 10px">
 				<?php
 					$week = date('W');
@@ -65,13 +67,13 @@ button.schedule{
 					for ($i = 1; $i <= $weeknumber; $i++){
 						$w = $i >= 10 ? $i : "0" . $i;
 						$highlight = ($i == $week) ? "selected style='background-color:rgba(50, 93, 167, 0.2)'" : "";
-						$thisWeekText = ($i == $week) ? " - This week" : "";
+                        $thisWeekText = ($i == $week) ? " - Tuần này" : "";
 						$weekstart = date('Y-m-d', strtotime($year . 'W' . $w));
-						echo "<option value='" . $weekstart . "' " . $highlight . ">" . $i . " (from " . $weekstart . ")" . $thisWeekText . "</option>";
+						echo "<option value='" . $weekstart . "' " . $highlight . ">" . $i . " (từ ngày " . $weekstart . ")" . $thisWeekText . "</option>";
 					}
 				?>
 			</select>
-			<button id='next-week' class='btn' style='float:left; height:36px'>Next</button>
+			<button id='next-week' class='btn' style='float:left; height:36px'>Tuần tới</button>
 		</div>
 	</div>
 	<div>
@@ -86,7 +88,7 @@ button.schedule{
 				
 				$header = 	"<thead>
 								<tr>
-									<th class='calendar-th'>Time</th>
+									<th class='calendar-th'>Thời gian</th>
 									<th class='calendar-th wday' day='0'>Thứ hai<br></th>
 									<th class='calendar-th wday' day='1'>Thứ ba<br></th>
 									<th class='calendar-th wday' day='2'>Thứ tư<br></th>
@@ -111,15 +113,15 @@ button.schedule{
 		</table>
 	</div>
 	<div class="row" style='height:20px; padding-top:20px'>
-		<p style='color: red; display:none' id='saving'>Processing...</p>
-		<p style='color: green; display:none' id='saved'>Schedule saved</p>
+		<p style='color: red; display:none' id='saving'>Đang lưu lịch dạy...</p>
+		<p style='color: green; display:none' id='saved'>Đã lưu lịch dạy</p>
 	</div>
 	<div class="row">
 		<div class="col-md-5">
 			
 		</div>
 		<div class="col-md-7">
-			<input type="button" id="saveSchedule" value="Save Schedule" class="text-center gui btn btn-primary" />
+			<input type="button" id="saveSchedule" value="Lưu lịch dạy" class="text-center gui btn btn-primary" />
 		</div>
 	</div>
 </div>
@@ -170,24 +172,24 @@ button.schedule{
 		
 		document.getElementById('week_start').onchange = function(){
 			if (modifying){
-				$("<div>You are modifying this week's schedule, navigating away from it will cause all unsaved changes to lost. " +
-					"<br>Are you sure you want to do this?</div>").dialog({
-					title:"You forgot to save your schedule!",
+				$("<div>Bạn đang sửa lịch dạy của tuần này. Chuyển sang trang khác sẽ làm mất toàn bộ thay đổi hiện tại. " +
+				"<br>Bạn có muốn tiếp tục không?</div>").dialog({
+					title:"Lịch dạy chưa được lưu",
 					modal:true,
 					resizable:false,
 					width:650,
 					buttons:{
-						"Yes, proceed": function(){
+						"Có, tiếp tục": function(){
 							loadSchedule();
 							currentWeekSelection = document.getElementById('week_start').value;
 							modifying = false;
 							$(this).dialog('close');
 						},
-						"No, take me back": function(){
+						"Không, quay lại": function(){
 							document.getElementById('week_start').value = currentWeekSelection;
 							$(this).dialog('close');
 						},
-						"Save it for me": function(){
+						"Lưu lại và tiếp tục": function(){
 							collectData(currentWeekSelection);
 							loadSchedule();
 							currentWeekSelection = document.getElementById('week_start').value;
@@ -220,28 +222,28 @@ button.schedule{
 			weekSelection.onchange();
 			return false;
 		};
-		bindSearchBoxEvent("teacherSearchBox", searchTeacher);
+		SearchBox.bindSearchEvent("teacherSearchBox", searchTeacher);
 	});
 	
 	$("a").on('click', function(e){
 		if (modifying){
 			var link = this;
 			e.preventDefault();
-			$("<div>You are modifying this week's schedule, navigating away from it will cause all unsaved changes to lost. " +
-				"<br>Are you sure you want to do this?</div>").dialog({
-				title:"You forgot to save your schedule!",
+			$("<div>Bạn đang sửa lịch dạy của tuần này. Chuyển sang trang khác sẽ làm mất toàn bộ thay đổi hiện tại. " +
+				"<br>Bạn có muốn tiếp tục không?</div>").dialog({
+				title:"Lịch dạy chưa được lưu",
 				modal:true,
 				resizable:false,
 				width:650,
 				buttons:{
-					"Yes, proceed": function(){
+					"Có, tiếp tục": function(){
 						$(this).dialog('close');
 						window.location.href = link.href;
 					},
-					"No, take me back": function(){
+					"Không, quay lại": function(){
 						$(this).dialog('close');
 					},
-					"Save it for me": function(){
+					"Lưu lại và tiếp tục": function(){
 						collectData(currentWeekSelection);
 						$(this).dialog('close');
 						window.location.href = link.href;
@@ -364,19 +366,9 @@ button.schedule{
 			var thisOne = $(this);
 			var day = thisOne.attr('day');
 			var html = thisOne.html();
-			thisOne.html(html.substr(0, html.indexOf('<br>') + 4) + ' ' + addDay(document.getElementById('week_start').value, parseInt(day)));
+            var thisDay=moment(document.getElementById('week_start').value).add(day, "days").format("DD-MM-YYYY");
+			thisOne.html(html.substr(0, html.indexOf('<br>') + 4) + ' ' + thisDay);
 		});
-	}
-	
-	function addDay(date, amount){
-		var denormalizedDate = date.replace(/-/g, '/')
-		var result = new Date(denormalizedDate);
-		result.setDate(result.getDate() + amount);
-		var month = (result.getMonth() + 1 < 10) ? '0' + (result.getMonth() + 1) : result.getMonth() + 1;
-		var day = (result.getDate() < 10) ? '0' + (result.getDate()) : result.getDate();
-		
-		//normalize date format
-		return day + '-' + month + '-' + result.getFullYear();
 	}
 	
 	//display loading message, copy from student.js
@@ -397,52 +389,13 @@ button.schedule{
 		$(".loading").remove();
 	}
 	
-	//searchBoxHandler
-	function bindSearchBoxEvent(searchBoxId, searchFunction){
-		$("#"+searchBoxId).keyup(function(){
-			var keyword =  $(this).val();
-			if(keyword.length<=3 && keyword.length>0) {
-				searchFunction.call(undefined, keyword);
-			}
-		});
-	}
-
-	function searchBoxAutocomplete(searchBox, results, selectCallback){
-		var searchBox = $('#'+searchBox)
-		if (selectCallback){
-			searchBox.autocomplete({
-				source: formatSearchResult(results),
-				height:'50',
-				select:function(e, ui){
-					selectCallback.call(undefined, ui.item.id);
-				},
-			});
-		} else {
-			searchBox.autocomplete({
-				source: formatSearchResult(results),
-				height:'50',
-			});
-		}
-	}
-
-	function formatSearchResult(result){
-		var formattedData = [];
-		result.forEach(function(value,key){
-			formattedData[formattedData.length] = {
-				'value': value.usernameAndFullName,
-				'id': value.id,
-			}
-		});
-		return formattedData;
-	}
-	
 	function searchTeacher(keyword){
 		$.ajax({
 			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/ajaxSearchTeacher/keyword/' + keyword,
 			type:'get',
 			success:function(response){
 				var data = response.result;
-				searchBoxAutocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
+				SearchBox.autocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
 			}
 		});
 	}
