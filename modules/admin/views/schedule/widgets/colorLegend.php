@@ -86,18 +86,20 @@ $('.day-nav').click(function(){
     }
 });
 var floatingDatepickerShowing = false;
-$(window).load(function(){
-    var firstCalendarTop = $("#calendar-1").find(".fc-view-container").offset().top;
-    $(window).scroll(function(){
-        var currentPos = window.pageYOffset;
-        if (currentPos >= firstCalendarTop && !floatingDatepickerShowing){
-            $('#floating-datepicker').show(300);
-            floatingDatepickerShowing = true;
-        } else if (currentPos < firstCalendarTop && floatingDatepickerShowing && !$("#changingSchedule").is(":visible")){
-            $('#floating-datepicker').hide(300);
-            floatingDatepickerShowing = false;
-        }
-    });
-    $(window).scroll();
+$(document).on("calendarLoaded", function(e){
+    if (e.calendar = "calendar-1"){
+        var firstCalendarTop = $("#calendar-1 > .fc-view-container").offset().top;
+        $(window).scroll(function(){
+            var currentPos = window.pageYOffset;
+            if (currentPos >= firstCalendarTop && !floatingDatepickerShowing){
+                $('#floating-datepicker').show(300);
+                floatingDatepickerShowing = true;
+            } else if (currentPos < firstCalendarTop && floatingDatepickerShowing && !$("#changingSchedule").is(":visible")){
+                $('#floating-datepicker').hide(300);
+                floatingDatepickerShowing = false;
+            }
+        });
+        $(window).scroll();
+    }
 });
 </script>

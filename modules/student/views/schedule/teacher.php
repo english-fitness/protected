@@ -2,9 +2,10 @@
 <link href="/media/js/calendar/fullcalendar.print.css" rel="stylesheet" media="print">
 <link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/student.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/calendar.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/util.js"></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.js'></script>
+<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
 
 <style>
 .reservedSlot{
@@ -59,7 +60,7 @@
 			<input type="submit" value="<?php echo Yii::t('lang', 'search')?>" class="btn" style="margin-top: 0px">
 		</div>
 		<div>
-			<a href="<?php echo Yii::app()->baseUrl?>/student/class/calendar"><?php echo Yii::t('lang', 'all_teachers')?></a>
+			<a href="<?php echo Yii::app()->baseUrl?>/student/schedule/calendar"><?php echo Yii::t('lang', 'all_teachers')?></a>
 		</div>
 	</form>
 	<form class="form-inline form-element-container" role="form" style="margin-left:35px; padding-top:0px">
@@ -100,7 +101,7 @@
 		}?>
 		
 		$(document).ready(function(){
-			bindSearchBoxEvent("teacherSearchBox", searchTeacher);
+			SearchBox.bindSearchEvent("teacherSearchBox", searchTeacher);
 			loadCalendar("calendar", [<?php echo $teacher?>]);
 			$('#month-selection').on('change', function(){
 				var thisMonth = moment($(this).val(), 'MM');
@@ -136,7 +137,7 @@
 			loading.created();
 			$.ajax({
 				type:'get',
-				url:'<?php echo Yii::app()->baseUrl;?>/student/class/getSessions',
+				url:'<?php echo Yii::app()->baseUrl;?>/student/schedule/getSessions',
 				data:{
 					teachers:JSON.stringify(teacher),
 					view:'month',
@@ -163,7 +164,7 @@
 				eventClick: function(event, jsEvent, view){
 					if (event.className == 'reservedSlot'){
 						var values = {
-							actionUrl: '<?php echo Yii::app()->baseUrl?>/student/class/bookSession',
+							actionUrl: '<?php echo Yii::app()->baseUrl?>/student/schedule/bookSession',
 							teacher: event.teacher,
 							start:event.start.format('YYYY-MM-DD HH:mm:ss'),
 						}
@@ -212,7 +213,7 @@
 			
 			$('.fc-title').css('cursor','default');
 			
-			bindSearchBoxEvent("teacherSearchBox", searchTeacher);
+			SearchBox.bindSearchEvent("teacherSearchBox", searchTeacher);
 		}
 		
 		$('body').css('overflow-x', 'hidden');
@@ -236,7 +237,7 @@
 			$('#calendar').fullCalendar( 'removeEvents');
 			$('#calendar').fullCalendar('refetchEvents');
 			$.ajax({
-				url:'<?php echo Yii::app()->baseUrl?>/student/class/getSessions',
+				url:'<?php echo Yii::app()->baseUrl?>/student/schedule/getSessions',
 				type:'post',
 				data:{
 					teachers:JSON.stringify([<?php echo $teacher?>]),
@@ -318,7 +319,7 @@
 		
 		function changeTeacher(data){
 			$.ajax({
-				url:'<?php echo Yii::app()->baseUrl?>/student/class/changeTeacher',
+				url:'<?php echo Yii::app()->baseUrl?>/student/schedule/changeTeacher',
 				type:'post',
 				data:{
 					session: data.existingSession,
@@ -381,7 +382,7 @@
 				buttons:{
 					"<?php echo Yii::t('lang', 'button_yes')?>": function(){
 						$.ajax({
-							url:'<?php echo Yii::app()->baseUrl?>/student/class/unbookSession',
+							url:'<?php echo Yii::app()->baseUrl?>/student/schedule/unbookSession',
 							type:'post',
 							data:{
 								session: sessionId,
@@ -401,11 +402,11 @@
 		
 		function searchTeacher(keyword){
 		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/student/class/ajaxSearchTeacher/keyword/' + keyword,
+			url:'<?php echo Yii::app()->baseUrl?>/student/schedule/ajaxSearchTeacher/keyword/' + keyword,
 			type:'get',
 			success:function(response){
 				var data = response.result;
-				searchBoxAutocomplete('teacherSearchBox', data, function(id){$('#teacherId').val(id);});
+				SearchBox.autocomplete('teacherSearchBox', data, function(id){$('#teacherId').val(id);});
 			}
 		});
 	}

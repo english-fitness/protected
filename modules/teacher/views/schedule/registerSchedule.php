@@ -1,11 +1,7 @@
 <div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Register Schedules</p></div>
 <?php $this->renderPartial('teacher.views.class.myCourseTab'); ?>
 <div class="details-class">
-<link rel="stylesheet" type="text/css" href="/media/css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
-<link rel="stylesheet" type="text/css" href="/media/css/bootstrap-theme.min.css" />
-<link rel="stylesheet" type="text/css" href="/media/js/bootstrap.min.js" />
-<link rel="stylesheet" type="text/css" href="/media/js/jquery.min.js" />
 <style>
 .calendar-td{
 	border: 1px solid;

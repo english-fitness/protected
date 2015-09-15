@@ -148,6 +148,10 @@
 			success:function(response){
 				createCalendar(divId, response, teachers.length);
 				$('#'+divId).fullCalendar('gotoDate', date);
+                $.event.trigger({
+                    type:"calendarLoaded",
+                    calendar:divId,
+                });
 			}
 		});
 	}

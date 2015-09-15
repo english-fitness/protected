@@ -238,11 +238,11 @@ class Course extends CActiveRecord
 	public function typeOptions()
 	{
 		return array(
-			self::TYPE_COURSE_TESTING => 'Khóa học test',
+			// self::TYPE_COURSE_TESTING => 'Khóa học test',
 			self::TYPE_COURSE_NORMAL => 'Khóa học thường',
-			self::TYPE_COURSE_TIMER => 'Khóa học đo thời gian',
+			// self::TYPE_COURSE_TIMER => 'Khóa học đo thời gian',
 			self::TYPE_COURSE_TRAINING => 'Khóa học thử',
-			self::TYPE_COURSE_PRESET => 'Khóa học tạo trước',	
+			// self::TYPE_COURSE_PRESET => 'Khóa học tạo trước',	
 		);
 	}
 	/**

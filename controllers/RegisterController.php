@@ -42,7 +42,7 @@ class RegisterController extends Controller
 				}
 			}
             
-            if (isset($_POST['referer'])){
+            if (isset($_REQUEST['referrer'])){
                 $model->source = $_REQUEST['referrer'];
             }
 			

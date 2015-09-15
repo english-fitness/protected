@@ -17,10 +17,13 @@
  */
 class Student extends CActiveRecord
 {
+    //these values are to match with current value
+    //may need changes for better coherent
     const STATUS_NEW_REGISTER = 0;
     const STATUS_TRIAL_TEST = 5;
     const STATUS_TRIAL_TEACHER = 6;
     const STATUS_TRIAL_COMPLETE = 4;
+    const STATUS_DISCONTINUED_STUDENT = 3;
     const STATUS_NEW_STUDENT = 7;
     const STATUS_OLD_STUDENT = 8;
     
@@ -30,6 +33,7 @@ class Student extends CActiveRecord
 			self::STATUS_TRIAL_TEST => 'Đang học thử/Test',
 			self::STATUS_TRIAL_TEACHER => 'Đang học thử/GV',
 			self::STATUS_TRIAL_COMPLETE => 'Học viên/Quản lý',
+            self::STATUS_DISCONTINUED_STUDENT => 'Học viên/Nghỉ',
 			self::STATUS_NEW_STUDENT => 'Học viên mới',
 			self::STATUS_OLD_STUDENT => 'Học viên VIP',
 		);
