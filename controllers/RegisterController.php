@@ -42,11 +42,9 @@ class RegisterController extends Controller
 				}
 			}
             
-            // if (isset($_POST['referer'])){
-                // $model->source = $_REQUEST['referrer'];
-            // } else {
-                // $model->source = 'Online - Website';
-            // }
+            if (isset($_POST['referer'])){
+                $model->source = $_REQUEST['referrer'];
+            }
 			
 			if ($model->save()){
 				$success = true;

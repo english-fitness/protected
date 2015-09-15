@@ -185,6 +185,8 @@
 				} else {
 					$('.today-select').removeClass('btn-primary');
 				}
+                
+                $("#secondary-datepicker").val(view.start.format("DD-MM-YYYY"));
 
 			},
 			eventClick: function(event, jsEvent, view){
@@ -339,59 +341,9 @@
 		});
 	}
     
-    //we'll look into it later
-    // //bind scroll function
-    // var calendarPos = [];
-    // //cache those variable so we dont need to go grab them every scroll
-    // var currentCalendarIndex = -1;
-    // var currentCalendar;
-    // var currentHeader = $("<div></div>");
-    
-    // function onScroll(){
-        // var currentPos = window.pageYOffset;
-        // var calendarId;
-        
-        // for (calendarId = 1; calendarId < 4; ++calendarId){
-            // var calendarPosition = calendarPos[calendarId];
-            // if (currentPos >= calendarPosition.top && currentPos <= calendarPosition.bottom){
-                // break;
-            // }
-        // }
-        
-        // if (calendarId != 4){
-            // if (currentCalendarIndex != calendarId){
-                // currentCalendarIndex = calendarId;
-                // currentHeader.css("position", "relative").css("top", "").css("width", "").css("margin-left","").find(".fc-axis").show();
-                // currentCalendar = calendarPos[currentCalendarIndex];
-                // currentHeader = $("#calendar-"+currentCalendarIndex).find(".fc-widget-header").first();
-            // }
-            // var currentHeaderTop = currentHeader.offset().top;
-            // if ((currentHeaderTop <= currentPos ) && (currentHeaderTop + currentHeader.height() <= currentCalendar.bottom)){
-                // console.log(currentHeader);
-                // currentHeader.attr("style", "position:fixed; top:0; width:914px;margin-left:85px;background-color:white;z-index:999").find(".fc-axis").hide();
-            // }
-        // } else {
-            // currentHeader.css("position", "relative").css("top", "").css("width", "").css("margin-left","").find(".fc-axis").show();
-        // }
-    // }
-    
-    // $(window).load(function(){
-        // for (var i = 1; i < 4; i++){
-            // var calendar = $('#calendar-'+i);
-            // var calendarTop = calendar.offset().top;
-            // var calendarBottom = calendarTop + calendar.height();
-            
-            // calendarPos[i] = {
-                // top:calendarTop,
-                // bottom:calendarBottom,
-            // }
-        // }
-        
-        // $(window).scroll(function(e){
-            // onScroll();
-        // });
-        // onScroll();
-    // });
-    
-    //calendar actions event handlers
+    function reloadAll(){
+        for (var i = 0; i < teacherGroups.length; i++){
+            reloadCalendar('calendar-'+(i+1), teacherGroups[i], moment(currentWeekStart).add(currentWday, 'days').format("YYYY-MM-DD"));
+        }
+    }
 </script>

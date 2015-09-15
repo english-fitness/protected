@@ -18,6 +18,12 @@ class ScheduleController extends Controller
 			$view = 'teacher';
 		} else {
 			$view = 'day';
+
+            if (isset($_REQUEST['date'])){
+                $currentDay = $_REQUEST['date'];
+            } else {
+                $currentDay = date('Y-m-d');
+            }
 		}
 		
 		if ($view == 'day'){
@@ -46,7 +52,8 @@ class ScheduleController extends Controller
 			$this->render('calendar', array(
 				"teachers"=>json_encode(array_values($teachers)),
 				"pageCount"=>$pageCount,
-				"page"=>$page
+				"page"=>$page,
+                "current_day"=>$currentDay,
 			));
 		} else {
 			//render teacher view

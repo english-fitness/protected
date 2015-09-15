@@ -283,6 +283,7 @@
                     <div class="inner-form">
                         <!--main form-->
                         <form id="main-registration-form" class="registration-form">
+                            <input type="hidden" name="referrer" value="Online - Facebook">
                             <div class="main-form">
                                 <div class="title">ĐĂNG KÝ TRẢI NGHIỆM MIỄN PHÍ</div>
                                 <div class="form-input">
