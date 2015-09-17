@@ -338,4 +338,28 @@ class Student extends CActiveRecord
         }
         return $saleUsers;
 	}
+    
+    public static function findByFullname($fullname, $returnAttributes=array()){
+		if (empty($returnAttributes)){
+			$returnModels = true;
+		} else {
+			$returnModels = false;
+		}
+		
+		if ($returnModels){
+			$query = "SELECT * FROM tbl_user u " .
+					 "WHERE CONCAT(u.`lastname`, ' ', u.`firstname`) LIKE '%".$fullname."%'
+                     AND u.`role` = 'role_student'";
+		} else {
+			$query = "SELECT " . implode(',', $returnAttributes) . " FROM tbl_user u " .
+					 "WHERE CONCAT(u.`lastname`, ' ', u.`firstname`) LIKE '%".$fullname."%'
+                     AND u.`role` = 'role_student'";
+		}
+        
+		if ($returnModels){
+			return self::model()->findAllBySql($query);
+		} else {
+			return Yii::app()->db->createCommand($query)->queryAll();
+		}
+	}
 }

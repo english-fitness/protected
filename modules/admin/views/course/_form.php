@@ -33,7 +33,7 @@
 			$(".toggle_schedule_link").hide();
             switch (mode){
                 case 'change':
-                    $("#update_schedule > legend").html("Sửa lịch học (Lịch học của tất cả các buổi học còn lại sẽ được sửa như lịch học dưới đây)");
+                    $("#update_schedule > legend").html("Sửa lịch học (Lịch học của tất cả các buổi học còn lại sẽ được sửa theo lịch dưới đây)");
                     $("#number_of_session").prop("disabled", true).hide();
                     $("#start_date").prop("disabled", true).hide();
                     $(".assignedStudent").prop("disabled", true);

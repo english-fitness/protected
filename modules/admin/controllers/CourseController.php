@@ -234,6 +234,32 @@ class CourseController extends Controller
 		$model->unsetAttributes();  // clear any default values		
 		if(isset($_GET['Course'])){
 			$model->attributes=$_GET['Course'];
+            if (isset($_GET['Course']['student_name'])){
+                $courseIds = Course::findByStudentName($_GET['Course']['student_name'], array("id"));
+                $courses = array();
+                foreach($courseIds as $course){
+                    $courses[] = $course['id'];
+                }
+                $courseIdString = implode(", ", $courses);
+				if ($courseIdString == ''){
+					$courseIdString = "''";
+				}
+                $model->getDbCriteria()->addCondition("id in (" . $courseIdString . ")");
+            }
+            if(isset($_GET['Course']['teacher_fullname'])){
+				$keyword = $_GET['Course']['teacher_fullname'];
+				$teachers = User::model()->findByFullname($keyword, 'role_teacher', array('id'));
+				$teacherId = array();
+				foreach ($teachers as $teacher)
+				{
+					array_push($teacherId, $teacher['id']);
+				}
+				$teacherIdString = implode(", ", $teacherId);
+				if ($teacherIdString == ''){
+					$teacherIdString = "''";
+				}
+				$model->getDbCriteria()->addCondition("teacher_id in (" . $teacherIdString . ")");
+			}
 		}
 		//Get list of course by teacher
 		if(isset($_GET['teacher_id']))	$model->teacher_id = $_GET['teacher_id'];

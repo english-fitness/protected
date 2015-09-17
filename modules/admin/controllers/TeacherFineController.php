@@ -2,6 +2,14 @@
 
 class TeacherFineController extends Controller
 {
+    /*
+        TODO:
+        - The model needs rework
+        + teacher_id is redundant (retrieve through session_id)
+        + id is redundant (use session_id as primary key)
+        - Actions needs changes
+        + add new fine record must be triggered in a session view to get session_id
+    */
 	public function filters()
 	{
 		return array(
@@ -20,7 +28,7 @@ class TeacherFineController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('chargeFine', 'fineRecords', 'fineChargeRecords', 'fineChargeList', 'expiredFine', 'deleteFine',
-								 'create', 'view', 'update', 'delete'),
+								 'create', 'view', 'update', 'delete', 'ajaxGetFine', 'ajaxUpdateFine'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -165,7 +173,7 @@ class TeacherFineController extends Controller
 			if($teacherFine->save()){
 				$this->redirect('/admin/teacherFine/fineRecords');
 			}else {
-				throw new CHttpException(500,'Unexpected error happened');
+				throw new CHttpException(500,'Internal server error');
 			}
 		} else {
 			if(isset($_REQUEST['teacherId'])){
@@ -198,7 +206,7 @@ class TeacherFineController extends Controller
 			if($teacherFine->save()){
 				$this->redirect('/admin/teacherFine/fineRecords');
 			} else {
-				throw new CHttpException(500,'Unexpected error happened');
+				throw new CHttpException(500,'Internal server error');
 			}
 		} else {
 			$this->render('update', array(
@@ -241,5 +249,47 @@ class TeacherFineController extends Controller
 		return $model;
 	}
 
-
+    public function actionAjaxGetFine(){
+        if (isset($_REQUEST['session_id'])){
+            $fine = TeacherFine::model()->findByAttributes(array("session_id"=>$_REQUEST['session_id']));
+            
+            if ($fine != null){
+                $this->renderJSON(array(
+                    "points"=>$fine->points,
+                    "notes"=>$fine->notes,
+                ));
+            } else {
+                $this->renderJSON(array(
+                    "not_found"=>true,
+                ));
+            }
+        }
+    }
+    
+    public function actionAjaxUpdateFine(){
+        $success = false;
+        if (isset($_POST['action']) && isset($_POST["TeacherFine"])){
+            $action = $_POST['action'];
+            
+            switch ($action){
+                case "create":
+                    $fine = new TeacherFine();
+                    break;
+                case "update":
+                    $fine = TeacherFine::model()->findByAttributes(array("session_id"=>$_POST['TeacherFine']['session_id']));
+                    break;
+                default:
+                    break;
+            }
+            
+            $fine->attributes = $_POST["TeacherFine"];
+            $fine->created_date = date("Y-m-d", strtotime($fine->session->plan_start));
+            $fine->teacher_id = $fine->session->teacher_id;
+            if ($fine->save()){
+                $success = true;
+            }
+        }
+        
+        $this->renderJSON(array("success"=>$success));
+    }
 }

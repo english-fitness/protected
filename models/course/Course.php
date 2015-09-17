@@ -738,4 +738,39 @@ class Course extends CActiveRecord
                  "ORDER BY plan_start DESC LIMIT 1";
         return Yii::app()->db->createCommand($query)->queryScalar();
     }
+    
+    public static function findByStudentName($keyword, $returnAttributes = array()){
+        if (empty($returnAttributes)){
+			$returnModels = true;
+		} else {
+			$returnModels = false;
+		}
+        
+        //the joined table is large so we find the student id first in order to use sargable search in next querry
+        $studentIds = Student::findByFullName($keyword, array("id"));
+        $students = array();
+        foreach ($studentIds as $student){
+            array_push($students, $student['id']);
+        }
+        
+        if ($returnModels){
+			$query = "SELECT  c.*
+                     FROM tbl_course c
+                        JOIN tbl_course_student cs
+                            ON c.id = cs.course_id
+                     WHERE cs.`student_id` IN (" . implode(',', $students) . ")";
+		} else {
+			$query = "SELECT c." . implode(', c.', $returnAttributes) . " " .
+                     "FROM tbl_course c
+                        JOIN tbl_course_student cs
+                            ON c.id = cs.course_id
+                     WHERE cs.`student_id` IN (" . implode(',', $students) . ")";
+		}
+        
+		if ($returnModels){
+			return self::model()->findAllBySql($query);
+		} else {
+			return Yii::app()->db->createCommand($query)->queryAll();
+		}    
+    }
 }

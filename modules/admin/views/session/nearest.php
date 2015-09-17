@@ -17,6 +17,7 @@ $this->breadcrumbs=array(
 	$registration = new ClsRegistration();//New Registration class
 	$startDateFilter = Yii::app()->controller->getQuery('Session[plan_start]', '');
 	$teacherFullname = Yii::app()->controller->getQuery('Session[teacher_fullname]', '');
+    $studentName = Yii::app()->controller->getQuery('Session[student_name]', '');
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'gridView',
@@ -54,11 +55,13 @@ $this->breadcrumbs=array(
 		array(
 		   'name'=>'teacher_id',
 		   'value'=>'$data->getTeacher("/admin/teacher/view/id", true)',
-		   'type'  => 'raw', 'filter'=>false,
+           'filter'=>'<input type="text" value="'.$teacherFullname.'" name="Session[teacher_fullname]">',
+		   'type'  => 'raw',
 		),
 		array(
 		   'header' => 'Học sinh',
 		   'value'=>'implode(", ", $data->getAssignedStudentsArrs("/admin/student/view/id"))',
+           'filter'=>'<input type="text" value="'.$studentName.'" name="Session[student_name]">',
 		   'type'  => 'raw',
 		   'htmlOptions'=>array('style'=>'min-width:150px; max-width:400px;'),
 		),

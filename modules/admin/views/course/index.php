@@ -24,6 +24,10 @@ $this->breadcrumbs=array(
 		}
 	}
 </script>
+<?php
+$studentName = Yii::app()->controller->getQuery('Course[student_name]', '');
+$teacherFullname = Yii::app()->controller->getQuery('Course[teacher_fullname]', '');
+?>
 <div class="page-header-toolbar-container row">
     <div class="col col-lg-6">
     	<?php 
@@ -54,12 +58,6 @@ $this->breadcrumbs=array(
 	'pager' => array('class'=>'CustomLinkPager'),
 	'rowHtmlOptionsExpression'=>'($data->deleted_flag==1)?array("class"=>"deletedRecord"):array()',
 	'columns'=>array(
-		/*
-		array(
-		   'name'=>'title',
-		   'value'=>'CHtml::link($data->title, Yii::app()->createUrl("admin/session?course_id=$data->id"))',
-		   'type' => 'raw',
-		),*/
 		array(
 		   'name'=>'subject_id',
 		   'value'=>'Subject::model()->displayClassSubject($data->subject_id)',
@@ -69,7 +67,7 @@ $this->breadcrumbs=array(
 		   'name'=>'type',
 		   'value'=>'Course::typeOptions()[$data->type]',
 		   'filter'=>Course::typeOptions(),
-		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
+		   'htmlOptions'=>array('style'=>'min-width:125px; text-align:center;'),
 		),
 		array(
 		   'header' => 'Số buổi',
@@ -85,24 +83,15 @@ $this->breadcrumbs=array(
 		   'type' => 'raw',		   
 		),
 		array(
-		   'name'=>'final_price',
-		   'value'=>'number_format($data->final_price)',
-		   'htmlOptions'=>array('style'=>'width:100px; text-align:right;'),
-		),
-		array(
-		   'name'=>'payment_status',
-		   'value'=>'$data->getPaymentStatus()',
-		   'filter'=>ClsCourse::paymentStatuses(),
-		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
-		),
-		array(
 		   'header'=>'Giáo viên',
 		   'value'=>'$data->getTeacher("/admin/teacher/view/id")',
+           'filter'=>'<input type="text" value="'.$teacherFullname.'" name="Course[teacher_fullname]">',
 		   'type' => 'raw',
 		),
 		array(
 		   'header' => 'Học sinh',
 		   'value'=>'implode(", ", $data->getAssignedStudentsArrs("/admin/student/view/id"))',
+           'filter'=>'<input type="text" value="'.$studentName.'" name="Course[student_name]">',
 		   'type' => 'raw',
 		   'htmlOptions'=>array('style'=>'max-width:400px;'),
 		),
@@ -122,10 +111,6 @@ $this->breadcrumbs=array(
 		   'filter'=>Course::statusOptions(),
 		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
 		),
-		/*
-		'created_date',
-		'modified_date',
-		*/
 		array(
 			'class'=>'CButtonColumn',
 			'buttons'=>array (

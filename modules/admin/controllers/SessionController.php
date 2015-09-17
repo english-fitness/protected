@@ -2,6 +2,7 @@
 
 class SessionController extends Controller
 {
+    
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
@@ -270,13 +271,19 @@ class SessionController extends Controller
     {
         $this->subPageTitle = 'Buổi học gần nhất';
         $this->loadJQuery = false;//Not load jquery
-        $model= new Session('searchNearestSession');
+        $model= new Session();
         $model->unsetAttributes();  // clear any default values
         if(isset($_GET['Session'])){
             $model->attributes=$_GET['Session'];
        		if(isset($_GET['Session']['plan_start'])){
 				$model->plan_start = Common::convertDateFilter($_GET['Session']['plan_start']);//Created date filter
 			}
+            if (isset($_GET['Session']['teacher_fullname'])){
+                $model->teacher_fullname = $_GET['Session']['teacher_fullname'];
+            }
+            if (isset($_GET['Session']['student_name'])){
+                $model->student_name = $_GET['Session']['student_name'];
+            }
         }
         $model->getDbCriteria()->addCondition('status<>'.Session::STATUS_CANCELED);
         $this->render('nearest',array(
@@ -291,7 +298,7 @@ class SessionController extends Controller
     {
         $this->subPageTitle = 'Những buổi học đang chờ';
         $this->loadJQuery = false;//Not load jquery
-        $model = new Session('searchNearestSession(365)');
+        $model = new Session();
         $model->unsetAttributes();  // clear any default values
         if(isset($_GET['Session'])){
             $model->attributes=$_GET['Session'];
@@ -329,27 +336,19 @@ class SessionController extends Controller
     {
         $this->subPageTitle = 'Buổi học đã kết thúc';
         $this->loadJQuery = false;//Not load jquery
-        $model= new Session('search('.Session::STATUS_ENDED.', "plan_start desc")');
+        $model= new Session();
         $model->unsetAttributes();  // clear any default values
         if(isset($_GET['Session'])){
             $model->attributes=$_GET['Session'];
         	if(isset($_GET['Session']['plan_start'])){
 				$model->plan_start = Common::convertDateFilter($_GET['Session']['plan_start']);//Created date filter
 			}
-			if(isset($_GET['Session']['teacher_fullname'])){
-				$keyword = $_GET['Session']['teacher_fullname'];
-				$teachers = User::model()->findByFullname($keyword, array('id'));
-				$teacherId = array();
-				foreach ($teachers as $teacher)
-				{
-					array_push($teacherId, $teacher['id']);
-				}
-				$teacherIdString = implode(", ", $teacherId);
-				if ($teacherIdString == ''){
-					$teacherIdString = "''";
-				}
-				$model->getDbCriteria()->addCondition("teacher_id in (" . $teacherIdString . ")");
-			}
+            if (isset($_GET['Session']['teacher_fullname'])){
+                $model->teacher_fullname = $_GET['Session']['teacher_fullname'];
+            }
+            if (isset($_GET['Session']['student_name'])){
+                $model->student_name = $_GET['Session']['student_name'];
+            }
         }
         $model->deleted_flag = 0;//not deleted session
         $this->render('ended',array(
@@ -367,20 +366,6 @@ class SessionController extends Controller
 			$model->attributes = $_GET['Session'];
 			if(isset($_GET['Session']['plan_start'])){
 				$model->plan_start = Common::convertDateFilter($_GET['Session']['plan_start']);
-			}
-			if(isset($_GET['Session']['teacher_fullname'])){
-				$keyword = $_GET['Session']['teacher_fullname'];
-				$teachers = User::model()->findByFullname($keyword, array('id'));
-				$teacherId = array();
-				foreach ($teachers as $teacher)
-				{
-					array_push($teacherId, $teacher['id']);
-				}
-				$teacherIdString = implode(", ", $teacherId);
-				if ($teacherIdString == ''){
-					$teacherIdString = "''";
-				}
-				$model->getDbCriteria()->addCondition("teacher_id in (" . $teacherIdString . ")");
 			}
 		}
 		$this->render('recorded', array(

@@ -10,8 +10,10 @@ class TeacherFine extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		$modelRules = array(
-			array('id, teacher_id, points, created_date, notes', 'safe'),
-			array('teacher_id, points', 'required'),
+            array('session_id, points', 'numerical', 'integerOnly'=>true),
+            array('notes', 'length', 'max'=>256),
+			array('teacher_id', 'safe'),
+			array('teacher_id, points, session_id', 'required'),
 			array('created_date', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -55,7 +57,7 @@ class TeacherFine extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'teacher' => array(self::HAS_MANY, 'Teacher', 'teacher_id'),
+            'session' => array(self::BELONGS_TO, 'Session', 'session_id'),
 		);
 	}
 

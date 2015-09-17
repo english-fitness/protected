@@ -165,6 +165,7 @@ class User extends CActiveRecord
 		$stripTagFields = array('firstname', 'lastname', 'address');
 		foreach($stripTagFields as $textField){
 			$this->$textField = strip_tags($this->$textField);
+            $this->$textField = trim($this->$textField);
 		}
 		//add the password hash if it's a new record
         $salt = "";
@@ -610,21 +611,31 @@ class User extends CActiveRecord
 		return $userId;
 	}
 	
-	public static function findByFullname($fullname, $returnAttributes=array()){
+	public static function findByFullname($fullname, $role=null, $returnAttributes=array()){
 		if (empty($returnAttributes)){
 			$returnModels = true;
 		} else {
 			$returnModels = false;
 		}
+        
+        if (!is_string($role)){
+            throw new Exception("User::findByFullname - role must be a string");
+        }
+        
+        if ($role != null){
+            $roleCondition = " AND role = '" . $role . "'";
+        } else {
+            $roleCondition = "";
+        }
 		
 		if ($returnModels){
-			$query = "SELECT * FROM tbl_user " .
-					 "WHERE `firstname` LIKE '%".$fullname."%' " .
-					 "OR `lastname` LIKE '%".$fullname."%'";
+			$query = "SELECT * FROM tbl_user u " .
+					 "WHERE CONCAT(u.`lastname`, ' ', u.`firstname`) LIKE '%".$fullname."%'" .
+                     $roleCondition;
 		} else {
-			$query = "SELECT " . implode(',', $returnAttributes) . " FROM tbl_user " .
-					 "WHERE `firstname` LIKE '%".$fullname."%' " .
-					 "OR `lastname` LIKE '%".$fullname."%'";
+			$query = "SELECT " . implode(',', $returnAttributes) . " FROM tbl_user u " .
+					 "WHERE CONCAT(u.`lastname`, ' ', u.`firstname`) LIKE '%".$fullname."%'" .
+                     $roleCondition;
 		}
 		
 		if ($returnModels){

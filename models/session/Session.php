@@ -23,6 +23,27 @@
  */
 class Session extends CActiveRecord
 {
+    //extra attributes for filtering by student or teacher names
+    private $_teacherFullname;
+    private $_studentName;
+    
+    public function getTeacher_fullname(){
+        return $this->_teacherFullname;
+    }
+    
+    public function setTeacher_fullname($teacher_fullname){
+        $this->_teacherFullname = $teacher_fullname;
+    }
+    
+    public function getStudent_name(){
+        return $this->_studentName;
+    }
+    
+    public function setStudent_name($student_name){
+        $this->_studentName = $student_name;
+    }
+    
+    
 	const DEFAULT_DURATION = 30;//Default plan duration
 	const DEFAULT_PRESET_DURATION = 30;//Default preset plan duration
 	const STATUS_PENDING = 0;//Pending status
@@ -179,6 +200,23 @@ class Session extends CActiveRecord
 		$criteria->compare('deleted_flag',$this->deleted_flag);
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('modified_date',$this->modified_date,true);
+        
+        if (isset($this->teacher_fullname)){
+            $teacherName = $this->teacher_fullname;
+        } else {
+            $teacherName = null;
+        }
+        
+        if (isset($this->student_name)){
+            $studentName = $this->student_name;
+        } else {
+            $studentName = null;
+        }
+        
+        if ($teacherName != null || $studentName != null){
+            $this->addNameFilter($teacherName, $studentName);
+        }
+        
 		if($order!==null) $criteria->order = $order;
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -250,6 +288,23 @@ class Session extends CActiveRecord
 		$criteria->compare('DATE_ADD(plan_start,INTERVAL plan_duration MINUTE)',">=$planFrom",true);
 		$criteria->compare('(SELECT status FROM tbl_course WHERE id=course_id)',"<>".Course::STATUS_PENDING,true);
 		$criteria->order = "plan_start asc";//Order by plan start asc
+        
+        //filter for searching by teacher name or student name
+        if (isset($this->teacher_fullname)){
+            $teacherName = $this->teacher_fullname;
+        } else {
+            $teacherName = null;
+        }
+        
+        if (isset($this->student_name)){
+            $studentName = $this->student_name;
+        } else {
+            $studentName = null;
+        }
+        
+        if ($teacherName != null || $studentName != null){
+            $this->addNameFilter($teacherName, $studentName);
+        }
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -656,4 +711,72 @@ class Session extends CActiveRecord
 		
 		return Yii::app()->db->createCommand($query)->queryRow();
 	}
+    
+    public static function findByStudentName($keyword, $returnAttributes = array()){
+        if (empty($returnAttributes)){
+			$returnModels = true;
+		} else {
+			$returnModels = false;
+		}
+        
+        //the joined table is large so we find the student id first in order to use sargable search in next querry
+        $studentIds = Student::findByFullName($keyword, array("id"));
+        
+        if (empty($studentIds)){
+            return array();
+        }
+        
+        $students = array();
+        foreach ($studentIds as $student){
+            array_push($students, $student['id']);
+        }
+        
+        if ($returnModels){
+			$query = "SELECT  s.*
+                     FROM tbl_session s
+                        JOIN tbl_session_student ss
+                            ON s.id = ss.session_id
+                     WHERE ss.`student_id` IN (" . implode(',', $students) . ")";
+		} else {
+			$query = "SELECT s." . implode(', s.', $returnAttributes) . " " .
+                     "FROM tbl_session s
+                        JOIN tbl_session_student ss
+                            ON s.id = ss.session_id
+                     WHERE ss.`student_id` IN (" . implode(',', $students) . ")";
+		}
+        
+		if ($returnModels){
+			return self::model()->findAllBySql($query);
+		} else {
+			return Yii::app()->db->createCommand($query)->queryAll();
+		}    
+    }
+    
+    private function addNameFilter($teacherName=null, $studentName=null){
+        if($teacherName != null){
+            $teachers = User::model()->findByFullname($teacherName, 'role_teacher', array('id'));
+            $teacherId = array();
+            foreach ($teachers as $teacher)
+            {
+                array_push($teacherId, $teacher['id']);
+            }
+            $teacherIdString = implode(", ", $teacherId);
+            if ($teacherIdString == ''){
+                $teacherIdString = "''";
+            }
+            $this->getDbCriteria()->addCondition("teacher_id in (" . $teacherIdString . ")");
+        }
+        if ($studentName != null){
+            $sessionIds = Session::findByStudentName($studentName, array("id"));
+            $sessions = array();
+            foreach($sessionIds as $session){
+                $sessions[] = $session['id'];
+            }
+            $sessionIdString = implode(", ", $sessions);
+            if ($sessionIdString == ''){
+                $sessionIdString = "''";
+            }
+            $this->getDbCriteria()->addCondition("id in (" . $sessionIdString . ")");
+        }
+    }
 }

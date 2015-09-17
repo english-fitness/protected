@@ -172,7 +172,18 @@ class SessionNote extends CActiveRecord
                         
         $count = Yii::app()->db->createCommand($countQuery)->queryScalar();
         
-        $query = "  SELECT s.id, subject, teacher_id, plan_start, plan_duration, status, note, using_platform, teacher_paid
+        $query = "  SELECT  s.id,
+                            subject,
+                            teacher_id,
+                            plan_start,
+                            plan_duration,
+                            status,
+                            CASE 
+                                WHEN status = " . Session::STATUS_CANCELED . " THEN status_note
+                                ELSE note
+                            END AS note,
+                            using_platform,
+                            teacher_paid
                     FROM (
                         tbl_session s LEFT JOIN tbl_session_note n ON s.id = n.session_id
                     ) JOIN tbl_session_student ss ON s.id = ss.session_id

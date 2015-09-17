@@ -276,7 +276,7 @@ function getStatusDisplay($session){
             },
             success: function(response){
                 if (!response.not_found){
-                    showEditFine(sessionId, "update", response.points, response.notes);
+                    showEditFine(sessionId, "update", response.points, response.note);
                 } else {
                     showEditFine(sessionId, "create");
                 }
