@@ -17,25 +17,6 @@ class CoursePackageOptions extends CActiveRecord
 
     private $_packageOptionMeta = array();
 
-    CONST CLASS_1_1 = 1;
-    CONST CLASS_1_2 = 2;
-    CONST CLASS_3_6 = 6;
-    CONST TYPE_STUDENT_OLD = 2;
-    CONST TYPE_STUDENT_NEW = 1;
-
-    public function getTypeStudent($get = null)
-    {
-        $type = array(
-            self::TYPE_STUDENT_OLD=>'Học sinh cũ',
-            self::TYPE_STUDENT_NEW=>'Học sinh mới',
-        );
-        if($get) {
-            return $type[$get];
-        }else {
-            return $type;
-        }
-    }
-
     /**
      * @var $optionMeta  = new CoursePackageOptions()
      */
@@ -60,21 +41,6 @@ class CoursePackageOptions extends CActiveRecord
         PackageOptionmeta::model()->metaOptions($this->id,$data,$formName);
     }
 
-
-    public function getClassNumbers($get = null)
-    {
-        $classes = array(
-            self::CLASS_1_1=>'Lớp 1-1 (1 giáo viên, 1 học sinh)',
-            self::CLASS_1_2=>'Lớp 1-2 (1 giáo viên, 2 học sinh)',
-            self::CLASS_3_6=>'Lớp 3-6 (1 giáo viên, 3-6 học sinh)'
-        );
-        if($get) {
-            return $classes[$get];
-        }else {
-            return $classes;
-        }
-    }
-
 	/**
 	 * @return string the associated database table name
 	 */
@@ -91,12 +57,12 @@ class CoursePackageOptions extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-            array('student+type+package_id', 'UniqueValidator'),
-			array('student, tuition, sales, each_, package_id', 'required'),
-			array('student, tuition, sales, each_, package_id, type', 'numerical', 'integerOnly'=>true),
+            array('package_id', 'UniqueValidator'),
+			array('tuition, package_id', 'required'),
+			array('tuition, package_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, student, tuition, sales, each_, package_id, type', 'safe', 'on'=>'search'),
+			array('id, tuition, package_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -119,12 +85,9 @@ class CoursePackageOptions extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'student' => 'Số học sinh',
             'package_id' => 'Gói',
-			'tuition' => 'Giá gốc',
-			'sales' => 'Thực đóng',
-			'each_' => 'Mỗi buổi',
-            'type'=>'Kiểu'
+			'tuition' => 'Học phí',
+            'note'=>'Ghi chú'
 		);
 	}
 
@@ -147,11 +110,8 @@ class CoursePackageOptions extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('student',$this->student);
         $criteria->compare('package_id',$this->package_id);
 		$criteria->compare('tuition',$this->tuition);
-		$criteria->compare('sales',$this->sales);
-		$criteria->compare('each_',$this->each_);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

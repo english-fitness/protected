@@ -34,6 +34,9 @@ class Course extends CActiveRecord
     const TYPE_COURSE_TIMER = 2;//Type normal timer
     const TYPE_COURSE_TRAINING = 3;//Type normal training
     const TYPE_COURSE_PRESET = 4;//Type normal preset
+    //Payment type
+    const PAYMENT_TYPE_FREE = 0;//Type free course
+    const PAYMENT_TYPE_PAID = 1;//Type paid course
 	
 	/**
 	 * @return string the associated database table name
@@ -52,9 +55,10 @@ class Course extends CActiveRecord
 		// will receive user inputs.
 		$modelRules = array(
 			array('subject_id', 'required'),
-			array('created_user_id, teacher_id, subject_id, status, type, payment_type, payment_status, final_price, total_of_student, modified_user_id, deleted_flag', 'numerical', 'integerOnly'=>true),
+			array('created_user_id, teacher_id, subject_id, status, type, final_price, total_sessions, payment_type,
+                   total_of_student, modified_user_id, deleted_flag', 'numerical', 'integerOnly'=>true),
 			array('title', 'length', 'max'=>256),
-			array('content, modified_date, payment_type, payment_status, final_price, total_of_student, deleted_flag, teacher_form_url, student_form_url', 'safe'),
+			array('content, modified_date, final_price, total_of_student, deleted_flag, teacher_form_url, student_form_url', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, created_user_id, teacher_id, subject_id, title, content, type, status, total_of_student, created_date, modified_date, modified_user_id', 'safe', 'on'=>'search'),
@@ -126,10 +130,9 @@ class Course extends CActiveRecord
 			'type' => 'Kiểu khóa học',
 			'total_of_student' => 'Kiểu lớp',
 			'status' => 'Trạng thái',
-			'payment_status' => 'Trạng thái thanh toán',
-			'payment_type' => 'Kiểu thu phí',
 			'final_price' => 'Học phí khóa học (VND)',
-			'number_of_sessions'=>'Số buổi',
+            'total_sessions'=>'Tổng số buổi học',
+			'payment_type'=>'Kiểu thu phí',
 			'student_form_url' => 'Học sinh feedback url',
 			'teacher_form_url' => 'Giáo viên feedback url',
 			'created_date' => 'Ngày tạo',
@@ -167,7 +170,6 @@ class Course extends CActiveRecord
 		$criteria->compare('deleted_flag',$this->deleted_flag);
 		$criteria->compare('type',$this->type);
 		$criteria->compare('total_of_student',$this->total_of_student);
-		$criteria->compare('payment_status',$this->payment_status);
 		$criteria->compare('final_price',$this->final_price, true);
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('modified_date',$this->modified_date,true);
@@ -196,7 +198,6 @@ class Course extends CActiveRecord
 		$criteria->compare('deleted_flag',$this->deleted_flag);
 		$criteria->compare('type',$this->type);
 		$criteria->compare('total_of_student',$this->total_of_student);
-		$criteria->compare('payment_status',$this->payment_status);
 		$criteria->compare('final_price',$this->final_price, true);
 		$criteria->compare('created_date',$this->created_date,true);
 		$criteria->compare('modified_date',$this->modified_date,true);
@@ -219,6 +220,13 @@ class Course extends CActiveRecord
 		return parent::model($className);
 	}
 	
+    public static function paymentTypeOptions(){
+        return array(
+            self::PAYMENT_TYPE_FREE=>'Miễn phí',
+            self::PAYMENT_TYPE_PAID=>'Có tính phí',
+        );
+    }
+    
 	/**
 	 * Course label statuses
 	 */
@@ -257,14 +265,6 @@ class Course extends CActiveRecord
 			return 'Chưa xác định';
 		}
 	}
-	//Get payment status
-	public function getPaymentStatus(){
-		$paymentStatusOpts = ClsCourse::paymentStatuses();
-		if(isset($paymentStatusOpts[$this->payment_status])){
-			return $paymentStatusOpts[$this->payment_status];
-		}
-		return null;
-    }
     
 	/**
 	 * Get assigned Teacher of Course
@@ -519,8 +519,6 @@ class Course extends CActiveRecord
 		$criteria->condition = $condition;
 		$attributes = array(
 			'type'=>$this->type,
-			'payment_status'=>$this->payment_status,
-			'payment_type'=>$this->payment_type,
 			'total_of_student'=>$this->total_of_student,
 		);
 		if($changeStatus && $this->status==self::STATUS_APPROVED){
@@ -717,11 +715,11 @@ class Course extends CActiveRecord
 	}
 	
 	public function getNumberOfSessionsAvailable(){
-		$query = "SELECT sum(number_of_sessions) FROM tbl_course_payment " . 
+		$query = "SELECT sum(total_sessions) FROM tbl_course_payment " . 
 				 "WHERE course_id = " . $this->id;
 		$additionalSessions = Yii::app()->db->createCommand($query)->queryScalar();
 		
-		return $this->number_of_sessions + $additionalSessions;
+		return $this->total_sessions + $additionalSessions;
 	}
     
     public function countCurrentSession(){

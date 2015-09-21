@@ -69,6 +69,10 @@ class StudentController extends Controller
 	 */
 	public function actionCreate()
 	{
+        if (!isset($_REQUEST['preregisterId']) && !Yii::app()->user->isAdmin()){
+            $this->redirect(array('index'));
+        }
+        
 		$model=new User;
 		$student = new Student; 
 		// Uncomment the following line if AJAX validation is needed
@@ -172,7 +176,7 @@ class StudentController extends Controller
         $user = User::model()->findByPk($student->user_id);
         if (isset($student->preregister_id)){
             $preregisterUser = PreregisterUser::model()->findByPk($student->preregister_id);
-        } 
+        }
         if (!isset($preregisterUser) || $preregisterUser == null){
             $preregisterUser = new PreregisterUser;
         }

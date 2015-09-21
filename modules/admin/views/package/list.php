@@ -33,19 +33,14 @@ $this->breadcrumbs=array(
 		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
 		),
         array(
-            'name'=>'type',
-            'value'=>'$data->getPackageType($data->type)',
-            'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
-        ),
-        array(
             'name'=>'sessions',
             'value'=>'$data->sessions',
             'htmlOptions'=>array('style'=>'width:350px; text-align:center;'),
         ),
 		array(
-				'name'=>'title',
-				'value'=>'$data->title',
-				'htmlOptions'=>array('style'=>'width:350px; text-align:center;'),
+            'name'=>'title',
+            'value'=>'$data->title',
+            'htmlOptions'=>array('style'=>'width:350px; text-align:center;'),
 		),
         array(
             'header' => 'Quản lý giá',
@@ -53,18 +48,18 @@ $this->breadcrumbs=array(
             'type' => 'raw',
         ),
 		array(
-				'class'=>'CButtonColumn',
-				'buttons'=>array (
-						'edit'=> array('label'=>'', 'imageUrl'=>'',
-								'options'=>array( 'class'=>'btn-edit mL15' ),
-						),
-						'delete'=>array(
-                            'visible'=>'true',
-						),
-                        'view'=>array(
-                            'visible'=>'false',
-                        ),
-				),
+            'class'=>'CButtonColumn',
+            'buttons'=>array (
+                    'edit'=> array('label'=>'', 'imageUrl'=>'',
+                            'options'=>array( 'class'=>'btn-edit mL15' ),
+                    ),
+                    'delete'=>array(
+                        'visible'=>'true',
+                    ),
+                    'view'=>array(
+                        'visible'=>'false',
+                    ),
+            ),
 		),
 	),
 )); ?>

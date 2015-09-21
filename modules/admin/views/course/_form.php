@@ -250,37 +250,7 @@
 	</div>
 </fieldset>
 <div class="clearfix h20">&nbsp;</div>	
-<fieldset>
-	<legend>Thông tin học phí, trạng thái thanh toán</legend>	
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'payment_type'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->dropDownList($model,'payment_type', ClsCourse::paymentTypes(), $disabledAttrs); ?>
-			<?php echo $form->error($model,'payment_type'); ?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'final_price'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->textField($model,'final_price', $disabledAttrs); ?>
-			<?php echo $form->error($model,'final_price'); ?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'payment_status'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->dropDownList($model,'payment_status', ClsCourse::paymentStatuses(), $disabledAttrs); ?>
-			<?php echo $form->error($model,'payment_status'); ?>
-		</div>
-	</div>	
-	<?php endif;?>
-</fieldset>
+<?php endif;?>
 <?php if ($action == 'update'):?>
 <div class="clearfix h20">&nbsp;</div>
 <div class="fR toggle_schedule_link">

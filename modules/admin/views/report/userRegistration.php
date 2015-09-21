@@ -1,3 +1,6 @@
+<?php
+    $careStatusOptions = PreregisterUser::careStatusOptions();
+?>
 <?php if(isset($users)):?>
 <div id="reportData">
     <?php
@@ -15,7 +18,7 @@
                 array(
                     'header'=>'Người liên hệ/Nguồn',
                     'value'=>'$data["source"]',
-                    'htmlOptions'=>array('style'=>'width:200px;'),
+                    'htmlOptions'=>array('style'=>'width:150px;text-align:center'),
                 ),
                 array(
                     'header'=>'Số điện thoại',
@@ -28,9 +31,14 @@
                     'htmlOptions'=>array('style'=>'width:250px;text-align:center'),
                 ),
                 array(
+                    'header'=>"Ngày đăng ký",
+                    'value'=>'date("d/m/Y", strtotime($data["created_date"]))',
+                    'htmlOptions'=>array('style'=>'width:100px;text-align:center'),
+                ),
+                array(
                     'header'=>'Trạng thái chăm sóc',
-                    'value'=>'$data["care_status"]',
-                    'htmlOptions'=>array('style'=>'width:200px;'),
+                    'value'=>'PreregisterUser::careStatusOptions($data["care_status"])',
+                    'htmlOptions'=>array('style'=>'width:100px;text-align:center'),
                 ),
                 array(
                     'header'=>'Ghi chú',

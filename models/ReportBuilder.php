@@ -160,8 +160,8 @@ class ReportBuilder {
                         ELSE 'Unpaid'
                     END AS 'paid_session',
                     CASE
-                        WHEN note.note IS NOT NULL THEN note.note
-                        ELSE ''
+                        WHEN sessions.status = " . Session::STATUS_CANCELED . " THEN status_note
+                        ELSE note.note
                     END AS 'session_remarks'
                 FROM tbl_session as sessions JOIN (tbl_session_student JOIN tbl_user student ON tbl_session_student.student_id = student.id)
                 ON sessions.id = tbl_session_student.session_id
@@ -175,7 +175,7 @@ class ReportBuilder {
     }
     
     private static function getUserRegistrationReportQuery($dateConstraint){
-        return  "SELECT fullname, source, phone, email, care_status, sale_note FROM tbl_preregister_user
+        return  "SELECT fullname, source, phone, email, created_date, care_status, sale_note FROM tbl_preregister_user
                 WHERE deleted_flag = 0
                 AND " . $dateConstraint . " " .
                 "ORDER BY created_date DESC";

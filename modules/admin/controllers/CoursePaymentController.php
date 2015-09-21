@@ -28,7 +28,7 @@ class CoursePaymentController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index', 'create', 'update', 'view'),
+                'actions'=>array('index', 'create', 'update', 'view', 'course'),
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -57,27 +57,21 @@ class CoursePaymentController extends Controller
         return $model;
     }
 	
-	public function actionIndex(){
+	public function actionCourse($id){
 		$this->subPageTitle = "Học phí khóa học";
-		
+		$this->loadJQuery = false;
+        
+        $course = $this->loadCourseModel($id);
+        
 		$model = new CoursePayment;
-			$model->unsetAttributes();
-		
+        $model->unsetAttributes();
+        
 		if (isset($_REQUEST['CoursePayment'])){
 			$model->attributes = $_REQUEST['CoursePayment'];
 		}
-		
-		$course = null;
-		
-		if (isset($_REQUEST['course_id'])){
-			$courseId = $_REQUEST['course_id'];
-			$model->course_id = $courseId;
-			$course = $this->loadCourseModel($courseId);
-		}
-		
-		$dataProvider = $model->search();
-			
-		$this->render('index', array(
+        $model->course_id = $id;
+        
+		$this->render('course', array(
 			'model'=>$model,
 			'course'=>$course,
 		));
@@ -95,9 +89,27 @@ class CoursePaymentController extends Controller
 		$payment = new CoursePayment;
 		$payment->course_id = $courseId;
 		if (isset($_REQUEST['CoursePayment'])){
-			$payment->attributes = $_REQUEST['CoursePayment'];
-			$model->save();
-			$this->redirect(array('/admin/coursePayment/index?course_id=' . $courseId));
+			$payment->attributes = $_POST['CoursePayment'];
+            $transaction = Yii::app()->db->beginTransaction();
+            
+            try{
+                if ($payment->save()){
+                    $course = Course::model()->findByPk($courseId);
+                    $newPackage = $payment->packageOption;
+                    $course->final_price += $newPackage->tuition;
+                    $course->total_sessions += $newPackage->package->sessions;
+                    if ($course->save()){
+                        $transaction->commit();
+                        $this->redirect(array('/admin/coursePayment/course/id/' . $courseId));
+                    } else {
+                        throw new Exception("course_not_saved");
+                    }
+                } else {
+                    throw new Exception("payment_not_saved");
+                }
+            } catch (Exception $e){
+                $transaction->rollback();
+            }
 		}
 		
 		$this->render('create', array(
@@ -113,9 +125,35 @@ class CoursePaymentController extends Controller
 		$success = false;
 		
 		if(isset($_REQUEST['CoursePayment'])){
-			$payment->attributes = $_REQUEST['CoursePayment'];
-			$payment->save();
-			$this->redirect(array('/admin/coursePayment/index?course_id=' . $payment->course_id));
+            $oldPackageOptionId = $payment->package_option_id;
+            $oldPackageId = $payment->packageOption->package_id;
+            $oldTuition = $payment->packageOption->tuition;
+            $oldSessions = $payment->packageOption->package->sessions;
+			$payment->attributes = $_POST['CoursePayment'];
+            
+            $transaction = Yii::app()->db->beginTransaction();
+            
+            try{
+                if ($payment->save()){
+                    if ($payment->package_option_id != $oldPackageOptionId){
+                        $course = Course::model()->findByPk($payment->course_id);
+                        $newPackage = CoursePackageOptions::model()->findByPk($payment->package_option_id);
+                        $course->final_price += $newPackage->tuition - $oldTuition;
+                        if ($newPackage->package_id != $oldPackageId){
+                            $course->total_sessions += $newPackage->package->sessions - $oldSessions;
+                        }
+                        if (!$course->save()){
+                            throw new Exception("course_not_saved");
+                        }
+                    }
+                    $transaction->commit();
+                    $this->redirect(array('/admin/coursePayment/course/id/' . $payment->course_id));
+                } else {
+                    throw new Exception("payment_not_saved");
+                }
+            } catch(Exception $e){
+                $transaction->rollback();
+            }
 		}
 		
 		$this->render('update', array(
@@ -126,10 +164,10 @@ class CoursePaymentController extends Controller
 	public function actionView($id){
 		$this->subPageTitle = "Xem chi tiết";
 		
-		$payment = $this->loadModel($id);
-		
+		$payment = CoursePayment::model()->with("course", "createdUser", "modifiedUser", "packageOption", "packageOption.package")->findByPk($id);
+        
 		$this->render('view', array(
-			'model'=>$payment;
+			'model'=>$payment,
 		));
 	}
 	

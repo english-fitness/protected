@@ -6,14 +6,10 @@
  * The followings are the available columns in table 'tbl_course_package':
  * @property integer $id
  * @property integer $sessions
- * @property integer $type
  * @property string $title
  */
 class CoursePackage extends CActiveRecord
 {
-
-    CONST TYPE_OFFICIAL = 1;
-    CONST TYPE_TRIAL = 2;
 
 	/**
 	 * @return string the associated database table name
@@ -22,15 +18,6 @@ class CoursePackage extends CActiveRecord
 	{
 		return 'tbl_course_package';
 	}
-
-    public function getPackageType($get = null) {
-        $list =  array(self::TYPE_OFFICIAL=>'Chính thức',self::TYPE_TRIAL=>'Thử nghiệm');
-        if($get) {
-            return $list[$get];
-        }else {
-            return $list;
-        }
-    }
 
 
 	/**
@@ -42,12 +29,12 @@ class CoursePackage extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('title', 'required'),
-			array('sessions, type', 'numerical', 'integerOnly'=>true),
+			array('sessions', 'numerical', 'integerOnly'=>true),
 			array('title', 'length', 'max'=>255),
             array('sessions', 'unique'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, sessions, type, title', 'safe', 'on'=>'search'),
+			array('id, sessions, title', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,15 +47,10 @@ class CoursePackage extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
             'options'=>array(
-                self::HAS_ONE,'CoursePackageOptions',array('package_id'=>'id')
+                self::HAS_MANY,'CoursePackageOptions',array('package_id'=>'id')
             ),
 		);
 	}
-
-    public function getOption($userStatus,$numberStudent)
-    {
-        return CoursePackageOptions::model()->findByAttributes(array('type'=>$userStatus,'student'=>$numberStudent,'package_id'=>$this->id));
-    }
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -78,8 +60,7 @@ class CoursePackage extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'sessions' => 'Số buổi',
-			'type' => 'Kiểu',
-			'title' => 'Tiêu đề',
+			'title' => 'Tên gói',
 		);
 	}
 
@@ -103,7 +84,6 @@ class CoursePackage extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('sessions',$this->sessions);
-		$criteria->compare('type',$this->type);
 		$criteria->compare('title',$this->title,true);
 
 		return new CActiveDataProvider($this, array(

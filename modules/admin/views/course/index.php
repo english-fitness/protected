@@ -6,6 +6,14 @@ $this->breadcrumbs=array(
 	'Courses'=>array('index'),
 	'Manage',
 );
+
+function getTuitionText($tuition){
+    if ($tuition == 0){
+        return "Chưa có";
+    } else {
+        return number_format($tuition)  . " đ";
+    }
+}
 ?>
 <script type="text/javascript">
 	function approve(id){
@@ -27,6 +35,98 @@ $this->breadcrumbs=array(
 <?php
 $studentName = Yii::app()->controller->getQuery('Course[student_name]', '');
 $teacherFullname = Yii::app()->controller->getQuery('Course[teacher_fullname]', '');
+$registration = new ClsRegistration();
+
+$columns = array(
+    array(
+       'name'=>'subject_id',
+       'value'=>'Subject::model()->displayClassSubject($data->subject_id)',
+       'filter'=>Subject::model()->generateSubjectFilters(),
+    ),
+    array(
+       'name'=>'type',
+       'value'=>'Course::typeOptions()[$data->type]',
+       'filter'=>false,
+       'htmlOptions'=>array('style'=>'min-width:125px; text-align:center;'),
+    ),
+    array(
+       'header' => 'Số buổi',
+       'value'=>'CHtml::link($data->countSessions(null, true)." buổi", Yii::app()->createUrl("admin/session?course_id=$data->id"))',
+       'htmlOptions'=>array('style'=>'width:60px; text-align:center;'),
+       'type'=>'raw',
+    ),
+    array(
+       'name'=>'total_of_student',
+       'value'=>'"1-".$data->total_of_student',
+       'htmlOptions'=>array('style'=>'width:60px; text-align:center;'),
+       'filter'=>$registration->totalStudentOptions(6, true),
+       'type' => 'raw',		   
+    ),
+    array(
+       'header'=>'Giáo viên',
+       'value'=>'$data->getTeacher("/admin/teacher/view/id")',
+       'filter'=>'<input type="text" value="'.$teacherFullname.'" name="Course[teacher_fullname]">',
+       'type' => 'raw',
+    ),
+    array(
+       'header' => 'Học sinh',
+       'value'=>'implode(", ", $data->getAssignedStudentsArrs("/admin/student/view/id"))',
+       'filter'=>'<input type="text" value="'.$studentName.'" name="Course[student_name]">',
+       'type' => 'raw',
+       'htmlOptions'=>array('style'=>'max-width:400px;'),
+    ),
+    array(
+       'header' => 'Ngày bắt đầu',
+       'value'=>'$data->getFirstDateInList("ASC")',
+       'htmlOptions'=>array('style'=>'width:100px; text-align:center;'), 
+    ),
+    array(
+       'header' => 'Ngày kết thúc',
+       'value'=>'$data->getFirstDateInList("DESC")',
+       'htmlOptions'=>array('style'=>'width:100px; text-align:center;'), 
+    ),
+    array(
+       'name'=>'status',
+       'value'=>'ClsAdminHtml::displayCourseStatus($data->id, $data->status)',
+       'filter'=>Course::statusOptions(),
+       'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
+    ),
+    array(
+        'class'=>'CButtonColumn',
+        'buttons'=>array (
+            'update'=> array('label'=>'', 'imageUrl'=>'',
+                'options'=>array( 'class'=>'btn-edit mL15' ),
+            ),
+            'view'=>array(
+                'label'=>'', 'imageUrl'=>'',
+                'options'=>array( 'class'=>'btn-view' ),
+            ),
+            'delete'=>array(
+                'label'=>'', 'imageUrl'=>'',
+                'options'=>array( 'class'=>'dpn' ),
+            ),
+        ),
+    ),
+);
+if ($model->type == Course::TYPE_COURSE_NORMAL){
+    $tuitionColumns = array(
+        array(
+            'header'=>'Học phí',
+            'value'=>'CHtml::link(
+                getTuitionText($data->final_price),
+                Yii::app()->createUrl("admin/coursePayment/course/id/$data->id")
+            )',
+            'htmlOptions'=>array('style'=>'width:130px;text-align:center'),
+            'type'=>'raw',
+        ),
+        array(
+            'name'=>'total_sessions',
+            'value'=>'$data->total_sessions . " buổi"',
+            'htmlOptions'=>array('style'=>'width:80px;text-align:center'),
+        ),
+    );
+    array_splice($columns, 4, 0, $tuitionColumns);  
+}
 ?>
 <div class="page-header-toolbar-container row">
     <div class="col col-lg-6">
@@ -43,13 +143,19 @@ $teacherFullname = Yii::app()->controller->getQuery('Course[teacher_fullname]', 
     </div>
     <div class="col col-lg-6 for-toolbar-buttons">
         <div class="btn-group">
-            <a class="top-bar-button btn btn-primary" href="<?php echo Yii::app()->baseUrl; ?>/admin/course/create">
+            <?php
+                if (isset($_GET['type'])){
+                    $typeParam = "?type=".$_GET['type'];
+                } else {
+                    $typeParam = "";
+                }
+            ?>
+            <a class="top-bar-button btn btn-primary" href="<?php echo Yii::app()->baseUrl; ?>/admin/course/create<?php echo $typeParam?>">
 			<i class="icon-plus"></i>Thêm khóa học
 			</a>
         </div>
     </div>
 </div>
-<?php $registration = new ClsRegistration();//New Registration class ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$model->search("created_date DESC"),
 	'filter'=>$model,
@@ -57,75 +163,5 @@ $teacherFullname = Yii::app()->controller->getQuery('Course[teacher_fullname]', 
 	'ajaxVar'=>'',
 	'pager' => array('class'=>'CustomLinkPager'),
 	'rowHtmlOptionsExpression'=>'($data->deleted_flag==1)?array("class"=>"deletedRecord"):array()',
-	'columns'=>array(
-		array(
-		   'name'=>'subject_id',
-		   'value'=>'Subject::model()->displayClassSubject($data->subject_id)',
-		   'filter'=>Subject::model()->generateSubjectFilters(),
-		),
-		array(
-		   'name'=>'type',
-		   'value'=>'Course::typeOptions()[$data->type]',
-		   'filter'=>Course::typeOptions(),
-		   'htmlOptions'=>array('style'=>'min-width:125px; text-align:center;'),
-		),
-		array(
-		   'header' => 'Số buổi',
-		   'value'=>'CHtml::link($data->countSessions(null, true)." buổi", Yii::app()->createUrl("admin/session?course_id=$data->id"))',
-		   'htmlOptions'=>array('style'=>'width:60px; text-align:center;'),
-		   'type'=>'raw',
-		),
-		array(
-		   'name'=>'total_of_student',
-		   'value'=>'"1-".$data->total_of_student',
-		   'htmlOptions'=>array('style'=>'width:60px; text-align:center;'),
-		   'filter'=>$registration->totalStudentOptions(6, true),
-		   'type' => 'raw',		   
-		),
-		array(
-		   'header'=>'Giáo viên',
-		   'value'=>'$data->getTeacher("/admin/teacher/view/id")',
-           'filter'=>'<input type="text" value="'.$teacherFullname.'" name="Course[teacher_fullname]">',
-		   'type' => 'raw',
-		),
-		array(
-		   'header' => 'Học sinh',
-		   'value'=>'implode(", ", $data->getAssignedStudentsArrs("/admin/student/view/id"))',
-           'filter'=>'<input type="text" value="'.$studentName.'" name="Course[student_name]">',
-		   'type' => 'raw',
-		   'htmlOptions'=>array('style'=>'max-width:400px;'),
-		),
-		array(
-		   'header' => 'Ngày bắt đầu',
-		   'value'=>'$data->getFirstDateInList("ASC")',
-		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'), 
-		),
-		array(
-		   'header' => 'Ngày kết thúc',
-		   'value'=>'$data->getFirstDateInList("DESC")',
-		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'), 
-		),
-		array(
-		   'name'=>'status',
-		   'value'=>'ClsAdminHtml::displayCourseStatus($data->id, $data->status)',
-		   'filter'=>Course::statusOptions(),
-		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
-		),
-		array(
-			'class'=>'CButtonColumn',
-			'buttons'=>array (
-		        'update'=> array('label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'btn-edit mL15' ),
-		        ),
-		        'view'=>array(
-		            'label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'btn-view' ),
-		        ),
-		        'delete'=>array(
-		            'label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'dpn' ),
-		        ),
-    		),
-		),
-	),
+	'columns'=>$columns,
 )); ?>

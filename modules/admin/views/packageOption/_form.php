@@ -30,24 +30,6 @@
 	</div>
     <div class="form-element-container row">
         <div class="col col-lg-3">
-            <?php echo $form->labelEx($model,'type'); ?>
-        </div>
-        <div class="col col-lg-9">
-            <?php echo $form->dropDownList($model,'type',$model->getTypeStudent()); ?>
-            <?php echo $form->error($model,'type'); ?>
-        </div>
-    </div>
-    <div class="form-element-container row">
-        <div class="col col-lg-3">
-            <?php echo $form->labelEx($model,'student'); ?>
-        </div>
-        <div class="col col-lg-9">
-            <?php echo $form->dropDownList($model,'student',$model->getClassNumbers()); ?>
-            <?php echo $form->error($model,'type'); ?>
-        </div>
-    </div>
-    <div class="form-element-container row">
-        <div class="col col-lg-3">
             <?php echo $form->labelEx($model,'tuition'); ?>
         </div>
         <div class="col col-lg-9">
@@ -55,34 +37,15 @@
             <?php echo $form->error($model,'tuition'); ?>
         </div>
     </div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'sales'); ?>
-		</div>
-		<div class="col col-lg-9">
-            <?php echo $form->textField($model,'sales'); ?>
-			<?php echo $form->error($model,'sales'); ?>
-		</div>
-	</div>
     <div class="form-element-container row">
         <div class="col col-lg-3">
-            <?php echo $form->labelEx($model,'each_'); ?>
+            <?php echo $form->labelEx($model,'note'); ?>
         </div>
         <div class="col col-lg-9">
-            <?php echo $form->textField($model,'each_'); ?>
-            <?php echo $form->error($model,'each_'); ?>
+            <?php echo $form->textArea($model,'note', array("maxlength"=>500)); ?>
+            <?php echo $form->error($model,'note'); ?>
         </div>
     </div>
-    <?php if($model->package->type == CoursePackage::TYPE_TRIAL): ?>
-    <div class="form-element-container row">
-        <div class="col col-lg-3">
-            <?php echo CHtml::label('Giá nộp bằng thẻ điện thoại',''); ?>
-        </div>
-        <div class="col col-lg-9">
-            <?php echo CHtml::textField('Meta[mobicard_final_price]',$model->getOptionMeta('mobicard_final_price')); ?>
-        </div>
-    </div>
-    <?php endif; ?>
 	<div class="clearfix h20">&nbsp;</div>
 <?php $this->endWidget(); ?>
 

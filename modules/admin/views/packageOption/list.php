@@ -33,19 +33,9 @@ $this->breadcrumbs=array(
 		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
 		),
         array(
-            'name'=>'type',
-            'value'=>'$data->getTypeStudent($data->type)',
-            'htmlOptions'=>array('style'=>'width:120px; text-align:center;'),
-        ),
-        array(
             'name'=>'package_id',
             'value'=>'$data->package->title',
             'htmlOptions'=>array('style'=>'width:120px; text-align:center;'),
-        ),
-        array(
-            'name'=>'student',
-            'value'=>'$data->getClassNumbers($data->student)',
-            'htmlOptions'=>array('style'=>'width:300px; text-align:center;'),
         ),
         array(
             'name'=>'tuition',
@@ -53,28 +43,18 @@ $this->breadcrumbs=array(
             'htmlOptions'=>array('style'=>'width:350px; text-align:center;'),
         ),
 		array(
-				'name'=>'sales',
-				'value'=>'Yii::app()->format->formatNumber($data->sales)." VND"',
-				'htmlOptions'=>array('style'=>'width:350px; text-align:center;'),
-		),
-        array(
-            'name'=>'each_',
-            'value'=>'Yii::app()->format->formatNumber($data->each_)." VND"',
-            'htmlOptions'=>array('style'=>'width:350px; text-align:center;'),
-        ),
-		array(
-				'class'=>'CButtonColumn',
-				'buttons'=>array (
-						'edit'=> array('label'=>'', 'imageUrl'=>'',
-								'options'=>array( 'class'=>'btn-edit mL15' ),
-						),
-						'delete'=>array(
-                            'visible'=>'true',
-						),
-                        'view'=>array(
-                            'visible'=>'false',
-                        ),
-				),
+            'class'=>'CButtonColumn',
+            'buttons'=>array (
+                'edit'=> array('label'=>'', 'imageUrl'=>'',
+                        'options'=>array( 'class'=>'btn-edit mL15' ),
+                ),
+                'delete'=>array(
+                    'visible'=>'true',
+                ),
+                'view'=>array(
+                    'visible'=>'false',
+                ),
+            ),
 		),
 	),
 )); ?>

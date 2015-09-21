@@ -2,6 +2,23 @@
 /* @var $this CourseController */
 /* @var $model Course */
 ?>
+<style>
+.datepicker[readonly]{
+	background-color: white;
+}
+</style>
+<?php
+    $coursePackages = CoursePackage::model()->findAll();
+    $packagePrices = array();
+    foreach($coursePackages as $package){
+        $options = $package->options;
+        $prices = array();
+        foreach ($options as $option){
+            $prices[$option->id] = number_format($option->tuition);
+        }
+        $packagePrices[$package->id] = $prices;
+    }
+?>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/course.js"></script>
 <script type="text/javascript">
 	function cancel(){
@@ -14,7 +31,7 @@
 			ajaxLoads({'class_id': <?php echo $classId;?>, 'subject_id':<?php echo $preCourse->subject_id;?>}, 'divDisplaySubject', 'course/ajaxLoadSubjects');
 			ajaxLoads({'subject_id': <?php echo $preCourse->subject_id;?>}, 'divDisplayTeacher', 'course/ajaxLoadTeachers');
 		<?php endif;?>
-	}	
+	}
 	$(document).ready(function() {
 		loadSuggestCourse();//Load suggest course from preregister course
 		$(document).on("click",".datepicker",function(){
@@ -59,14 +76,14 @@
 			<?php echo $this->renderPartial('widget/tutorClasses', array('selectedId'=>$selectedId));?>
 		</div>
 	</div>
-	
+
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'subject_id'); ?>
 		</div>
 		<div class="col col-lg-9">
 			<div id="divDisplaySubject">
-				<select id="Course_subject_id" name="Course[subject_id]">				
+				<select id="Course_subject_id" name="Course[subject_id]">
 					<option value=''>Chọn môn học...</option>
 				</select>
 			</div>
@@ -111,34 +128,6 @@
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'payment_type'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php if(isset($preCourse)) $model->payment_type = $preCourse->payment_type;?>
-			<?php echo $form->dropDownList($model,'payment_type', ClsCourse::paymentTypes()); ?>
-			<?php echo $form->error($model,'payment_type'); ?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'final_price'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->textField($model,'final_price', array()); ?>
-			<?php echo $form->error($model,'final_price'); ?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'payment_status'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->dropDownList($model,'payment_status', ClsCourse::paymentStatuses()); ?>
-			<?php echo $form->error($model,'payment_status'); ?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'content'); ?>
 		</div>
 		<div class="col col-lg-9">
@@ -146,31 +135,86 @@
 			<?php echo $form->textArea($model,'content',array('rows'=>6, 'cols'=>50, 'style'=>'height:8em;')); ?>
 			<?php echo $form->error($model,'content'); ?>
 		</div>
-	</div>	
+	</div>
 </fieldset>
-<div class="clearfix h20">&nbsp;</div>	
+<div class="clearfix h20">&nbsp;</div>
 <fieldset>
-	<legend>Gán giáo viên, học sinh cho khóa học</legend>	
+	<legend>Học phí khóa học</legend>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+			<?php echo $form->labelEx($model,'payment_type'); ?>
+		</div>
+		<div class="col col-lg-9">
+			<?php echo $form->dropDownList($model,'payment_type', Course::paymentTypeOptions()); ?>
+			<?php echo $form->error($model,'payment_type'); ?>
+		</div>
+	</div>
+    <div id="course_payment">
+        <div class="form-element-container row">
+            <div class="col col-lg-3">
+                <label for="course_package_select">Số buổi học</label>
+            </div>
+            <div class="col col-lg-9">
+                <select id="course_package_select" style="font-size:14px">
+                    <?php foreach($coursePackages as $package):?>
+                        <option value="<?php echo $package->id?>" data-sessions="<?php echo $package->sessions?>"><?php echo $package->sessions . " buổi"?></option>
+                    <?php endforeach;?>
+                <select>
+            </div>
+        </div>
+        <div class="form-element-container row">
+            <div class="col col-lg-3">
+                <label for="price_select">Học phí</label>
+            </div>
+            <div class="col col-lg-9">
+                <select id="price_select" name="CoursePayment[package_option_id]">
+                <select>
+            </div>
+        </div>
+        <div class="form-element-container row">
+            <div class="col col-lg-3">
+                <label for="payment_date">Ngày thanh toán</label>
+            </div>
+            <div class="col col-lg-9">
+                <input type="text" id="payment_date" name="CoursePayment[payment_date]" class="datepicker" readonly>
+                <div>
+                    <a class="fs12 errorMessage" style="color:grey;display:none" id="clear_payment_date" href="javascript: clearPaymentDate()">Xóa ngày thanh toán</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-element-container row">
+		<div class="col col-lg-3">
+			<label for="payment_note">Ghi chú</label>
+        </div>
+		<div class="col col-lg-9">
+			<textarea rows="6" cols="50" style="height:8em;" maxlength="500" name="CoursePayment[note]" id="payment_note"></textarea>
+        </div>
+	</div>
+</fieldset>
+<div class="clearfix h20">&nbsp;</div>
+<fieldset>
+	<legend>Gán giáo viên, học sinh cho khóa học</legend>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<label>Gán giáo viên</label>
 		</div>
 		<div class="col col-lg-9">
 			<div id="divDisplayTeacher">
-				<select id="Course_teacher_id" name="Course[teacher_id]">				
+				<select id="Course_teacher_id" name="Course[teacher_id]">
 					<option value=''>Chọn giáo viên...</option>
 				</select>
 			</div>
 			<?php echo $form->error($model,'teacher_id'); ?>
 		</div>
-	</div>	
+	</div>
 
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<label for="Course_class">Gán học sinh</label>
 		</div>
 		<div class="col col-lg-9">
-			<?php 
+			<?php
 				$ajaxSearchUser = Yii::app()->request->getPost('ajaxSearchUser', "");
 				if($ajaxSearchUser=="" && isset($preCourse)) $ajaxSearchUser = $preCourse->getEmail();
 			?>
@@ -201,3 +245,72 @@
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<script>
+    var packagePrices = <?php echo json_encode($packagePrices)?>;
+    <?php 
+    if(isset($_GET['type'])){
+        $courseType = $_GET['type'];
+    } else {
+        $courseType = Course::TYPE_COURSE_NORMAL;
+    }
+    ?>
+    
+    $(document).on("click",".datepicker",function(){
+        $(this).datepicker({
+            "dateFormat":"yy-mm-dd",
+            "firstDay":1,
+        }).datepicker("show");
+	});
+    
+    $(function(){
+        var packageSelect = $("#course_package_select");
+        packageSelect.change(function(){
+            $("#numberOfSession").val(packageSelect.find(":selected").data("sessions"));
+            setPriceOptions(this.value);
+        });
+        packageSelect.change();
+        
+        $("#payment_date").change(function(){
+            if (this.value != ""){
+                $("#clear_payment_date").show();
+            }
+        });
+        $("#payment_date").change();
+        
+        $("#Course_payment_type").change(function(){
+            if (this.value == <?php echo Course::PAYMENT_TYPE_FREE?>){
+                $("#course_payment").hide();
+                $("#course_payment select").prop("disabled", true);
+                $("#course_payment input").prop("disabled", true);
+            } else if (this.value == <?php echo Course::PAYMENT_TYPE_PAID?>) {
+                $("#course_payment").show();
+                $("#course_payment select").prop("disabled", false);
+                $("#course_payment input").prop("disabled", false);
+            }
+        });
+        
+        $("#Course_type").change(function(){
+            if (this.value == <?php echo Course::TYPE_COURSE_NORMAL?>){
+                $("#Course_payment_type").val(<?php echo Course::PAYMENT_TYPE_PAID?>).change();
+            } else if (this.value == <?php echo Course::TYPE_COURSE_TRAINING?>){
+                $("#Course_payment_type").val(<?php echo Course::PAYMENT_TYPE_FREE?>).change();
+            }
+        });
+        $("#Course_type").val(<?php echo $courseType?>).change();
+    });
+    
+    function setPriceOptions(packageId){
+        var priceOptions = packagePrices[packageId];
+        var priceSelect = $("#price_select");
+        priceSelect.html("");
+        for(var i in priceOptions){
+            priceSelect.append('<option value="'+i+'">'+priceOptions[i]+'</option>');
+        }
+    }
+    
+    function clearPaymentDate(){
+        $("#payment_date").val("");
+        $("#clear_payment_date").hide();
+        return false;
+    }
+</script>

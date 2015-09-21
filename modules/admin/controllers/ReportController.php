@@ -69,11 +69,12 @@ class ReportController extends Controller
             case 'userRegistration':
                 return array(
                     array('name'=>'Họ tên','width'=>'30'),
-                    array('name'=>'Người liên hệ/Nguồn','width'=>'30'),
-                    array('name'=>'Số điện thoại','width'=>'20'),
-                    array('name'=>'Email','width'=>'35'),
-                    array('name'=>'Trạng thái chăm sóc','width'=>'30'),
-                    array('name'=>'Ghi chú','width'=>'60'),
+                    array('name'=>'Người liên hệ/Nguồn','width'=>'20'),
+                    array('name'=>'Số điện thoại','width'=>'17'),
+                    array('name'=>'Email','width'=>'40'),
+                    array('name'=>'Ngày đăng ký','width'=>'14'),
+                    array('name'=>'Trạng thái chăm sóc','width'=>'17'),
+                    array('name'=>'Ghi chú','width'=>'50'),
                 );
                 break;
             default:
@@ -140,7 +141,7 @@ class ReportController extends Controller
         }
     }
     
-    public function sendSessionReport($requestParams){
+    private function sendSessionReport($requestParams){
         $data = ReportBuilder::getSessionReportExportData($requestParams);
         
         $phpExcel = new PHPExcel();
@@ -183,8 +184,9 @@ class ReportController extends Controller
         $this->sendReportFile($phpExcel, 'session_' . ReportBuilder::getReportDate($requestParams));
     }
     
-    public function sendUserRegistrationReport($requestParams){
+    private function sendUserRegistrationReport($requestParams){
         $data = ReportBuilder::getUserRegistrationReportExportData($requestParams);
+        $careStatusOptions = PreregisterUser::careStatusOptions();
         
         $phpExcel = new PHPExcel();
         
@@ -211,8 +213,14 @@ class ReportController extends Controller
                 if ($key == 'sale_note'){
                     $html = new Html2Text($value);
                     $value = $html->getText();
+                } else if ($key == 'care_status'){
+                    $value = $careStatusOptions[$value];
+                } else if ($key == 'phone'){
+                    
+                } else if ($key == 'created_date'){
+                    $value = date("d/m/Y", strtotime($value));
                 }
-                $activeSheet->setCellValueByColumnAndRow($col, $row, $value);
+                $activeSheet->setCellValueExplicitByColumnAndRow($col, $row, $value);
                 $col++;
             }
             $row++;
@@ -224,7 +232,8 @@ class ReportController extends Controller
         $currentSheetAlignment->setWrapText(true);
         
         $activeSheet->getStyle('D2:D'.$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-        $activeSheet->getStyle('A2:D'.$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $activeSheet->getStyle('A2:A'.$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $activeSheet->getStyle('G2:G'.$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         
         $activeSheet->setSelectedCells('A1');
         

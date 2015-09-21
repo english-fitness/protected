@@ -11,6 +11,7 @@ $this->breadcrumbs=array(
     <div class="col col-lg-6">
         <h2 class="page-title mT10">Quản lý học sinh</h2>
     </div>
+    <?php if(Yii::app()->user->isAdmin()):?>
     <div class="col col-lg-6 for-toolbar-buttons">
         <div class="btn-group">
             <a class="top-bar-button btn btn-primary" href="<?php echo Yii::app()->baseUrl; ?>/admin/student/create">
@@ -18,6 +19,7 @@ $this->breadcrumbs=array(
 			</a>
         </div>
     </div>
+    <?php endif;?>
 </div>
 <?php 
 	$statusOptions = Student::statusOptions();
@@ -29,7 +31,7 @@ $this->breadcrumbs=array(
             return '';
         }
         $date = new DateTime($d);
-        return $date->format('d-m-Y');
+        return $date->format('d/m/Y');
     }
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
@@ -77,7 +79,7 @@ $this->breadcrumbs=array(
 		   'name'=>'created_date',
 		   'value'=>'date("d/m/Y", strtotime($data->created_date))',
 		   'filter'=>'<input type="text" value="'.$createdDateFilter.'" name="User[created_date]">',
-		   'htmlOptions'=>array('style'=>'width:100px;'),
+		   'htmlOptions'=>array('style'=>'width:100px;text-align:center;'),
 		),
         array(
             'header'=>'Học viên chính thức từ ngày',

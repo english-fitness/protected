@@ -15,6 +15,9 @@ $this->breadcrumbs=array(
     <?php if(isset($course) && $course!==NULL):?>
     <div class="col col-lg-6 for-toolbar-buttons">
         <div class="btn-group">
+            <a class="top-bar-button btn btn-primary mR5" href="<?php echo Yii::app()->baseUrl; ?>/admin/coursePayment/create?course_id=<?php echo $model->course_id;?>">
+			<i class="icon-plus"></i>Thêm học phí
+			</a>
             <a class="top-bar-button btn btn-primary" href="<?php echo Yii::app()->baseUrl; ?>/admin/session/create?cid=<?php echo $model->course_id;?>">
 			<i class="icon-plus"></i>Thêm buổi học mới
 			</a>
@@ -54,14 +57,15 @@ $this->breadcrumbs=array(
     		</div>
     	</p>
     </div>
-    <div class="col col-lg-12 pB10">
+    <div class="col col-lg-12">
     	<p>
-    		<div class="col col-lg-12 pL0i">
-    			<?php $preCourseStr = $course->displayConnectedPreCourses();?>
-    			<span class="fL"><b>Đơn xin học:</b>&nbsp;
-    				<?php echo ($preCourseStr!="")? $preCourseStr: "Chưa xác định";?>
-    			</span>
+    		<div class="col col-lg-3 pL0i">
+    			<span class="fL"><b>Tổng học phí:</b>&nbsp;<?php echo number_format($course->final_price)?> đ</span>
     		</div>
+            <div class="col col-lg-8 pL0i">
+    			<span class="fL"><b>Tổng số buổi học:</b>&nbsp;<?php echo $course->total_sessions?> buổi</span>
+    		</div>
+    	</p>
     	</p>
     </div>
 	<?php endif;?>

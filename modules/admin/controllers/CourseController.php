@@ -66,10 +66,6 @@ class CourseController extends Controller
 		$model=new Course;
 		$this->subPageTitle = 'Tạo khóa học mới';
 		$params = array();
-		if(isset($_GET['preCourseId'])){
-			$preCourse = PreregisterCourse::model()->findByPk($_GET['preCourseId']);
-			if(isset($preCourse->id)) $params['preCourse'] =  $preCourse;
-		}
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 		if(isset($_POST['Course']))
@@ -80,8 +76,9 @@ class CourseController extends Controller
 			$model->status = Course::STATUS_PENDING;//Pending status
 			$sessionValues = $_POST['Session'];//Session schedule values
 			$checkValidTime = $registration->validateGenerateSession($sessionValues);
+            
 			if(isset($sessionValues['dayOfWeek']) && $checkValidTime){
-				if($model->save()){				
+				if($model->save()){
 					//Create schedule session of Course					
 					$sessionValues['course_id'] = $model->id;//Set session course id
 					$sessionValues['teacher_id'] = $model->teacher_id;//Set session teacher id
@@ -99,12 +96,19 @@ class CourseController extends Controller
 						$model->assignTeacherToCourseSession();
 					}
 					$model->resetStatusSessions();//Reset status of sessions
-					//Save actual course id to preregister course
-					if(isset($preCourse)){
-						$preCourse->course_id = $model->id;//Course id
-						$preCourse->status = PreregisterCourse::STATUS_APPROVED;//Approve requested Course when create course
-						$preCourse->save();
-					}
+                    
+                    if (isset($_POST['CoursePayment'])){
+                        $payment = new CoursePayment;
+                        $payment->course_id = $model->id;
+                        $payment->package_option_id = $_POST['CoursePayment']['package_option_id'];
+                        $payment->payment_date = $_POST['CoursePayment']['payment_date'];
+                        $payment->note = $_POST['CoursePayment']['note'];
+                        if ($payment->save()){
+                            $model->final_price += $payment->packageOption->tuition;
+                            $model->total_sessions += $payment->packageOption->package->sessions;
+                            $model->save();
+                        }
+                    }
 				}
 				$this->redirect(array('index?type='.$model->type));
 			}else{

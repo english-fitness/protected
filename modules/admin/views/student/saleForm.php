@@ -157,8 +157,16 @@
 			<?php echo $form->labelEx($preregisterUser,'sale_note'); ?>
 		</div>
 		<div class="col col-lg-9">
-			<?php echo $form->textArea($preregisterUser,'sale_note',array_merge($readonlyAttrs, array('rows'=>6, 'cols'=>5, 'style'=>'height:4em;'))); ?>
-			<?php echo $form->error($preregisterUser,'sale_note'); ?>
+			<?php $this->widget('application.extensions.ckeditor.CKEditor', array(
+				'model'=>$preregisterUser,
+				'attribute'=>'sale_note',
+				'language'=>'en',
+				'editorTemplate'=>'advanced',
+				'toolbar' => array(
+                    array('-','Source','-','Bold','Italic','Underline','-','NumberedList','BulletedList','-','Outdent','Indent','Blockquote','-','Link','Unlink','-','SpecialChar','-','Cut','Copy','Paste','-','Undo','Redo','-','Maximize','-','About'),
+                ),
+			)); ?>
+		<?php echo $form->error($preregisterUser,'sale_note'); ?>
 		</div>	
 	</div>
 </fieldset>

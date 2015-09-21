@@ -18,23 +18,24 @@ class CoursePayment extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		$modelRules = array(
-			array('course_id', 'tuition', 'number_of_sessions', 'required'),
-			array('course_id', 'tuition', 'number_of_sessions', 'numerical', 'integerOnly'=>true),
+			array('package_option_id', 'required'),
+			array('package_option_id', 'numerical', 'integerOnly'=>true),
 			array('note', 'length', 'max'=>256),
-			array('course_id', 'tuition', 'number_of_sessions', 'note', 'last_modified_date', 'last_modified_user_id', 'safe'),
+            array('payment_date', 'default', 'setOnEmpty'=>true, 'value'=>null),
+			array('note, payment_date, created_date, created_user_id, last_modified_date, last_modified_user_id', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('course_id', 'tutition', 'number_of_sessions', 'created_user_id', 'created_date',
-				  'created_user', 'last_modified_date', 'last_modified_user_id',
-				  'on'=>'search'),
+			array('payment_date, created_user_id, last_modified_user_id', 'safe', 'on'=>'search'),
 			// Set the created and modified dates automatically on insert, update.
 			array('created_date', 'default', 'value'=>date('Y-m-d H:i:s'), 'setOnEmpty'=>false, 'on'=>'insert'),
+            array('created_user_id', 'default', 'value'=>Yii::app()->user->id, 'setOnEmpty'=>false, 'on'=>'insert'),
+            array('last_modified_date', 'default', 'value'=>date('Y-m-d H:i:s'), 'setOnEmpty'=>false, 'on'=>'insert'),
+            array('last_modified_user_id', 'default', 'value'=>Yii::app()->user->id, 'setOnEmpty'=>false, 'on'=>'insert'),
 		);
 		//Update model rules: modified date, created user, modified user
 		if(isset(Yii::app()->params['isUserAction'])){
 			$modelRules[] = array('last_modified_date', 'default', 'value'=>date('Y-m-d H:i:s'), 'setOnEmpty'=>false, 'on'=>'update');
-			$modelRules[] = array('created_user_id', 'default', 'value'=>Yii::app()->user->id, 'setOnEmpty'=>false, 'on'=>'insert');
-			$modelRules[] = array('last_modified_user_id', 'default', 'value'=>Yii::app()->user->id, 'setOnEmpty'=>false, 'on'=>'update');
+            $modelRules[] = array('last_modified_user_id', 'default', 'value'=>Yii::app()->user->id, 'setOnEmpty'=>false, 'on'=>'update');
 		}
 		return $modelRules;//Return model rules
 	}
@@ -48,8 +49,10 @@ class CoursePayment extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'course' => array(self::BELONGS_TO, 'Course', 'course_id'),
-			'createdUser' => array(self::BELONGS_TO, 'User', 'created_user_id'),
-			'modifiedUser' => array(self::BELONGS_TO, 'User', 'last_modified_user_id'),
+			'createdUser' => array(self::HAS_ONE, 'User', array('id'=>'created_user_id')),
+            // why this ._.
+			'modifiedUser' => array(self::HAS_ONE, 'User', array('id'=>'last_modified_user_id')),
+            'packageOption' => array(self::HAS_ONE, 'CoursePackageOptions', array('id'=>'package_option_id')),
 		);
 	}
 
@@ -75,9 +78,10 @@ class CoursePayment extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'course_id'=>'Khóa học',
-			'tuition'=>'Học phí',
-			'number_of_sessions'=>'Số buổi học',
+			// 'tuition'=>'Học phí',
+			// 'number_of_sessions'=>'Số buổi học',
 			'note'=>'Ghi chú',
+            'payment_date'=>'Ngày nộp tiền',
 			'created_user_id' => 'Người tạo',
 			'created_date' => 'Ngày tạo',
 			'last_modified_date' => 'Ngày sửa cuối cùng',
@@ -104,9 +108,10 @@ class CoursePayment extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('course_id',$this->course_id);
-		$criteria->compare('tuition',$this->tuition);
-		$criteria->compare('number_of_sessions',$this->number_of_sessions);
+        $criteria->compare('course_id',$this->course_id);
+		// $criteria->compare('tuition',$this->tuition);
+		// $criteria->compare('number_of_sessions',$this->number_of_sessions);
+		$criteria->compare('payment_date',$this->payment_date);
 		$criteria->compare('created_date',$this->created_date);
 		$criteria->compare('created_user_id',$this->created_user_id);
 		$criteria->compare('last_modified_date',$this->last_modified_date);

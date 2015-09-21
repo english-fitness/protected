@@ -63,17 +63,10 @@ $this->breadcrumbs=array(
 		   'value'=>$statusOptions[$model->status],
 		),
 		array(
-		   'name'=>'payment_type',
-		   'value'=>$paymentTypes[$model->payment_type],
-		),
-		array(
 		   'name'=>'Học phí toàn khóa học',
 		   'value'=>number_format($model->final_price),
 		),
-		array(
-		   'name'=>'payment_status',
-		   'value'=>$paymentStatuses[$model->payment_status],
-		),
+        'total_sessions',
 		array(
 		   'name'=>'created_user_id',
 		   'value'=>($model->created_user_id)? User::model()->displayUserById($model->created_user_id):"",

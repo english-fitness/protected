@@ -30,15 +30,6 @@
 	</div>
     <div class="form-element-container row">
         <div class="col col-lg-3">
-            <?php echo $form->labelEx($model,'type'); ?>
-        </div>
-        <div class="col col-lg-9">
-            <?php echo $form->dropDownList($model,'type',$model->getPackageType()); ?>
-            <?php echo $form->error($model,'type'); ?>
-        </div>
-    </div>
-    <div class="form-element-container row">
-        <div class="col col-lg-3">
             <?php echo $form->labelEx($model,'sessions'); ?>
         </div>
         <div class="col col-lg-9">
