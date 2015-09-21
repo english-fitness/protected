@@ -179,8 +179,8 @@ class SessionNote extends CActiveRecord
                             plan_duration,
                             status,
                             CASE 
-                                WHEN sessions.status = " . Session::STATUS_CANCELED . " THEN status_note
-                                ELSE note.note
+                                WHEN status = " . Session::STATUS_CANCELED . " THEN status_note
+                                ELSE note
                             END AS note,
                             using_platform,
                             teacher_paid

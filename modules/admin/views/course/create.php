@@ -182,15 +182,15 @@
                 </div>
             </div>
         </div>
+        <div class="form-element-container row">
+            <div class="col col-lg-3">
+                <label for="payment_note">Ghi chú</label>
+            </div>
+            <div class="col col-lg-9">
+                <textarea rows="6" cols="50" style="height:8em;" maxlength="500" name="CoursePayment[note]" id="payment_note"></textarea>
+            </div>
+        </div>
     </div>
-    <div class="form-element-container row">
-		<div class="col col-lg-3">
-			<label for="payment_note">Ghi chú</label>
-        </div>
-		<div class="col col-lg-9">
-			<textarea rows="6" cols="50" style="height:8em;" maxlength="500" name="CoursePayment[note]" id="payment_note"></textarea>
-        </div>
-	</div>
 </fieldset>
 <div class="clearfix h20">&nbsp;</div>
 <fieldset>
