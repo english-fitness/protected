@@ -46,9 +46,9 @@
 		   'htmlOptions'=>array('style'=>'width:100px; text-align:right;'),
 		),
 		array(
-		   'name'=>'payment_status',
-		   'value'=>'$data->getPaymentStatus()',
-		   'filter'=>ClsCourse::paymentStatuses(),
+		   'name'=>'total_sessions',
+		   'value'=>'$data->total_sessions',
+		   'filter'=>false,
 		   'htmlOptions'=>array('style'=>'width:120px; text-align:center;'),
 		),
 		array(

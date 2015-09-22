@@ -269,13 +269,13 @@
                         </div>
                     </div>
                     <div class="text-center" style="padding-top:40px;">
-                        <a href="#" class="orange-btn large slow-teleporter form-trigger" data-waypoint="testimonials">ĐĂNG KÝ NGAY</a>
+                        <a href="#" class="orange-btn large teleporter" data-waypoint="registration">ĐĂNG KÝ NGAY</a>
                     </div>
                 </div>
             </div>
             <!--register-->
             <!--registration form-->
-            <div id="registration" class="body-content" style="display:none">
+            <div id="registration" class="body-content">
                 <div class="form-container" id="main-form">
                     <div class="close-button">
                         <a href='#'><img src="./media/images/icon/close-button.png"/></a>
@@ -329,7 +329,6 @@
                             </div>
 							<!--end main form-->
 							<!--optional form-->
-                            <!--
 							<div class="optional-form">
 								<div class="title">Thông tin thêm (không bắt buộc)</div>
 								<div class="form-input">
@@ -356,7 +355,6 @@
 									<p style="font-size:15px"><small><i>Nếu bạn có mã khuyến mại, bạn có thể nhập vào đây để nhận ưu đãi từ speakup.vn</i></small></p>
 								</div>
 							</div>
-                            -->
                             <!--end optional form-->
 						</form>
                     </div>
@@ -378,6 +376,53 @@
 
         </div>
         <!--end content-->
+    </div>
+    <div id="popup-registration-form">
+        <form id="small-registration-form" class="registration-form">
+            <div id="inner-clone-form" class="main-form">
+                <div class="title">ĐĂNG KÝ TRẢI NGHIỆM MIỄN PHÍ</div>
+                <div class="form-input">
+                    <label>
+                        Họ tên <span class="orange-darker">*</span>
+                        <span class="fullname invalid-notice">
+                            <small><i></i></small>
+                        </span>
+                    </label>
+                    <input class="form-attr" data-attr="fullname" type="text" name="PreregisterUser[fullname]" placeholder="Họ tên"/>
+                </div>
+                <div class="form-input">
+                    <label>
+                        Số điện thoại <span class="orange-darker">*</span>
+                        <span class="phone invalid-notice">
+                            <small><i></i></small>
+                        </span>
+                    </label>
+                    <input class="form-attr" data-attr="phone" type="text" name="PreregisterUser[phone]" placeholder="Số điện thoại"/>
+                </div>
+                <div class="form-input">
+                    <label>
+                        Email
+                        <span class="email invalid-notice">
+                            <small><i></i></small>
+                        </span>
+                    </label>
+                    <input class="form-attr" data-attr="email" type="text" name="PreregisterUser[email]" placeholder="Email"/>
+                </div>
+                <div class="form-input text-center" style="padding-top:30px">
+                    <a href="#" class="orange-btn large submit-btn" data-form="main-registration-form" data-validator="validate">ĐĂNG KÝ</a>
+                </div>
+                <div class="form-input">
+                    <p id="privacy-info">
+                        <small>
+                            <i>
+                                Thông tin của bạn được bảo mật và chỉ được sử dụng trong tư vấn liên quan đến chương trình tiếng anh
+                                trực tuyến tại speakup.vn
+                            </i>
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </form>
     </div>
 </body>
 </html>

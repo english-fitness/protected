@@ -28,7 +28,7 @@ class PreregisterUserController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','create', 'update', 'saleUpdate', 'importData', 'delete'),
+				'actions'=>array('index','view','create', 'update', 'saleUpdate', 'importData', 'delete', 'ajaxSaleUpdate'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -134,6 +134,29 @@ class PreregisterUserController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    //for silently update sale form before creating account
+    public function actionAjaxSaleUpdate($id){
+		$model = $this->loadModel($id);
+        
+        $success = false;
+        
+		if(isset($_POST['PreregisterUser']))
+		{
+			$preUserValues = $_POST['PreregisterUser'];
+			if(trim($preUserValues['last_sale_date'])==''){
+				unset($preUserValues['last_sale_date']);
+			}
+			$model->attributes = $preUserValues;
+			if($model->save()){
+                $success = true;
+			}
+		}
+        
+        $this->renderJSON(array(
+            "success"=>$success,
+        ));
+    }
 
 	/**
 	 * Deletes a particular model.

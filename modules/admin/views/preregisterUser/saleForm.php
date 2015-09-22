@@ -33,6 +33,27 @@
             .attr("name", "urlReferrer")
             .val('<?php echo Yii::app()->request->urlReferrer?>')
         );
+        $("#createUserButton").click(function(e){
+            e.preventDefault();
+            
+            for ( instance in CKEDITOR.instances )
+                CKEDITOR.instances[instance].updateElement();
+            
+            $.ajax({
+                url:"/admin/preregisterUser/ajaxSaleUpdate/id/<?php echo $model->id?>",
+                type:"post",
+                data:$("#preregister-user-form").serialize(),
+                success:function(response){
+                    if (!response.success){
+                        //indicate saving failure
+                    }
+                    window.location.href = "/admin/student/create?preregisterId=<?php echo $model->id?>";
+                },
+                error:function(){
+                    window.location.href = "/admin/student/create?preregisterId=<?php echo $model->id?>";
+                }
+            })
+        });
     });
     <?php endif;?>
 </script>
@@ -56,9 +77,7 @@
         	<button class="btn btn-default cancel" name="form_action" type="button" onclick="cancel();"><i class="icon-undo"></i>Bỏ qua</button>
         </div>
         <?php if(!$model->hasExistingUser()):?>
-        <a href="/admin/student/create?preregisterId=<?php echo $model->id?>">
-            <button class="btn btn-default" name="form_action" type="button"><i class="icon-plus"></i>Tạo tài khoản</button>
-        </a>
+            <button id="createUserButton" class="btn btn-default" name="form_action" type="button"><i class="icon-plus"></i>Tạo tài khoản</button>
         <?php endif;?>
     </div>
 </div>

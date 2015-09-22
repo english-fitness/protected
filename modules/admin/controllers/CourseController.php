@@ -97,7 +97,7 @@ class CourseController extends Controller
 					}
 					$model->resetStatusSessions();//Reset status of sessions
                     
-                    if (isset($_POST['CoursePayment'])){
+                    if ($model->payment_type == Course::PAYMENT_TYPE_PAID && isset($_POST['CoursePayment'])){
                         $payment = new CoursePayment;
                         $payment->course_id = $model->id;
                         $payment->package_option_id = $_POST['CoursePayment']['package_option_id'];
