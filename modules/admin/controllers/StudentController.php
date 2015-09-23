@@ -73,11 +73,19 @@ class StudentController extends Controller
             $this->redirect(array('index'));
         }
         
-		$model=new User;
+		$user=new User;
 		$student = new Student; 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 		$this->subPageTitle = 'Thêm học sinh mới';
+        
+        if (isset($_REQUEST['preregisterId'])){
+            $preregisterUser = PreregisterUser::model()->findByPk($_REQUEST['preregisterId']);
+            if ($preregisterUser->hasExistingUser()){
+                $student->addError("preregister_id", "Tài khoản học sinh cho đăng ký tư vấn này đã tồn tại");
+            }
+        }
+        
 		if(isset($_POST['User']))
 		{
 			$student_values = $_POST['User'];
@@ -86,28 +94,39 @@ class StudentController extends Controller
 			if(trim($student_values['birthday'])==''){
 				unset($student_values['birthday']);
 			}
-			$model->attributes= $student_values;
-			$model->passwordSave = $student_values['password'];
-            if ($model->attributes['status'] >= Student::STATUS_NEW_STUDENT){
+			$user->attributes= $student_values;
+			$user->passwordSave = $student_values['password'];
+            if ($user->attributes['status'] >= Student::STATUS_NEW_STUDENT){
                 $student->official_start_date = date('Y-m-d');
             }
-			if($model->save()){
-				// $student->attributes = $student_profile_values;
-                if (isset($_REQUEST['preregisterId'])){
-                    $student->preregister_id = $_REQUEST['preregisterId'];
-                    $preregisterUser = PreregisterUser::model()->findByPk($_REQUEST['preregisterId']);
-                    $preregisterUser->care_status = PreregisterUser::CARE_STATUS_REGISTERED;
-                    $preregisterUser->save();
+            
+            $transaction = Yii::app()->db->beginTransaction();
+            
+            try{
+                if($user->save()){
+                    // $student->attributes = $student_profile_values;
+                    if (isset($_REQUEST['preregisterId'])){
+                        $student->preregister_id = $_REQUEST['preregisterId'];
+                        $preregisterUser->care_status = PreregisterUser::CARE_STATUS_REGISTERED;
+                        $preregisterUser->save();
+                    }
+                    $student->user_id = $user->id;
+                    if($student->save()){
+                        $transaction->commit();
+                        $this->redirect(array('index'));
+                    } else {
+                        throw new Exception("student_not_saved");
+                    }
+                } else {
+                    throw new Exception("user_not_saved");
                 }
-				$student->user_id = $model->id;
-				if($student->save()){
-					$this->redirect(array('index'));
-				}
-			}
+            } catch (Exception $e){
+                $transaction->rollback();
+            }
 		}
         
         $params = array(
-            'model'=>$model,
+            'model'=>$user,
 			'student'=>$student,
         );
         if(isset($_REQUEST['preregisterId'])){
@@ -124,8 +143,11 @@ class StudentController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
-		$student = Student::model()->findByPk($id);
+        $student = Student::model()->with("user")->findByPk($id);
+        if ($student == null){
+            throw new CHttpException(404,'The requested page does not exist.');
+        }
+		$user=$student->user;
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 		$this->subPageTitle = 'Sửa thông tin học sinh';
@@ -141,18 +163,18 @@ class StudentController extends Controller
 				$changePassStatus = false;
 				unset($studentValues['password']);//Not save password
 			}
-            $unofficialUser = ($model->status <= Student::STATUS_NEW_STUDENT);
-			$model->attributes = $studentValues;
-            if ($unofficialUser && $model->attributes['status'] >= Student::STATUS_NEW_STUDENT){
+            $unofficialUser = ($user->status <= Student::STATUS_NEW_STUDENT);
+			$user->attributes = $studentValues;
+            if ($unofficialUser && $user->attributes['status'] >= Student::STATUS_NEW_STUDENT){
                 $student->official_start_date = date('Y-m-d');
             }
 			if($changePassStatus){
-				$model->passwordSave = $model->password;
-				$model->repeatPassword = $model->passwordSave;
+				$user->passwordSave = $user->password;
+				$user->repeatPassword = $user->passwordSave;
 			}
-			if($model->save()){
+			if($user->save()){
 				// $student->attributes = $studentProfileValues;
-				$student->user_id = $model->id;
+				$student->user_id = $user->id;
 				if($student->save()){
 					$this->redirect(array('index'));
 				}
@@ -160,7 +182,7 @@ class StudentController extends Controller
 		}
 
 		$this->render('update',array(
-			'model'=>$model,
+			'model'=>$user,
 			'student'=>$student,
 		));
 	}

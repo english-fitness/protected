@@ -44,7 +44,7 @@ $this->breadcrumbs=array(
 		array(
 		   'name'=>'id',
 		   'value'=>'$data->id',
-		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
+		   'htmlOptions'=>array('style'=>'width:70px; text-align:center;'),
 		),
 		array(
 		   'name'=>'firstname',
@@ -53,72 +53,37 @@ $this->breadcrumbs=array(
 		),
 		array(
 		   'name'=>'username',
-		   'htmlOptions'=>array('style'=>'width:180px;'),
+		   'htmlOptions'=>array('style'=>'width:150px;'),
 		),
 		'email',
-		/*
-		array(
-		   'name' => 'birthday',
-		   'value'=>'($data->birthday)? date("d/m/Y", strtotime($data->birthday)): ""',
-		   'filter'=>'<input type="text" value="'.$birthdayFilter.'" name="User[birthday]">',
-		   'htmlOptions'=>array('style'=>'width:100px;'),
-		),
-		*/
 		array(
 		   'name' => 'phone',
 		   'value'=>'Common::formatPhoneNumber($data->phone)',
-		   'htmlOptions'=>array('style'=>'width:100px;'),
+		   'htmlOptions'=>array('style'=>'width:110px;padding-left:5px'),
 		),
 		array(
 		   'name'=>'status',
 		   'value'=>'($data->statusOptions($data->status))',
 		   'filter'=>$statusOptions,
-		   'htmlOptions'=>array('style'=>'width:135px;'),
+		   'htmlOptions'=>array('style'=>'width:130px;text-align:center'),
 		),
 		array(
 		   'name'=>'created_date',
 		   'value'=>'date("d/m/Y", strtotime($data->created_date))',
 		   'filter'=>'<input type="text" value="'.$createdDateFilter.'" name="User[created_date]">',
-		   'htmlOptions'=>array('style'=>'width:100px;text-align:center;'),
+		   'htmlOptions'=>array('style'=>'width:90px;text-align:center;'),
 		),
         array(
             'header'=>'Học viên chính thức từ ngày',
             'value'=>'normalizeDate($data->student->official_start_date)',
-            'htmlOptions'=>array('style'=>'text-align:center;width:100px'),
+            'htmlOptions'=>array('style'=>'text-align:center;width:90px'),
         ),
-		/*
-		array(
-		   'header'=>'Đơn',
-		   'value'=>'Student::model()->displayPreCourseLink($data->id, "")',
-		   'htmlOptions'=>array('style'=>'width:20px; text-align:center;'),
-		   'type' => 'raw',
-		),
-		*/
 		array(
 		   'header'=>'Khóa học',
 		   'value'=>'Student::model()->displayCourseLink($data->id, "khóa học")',
 		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
 		   'type' => 'raw',
 		),
-        /*
-		array(
-		   'header'=>'Trạng thái Sale',
-		   'value'=>'Student::model()->displaySaleStatus($data->id)',
-		   'filter'=>'<input type="text" value="'.$saleStatusFilter.'" name="Student[sale_status]">',
-		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
-		),
-		array(
-		   'header'=>'Trạng thái chăm sóc',
-		   'value'=>'CHtml::link(Student::model()->displayCareStatus($data->id), Yii::app()->createUrl("admin/userSalesHistory/index?student_id=$data->id"));',
-		   'filter'=>CHtml::dropDownList('Student[care_status]', $selectedCareStatus, $careStatusOptions, array()),
-		   'htmlOptions'=>array('style'=>'width:120px;'),'type' => 'raw',
-		),
-		array(
-		   'header'=>'Người tư vấn',
-		   'value'=>'Student::model()->displaySaleUser($data->id)',
-		   'filter'=>CHtml::dropDownList('Student[sale_user_id]', $selectedSaleUserId, Student::model()->getSalesUserOptions(false), array()),
-		   'htmlOptions'=>array('style'=>'width:120px;'),
-		),*/
 		array(
 			'class'=>'CButtonColumn',
 			'buttons'=>array (
@@ -134,10 +99,12 @@ $this->breadcrumbs=array(
 		            'options'=>array( 'class'=>'dpn' ),
 		        ),
     		),
+            'htmlOptions'=>array('style'=>'width:60px;'),
+            'headerHtmlOptions'=>array('style'=>'width:60px;'),
 		),
 		array(
 		   'header'=>'Tư vấn',
-		   'value'=>'CHtml::link("Tư vấn", "/admin/student/saleUpdate/id/".$data->id, array("class"=>"icon-plus pL20", "style"=>"width:75px;"))',
+		   'value'=>'CHtml::link("Tư vấn", "/admin/student/saleUpdate/id/".$data->id, array("class"=>"icon-plus pL20", "style"=>"width:60px;"))',
 		   'filter'=>false, 'type'  => 'raw',
 		   'htmlOptions'=>array('style'=>'width:60px;'),
 		),

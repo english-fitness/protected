@@ -115,7 +115,9 @@ foreach ($usernamePrefixesOptions as $prefix){
 	    </div>
 	    <div class="col col-lg-6 for-toolbar-buttons">
 	        <div class="btn-group">
+                <?php if (!$student->hasErrors("preregister_id")):?>
 	        	<button class="btn btn-primary" name="form_action" type="submit"><i class="icon-save"></i>Lưu lại</button>
+                <?php endif;?>
 	        	<button class="btn btn-default cancel" name="form_action" type="button" onclick="cancel();"><i class="icon-undo"></i>Bỏ qua</button>
 	        	<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin() && $model->status==User::STATUS_PENDING):?>
 	        	<button class="btn btn-default remove" name="form_action" type="button" onclick="removeStudent(<?php echo $model->id;?>);"><i class="btn-remove"></i>Xóa học sinh</button>
@@ -123,6 +125,7 @@ foreach ($usernamePrefixesOptions as $prefix){
 	        </div>
 	    </div>
 	</div>
+    <div class="row"><div style="float:right"><?php echo $form->error($student,'preregister_id'); ?></div></div>
 <fieldset>
 	<?php $disabledAttrs = (!$model->isNewRecord)? array('disabled'=>'disabled'):array();?>
 	<?php $readonlyAttrs = (!$model->isNewRecord)? array('readonly'=>'readonly','ondblclick'=>'allowEdit(this)'): array();?>
@@ -286,6 +289,17 @@ foreach ($usernamePrefixesOptions as $prefix){
 			<?php endif;?>
 		</div>
 	</div>
+    <?php if (!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
+    <div class="form-element-container row">
+		<div class="col col-lg-3">
+			<?php echo $form->labelEx($student,'official_start_date'); ?>
+		</div>
+		<div class="col col-lg-9">
+			<?php echo $form->textField($student,'official_start_date',array_merge(array("class"=>"datepicker"), $readonlyAttrs)); ?>
+			<?php echo $form->error($student,'official_start_date'); ?>
+		</div>
+	</div>
+    <?php endif;?>
 	<?php if(!$model->isNewRecord):?>
 	<div class="form-element-container row">
 		<div class="col col-lg-3"><label>Lịch sử trạng thái</label></div>

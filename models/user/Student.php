@@ -99,7 +99,7 @@ class Student extends CActiveRecord
 		return array(
 			'user_id' => 'Mã học sinh',
             'preregister_id'=>'Tư vấn',
-            'official_start_date'=>'Ngày học chính thức',
+            'official_start_date'=>'Thành viên chính thức từ ngày',
             'sale_status'=>'Trạng thái sale',
 			'created_date' => 'Ngày tạo',
 			'modified_date' => 'Ngày sửa',
