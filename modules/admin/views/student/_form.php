@@ -153,12 +153,7 @@ foreach ($usernamePrefixesOptions as $prefix){
                 <?php echo $form->hiddenField($model,'username'); ?>
                 <?php echo $form->error($model,'username'); ?>
             <?php else:
-                if (Yii::app()->user->isAdmin()){
-                    $usernameInputStatus = array("readonly"=>true, 'ondblclick'=>'allowEdit(this)');
-                } else {
-                    $usernameInputStatus = array("disabled"=>true);
-                }
-                echo $form->textField($model,'username',array_merge(array('size'=>60,'maxlength'=>30), $usernameInputStatus));
+                echo $form->textField($model,'username',array_merge(array('size'=>60,'maxlength'=>30), $readonlyAttrs));
                 echo $form->error($model,'username');
             endif;?>
             

@@ -103,7 +103,7 @@
 	        <div class="btn-group">
 	        	<button class="btn btn-primary" name="form_action" type="submit"><i class="icon-save"></i>Lưu lại</button>
 	        	<button class="btn btn-default cancel" name="form_action" type="button" onclick="cancel();"><i class="icon-undo"></i>Bỏ qua</button>
-	        	<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin() && $model->status==Course::STATUS_PENDING):?>
+	        	<?php if(!$model->isNewRecord && $model->status==Course::STATUS_PENDING):?>
 	        	<button class="btn btn-default remove" name="form_action" type="button" onclick="removeCourse(<?php echo $model->id;?>);"><i class="btn-remove"></i>Xóa khóa học</button>
 	        	<?php endif;?>
 	        </div>

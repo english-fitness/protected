@@ -166,6 +166,9 @@ class PreregisterUserController extends Controller
 	public function actionDelete($id)
 	{
 		$model = $this->loadModel($id);//Load model
+        if ($model->hasExistingUser()){
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('/admin/preregisterUser'));
+        }
 		if($model->deleted_flag==0){
 			$model->deleted_flag = 1;//Set deleted flag before delete
 			$model->save();

@@ -64,7 +64,7 @@
         <div class="btn-group">
         	<button class="btn btn-primary" name="form_action" type="submit"><i class="icon-save"></i>Lưu lại</button>
         	<button class="btn btn-default cancel" name="form_action" type="button" onclick="cancel();"><i class="icon-undo"></i>Bỏ qua</button>
-        	<?php if(!$model->isNewRecord):?>
+        	<?php if(!$model->isNewRecord && !$model->hasExistingUser()):?>
         	<button class="btn btn-default remove" name="form_action" type="button" onclick="removePreUser(<?php echo $model->id;?>);"><i class="btn-remove"></i>Xóa đăng ký</button>
         	<?php endif;?>
         </div>
