@@ -25,7 +25,10 @@ $this->breadcrumbs=array(
 		),
 		'username',
 		'email',
-		'phone',
+		array(
+		   'name'=>'phone',
+		   'value'=>Common::formatPhoneNumber($model->phone),
+		),
 		array(
 		   'name'=>'Đơn xin học',
 		   'value'=>Student::model()->displayPreCourseLink($model->id, " đơn xin học"),

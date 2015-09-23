@@ -87,10 +87,15 @@ class TeacherController extends Controller
 			$common = new Common();
 			$dir = "media/uploads/profiles";
 			$profilePicture = $common->uploadProfilePicture("profilePicture",$dir);
-			if($profilePicture){
+			if($profilePicture !== false){
+                $oldProfilePicture = $model->profile_picture;
 				$model->profile_picture=$profilePicture;
 			}
 			if($model->save()){
+                $oldPictureFullPath = $dir."/".$oldProfilePicture;
+                if ($profilePicture !== false && file_exists($oldPictureFullPath)){
+                    unlink($oldPictureFullPath);
+                }
 				$teacher->attributes = $teacher_profile_values;
 				$teacher->user_id = $model->id;
 				if($teacher->save()){
@@ -148,10 +153,15 @@ class TeacherController extends Controller
 			$common = new Common();
 			$dir = "media/uploads/profiles";
 			$profilePicture = $common->uploadProfilePicture("profilePicture",$dir);
-			if($profilePicture){
+			if($profilePicture !== false){
+                $oldProfilePicture = $model->profile_picture;
 				$model->profile_picture=$profilePicture;
 			}
 			if($model->save()){
+                $oldPictureFullPath = $dir."/".$oldProfilePicture;
+                if ($profilePicture !== false && file_exists($oldPictureFullPath)){
+                    unlink($oldPictureFullPath);
+                }
 				$teacher->attributes = $teacherProfileValues;
 				$teacher->user_id = $model->id;
 				if($teacher->save()){

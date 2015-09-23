@@ -65,7 +65,7 @@
 			<label>Email:&nbsp;</label><?php echo $user->email;?>
 		</div>
 		<div class="col col-lg-4">
-			<label>Điện thoại:&nbsp;</label><?php echo $user->phone;?>
+			<label>Điện thoại:&nbsp;</label><?php echo Common::formatPhoneNumber($user->phone);?>
 		</div>
 	</div>
 	<div class="form-element-container row">

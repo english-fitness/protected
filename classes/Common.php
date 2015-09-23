@@ -87,7 +87,7 @@ class Common
             $imageType = array('image/gif','image/jpeg','image/jpg','image/png');
             $imageInfo =getimagesize($file['tmp_name']);
             if(array_search($imageInfo['mime'],$imageType)){
-                $saveFileName = time().$file['name'];
+                $saveFileName = time().strtolower($file['name']);
                 move_uploaded_file($file['tmp_name'], $dir."/".$saveFileName);
                 return $saveFileName;
             }
@@ -233,6 +233,27 @@ class Common
 
         return $str;
 
+    }
+    
+    public static function formatPhoneNumber($phoneNumber){
+        $phone = trim($phoneNumber);
+        if (strpos($phone, "+84") === 0){
+            $phone = str_replace('+84', '0', $phone);
+        }
+        $phone = str_replace(' ', '', $phone);
+        $length = strlen($phone);
+        switch ($length){
+            case 10:
+                $regex = '/^(\d{3})(\d{3})(\d{2})(\d{2})$/';
+                break;
+            case 11:
+                $regex = '/^(\d{4})(\d{3})(\d{2})(\d{2})$/';
+                break;
+            default:
+                return $phoneNumber;
+        }
+        preg_match($regex, $phone, $matches);
+        return $matches[1] . " " . $matches[2] . " " . $matches[3] . " " . $matches[4];
     }
 }
 ?>

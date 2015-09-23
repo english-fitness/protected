@@ -66,7 +66,7 @@ $this->breadcrumbs=array(
 		*/
 		array(
 		   'name' => 'phone',
-		   'value'=>'$data->displayContactIcons()',
+		   'value'=>'Common::formatPhoneNumber($data->phone)',
 		   'htmlOptions'=>array('style'=>'width:100px;'),
 		),
 		array(

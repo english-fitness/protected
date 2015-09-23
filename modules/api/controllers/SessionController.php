@@ -145,8 +145,9 @@ class SessionController extends Controller
 		$record_file = $_REQUEST['file'];
 		
 		$record_dir = Yii::app()->params['recordDir'];
-		if (!$record_dir)
+		if (!isset($record_dir)){
 			$record_dir = "/home/administrator/records/";
+        }
 		$file_url = $record_dir . $record_file;
 		
 		if (!file_exists($file_url)) return;
@@ -176,7 +177,7 @@ class SessionController extends Controller
 		
 		$model = SessionRecord::model()->find($criteria);
 		
-		if (!$model)
+		if ($model == null)
 		{
 			$model = new SessionRecord();
 			$model->attributes = array('session_id'=>$session_id, 'record_file'=>$real_file_name);

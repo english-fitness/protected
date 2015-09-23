@@ -87,7 +87,7 @@ class ClsAdminHtml
 	public static function displayContactIcons($phone=null, $fbId=null, $gmail=null, $hmUser=null)
 	{
 		if($phone!=NULL){
-			echo '<span class="fL pR10">'.$phone.'</span>';
+			echo '<span class="fL pR10">'.Common::formatPhoneNumber($phone).'</span>';
 		}
 		if($fbId!=NULL){
 			echo '<a  class="fL pR10" target="_blank" href="https://www.facebook.com/profile.php?id='.$fbId.'"><span class="facebook"></span></a>&nbsp;&nbsp;';
