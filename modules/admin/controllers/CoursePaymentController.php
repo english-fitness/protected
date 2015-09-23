@@ -90,14 +90,16 @@ class CoursePaymentController extends Controller
 		$payment->course_id = $courseId;
 		if (isset($_REQUEST['CoursePayment'])){
 			$payment->attributes = $_POST['CoursePayment'];
-            $transaction = Yii::app()->db->beginTransaction();
+            $packageOption = CoursePackageOptions::model()->findByPk($_POST['CoursePayment']['package_option_id']);
+            $payment->tuition = $packageOption->tuition;
+            $payment->sessions = $packageOption->package->sessions;
             
+            $transaction = Yii::app()->db->beginTransaction();
             try{
                 if ($payment->save()){
                     $course = Course::model()->findByPk($courseId);
-                    $newPackage = $payment->packageOption;
-                    $course->final_price += $newPackage->tuition;
-                    $course->total_sessions += $newPackage->package->sessions;
+                    $course->final_price += $payment->tuition;
+                    $course->total_sessions += $payment->sessions;
                     if ($course->save()){
                         $transaction->commit();
                         $this->redirect(array('/admin/coursePayment/course/id/' . $courseId));
@@ -125,23 +127,21 @@ class CoursePaymentController extends Controller
 		$success = false;
 		
 		if(isset($_REQUEST['CoursePayment'])){
-            $oldPackageOptionId = $payment->package_option_id;
-            $oldPackageId = $payment->packageOption->package_id;
-            $oldTuition = $payment->packageOption->tuition;
-            $oldSessions = $payment->packageOption->package->sessions;
+            $oldTuition = $payment->tuition;
+            $oldSessions = $payment->sessions;
 			$payment->attributes = $_POST['CoursePayment'];
+            $packageOption = CoursePackageOptions::model()->findByPk($_POST['CoursePayment']['package_option_id']);
+            $payment->tuition = $packageOption->tuition;
+            $payment->sessions = $packageOption->package->sessions;
             
             $transaction = Yii::app()->db->beginTransaction();
             
             try{
                 if ($payment->save()){
-                    if ($payment->package_option_id != $oldPackageOptionId){
+                    if ($oldTuition != $payment->tuition || $oldSessions != $payment->sessions){
                         $course = Course::model()->findByPk($payment->course_id);
-                        $newPackage = CoursePackageOptions::model()->findByPk($payment->package_option_id);
-                        $course->final_price += $newPackage->tuition - $oldTuition;
-                        if ($newPackage->package_id != $oldPackageId){
-                            $course->total_sessions += $newPackage->package->sessions - $oldSessions;
-                        }
+                        $course->final_price += $payment->tuition - $oldTuition;
+                        $course->total_sessions += $payment->sessions - $oldSessions;
                         if (!$course->save()){
                             throw new Exception("course_not_saved");
                         }
@@ -164,7 +164,7 @@ class CoursePaymentController extends Controller
 	public function actionView($id){
 		$this->subPageTitle = "Xem chi tiết";
 		
-		$payment = CoursePayment::model()->with("course", "createdUser", "modifiedUser", "packageOption", "packageOption.package")->findByPk($id);
+		$payment = CoursePayment::model()->with("course", "createdUser", "modifiedUser")->findByPk($id);
         
 		$this->render('view', array(
 			'model'=>$payment,

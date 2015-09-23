@@ -283,11 +283,13 @@
                 $("#course_payment select").prop("disabled", true);
                 $("#course_payment input").prop("disabled", true);
                 $("#course_payment textarea").prop("disabled", true);
+                $("#numberOfSession").val(1);
             } else if (this.value == <?php echo Course::PAYMENT_TYPE_PAID?>) {
                 $("#course_payment").show();
                 $("#course_payment select").prop("disabled", false);
                 $("#course_payment input").prop("disabled", false);
                 $("#course_payment textarea").prop("disabled", false);
+                $("#course_package_select").change();
             }
         });
         

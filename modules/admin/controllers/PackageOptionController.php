@@ -71,7 +71,9 @@ class PackageOptionController extends Controller
 			if($model->save()) {
                 $model->updateOptionsMeta($_POST);
 				$this->redirect(array('index','id'=>$model->package_id));
-			}
+			} else {
+                exit(var_dump($model->getErrors()));
+            }
 		}
 		
 		$params = array(

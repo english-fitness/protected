@@ -33,26 +33,46 @@
             .attr("name", "urlReferrer")
             .val('<?php echo Yii::app()->request->urlReferrer?>')
         );
+        
+        var mustSaveBeforeCreate = false;
+        
+        $("#preregister-user-form").change(function(){
+            mustSaveBeforeCreate = true;
+        });
+        
         $("#createUserButton").click(function(e){
             e.preventDefault();
             
-            for ( instance in CKEDITOR.instances )
-                CKEDITOR.instances[instance].updateElement();
-            
-            $.ajax({
-                url:"/admin/preregisterUser/ajaxSaleUpdate/id/<?php echo $model->id?>",
-                type:"post",
-                data:$("#preregister-user-form").serialize(),
-                success:function(response){
-                    if (!response.success){
-                        //indicate saving failure
-                    }
-                    window.location.href = "/admin/student/create?preregisterId=<?php echo $model->id?>";
-                },
-                error:function(){
-                    window.location.href = "/admin/student/create?preregisterId=<?php echo $model->id?>";
+            //need to check if ckeditor instance changed
+            for ( instance in CKEDITOR.instances ){
+                if ( CKEDITOR.instances[instance].checkDirty() ){
+                    mustSaveBeforeCreate = true;
                 }
-            })
+            }
+            
+            if (mustSaveBeforeCreate){
+                for ( instance in CKEDITOR.instances ){
+                    CKEDITOR.instances[instance].updateElement();
+                }
+                $("#savingIndicator").html('<span style="color:blue;float:right">Đang lưu thông tin tư vấn...</span>').show()
+                $.ajax({
+                    url:"/admin/preregisterUser/ajaxSaleUpdate/id/<?php echo $model->id?>",
+                    type:"post",
+                    data:$("#preregister-user-form").serialize(),
+                    success:function(response){
+                        if (!response.success){
+                            $("#savingIndicator").html('<span style="color:red;float:right">Không thể lưu thông tin</span>').show()
+                        }
+                        window.location.href = "/admin/student/create?preregisterId=<?php echo $model->id?>";
+                    },
+                    error:function(){
+                        $("#savingIndicator").html('<span style="color:red;float:right">Không thể lưu thông tin</span>').show()
+                        window.location.href = "/admin/student/create?preregisterId=<?php echo $model->id?>";
+                    }
+                });
+            } else {
+                window.location.href = "/admin/student/create?preregisterId=<?php echo $model->id?>";
+            }
         });
     });
     <?php endif;?>
@@ -80,6 +100,9 @@
             <button id="createUserButton" class="btn btn-default" name="form_action" type="button"><i class="icon-plus"></i>Tạo tài khoản</button>
         <?php endif;?>
     </div>
+</div>
+<div class="row">
+    <div class="col col-lg-12" id="savingIndicator" style="display:none"></div>
 </div>
 <?php 
 	$readOnlyAttrs = (!$model->isNewRecord)? array('readonly'=>'readonly','ondblclick'=>'allowEdit(this)'): array();

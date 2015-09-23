@@ -4,24 +4,36 @@
         <h2 class="page-title mT10">Chi tiết học phí</h2>
     </div>
 </div>
+<?php
+    function formatDate($format, $date){
+        return $date != null ? date($format, strtotime($date)) : "Chưa có";
+    }
+    function displayCourseName($title, $id){
+        return $title != "" ? $title : $id;
+    }
+?>
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
 		array(
 			'name'=>'Khóa học',
-			'value'=>'<a href="/admin/course/view/id/'.$model->course_id.'">'.$model->course->title.'</a>',
+			'value'=>'<a href="/admin/session?course_id='.$model->course_id.'">'.displayCourseName($model->course->title, $model->course_id).'</a>',
 			'type'=>'raw',
 		),
 		array(
 			'name'=>'Số buổi',
-			'value'=>$model->packageOption->package->sessions,
+			'value'=>$model->sessions,
 			'type'=>'raw',
 		),
         array(
 			'name'=>'Học phí',
-			'value'=>number_format($model->packageOption->tuition),
+			'value'=>number_format($model->tuition),
 		),
+        array(
+            'name'=>'payment_date',
+            'value'=>formatDate("d/m/Y", $model->payment_date),
+        ),
 		'note',
         array(
 			'name'=>'created_user_id',

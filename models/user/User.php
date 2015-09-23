@@ -529,7 +529,7 @@ class User extends CActiveRecord
 	public function searchUsersToAssign($keyword, $userRole=NULL)
 	{
 		$criteria = new CDbCriteria();
-		$condition = "((username LIKE '%".$keyword."%') OR (email LIKE '%".$keyword."%') OR (CONCAT(`lastname`,' ',`firstname`) LIKE '%".$keyword."%'))";
+		$condition = "((username LIKE '%".$keyword."%') OR (CONCAT(`lastname`,' ',`firstname`) LIKE '%".$keyword."%'))";
 		if($userRole!=NULL){
 			$condition .= " AND (role='".$userRole."')";
 		}

@@ -67,7 +67,7 @@
 	$startDateFilter = Yii::app()->controller->getQuery('Session[plan_start]', ''); 
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'dataProvider'=>$model->with('packageOption','packageOption.package', 'modifiedUser')->search(),
+	'dataProvider'=>$model->with('modifiedUser')->search(),
 	'filter'=>$model,
 	'enableHistory'=>true,
 	'ajaxVar'=>'',
@@ -80,12 +80,12 @@
         ),
         array(
             'header'=>'Học phí',
-            'value'=>'number_format($data->packageOption->tuition)',
+            'value'=>'number_format($data->tuition)',
             'htmlOptions'=>array('style'=>'text-align:center'),
         ),
         array(
             'header'=>'Số buổi',
-            'value'=>'$data->packageOption->package->sessions',
+            'value'=>'$data->sessions',
             'htmlOptions'=>array('style'=>'text-align:center'),
         ),
         array(

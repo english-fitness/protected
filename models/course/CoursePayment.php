@@ -52,7 +52,6 @@ class CoursePayment extends CActiveRecord
 			'createdUser' => array(self::HAS_ONE, 'User', array('id'=>'created_user_id')),
             // why this ._.
 			'modifiedUser' => array(self::HAS_ONE, 'User', array('id'=>'last_modified_user_id')),
-            'packageOption' => array(self::HAS_ONE, 'CoursePackageOptions', array('id'=>'package_option_id')),
 		);
 	}
 

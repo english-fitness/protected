@@ -57,7 +57,6 @@ class CoursePackageOptions extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-            array('package_id', 'UniqueValidator'),
 			array('tuition, package_id', 'required'),
 			array('tuition, package_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().

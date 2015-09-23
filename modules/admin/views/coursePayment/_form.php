@@ -5,10 +5,6 @@
 </style>
 <div class="form">
 <?php
-    if(!$model->isNewRecord){
-        $currentPackageOption = $model->packageOption;
-        $currentPackage = $currentPackageOption->package;
-    }
     
     $coursePackages = CoursePackage::model()->findAll();
     $packagePrices = array();
@@ -16,7 +12,7 @@
         $options = $package->options;
         $prices = array();
         foreach ($options as $option){
-            $prices[$option->id] = number_format($option->tuition);
+            $prices[$option->id] = number_format($option->tuition)." đ";
         }
         $packagePrices[$package->id] = $prices;
     }
@@ -47,6 +43,9 @@
 		</div>
 		<div class="col col-lg-9">
 			<select id="course_package_select" name="CoursePackage[package_option_id]" style="font-size:14px">
+                <?php if (!$model->isNewRecord):?>
+                    <option disabled selected style="display:none"><?php echo $model->sessions." buổi"?></option>
+                <?php endif;?>
                 <?php foreach($coursePackages as $package):?>
                     <option value="<?php echo $package->id?>" data-sessions="<?php echo $package->sessions?>"><?php echo $package->sessions . " buổi"?></option>
                 <?php endforeach;?>
@@ -59,6 +58,9 @@
 		</div>
 		<div class="col col-lg-9">
 			<select id="price_select" name="CoursePayment[package_option_id]">
+                <?php if (!$model->isNewRecord):?>
+                    <option disabled selected style="display:none"><?php echo number_format($model->tuition)." đ"?></option>
+                <?php endif;?>
             <select>
 		</div>
 	</div>
@@ -108,14 +110,19 @@
         });
         var packageSelect = $("#course_package_select")
         packageSelect.change(function(){
+            $("#price_select").html("");
             setPriceOptions(this.value);
         });
         <?php if ($model->isNewRecord):?>
             packageSelect.change();
         <?php else:?>
-            packageSelect.val(<?php echo $currentPackage->id?>);
-            packageSelect.change();
-            $("#price_select").val(<?php echo $currentPackageOption->id?>);
+            $("#course_package_select > option").each(function(){
+                var option = $(this);
+                if (option.data("sessions") == <?php echo $model->sessions?>){
+                    console.log(option[0]);
+                    setPriceOptions(option.val());
+                }
+            })
         <?php endif;?>
         
         $("#payment_date").change(function(){
@@ -129,7 +136,6 @@
     function setPriceOptions(packageId){
         var priceOptions = packagePrices[packageId];
         var priceSelect = $("#price_select");
-        priceSelect.html("");
         for(var i in priceOptions){
             priceSelect.append('<option value="'+i+'">'+priceOptions[i]+'</option>');
         }
