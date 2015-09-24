@@ -18,8 +18,8 @@ class CoursePayment extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		$modelRules = array(
-			array('package_option_id', 'required'),
-			array('package_option_id', 'numerical', 'integerOnly'=>true),
+			array('tuition, sessions', 'required'),
+			array('tuition, sessions', 'numerical', 'integerOnly'=>true),
 			array('note', 'length', 'max'=>256),
             array('payment_date', 'default', 'setOnEmpty'=>true, 'value'=>null),
 			array('note, payment_date, created_date, created_user_id, last_modified_date, last_modified_user_id', 'safe'),

@@ -176,9 +176,25 @@ class CoursePaymentController extends Controller
 		
 		$success = false;
 		
-		if ($payment->delete()){
-			$success = true;
-		}
+		$transaction = Yii::app()->db->beginTransaction();
+        try{
+            if ($payment->delete()){
+                $course = Course::model()->findByPk($payment->course_id);
+                $course->final_price -= $payment->tuition;
+                $course->total_sessions -= $payment->sessions;
+                if ($course->save()){
+                    $transaction->commit();
+                    $success = true;
+                } else {
+                    throw new Exception("course_not_saved");
+                }
+            } else {
+                throw new Exception("payment_not_saved");
+            }
+        } catch (Exception $e){
+            $transaction->rollback();
+            exit($e);
+        }
 		
 		$this->renderJSON(array(
 			'success'=>$success
