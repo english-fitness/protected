@@ -107,7 +107,6 @@
 		}?>
 		
 		$(document).ready(function(){
-			SearchBox.bindSearchEvent("teacherSearchBox", searchTeacher);
 			loadCalendar();
 			$('#month-selection').on('change', function(){
 				var thisMonth = moment($(this).val(), 'MM');
@@ -170,7 +169,6 @@
 								start: event.start,
 							}
 							CalendarSessionHandler.newSession(preset, createSessionSuccess, createSessionError);
-							SearchBox.bindSearchEvent("ajaxSearchStudent", searchStudent);
 						} else if (['approvedSession', 'ongoingSession', 'pendingSession'].indexOf(event.className[0]) > -1){
 							var data = {
 								action: '<?php echo Yii::app()->baseUrl;?>/admin/schedule/calendarUpdateSession',
@@ -185,8 +183,8 @@
 								end: event.end,
 							}
 							CalendarSessionHandler.editSession(data, updateSessionSuccess, updateSessionError);
-							SearchBox.bindSearchEvent("ajaxSearchStudent", searchStudent);
 						}
+                        SearchBox.bindSearchEvent("#ajaxSearchStudent", AjaxCall.searchStudent, displayStudentSearchResult);
 					}
 				},
 				minTime: minTime,
@@ -298,29 +296,16 @@
 				}
 			});
 		}
-		
-		function searchStudent(keyword){
-			$.ajax({
-				url:"<?php echo Yii::app()->baseurl; ?>/admin/course/AjaxLoadStudent/keyword/"+keyword,
-				type:"get",
-				success: function(response) {
-					var data = response[0];
-					SearchBox.autocomplete('ajaxSearchStudent', data, ajaxLoadCourse);
-				}
-			});
-		}
+        
+        function displayStudentSearchResult(results){
+            SearchBox.autocomplete({
+                searchBox:'#ajaxSearchStudent',
+                results:results,
+                resultDisplay:'usernameAndFullName',
+                selectCallback:ajaxLoadCourse,
+            });
+        }
 
-		function searchTeacher(keyword){
-			$.ajax({
-				url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/ajaxSearchTeacher/keyword/' + keyword,
-				type:'get',
-				success:function(response){
-					var data = response.result;
-					SearchBox.autocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
-				}
-			});
-		}
-		
 		function createSessionSuccess(){
 			reloadCalendar();
 		}
@@ -576,16 +561,6 @@
 			});
 		}
 		
-		function searchTeacherToView(keyword){
-			$.ajax({
-				url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/ajaxSearchTeacher/keyword/' + keyword,
-				type:'get',
-				success:function(response){
-					var data = response.result;
-					SearchBox.autocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
-				}
-			});
-		}
 		function displayConfirmDialog(title, confirmText, confirmButton){
 			var buttons = {};
 			buttons[confirmButton] = function(){

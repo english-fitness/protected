@@ -225,7 +225,7 @@
 						}
 						CalendarSessionHandler.editSession(data, updateSessionSuccess, updateSessionError);
 					}
-                    SearchBox.bindSearchEvent("ajaxSearchStudent", searchStudent);
+                    SearchBox.bindSearchEvent("#ajaxSearchStudent", AjaxCall.searchStudent, displayStudentSearchResult);
 				}
 			},
 			minTime: minTime,
@@ -333,17 +333,15 @@
 			}
 		});
 	}
-
-	function searchStudent(keyword){
-		$.ajax({
-			url:"<?php echo Yii::app()->baseurl; ?>/admin/course/AjaxLoadStudent/keyword/"+keyword,
-			type:"get",
-			success: function(response) {
-				var data = response[0];
-				SearchBox.autocomplete('ajaxSearchStudent', data, ajaxLoadCourse);
-			}
-		});
-	}
+    
+    function displayStudentSearchResult(results){
+        SearchBox.autocomplete({
+            searchBox:'#ajaxSearchStudent',
+            results:results,
+            resultDisplay:'usernameAndFullName',
+            selectCallback:ajaxLoadCourse,
+        });
+    }
     
     function reloadAll(){
         for (var i = 0; i < teacherGroups.length; i++){
