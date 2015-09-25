@@ -12,7 +12,8 @@
         <link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
         <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
-        <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/calendar.js"></script>
+        <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
+        <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/utils.js"></script>
         <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
         <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
     </head>
@@ -195,7 +196,7 @@
                             selected.removeClass('btn-primary selected');
                             $('.wday-select[day='+currentWday+']').addClass('btn-primary selected');
                         }
-                        setPaginationLinkDate(addDay(currentWeekStart, currentWday));
+                        setPaginationLinkDate(moment(currentWeekStart).add(currentWday, 'days'));
                         
                         if (view.start.format('YYYY-MM-DD') == today){
                             $('#today-select').addClass('btn-primary');

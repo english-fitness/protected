@@ -3,7 +3,7 @@
 <link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/student.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/util.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/utils.js"></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.js'></script>
 <?php if(Yii::app()->language=="vi"):?>
@@ -70,14 +70,9 @@
 <div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;"><?php echo Yii::t('lang', 'schedule')?></p></div>
 <?php $this->renderPartial('student.views.class.myCourseTab'); ?>
 <div class="details-class">
-	<form class="form-inline" role="form" method="get">
-		<div class="form-group" style="margin:0 150px;">
-			<label class="form-label"><?php echo Yii::t('lang', 'search_teacher')?>: </label>
-			<input id="teacherSearchBox" type="text" class="form-control" placeholder="<?php echo Yii::t('lang', 'student_search_teacher_placeholder')?>" style="width:500px;">
-			<input id="teacherId" type="hidden" name="teacher">
-			<input type="submit" value="<?php echo Yii::t('lang', 'search')?>" class="btn" style="margin-top: 0px">
-		</div>
-	 </form>
+    <div style="margin:0 150px;">
+        <?php $this->renderPartial("widgets/searchBox")?>
+    </div>
 	<div style='margin:10px auto; text-align:center'>
 		<?php echo Yii::t('lang', 'page')?> <?php echo PaginationLinks::create($page, $pageCount)?>
 	</div>
@@ -96,7 +91,7 @@
 	<div style='margin:0 auto; text-align:center'>
 		<?php echo Yii::t('lang', 'page')?> <?php echo PaginationLinks::create($page, $pageCount)?>
 	</div>
-	<?php $this->renderPartial('colorLegendWidget');?>
+	<?php $this->renderPartial('widgets/colorLegend');?>
 </div>
 <script>
 	var minTime = '09:00';
@@ -121,10 +116,6 @@
 				minTime = convertedRange.minTime;
 				maxTime = convertedRange.maxTime;';
 	}?>
-	
-	$(document).ready(function(){
-		SearchBox.bindSearchEvent("teacherSearchBox", searchTeacher);
-	});
 	
 	//functions
 	function loadCalendar (divId, teachers, date){
@@ -424,17 +415,6 @@
 				"<?php echo Yii::t('lang', 'button_no')?>": function(){
 					$(this).dialog('close');
 				}
-			}
-		});
-	}
-	
-	function searchTeacher(keyword){
-		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/student/schedule/ajaxSearchTeacher/keyword/' + keyword,
-			type:'get',
-			success:function(response){
-				var data = response.result;
-				SearchBox.autocomplete('teacherSearchBox', data, function(id){$('#teacherId').val(id);});
 			}
 		});
 	}

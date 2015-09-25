@@ -3,7 +3,7 @@
 <link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/student.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/util.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/utils.js"></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
 
@@ -52,17 +52,12 @@
 <div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;"><?php echo Yii::t('lang', 'schedule')?></p></div>
 <?php $this->renderPartial('student.views.class.myCourseTab'); ?>
 <div class="details-class">
-	<form class="form-inline form-element-container" role="form" style="margin-left:35px; padding-bottom:0px">
-		<div class="form-group">
-			<label class="form-label"><?php echo Yii::t('lang', 'search_teacher')?>: </label>
-			<input id="teacherSearchBox" type="text" class="form-control" placeholder="<?php echo Yii::t('lang', 'student_search_teacher_placeholder')?>" style="width:500px;">
-			<input id="teacherId" type="hidden" name="teacher">
-			<input type="submit" value="<?php echo Yii::t('lang', 'search')?>" class="btn" style="margin-top: 0px">
-		</div>
-		<div>
+	<div style="margin-left:35px;">
+		<?php $this->renderPartial("widgets/searchBox")?>
+		<div style="margin-left:20px;">
 			<a href="<?php echo Yii::app()->baseUrl?>/student/schedule/calendar"><?php echo Yii::t('lang', 'all_teachers')?></a>
 		</div>
-	</form>
+	</div>
 	<form class="form-inline form-element-container" role="form" style="margin-left:35px; padding-top:0px">
 		<div class="form-group">
 			<label class="form-label" for="month-selection"><?php echo Yii::t('lang', 'month_selection')?>: </label>
@@ -83,7 +78,7 @@
 		<?php echo $teacherModel->getProfilePictureHtml(array('style'=>'margin:3px;width:180px;height:180px'));?>
 	</div>
     <div id="calendar" style="width:1000px; margin:35px"></div>
-	<?php $this->renderPartial('colorLegendWidget');?>
+	<?php $this->renderPartial('widgets/colorLegend');?>
 </div>
 
 <?php if(isset($teacher)):?>
@@ -101,7 +96,6 @@
 		}?>
 		
 		$(document).ready(function(){
-			SearchBox.bindSearchEvent("teacherSearchBox", searchTeacher);
 			loadCalendar("calendar", [<?php echo $teacher?>]);
 			$('#month-selection').on('change', function(){
 				var thisMonth = moment($(this).val(), 'MM');
@@ -212,8 +206,6 @@
 		?>
 			
 			$('.fc-title').css('cursor','default');
-			
-			SearchBox.bindSearchEvent("teacherSearchBox", searchTeacher);
 		}
 		
 		$('body').css('overflow-x', 'hidden');
@@ -399,16 +391,5 @@
 				}
 			});
 		}
-		
-		function searchTeacher(keyword){
-		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/student/schedule/ajaxSearchTeacher/keyword/' + keyword,
-			type:'get',
-			success:function(response){
-				var data = response.result;
-				SearchBox.autocomplete('teacherSearchBox', data, function(id){$('#teacherId').val(id);});
-			}
-		});
-	}
 	</script>
 <?php endif;?>

@@ -62,10 +62,6 @@
     </div>
 	<?php endif;?>
 </div>
-<?php 
-	$registration = new ClsRegistration();//New Registration class
-	$startDateFilter = Yii::app()->controller->getQuery('Session[plan_start]', ''); 
-?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$model->with('modifiedUser')->search(),
 	'filter'=>$model,

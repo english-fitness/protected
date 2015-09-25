@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/util.js"></script>
+<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/utils.js"></script>
 <style>
 .calendar-td{
 	border: 1px solid;
@@ -42,14 +42,7 @@ button.schedule{
 	$teacherModel = User::model()->findByPk($teacher);
 ?>
 <div class="details-class">
-	<form class="form-inline form-element-container" role="form" style="margin:0 auto; width:700px; padding:10px">
-		<div class="form-group">
-			<label class="form-label">Tìm giáo viên: </label>
-			<input id="teacherSearchBox" type="text" class="form-control" placeholder="Nhập tên giáo viên để tìm kiếm" style="width:500px;">
-			<input id="searchTeacherId" type="hidden" name="teacher">
-			<input type="submit" value="Tìm" class="btn" style="margin-top: 0px">
-		</div>
-	</form>
+    <?php $this->renderPartial('widgets/searchBox')?>
 	<div style="text-align:center;">
 		<span style="margin:0 auto; font-size:15px"><b><?php echo $teacherModel->fullname() . " - " . $teacherModel->username?></b></span>
 	</div>
@@ -222,7 +215,6 @@ button.schedule{
 			weekSelection.onchange();
 			return false;
 		};
-		SearchBox.bindSearchEvent("teacherSearchBox", searchTeacher);
 	});
 	
 	$("a").on('click', function(e){
@@ -389,15 +381,5 @@ button.schedule{
 		$(".loading").remove();
 	}
 	
-	function searchTeacher(keyword){
-		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/ajaxSearchTeacher/keyword/' + keyword,
-			type:'get',
-			success:function(response){
-				var data = response.result;
-				SearchBox.autocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
-			}
-		});
-	}
 </script>
 <!--.class-->

@@ -8,20 +8,17 @@
 </form>
 <script>
     $(function(){
-        bindSearchBoxEvent("teacherSearchBox", searchTeacher);
-		$('#cancelChangeSchedule').click(function(){
-			toggleChangeSchedule(false);
-		});
+        SearchBox.bindSearchEvent("#teacherSearchBox", AjaxCall.searchTeacher, displaySearchResults);
     });
 
-    function searchTeacher(keyword){
-		$.ajax({
-			url:'<?php echo Yii::app()->baseUrl?>/schedule/ajaxSearchTeacher/keyword/' + keyword,
-			type:'get',
-			success:function(response){
-				var data = response.result;
-				searchBoxAutocomplete('teacherSearchBox', data, function(id){$('#searchTeacherId').val(id);});
-			}
-		});
-	}
+    function displaySearchResults(results){
+        SearchBox.autocomplete({
+            searchBox:'#teacherSearchBox',
+            results:results,
+            resultDisplay:'fullName',
+            selectCallback:function(id){
+                $('#searchTeacherId').val(id);
+            }
+        });
+    }
 </script>

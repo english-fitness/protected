@@ -12,7 +12,8 @@
     <link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
     <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
-    <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/calendar.js"></script>
+    <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
+    <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/utils.js"></script>
     <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
     <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.js'></script>
 
@@ -100,7 +101,6 @@
 		}?>
 		
 		$(document).ready(function(){
-			bindSearchBoxEvent("teacherSearchBox", searchTeacher);
 			loadCalendar();
 			$('#month-selection').on('change', function(){
 				var thisMonth = moment($(this).val(), 'MM');

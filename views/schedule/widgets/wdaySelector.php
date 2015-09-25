@@ -53,7 +53,7 @@
     $(document).ready(function(){
 		setHeader();
 		$('.wday-select').click(function(){		
-			var targetDate = addDay(currentWeekStart, $(this).attr('day'));
+			var targetDate = moment(currentWeekStart).add($(this).attr('day'), 'days');
 			
 			for (var i = 1; i <= 4; i++){
 				var calendar = $('#calendar-'+i);
@@ -63,9 +63,9 @@
 		$('.week-nav').click(function(){
 			var value = $(this).attr('nav');
 			if (value == 'prev'){
-				currentWeekStart = addDay(currentWeekStart, -7);
+				currentWeekStart = moment(currentWeekStart).add(-7, 'days');
 			} else if (value == 'next'){
-				currentWeekStart = addDay(currentWeekStart, 7);
+				currentWeekStart = moment(currentWeekStart).add(7, 'days');
 			}
 			for (var i = 0; i < teacherGroups.length; i++){
 				reloadCalendar('calendar-'+(i+1), teacherGroups[i], currentWeekStart);
@@ -92,7 +92,7 @@
 			var thisOne = $(this);
 			var day = thisOne.attr('day');
 			var html = thisOne.html();
-            var date = moment(addDay(currentWeekStart, day)).format('DD-MM-YYYY')
+            var date = moment(currentWeekStart).add(day, 'days').format('DD-MM-YYYY')
 			thisOne.html(html.substr(0, html.indexOf('<br>') + 4) + ' ' + date);
 		});
 	}

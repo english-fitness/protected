@@ -88,21 +88,26 @@ class TeacherController extends Controller
 			$dir = "media/uploads/profiles";
 			$profilePicture = $common->uploadProfilePicture("profilePicture",$dir);
 			if($profilePicture !== false){
-                $oldProfilePicture = $model->profile_picture;
 				$model->profile_picture=$profilePicture;
 			}
-			if($model->save()){
-                $oldPictureFullPath = $dir."/".$oldProfilePicture;
-                if ($profilePicture !== false && file_exists($oldPictureFullPath)){
-                    unlink($oldPictureFullPath);
+            $transaction = Yii::app()->db->beginTransaction();
+            try{
+                if($model->save()){
+                    $teacher->attributes = $teacher_profile_values;
+                    $teacher->user_id = $model->id;
+                    if($teacher->save()){
+                        $teacher->saveAbilitySubjects($abilitySubjects);
+                        $transaction->commit();
+                        $this->redirect(array('index'));
+                    } else {
+                        throw new Exception('teacher_not_saved');
+                    }
+                } else {
+                    throw new Exception('user_not_saved');
                 }
-				$teacher->attributes = $teacher_profile_values;
-				$teacher->user_id = $model->id;
-				if($teacher->save()){
-					$teacher->saveAbilitySubjects($abilitySubjects);
-					$this->redirect(array('index'));
-				}
-			}
+            } catch(Exception $e){
+                $transaction->rollback();
+            }
 		}
 
 		$this->render('create',array(
@@ -158,9 +163,11 @@ class TeacherController extends Controller
 				$model->profile_picture=$profilePicture;
 			}
 			if($model->save()){
-                $oldPictureFullPath = $dir."/".$oldProfilePicture;
-                if ($profilePicture !== false && file_exists($oldPictureFullPath)){
-                    unlink($oldPictureFullPath);
+                if ($profilePicture !== false && $oldProfilePicture != ''){
+                    $oldPicturePath = $dir."/".$oldProfilePicture;
+                    if (file_exists($oldPicturePath)){
+                        unlink($oldPicturePath);
+                    }
                 }
 				$teacher->attributes = $teacherProfileValues;
 				$teacher->user_id = $model->id;
