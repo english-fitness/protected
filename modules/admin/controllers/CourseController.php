@@ -100,12 +100,16 @@ class CourseController extends Controller
                     if ($model->payment_type == Course::PAYMENT_TYPE_PAID && isset($_POST['CoursePayment'])){
                         $payment = new CoursePayment;
                         $payment->course_id = $model->id;
-                        $payment->package_option_id = $_POST['CoursePayment']['package_option_id'];
+                        
+                        $packageOption = CoursePackageOptions::model()->findByPk($_POST['CoursePayment']['package_option_id']);
+                        $payment->tuition = $packageOption->tuition;
+                        $payment->sessions = $packageOption->package->sessions;
+                        
                         $payment->payment_date = $_POST['CoursePayment']['payment_date'];
                         $payment->note = $_POST['CoursePayment']['note'];
                         if ($payment->save()){
-                            $model->final_price += $payment->packageOption->tuition;
-                            $model->total_sessions += $payment->packageOption->package->sessions;
+                            $model->final_price += $payment->tuition;
+                            $model->total_sessions += $payment->sessions;
                             $model->save();
                         }
                     }
