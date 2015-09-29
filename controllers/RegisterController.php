@@ -10,6 +10,10 @@ class RegisterController extends Controller
 
 	public function actionContact()
 	{
+        if (isset($_COOKIE['utmParams'])){
+            $utmParams = json_decode($_COOKIE['utmParams'], true);
+        }
+        
 		$success = false;
 		
 		if(isset($_POST['PreregisterUser']))
@@ -45,12 +49,15 @@ class RegisterController extends Controller
             if (isset($_REQUEST['referrer'])){
                 $model->source = $_REQUEST['referrer'];
             }
-			
+            
 			if ($model->save()){
+                if (isset($utmParams)){
+                    $utmStat = new UtmSaleStat;
+                    $utmStat->register_id = $model->id;
+                    $utmStat->attributes = $utmParams;
+                    $utmStat->save();
+                }
 				$success = true;
-				if ($model->id == null){
-					$model->id = $model->getPrimaryKey();
-				}
 			}
 		}
 		

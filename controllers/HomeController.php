@@ -4,11 +4,11 @@ class HomeController extends Controller
 {
     public  function  init()
     {
-        $this->layout = '//layouts/blank';
         Yii::app()->language = 'vi';
     }
     
     public function actionIndex(){
+        $this->layout = '//layouts/landing';
         $this->render('landing');
     }
 }

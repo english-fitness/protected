@@ -28,7 +28,7 @@ class PreregisterUserController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','create', 'update', 'saleUpdate', 'importData', 'delete', 'ajaxSaleUpdate'),
+				'actions'=>array('index','view','create', 'update', 'saleUpdate', 'importData', 'delete', 'ajaxSaleUpdate', 'saleStat'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -212,6 +212,33 @@ class PreregisterUserController extends Controller
 			'model'=>$model,
 		));
 	}
+    
+    public function actionSaleStat(){
+        $this->subPageTitle = 'Registration Statistics';
+        $this->loadJQuery = false;//Not load jquery
+		$model = new PreregisterUser('search');
+		$model->unsetAttributes();  // clear any default values
+        if(isset($_GET['PreregisterUser'])){
+			$model->attributes=$_GET['PreregisterUser'];
+			if(isset($_GET['PreregisterUser']['created_date'])){
+				$model->created_date = Common::convertDateFilter($_GET['PreregisterUser']['created_date']);//Created date filter
+			}
+			if(isset($_GET['PreregisterUser']['birthday'])){
+				$model->birthday = Common::convertDateFilter($_GET['PreregisterUser']['birthday']);//Birthday filter
+			}
+		}
+        $model->deleted_flag = 0;
+        $model->getDbCriteria()->order = 'created_date DESC';
+        
+        if (isset($_REQUEST['p'])){
+            $registerIds = UtmSaleStat::getRegisterIds($_REQUEST['p']);
+            $model->getDbCriteria()->condition = 'id IN (' . implode(',', $registerIds) . ')';
+        }
+        
+        $this->render('saleStat',array(
+			'model'=>$model,
+		));
+    }
     
     public function actionImportData(){
         $columns = array(
