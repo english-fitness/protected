@@ -118,6 +118,41 @@ class AccountController extends Controller
         ));
     }
 
+    public function actionResetPassword(){
+        $this->subPageTitle = Yii::t('lang', 'reset_pw_page_title');
+        $this->layout = "//layouts/blank";
+
+        if (isset($_POST['password']) && isset($_POST['repeatPassword'])){
+            $user = User::model()->findByPk(Yii::app()->user->id);
+
+            $password = $_POST['password'];
+            $repeatPassword = $_POST['repeatPassword'];
+
+            if ($password !== $repeatPassword){
+                $notice = Yii::t('lang','change_pw_notice_pw_not_match');
+            } else {
+                $newPwHash = crypt($password, $user->password);
+                if ($newPwHash === $user->password){
+                    $notice = Yii::t('lang', 'reset_pw_notice_old_password');
+                }
+            }
+
+            if (isset($notice)){
+                $this->render('resetPassword', array(
+                    'notice'=>$notice,
+                ));
+            } else {
+                $user->passwordSave = $_POST['password'];
+                $user->repeatPassword = $_POST['repeatPassword'];
+                if ($user->save()){
+                    $this->redirect('/site/loggedRedirect');
+                }
+            }
+        } else {
+            $this->render('resetPassword');
+        }
+    }
+
 	//Connect to facebook from profile 
 	public function actionConnectFacebook()
 	{

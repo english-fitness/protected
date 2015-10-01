@@ -30,9 +30,11 @@ return array(
 	'change_password'=>'Thay đổi mật khẩu',
 	
 	//messages
+	'reset_pw_page_title'=>'Nhập mật khẩu mới',
+	'reset_pw_notice_old_password'=>'Mật khẩu mới phải khác với mật khẩu được hệ thống cung cấp',
 	'change_pw_notice_not_enough_input'=>'Vui lòng nhập đầy đủ thông tin',
 	'change_pw_notice_wrong_old_pw'=>'Mật khẩu cũ không chính xác',
-	'change_pw_notice_pw_not_match'=>'Xác nhận lại mật khẩu mới',
+	'change_pw_notice_pw_not_match'=>'Hãy xác nhận lại mật khẩu mới',
 	'change_pw_notice_success'=>'Thay đổi mật khẩu thành công',
 	'message_send_notice_no_recipent'=>'Vui lòng thêm người gửi',
 	'message_view_notice_non_existent'=>'Tin nhắn này không tồn tại',

@@ -5,10 +5,14 @@ class DefaultController extends CController{
     {
     	$userId = Yii::app()->user->id;
     	$user = User::model()->findByPk($userId);
-    	$clsNotification = new ClsNotification();
-        $enoughProfile = $clsNotification->enoughProfile($userId);
-    	$checkRegisteredCourse = Course::model()->checkRegisteredCourseStudent($userId);
-    	$countPreCourse = PreregisterCourse::model()->countByAttributes(array('student_id'=>$userId, 'deleted_flag'=>0));
+    	// $clsNotification = new ClsNotification();
+     //    $enoughProfile = $clsNotification->enoughProfile($userId);
+    	// $checkRegisteredCourse = Course::model()->checkRegisteredCourseStudent($userId);
+    	// $countPreCourse = PreregisterCourse::model()->countByAttributes(array('student_id'=>$userId, 'deleted_flag'=>0));
+        $defaultPwHash = crypt("speakup.vn", $user->password);
+        if ($defaultPwHash == $user->password){
+            $this->redirect('/student/account/resetPassword');
+        }
     	$returnUrl = Yii::app()->session['returnUrl'];
     	if(isset($returnUrl) && $returnUrl!==false){
     		$this->redirect($returnUrl);

@@ -167,27 +167,9 @@ class User extends CActiveRecord
 			$this->$textField = strip_tags($this->$textField);
             $this->$textField = trim($this->$textField);
 		}
-		//add the password hash if it's a new record
-        $salt = "";
-		if ($this->isNewRecord) {
 
-			for ($i = 0; $i < 16; $i++) {
-				$salt .= substr("./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", mt_rand(0, 63), 1);
-			}
-			// sha256
-			$salt = '$5$'.$salt.'$';
-			$this->password = crypt($this->passwordSave, $salt);
-		}
-		else if (!empty($this->passwordSave)&&!empty($this->repeatPassword)&&($this->passwordSave===$this->repeatPassword))
-			//if it's not a new password, save the password only if it not empty and the two passwords match
-		{
-			for ($i = 0; $i < 16; $i++) {
-				$salt .= substr("./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", mt_rand(0, 63), 1);
-			}
-			// sha256
-			$salt = '$5$'.$salt.'$';
-			$this->password = crypt($this->passwordSave, $salt);
-		}
+		//conditions are on the function itself
+		$this->savePassword();
 		
 		//Update status change
 		$historyStatuses = array();//Init history statuses
@@ -321,6 +303,32 @@ class User extends CActiveRecord
 			'pagination'=>array('pageVar'=>'page'),
 		    'sort'=>array('sortVar'=>'sort'),
 		));
+	}
+
+	public function savePassword($repeatPassword=true){
+		//add the password hash if it's a new record
+		//or change the password if new password is set and repeat password match
+		if (!$this->isNewRecord){
+			$validPasswordSave = false;
+			if (!empty($this->passwordSave)){
+				if (($repeatPassword && !empty($this->repeatPassword)&&($this->passwordSave===$this->repeatPassword))
+					|| !$repeatPassword){
+					$validPasswordSave = true;
+				}
+			}
+
+			if(!$validPasswordSave){
+				return;
+			}
+		}
+        $salt = "";
+
+		for ($i = 0; $i < 16; $i++) {
+			$salt .= substr("./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", mt_rand(0, 63), 1);
+		}
+		// sha256
+		$salt = '$5$'.$salt.'$';
+		$this->password = crypt($this->passwordSave, $salt);
 	}
 
 	/**

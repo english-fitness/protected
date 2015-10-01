@@ -110,6 +110,8 @@ return array(
 	'change_password'=>'Change password',
 	
 	//messages
+	'reset_pw_page_title'=>'Select your new password',
+	'reset_pw_notice_old_password'=>'Your new password must not be identical to the old one provided by the system',
 	'change_pw_notice_not_enough_input'=>'Please fill in all required fields',
 	'change_pw_notice_wrong_old_pw'=>'Current password is not valid',
 	'change_pw_notice_pw_not_match'=>'Your passwords does not match',
