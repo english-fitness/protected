@@ -310,6 +310,7 @@
 </div>
 <div id="popup-registration-form">
     <form id="small-registration-form" class="registration-form">
+        <input type="hidden" name="referrer" value="Online - Facebook">
         <div id="inner-clone-form" class="main-form">
             <div class="title">ĐĂNG KÝ TRẢI NGHIỆM MIỄN PHÍ</div>
             <div class="form-input">
