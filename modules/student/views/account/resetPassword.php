@@ -1,5 +1,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl; ?>/media/css/base/style.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->theme->baseUrl; ?>/bootstrap/css/bootstrap.min.css" />
+<?php Yii::app()->clientScript->registerCoreScript('jquery'); ?>
 
 <style type="text/css">
 	.form-label{
@@ -21,8 +22,16 @@
 		height: 40px;
 		color:red;
 	}
+	.logout{
+		position:absolute;
+		top:5px;
+		right:10px;
+	}
 </style>
 <div style="position:relative;height:100vh">
+	<div class="logout">
+		<a href="/site/logout">Thoát</a>
+	</div>
 	<div style="margin:0 auto; position:relative; top:18%; height:100px; width:500px">
 		<div style="text-align:center">
 			<img src="/media/images/logo/logo.png" style="height:80px">
@@ -32,22 +41,22 @@
 		<?php if (isset($notice)):?>
 		<div class="notice"><span><?php echo $notice?></span></div>
 		<?php else:?>
-		<div style="height:40px;"></div>
+		<div class="notice"></div>
 		<?php endif;?>
 		<div style="margin:0 auto; width:400px;">
-			<form method="post" action="/student/account/resetPassword">
+			<form id="pw-form" method="post" action="/student/account/resetPassword">
 				<div class="form-label">
 					<label>Mật khẩu mới</label>
 				</div>
 				<div class="input">
-					<input type="password" name="password">
+					<input type="password" id="password" name="password">
 				</div>
 				<div style="clear:both"></div>
 				<div class="form-label">
 					<label>Nhập lại mật khẩu</label>
 				</div>
 				<div class="input">
-					<input type="password" name="repeatPassword">
+					<input type="password" id="repeadPassword" name="repeatPassword">
 				</div>
 				<div style="clear:both"></div>
 				<div style="margin-top:10px">
@@ -60,3 +69,11 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	$("#pw-form").submit(function(){
+		if ($("#password").val() == "" || $("#repeatPassword").val() == ""){
+			$(".notice").html("<span>Hãy điền đầy đủ thông tin cần thiết<span>");
+			return false;
+		}
+	});
+</script>
