@@ -2,6 +2,9 @@
 
 /* Messages Controller */
 class MessageController extends Controller {
+    public function init(){
+        $this->redirect("/");
+    }
 
     /* sub Page Title */
     public  $subPageTitle = 'Tin nhắn';
