@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/media/home/style/landing.css" />
 <div id="main">
     <!--banner-->
     <div id="main-banner">
@@ -62,7 +63,7 @@
                 <ul class="benefits clearfix">
                     <li>
                         <div class="benefit-img">
-                            <img src="/media/home/img/su-benefit-11.png" />
+                            <img src="/media/home/img/landing-1/su-benefit-11.png" />
                         </div>
                         <div class="benefit-txt orange-darker">
                             <p>100% GIÁO VIÊN QUỐC TẾ<br><span class="accent">sẽ đem lại môi trường tuyệt vời cho bạn nói tiếng anh</span></p>
@@ -70,7 +71,7 @@
                     </li>
                     <li>
                         <div class="benefit-img">
-                            <img src="/media/home/img/su-benefit-teacher.png" />
+                            <img src="/media/home/img/landing-1/su-benefit-teacher.png" />
                         </div>
                         <div class="benefit-txt orange-darker">
                             <p>GIÁO VIÊN LUÔN SÁT CÁNH<br><span class="accent">giúp bạn sửa lỗi nhanh</span></p>
@@ -78,7 +79,7 @@
                     </li>
                     <li>
                         <div class="benefit-img">
-                            <img src="/media/home/img/su-benefit-personalize.png" />
+                            <img src="/media/home/img/landing-1/su-benefit-personalize.png" />
                         </div>
                         <div class="benefit-txt orange-darker">
                             <p>GIÁO TRÌNH THIẾT KẾ RIÊNG<br><span class="accent">phù hợp với trình độ của từng học viên</span></p>
@@ -86,7 +87,7 @@
                     </li>
                     <li>
                         <div class="benefit-img">
-                            <img src="/media/home/img/su-benefit-everywhere.png" />
+                            <img src="/media/home/img/landing-1/su-benefit-everywhere.png" />
                         </div>
                         <div class="benefit-txt orange-darker">
                             <p>GIÁO VIÊN TÂM HUYẾT<br><span class="accent">tạo không gian cởi mở giúp bạn tự tin khi giao tiếp tiếng Anh</span></p>
@@ -169,7 +170,7 @@
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <div class="step-img">
-                                <img src="/media/home/img/step-1.png" />
+                                <img src="/media/home/img/landing-1/step-1.png" />
                             </div>
                             <div class="step-text">
                                 <p>ĐĂNG KÝ</p>
@@ -180,7 +181,7 @@
                         <div class="step-number">2</div>
                         <div class="step-content">
                             <div class="step-img">
-                                <img src="/media/home/img/step-2.png" style="padding-top:8px" />
+                                <img src="/media/home/img/landing-1/step-2.png" style="padding-top:8px" />
                             </div>
                             <div class="step-text">
                                 <p>XẾP LỊCH HỌC</p>
@@ -191,7 +192,7 @@
                         <div class="step-number">3</div>
                         <div class="step-content">
                             <div class="step-img">
-                                <img src="/media/home/img/step-3.png" />
+                                <img src="/media/home/img/landing-1/step-3.png" />
                             </div>
                             <div class="step-text">
                                 <p>THAM GIA HỌC THỬ</p>
@@ -214,7 +215,21 @@
                 <div class="inner-form">
                     <!--main form-->
                     <form id="main-registration-form" class="registration-form">
-                        <input type="hidden" name="referrer" value="Online - Facebook">
+                        <?php if (isset($_REQUEST['ref'])):
+                            $knownReferrer = array(
+                                'facebook'=>'Online - Facebook',
+                                'hocmai'=>'Offline - Hocmai',
+                            );
+                            if (isset($knownReferrer[$_REQUEST['ref']])){
+                                $referrer = $knownReferrer[$_REQUEST['ref']];
+                            } else {
+                                $referrer = "";
+                            }
+                        ?>
+                            <input type="hidden" name="referrer" value="<?php echo $referrer?>">
+                        <?php else:?>
+                            <input type="hidden" name="referrer" value="Online - Facebook">
+                        <?php endif;?>
                         <div class="main-form">
                             <div class="title">ĐĂNG KÝ TRẢI NGHIỆM MIỄN PHÍ</div>
                             <div class="form-input">
@@ -310,7 +325,21 @@
 </div>
 <div id="popup-registration-form">
     <form id="small-registration-form" class="registration-form">
-        <input type="hidden" name="referrer" value="Online - Facebook">
+        <?php if (isset($_REQUEST['ref'])):
+            $knownReferrer = array(
+                'facebook'=>'Online - Facebook',
+                'hocmai'=>'Offline - Hocmai',
+            );
+            if (isset($knownReferrer[$_REQUEST['ref']])){
+                $referrer = $knownReferrer[$_REQUEST['ref']];
+            } else {
+                $referrer = "";
+            }
+        ?>
+            <input type="hidden" name="referrer" value="<?php echo $referrer?>">
+        <?php else:?>
+            <input type="hidden" name="referrer" value="Online - Facebook">
+        <?php endif;?>
         <div id="inner-clone-form" class="main-form">
             <div class="title">ĐĂNG KÝ TRẢI NGHIỆM MIỄN PHÍ</div>
             <div class="form-input">
