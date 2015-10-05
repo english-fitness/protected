@@ -3,6 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=1366, initial-scale=1, maximum-scale=1, user-scalable=no">
         <title>Speak up - Học tiếng Anh online</title>
         <!--favicon-->
         <link rel="apple-touch-icon" sizes="57x57" href="/media/images/favicons/apple-touch-icon-57x57.png">
@@ -44,18 +45,17 @@
         <link rel="stylesheet" href="/media/css/bootstrap/bootstrap-dialog.min.css">
         <script src="/media/uploads/home/data/testimonials.js"></script>
         <script src="/media/uploads/home/data/teachers.js"></script>
-        <link rel="stylesheet" href="/media/home/style/landing.css" />
         <!--Start of Tawk.to Script-->
         <script type="text/javascript">
-            var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-            (function(){
-                var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-                s1.async=true;
-                s1.src='https://embed.tawk.to/55eff32a19a4a3e632e8a76c/default';
-                s1.charset='UTF-8';
-                s1.setAttribute('crossorigin','*');
-                s0.parentNode.insertBefore(s1,s0);
-            })();
+            // var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+            // (function(){
+            //     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            //     s1.async=true;
+            //     s1.src='https://embed.tawk.to/55eff32a19a4a3e632e8a76c/default';
+            //     s1.charset='UTF-8';
+            //     s1.setAttribute('crossorigin','*');
+            //     s0.parentNode.insertBefore(s1,s0);
+            // })();
         </script>
         <!--End of Tawk.to Script-->
         <!--Facebook-->
@@ -97,8 +97,6 @@
     ?>
     <script>
         var utmParams = <?php echo json_encode($utmParams);?>;
-        console.log(utmParams);
-        console.log(JSON.stringify(utmParams));
         document.cookie = "utmParams="+JSON.stringify(utmParams);
     </script>
     <?php echo $content; ?>
