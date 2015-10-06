@@ -2,6 +2,8 @@
 
 return array(
 	//student specific
+	'courses'=>'Khóa học',
+	'course_report'=>'Đánh giá trong khóa học',
 	'student_schedule'=>'Lịch học',
     'whiteboard_link'=>'Xem lại buổi học',
     'view_comment'=>'Ghi chú',
@@ -57,6 +59,7 @@ return array(
 	'search'=>'Tìm',
 	'schedule'=>'Lịch học',
 	'page'=>'Trang',
+	'unassigned'=>'Chưa có',
 	
 	'monday'=>'Thứ hai',
 	'tuesday'=>'Thứ ba',
@@ -86,4 +89,30 @@ return array(
 	
 	//view link
 	'test_speaker_mic_view'=>'student.views.testCondition.index',
+
+	//course reports
+	'course_report_teacher'=>'Giáo viên',
+	'course_report_date'=>'Ngày đánh giá',
+	'level'=>'Trình độ',
+	'curriculum'=>'Giáo trình',
+	'view'=>'Xem',
+	'course_report_comment'=>'Nhận xét',
+	'course_report_no_report'=>'Chưa có đánh giá nào cho khóa học này',
+
+	//course
+	'course_title'=>'Tiêu đề',
+	'course_teacher'=>'Giáo viên',
+	'course_number_of_sessions'=>'Số buổi',
+	'course_level'=>'Trình độ',
+	'course_curriculum'=>'Giáo trình',
+	'course_start_date'=>'Ngày bắt đầu',
+	'course_end_date'=>'Ngày kết thúc',
+	'course_status'=>'Trạng thái',
+	'course_report_th'=>'Đánh giá',
+	'course_report_link'=>'Đánh giá',
+	'course_report_view_title'=>'Đánh giá khóa học',
+	'course_report_comment_view'=>'Nhận xét khóa học',
+	'course_report_comment_label'=>'Cám ơn bạn đã tham gia khóa học. \
+	Bạn có thể nhập nhận xét hoặc yêu cầu của bạn dưới đây để chúng tôi \
+	có thể giúp điều chỉnh chương trình học để đạt hiệu quả cao nhất.',
 );

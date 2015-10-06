@@ -58,7 +58,7 @@ class Course extends CActiveRecord
 			array('created_user_id, teacher_id, subject_id, status, type, final_price, total_sessions, payment_type,
                    total_of_student, modified_user_id, deleted_flag', 'numerical', 'integerOnly'=>true),
 			array('title', 'length', 'max'=>256),
-			array('content, modified_date, final_price, total_of_student, deleted_flag, teacher_form_url, student_form_url', 'safe'),
+			array('content, level, curriculum, modified_date, final_price, total_of_student, deleted_flag, teacher_form_url, student_form_url', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, created_user_id, teacher_id, subject_id, title, content, type, status, total_of_student, created_date, modified_date, modified_user_id', 'safe', 'on'=>'search'),
@@ -89,6 +89,7 @@ class Course extends CActiveRecord
 			'tblUsers' => array(self::MANY_MANY, 'User', 'tbl_course_student(course_id, student_id)'),
 			'sessions' => array(self::HAS_MANY, 'Session', 'course_id'),
 			'teacher' => array(self::BELONGS_TO, 'User', 'teacher_id'),
+			'reports'=> array(self::HAS_MANY, 'CourseReport', 'course_id'),
 		);
 	}
 
@@ -127,6 +128,8 @@ class Course extends CActiveRecord
 			'subject_id' => 'Môn học',
 			'title' => 'Chủ đề',
 			'content' => 'Nội dung',
+			'level'=>'Trình độ',
+			'curriculum'=>'Giáo trình',
 			'type' => 'Kiểu khóa học',
 			'total_of_student' => 'Kiểu lớp',
 			'status' => 'Trạng thái',
@@ -243,7 +246,7 @@ class Course extends CActiveRecord
 	/**
 	 * Course type options
 	 */
-	public function typeOptions()
+	public static function typeOptions()
 	{
 		return array(
 			// self::TYPE_COURSE_TESTING => 'Khóa học test',
@@ -703,10 +706,10 @@ class Course extends CActiveRecord
         return true;
     }
 	
-	public static function findByStudent($student){
+	public static function findByStudent($studentId){
 		$query = "SELECT id, title, type FROM tbl_course JOIN tbl_course_student " .
 				 "ON tbl_course.id = tbl_course_student.course_id " .
-				 "WHERE tbl_course_student.student_id = " . $student . " " .
+				 "WHERE tbl_course_student.student_id = " . $studentId . " " .
 				 "AND (tbl_course.status = " . Course::STATUS_WORKING . " " .
 				 "OR tbl_course.status = " . Course::STATUS_APPROVED . ") " .
 				 "AND deleted_flag = 0 " . " " .

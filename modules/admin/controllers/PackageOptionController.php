@@ -47,6 +47,9 @@ class PackageOptionController extends Controller
 		
 		if(isset($_POST['CoursePackageOptions'])) {
 			$model->attributes = $_POST['CoursePackageOptions'];
+			if ($model->expire_date == ""){
+				$model->expire_date = null;
+			}
 			if($model->save()) {
                 $model->updateOptionsMeta($_POST);
                 $this->redirect(array('index','id'=>$model->package_id));
@@ -68,6 +71,9 @@ class PackageOptionController extends Controller
         $model->package_id = $id;
 		if(isset($_POST['CoursePackageOptions'])) {
 			$model->attributes = $_POST['CoursePackageOptions'];
+			if ($model->expire_date == ""){
+				$model->expire_date = null;
+			}
 			if($model->save()) {
                 $model->updateOptionsMeta($_POST);
 				$this->redirect(array('index','id'=>$model->package_id));

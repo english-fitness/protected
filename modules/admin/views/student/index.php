@@ -79,10 +79,9 @@ $this->breadcrumbs=array(
             'htmlOptions'=>array('style'=>'text-align:center;width:90px'),
         ),
 		array(
-		   'header'=>'Khóa học',
-		   'value'=>'Student::model()->displayCourseLink($data->id, "khóa học")',
-		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
-		   'type' => 'raw',
+		   	'value'=>'CHtml::link("Quản lý", "/admin/student/manage/sid/".$data->id)',
+		   	'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
+		   	'type' => 'raw',
 		),
 		array(
 			'class'=>'CButtonColumn',

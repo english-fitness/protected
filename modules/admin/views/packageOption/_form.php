@@ -8,6 +8,11 @@
 		window.location = '<?php echo Yii::app()->baseUrl; ?>/admin/<?php echo Yii::app()->controller->id.'/index/id/'.$model->package->id?>';
 	}
 </script>
+<style type="text/css">
+	.datepicker[readonly]{
+		background: white;
+	}
+</style>
 <div class="form">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'session-form',
@@ -39,6 +44,24 @@
     </div>
     <div class="form-element-container row">
         <div class="col col-lg-3">
+            <?php echo $form->labelEx($model,'valid_from'); ?>
+        </div>
+        <div class="col col-lg-9">
+            <?php echo $form->textField($model,'valid_from', array('value'=>date('Y-m-d'), 'class'=>'datepicker', 'readonly'=>true)); ?>
+            <?php echo $form->error($model,'valid_from'); ?>
+        </div>
+    </div>
+    <div class="form-element-container row">
+        <div class="col col-lg-3">
+            <?php echo $form->labelEx($model,'expire_date'); ?>
+        </div>
+        <div class="col col-lg-9">
+            <?php echo $form->textField($model,'expire_date', array('class'=>'datepicker', 'readonly'=>true)); ?>
+            <?php echo $form->error($model,'expire_date'); ?>
+        </div>
+    </div>
+    <div class="form-element-container row">
+        <div class="col col-lg-3">
             <?php echo $form->labelEx($model,'note'); ?>
         </div>
         <div class="col col-lg-9">
@@ -50,3 +73,10 @@
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<script type="text/javascript">
+	$(document).on("click",".datepicker",function(){
+        $(this).datepicker({
+            "dateFormat":"yy-mm-dd"
+        }).datepicker("show");;
+    });
+</script>

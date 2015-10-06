@@ -42,6 +42,16 @@ $this->breadcrumbs=array(
             'value'=>'Yii::app()->format->formatNumber($data->tuition)." VND"',
             'htmlOptions'=>array('style'=>'width:350px; text-align:center;'),
         ),
+        array(
+            'name'=>'valid_from',
+            'value'=>'date("d-m-Y", strtotime($data->valid_from))',
+            'htmlOptions'=>array('style'=>'width:150px; text-align:center;'),
+        ),
+        array(
+            'name'=>'expire_date',
+            'value'=>'$data->expire_date != null ? date("d-m-Y", strtotime($data->expire_date)) : ""',
+            'htmlOptions'=>array('style'=>'width:150px; text-align:center;'),
+        ),
 		array(
             'class'=>'CButtonColumn',
             'buttons'=>array (

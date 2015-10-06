@@ -5,14 +5,18 @@
 </style>
 <div class="form">
 <?php
-    
-    $coursePackages = CoursePackage::model()->findAll();
+    $today = date('Y-m-d');
+    $coursePackages = CoursePackage::model()->with(array(
+        'options'=>array(
+            "condition"=>"valid_from <= '".$today."' AND (expire_date IS NULL OR (expire_date IS NOT NULL AND expire_date >= '".$today."'))"
+        )
+    ))->findAll();
     $packagePrices = array();
     foreach($coursePackages as $package){
         $options = $package->options;
         $prices = array();
         foreach ($options as $option){
-            $prices[$option->id] = number_format($option->tuition)." đ";
+            $prices[$option->id] = number_format($option->tuition)."đ";
         }
         $packagePrices[$package->id] = $prices;
     }
@@ -42,7 +46,7 @@
 			<label for="course_package_select">Số buổi học</label>
 		</div>
 		<div class="col col-lg-9">
-			<select id="course_package_select" name="CoursePackage[package_option_id]" style="font-size:14px">
+			<select id="course_package_select" style="font-size:14px">
                 <?php if (!$model->isNewRecord):?>
                     <option disabled selected style="display:none"><?php echo $model->sessions." buổi"?></option>
                 <?php endif;?>
@@ -119,8 +123,14 @@
             $("#course_package_select > option").each(function(){
                 var option = $(this);
                 if (option.data("sessions") == <?php echo $model->sessions?>){
-                    console.log(option[0]);
+                    $("#course_package_select").val(option.val());
                     setPriceOptions(option.val());
+                }
+            });
+            $("#price_select > option").each(function(){
+                var option = $(this);
+                if (option.data("price") == <?php echo $model->tuition?>){
+                    $("#price_select").val(option.val());
                 }
             })
         <?php endif;?>
@@ -136,8 +146,11 @@
     function setPriceOptions(packageId){
         var priceOptions = packagePrices[packageId];
         var priceSelect = $("#price_select");
+        var sessions = $("#course_package_select").children(":selected").data("sessions");
         for(var i in priceOptions){
-            priceSelect.append('<option value="'+i+'">'+priceOptions[i]+'</option>');
+            var price = undoNumberFormat(priceOptions[i]);
+            var each = number_format(calculateEach(price, sessions));
+            priceSelect.append('<option data-price="'+price+'" value="'+i+'">'+priceOptions[i]+' ('+each+'đ/buổi)</option>');
         }
     }
     
@@ -145,5 +158,41 @@
         $("#payment_date").val("");
         $("#clear_payment_date").hide();
         return false;
+    }
+
+    function undoNumberFormat(number){
+        return number.replace(/[^0-9]/g, '');
+    }
+
+    function calculateEach(total, sessions){
+        console.log(total);
+        console.log(sessions);
+        return parseInt(total)/parseInt(sessions);
+    }
+
+    function number_format(number, decimals, dec_point, thousands_sep) {
+        number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+        var n = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s = '',
+        toFixedFix = function(n, prec) {
+        var k = Math.pow(10, prec);
+        return '' + (Math.round(n * k) / k)
+        .toFixed(prec);
+        };
+        // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n))
+        .split('.');
+        if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+        }
+        if ((s[1] || '').length < prec) {
+            s[1] = s[1] || '';
+            s[1] += new Array(prec - s[1].length + 1)
+            .join('0');
+        }
+        return s.join(dec);
     }
 </script>

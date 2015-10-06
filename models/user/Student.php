@@ -61,8 +61,10 @@ class Student extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id', 'required'),
+			array('user_id, contact_name, contact_phone, contact_email', 'required'),
 			array('user_id, preregister_id', 'numerical', 'integerOnly'=>true),
+			array('contact_phone', 'match', 'pattern'=>'/^\+{0,1}[0-9\-\s]{8,16}$/'),
+			array('contact_email', 'email'),
             array('sale_status', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -101,6 +103,9 @@ class Student extends CActiveRecord
             'preregister_id'=>'Tư vấn',
             'official_start_date'=>'Thành viên chính thức từ ngày',
             'sale_status'=>'Trạng thái sale',
+            'contact_name'=>'Người liên hệ',
+            'contact_phone'=>'Số điện thoại liên hệ',
+            'contact_email'=>'Email liên hệ',
 			'created_date' => 'Ngày tạo',
 			'modified_date' => 'Ngày sửa',
 		);

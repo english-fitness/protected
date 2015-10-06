@@ -12,7 +12,7 @@ class ClassController extends Controller
     {
 		$this->subPageTitle = 'Courses List';
         $uid = yii::app()->user->id;
-        $teacherCourses = Course::model()->findAll(array("condition"=>"teacher_id = ".$uid." AND deleted_flag=0"));
+        $teacherCourses = Course::model()->findAll(array("condition"=>"teacher_id = ".$uid." AND deleted_flag=0 AND type=".Course::TYPE_COURSE_NORMAL));
         $this->render('index',array(
             "teacherCourses"=>$teacherCourses
             )

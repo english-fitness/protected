@@ -134,6 +134,7 @@ class User extends CActiveRecord
 			array('username', 'match' ,'pattern'=>'/^[A-Za-z0-9-@.-_]+$/u',
                             'message'=> 'Tên người dùng chỉ bao gồm các ký tự và số, không được chứa các ký tự đặc biệt nào khác.'),			
 			array('email', 'email'),
+			array('phone', 'match', 'pattern'=>'/^\+{0,1}[0-9\-\s]{8,16}$/'),
 			//array('email', 'unique'),	
 			array('gender, status', 'numerical', 'integerOnly'=>true),
 			array('username', 'length', 'max'=>128),

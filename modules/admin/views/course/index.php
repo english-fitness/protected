@@ -42,12 +42,13 @@ $columns = array(
        'name'=>'subject_id',
        'value'=>'Subject::model()->displayClassSubject($data->subject_id)',
        'filter'=>Subject::model()->generateSubjectFilters(),
+       'htmlOptions'=>array('style'=>'width:245px; text-align:center;'),
     ),
     array(
        'name'=>'type',
        'value'=>'Course::typeOptions()[$data->type]',
        'filter'=>false,
-       'htmlOptions'=>array('style'=>'min-width:125px; text-align:center;'),
+       'htmlOptions'=>array('style'=>'width:125px; text-align:center;'),
     ),
     array(
        'header' => 'Số buổi',
@@ -56,17 +57,11 @@ $columns = array(
        'type'=>'raw',
     ),
     array(
-       'name'=>'total_of_student',
-       'value'=>'"1-".$data->total_of_student',
-       'htmlOptions'=>array('style'=>'width:60px; text-align:center;'),
-       'filter'=>$registration->totalStudentOptions(6, true),
-       'type' => 'raw',		   
-    ),
-    array(
        'header'=>'Giáo viên',
        'value'=>'$data->getTeacher("/admin/teacher/view/id")',
        'filter'=>'<input type="text" value="'.$teacherFullname.'" name="Course[teacher_fullname]">',
        'type' => 'raw',
+       'htmlOptions'=>array('style'=>'width:120px; text-align:center;'), 
     ),
     array(
        'header' => 'Học sinh',
@@ -78,12 +73,12 @@ $columns = array(
     array(
        'header' => 'Ngày bắt đầu',
        'value'=>'$data->getFirstDateInList("ASC")',
-       'htmlOptions'=>array('style'=>'width:100px; text-align:center;'), 
+       'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
     ),
     array(
        'header' => 'Ngày kết thúc',
        'value'=>'$data->getFirstDateInList("DESC")',
-       'htmlOptions'=>array('style'=>'width:100px; text-align:center;'), 
+       'htmlOptions'=>array('style'=>'width:80px; text-align:center;'),
     ),
     array(
        'name'=>'status',
@@ -106,6 +101,8 @@ $columns = array(
                 'options'=>array( 'class'=>'dpn' ),
             ),
         ),
+        'headerHtmlOptions'=>array('style'=>'width:60px;'),
+        'htmlOptions'=>array('style'=>'width:60px;'),
     ),
 );
 if ($model->type == Course::TYPE_COURSE_NORMAL){
@@ -116,7 +113,7 @@ if ($model->type == Course::TYPE_COURSE_NORMAL){
                 getTuitionText($data->final_price),
                 Yii::app()->createUrl("admin/coursePayment/course/id/$data->id")
             )',
-            'htmlOptions'=>array('style'=>'width:130px;text-align:center'),
+            'htmlOptions'=>array('style'=>'width:120px;text-align:center'),
             'type'=>'raw',
         ),
         array(
@@ -125,7 +122,17 @@ if ($model->type == Course::TYPE_COURSE_NORMAL){
             'htmlOptions'=>array('style'=>'width:80px;text-align:center'),
         ),
     );
-    array_splice($columns, 4, 0, $tuitionColumns);  
+    array_splice($columns, 4, 0, $tuitionColumns);
+    $reportColumn = array(
+    	array(
+	    	'header'=>'Báo cáo',
+	    	'value'=>'CHtml::link("Báo cáo", "/admin/courseReport/course/id/$data->id")',
+	    	'htmlOptions'=>array('text-align:center'),
+	        'type'=>'raw',
+	        'htmlOptions'=>array('style'=>'width:80px;text-align:center'),
+        ),
+    );
+    array_splice($columns, 9, 0, $reportColumn);
 }
 ?>
 <div class="page-header-toolbar-container row">

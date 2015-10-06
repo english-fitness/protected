@@ -28,7 +28,8 @@ class StudentController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','changeToTeacher','create','update', 'saleUpdate'),
+				'actions'=>array('index','view','changeToTeacher','create','update', 'manage', 'saleUpdate',
+								 'courseWidget', 'tuitionWidget', 'studentWidget'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -111,6 +112,7 @@ class StudentController extends Controller
                         $preregisterUser->save();
                     }
                     $student->user_id = $user->id;
+                    $student->attributes = $_POST['Student'];
                     if($student->save()){
                         $transaction->commit();
                         $this->redirect(array('index'));
@@ -175,6 +177,7 @@ class StudentController extends Controller
 			if($user->save()){
 				// $student->attributes = $studentProfileValues;
 				$student->user_id = $user->id;
+				$student->attributes = $_POST['Student'];
 				if($student->save()){
 					$this->redirect(array('index'));
 				}
@@ -358,5 +361,66 @@ class StudentController extends Controller
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
+	}
+
+	public function actionManage(){
+		$this->subPageTitle = "Quản lý học sinh";
+
+		if (isset($_REQUEST['sid'])){
+			$sid = $_REQUEST['sid'];
+
+			$this->render('manage', array(
+				'sid'=>$sid,
+			));
+		}
+	}
+
+	public function actionCourseWidget($sid){
+		$this->layout = '//layouts/widget';
+		$course = new Course;
+		$course->unsetAttributes();
+
+		$assignedCourses = Student::model()->assignedCourses($sid);
+		if(count($assignedCourses)==0) $assignedCourses = array(0);
+		$course->id = $assignedCourses;
+
+		$course->type = Course::TYPE_COURSE_NORMAL;
+
+		$course = $course->search("created_date DESC");
+		$course->pagination = array('pageSize' => 5);
+
+
+
+		$this->render('widgets/course', array(
+			'course'=>$course,
+		));
+	}
+
+	public function actionTuitionWidget($sid){
+		$this->layout = '//layouts/widget';
+
+		$model = new CoursePayment;
+        $model->unsetAttributes();
+
+        $assignedCourses = Student::model()->assignedCourses($sid);
+		if(count($assignedCourses)==0) $assignedCourses = array(0);
+		$model->course_id = $assignedCourses;
+
+		$model = $model->search();
+        $model->pagination = array('pageSize' => 10);
+
+		$this->render('widgets/tuition', array(
+			'model'=>$model,
+		));
+	}
+
+	public function actionStudentWidget($sid){
+		$this->layout = '//layouts/widget';
+
+		$student = Student::model()->with('user')->findByPk($sid);
+
+		$this->render('widgets/student', array(
+			'student' => $student,
+		));
 	}
 }

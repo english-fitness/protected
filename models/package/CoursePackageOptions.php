@@ -57,8 +57,9 @@ class CoursePackageOptions extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('tuition, package_id', 'required'),
+			array('tuition, package_id, valid_from', 'required'),
 			array('tuition, package_id', 'numerical', 'integerOnly'=>true),
+			array('valid_from, expire_date', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, tuition, package_id', 'safe', 'on'=>'search'),
@@ -86,7 +87,9 @@ class CoursePackageOptions extends CActiveRecord
 			'id' => 'ID',
             'package_id' => 'Gói',
 			'tuition' => 'Học phí',
-            'note'=>'Ghi chú'
+            'note'=>'Ghi chú',
+            'valid_from'=>'Có hiệu lực từ',
+            'expire_date'=>'Ngày hết hạn',
 		);
 	}
 

@@ -242,17 +242,17 @@ class ScheduleController extends Controller
 	}
 
 	public function actionGetSessions(){
-		$teacherIds = json_decode($_REQUEST["teachers"]);
+		$teacherIds = json_decode($_GET["teachers"]);
 
-		if (isset($_REQUEST['view'])){
-			$view = $_REQUEST['view'];
+		if (isset($_GET['view'])){
+			$view = $_GET['view'];
 		} else {
 			$view = 'week';
 		}
 
 		if ($view == 'month'){
-			if (isset($_REQUEST['month'])){
-				$month = $_REQUEST['month'];
+			if (isset($_GET['month'])){
+				$month = $_GET['month'];
 			} else {
 				$month = date('m');
 			}
@@ -264,7 +264,7 @@ class ScheduleController extends Controller
 			$end = date('Y-m-d', strtotime('+6 days', strtotime($year.'W'.$endWeek)));
 		} else {
 			//too lazy to write handling code for non-monday week_start
-			if (isset($_REQUEST['week_start']) && date ('w', strtotime($_REQUEST['week_start'])) == 1){
+			if (isset($_GET['week_start']) && date ('w', strtotime($_GET['week_start'])) == 1){
 				$weekStartTimestamp = strtotime($_REQUEST['week_start']);
 				$start = date('Y-m-d', $weekStartTimestamp);
 				$end = date('Y-m-d', strtotime('+6 days', $weekStartTimestamp));
@@ -273,7 +273,6 @@ class ScheduleController extends Controller
 				$end = date('Y-m-d', strtotime('sunday this week'));
 			}
 		}
-
 
 		$query = "SELECT * FROM tbl_session " .
 				 "WHERE teacher_id IN (" . implode(', ',$teacherIds) . ") " .

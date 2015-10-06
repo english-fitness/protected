@@ -7,6 +7,8 @@
  */
 
 return array(
+	'courses'=>'Courses',
+	'course_report'=>'Course Evaluations',
     'Lịch học'=>'Schedule',
     'Thay đổi ngôn ngữ'=>'Change Language',
     'Loại lớp học'=>'Type of class',
@@ -137,6 +139,7 @@ return array(
 	'search'=>'Search',
 	'schedule'=>'Schedule',
 	'page'=>'Page',
+	'unassigned'=>'Unassigned',
 	
 	'color_legend'=>'Color legend',
 	'timeslot_available'=>'Available timeslot',
@@ -165,4 +168,30 @@ return array(
 	
 	//view link
 	'test_speaker_mic_view'=>'teacher.views.testCondition.index',
+
+	//course reports
+	'course_report_teacher'=>'Teacher',
+	'course_report_date'=>'Date',
+	'level'=>'Level',
+	'curriculum'=>'Curriculum',
+	'view'=>'View',
+	'course_report_comment'=>'Comments',
+	'course_report_no_report'=>'There isn\'t any evaluation for this course',
+
+	//course
+	'course_title'=>'Title',
+	'course_teacher'=>'Teacher',
+	'course_number_of_sessions'=>'Number of sessions',
+	'course_level'=>'Level',
+	'course_curriculum'=>'Curriculum',
+	'course_start_date'=>'Start date',
+	'course_end_date'=>'End date',
+	'course_status'=>'Status',
+	'course_report_th'=>'Evaluations',
+	'course_report_link'=>'Evaluations',
+	'course_report_view_title'=>'Progress report',
+	'course_report_comment_view'=>'Comments',
+	'course_report_comment_label'=>'Thank you for attending the course. \
+	You can input your comments or requirements below so we can adjust the curriculum \
+	in order to achieve the best result from the course.',
 );

@@ -90,7 +90,7 @@ class CoursePaymentController extends Controller
 		$payment->course_id = $courseId;
 		if (isset($_REQUEST['CoursePayment'])){
 			$payment->attributes = $_POST['CoursePayment'];
-            $packageOption = CoursePackageOptions::model()->findByPk($_POST['CoursePayment']['package_option_id']);
+            $packageOption = CoursePackageOptions::model()->with('package')->findByPk($_POST['CoursePayment']['package_option_id']);
             $payment->tuition = $packageOption->tuition;
             $payment->sessions = $packageOption->package->sessions;
             
@@ -130,7 +130,7 @@ class CoursePaymentController extends Controller
             $oldTuition = $payment->tuition;
             $oldSessions = $payment->sessions;
 			$payment->attributes = $_POST['CoursePayment'];
-            $packageOption = CoursePackageOptions::model()->findByPk($_POST['CoursePayment']['package_option_id']);
+            $packageOption = CoursePackageOptions::model()->with('package')->findByPk($_POST['CoursePayment']['package_option_id']);
             $payment->tuition = $packageOption->tuition;
             $payment->sessions = $packageOption->package->sessions;
             

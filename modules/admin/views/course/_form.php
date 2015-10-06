@@ -155,6 +155,24 @@
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
+			<?php echo $form->labelEx($model,'level'); ?>
+		</div>
+		<div class="col col-lg-9">
+			<?php echo $form->textField($model,'level',array_merge(array('size'=>60,'maxlength'=>50))); ?>
+			<?php echo $form->error($model,'level'); ?>
+		</div>
+	</div>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+			<?php echo $form->labelEx($model,'curriculum'); ?>
+		</div>
+		<div class="col col-lg-9">
+			<?php echo $form->textField($model,'curriculum',array_merge(array('size'=>60,'maxlength'=>50))); ?>
+			<?php echo $form->error($model,'curriculum'); ?>
+		</div>
+	</div>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
 			<label>Nội dung khóa học</label>
 		</div>
 		<div class="col col-lg-9">
