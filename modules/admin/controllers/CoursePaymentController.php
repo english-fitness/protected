@@ -130,9 +130,12 @@ class CoursePaymentController extends Controller
             $oldTuition = $payment->tuition;
             $oldSessions = $payment->sessions;
 			$payment->attributes = $_POST['CoursePayment'];
-            $packageOption = CoursePackageOptions::model()->with('package')->findByPk($_POST['CoursePayment']['package_option_id']);
-            $payment->tuition = $packageOption->tuition;
-            $payment->sessions = $packageOption->package->sessions;
+            if (isset($_POST['CoursePayment']['package_option_id'])){
+                $packageOption = CoursePackageOptions::model()->with('package')->findByPk($_POST['CoursePayment']['package_option_id']);
+                $payment->tuition = $packageOption->tuition;
+                $payment->sessions = $packageOption->package->sessions;
+            }
+            
             
             $transaction = Yii::app()->db->beginTransaction();
             
