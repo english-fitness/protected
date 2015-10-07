@@ -2,10 +2,6 @@
 
 /* Messages Controller */
 class MessageController extends Controller {
-    public function init(){
-        $this->redirect("/");
-    }
-
     /* action Index */
     public function actionIndex() {
 		$this->subPageTitle = Yii::t('lang','message');
