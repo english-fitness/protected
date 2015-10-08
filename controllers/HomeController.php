@@ -11,4 +11,9 @@ class HomeController extends Controller
         $this->layout = '//layouts/landing';
         $this->render('landing');
     }
+
+    public function actionLanding2(){
+    	$this->layout = '//layouts/landing';
+        $this->render('landing2');
+    }
 }

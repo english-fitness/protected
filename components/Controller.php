@@ -36,6 +36,16 @@ class Controller extends CController
 		}
 		Yii::app()->end();
 	}
+
+	public function missingAction($action)
+    {
+        $action=str_replace('-','',$action);
+        $action='action'.ucfirst(strtolower($action));
+        if(method_exists($this,$action))
+            $this->$action();
+        else
+            $this->actionIndex();
+    }
 	
 	/**
 	 * @return string the page title. Using subPageTitle if we set it for each controller, action.
