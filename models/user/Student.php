@@ -61,11 +61,11 @@ class Student extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, contact_name, contact_phone, contact_email', 'required'),
+			array('user_id', 'required'),
 			array('user_id, preregister_id', 'numerical', 'integerOnly'=>true),
 			array('contact_phone', 'match', 'pattern'=>'/^\+{0,1}[0-9\-\s]{8,16}$/'),
 			array('contact_email', 'email'),
-            array('sale_status', 'safe'),
+            array('sale_status, contact_name, contact_phone, contact_email', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('user_id, official_start_date, created_date, modified_date', 'safe', 'on'=>'search'),

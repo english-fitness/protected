@@ -218,6 +218,10 @@ class StudentController extends Controller
                     $attributes = $_POST['PreregisterUser'];
                 
                     $preregisterUser->attributes = $attributes;
+                    if ($preregisterUser->isNewRecord){
+                    	$preregisterUser->fullname = $student->user->fullname();
+                    	$preregisterUser->phone = $student->user->phone;
+                    }
                     
                     if ($preregisterUser->save()){
                         if (isset($student->preregister_id)){
@@ -250,6 +254,7 @@ class StudentController extends Controller
                 $this->redirect(array('index'));
             } catch (Exception $e) {
                 $transaction->rollback();
+                exit($e);
             }
         }
         

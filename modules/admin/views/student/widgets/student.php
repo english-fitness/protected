@@ -83,6 +83,7 @@
 	<div class="row">
 		<h3><b>Thông tin liên hệ</b></h3>
 	</div>
+	<?php if ($student-> contact_name != '' && $student->contact_phone != '' && $student->contact_email != ''):?>
 	<div class="row">
 		<div class="col col-xs-4 pL0i">
 			<span class="fL"><b>Họ tên:</b></span>
@@ -107,4 +108,30 @@
 			<span class="fL"><?php echo $student->contact_email?></span>
 		</div>
 	</div>
+	<?php else:?>
+	<div class="row">
+		<div class="col col-xs-4 pL0i">
+			<span class="fL"><b>Họ tên:</b></span>
+		</div>
+		<div class="col col-xs-8 pL0i">
+			<span class="fL"><?php echo $student->user->fullname()?></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col col-xs-4 pL0i">
+			<span class="fL"><b>Điện thoại:</b></span>
+		</div>
+		<div class="col col-xs-8 pL0i">
+			<span class="fL"><?php echo Common::formatPhoneNumber($student->user->phone);?></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col col-xs-4 pL0i">
+			<span class="fL"><b>Email:</b></span>
+		</div>
+		<div class="col col-xs-8 pL0i">
+			<span class="fL"><?php echo $student->user->email?></span>
+		</div>
+	</div>
+	<?php endif;?>
 </div>

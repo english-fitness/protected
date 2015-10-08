@@ -170,6 +170,36 @@
 		</div>	
 	</div>
 </fieldset>
+<fieldset>
+	<legend>Thông tin liên hệ</legend>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+			<?php echo $form->labelEx($student,'contact_name'); ?>
+		</div>
+		<div class="col col-lg-9">
+			<?php echo $form->textField($student,'contact_name',array_merge(array('maxlength'=>128),$readonlyAttrs)); ?>
+			<?php echo $form->error($student,'contact_name'); ?>
+		</div>
+	</div>
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+			<?php echo $form->labelEx($student,'contact_phone'); ?>
+		</div>
+		<div class="col col-lg-9">
+			<?php echo $form->textField($student,'contact_phone',array_merge(array('maxlength'=>20),$readonlyAttrs)); ?>
+			<?php echo $form->error($student,'contact_phone'); ?>
+		</div>
+	</div>	
+	<div class="form-element-container row">
+		<div class="col col-lg-3">
+			<?php echo $form->labelEx($student,'contact_email'); ?>
+		</div>
+		<div class="col col-lg-9">
+			<?php echo $form->textField($student,'contact_email',array_merge(array('maxlength'=>128),$readonlyAttrs)); ?>
+			<?php echo $form->error($student,'contact_email'); ?>
+		</div>
+	</div>
+</fieldset>
 <div class="clearfix h20">&nbsp;</div>
 <fieldset>
 	<?php $checkedNewHistory = isset($_POST['chkAddNewHistory'])? true: false;?>
