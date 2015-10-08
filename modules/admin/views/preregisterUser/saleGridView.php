@@ -1,3 +1,27 @@
+<style type="text/css">
+	.notable{
+		color: darkviolet;
+		background-color: lightblue !important;
+		font-weight: bold;
+	}
+	.notable a{
+		color: darkviolet;
+	}
+	.notable:hover{
+		color: blue;
+		background-color: #BCE774 !important;
+	}
+	.notable:hover a{
+		color: blue;
+	}
+	.notable.selected{
+		color: white;
+		background-color: #245ba7 !important;
+	}
+	.notable.selected a{
+		color: white;
+	}
+</style>
 <?php 
 	$createdDateFilter = Yii::app()->controller->getQuery('PreregisterUser[created_date]', '');
 ?>
@@ -8,12 +32,12 @@
 	'enableHistory'=>true,
 	'ajaxVar'=>'',
 	'pager' => array('class'=>'CustomLinkPager'),
-	'rowHtmlOptionsExpression'=>'($data->deleted_flag==1)?array("class"=>"deletedRecord"):array()',
+	'rowHtmlOptionsExpression'=>'($data->care_status == PreregisterUser::CARE_STATUS_LATER)?array("class"=>"notable"):array()',
 	'columns'=>array(
 		'fullname',
         array(
             'name'=>'phone',
-            'value'=>'$data->phone',
+            'value'=>'Common::formatPhoneNumber($data->phone)',
             'htmlOptions'=>array('style'=>'width:100px;'),
         ),
 		'email',

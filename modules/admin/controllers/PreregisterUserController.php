@@ -199,9 +199,6 @@ class PreregisterUserController extends Controller
 			if(isset($_GET['PreregisterUser']['created_date'])){
 				$model->created_date = Common::convertDateFilter($_GET['PreregisterUser']['created_date']);//Created date filter
 			}
-			if(isset($_GET['PreregisterUser']['birthday'])){
-				$model->birthday = Common::convertDateFilter($_GET['PreregisterUser']['birthday']);//Birthday filter
-			}
 		}
 		$model->deleted_flag = 0;
 		if(isset($_GET['deleted_flag']) && $_GET['deleted_flag']==1){

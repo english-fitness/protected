@@ -39,6 +39,7 @@ class PreregisterUser extends CActiveRecord
     const CARE_STATUS_WORKING = 2;//Working status
     const CARE_STATUS_DISABLED = 3;//Disabled status
     const CARE_STATUS_REGISTERED = 4;
+    const CARE_STATUS_LATER = 5;
 	
 	/**
 	 * @return string the associated database table name
@@ -215,6 +216,7 @@ class PreregisterUser extends CActiveRecord
 			self::CARE_STATUS_WORKING => 'Đang chăm sóc',
             self::CARE_STATUS_REGISTERED => 'Đăng ký hệ thống',
 			self::CARE_STATUS_DISABLED => 'Hủy chăm sóc',
+			self::CARE_STATUS_LATER => 'Chăm sóc sau',
 		);
 		if($careStatus==null){
 			return $careStatusOptions;
