@@ -90,11 +90,13 @@ class SuAdminMenu extends CMenu
 			}
 
 
-
+			if ($isSubmenu){
+				$item['isSubmenu'] = true;
+			}
 
 			echo CHtml::openTag('li', $options);
 
-			$menu=$this->renderMenuItem($item, $isSubmenu);
+			$menu=$this->renderMenuItem($item);
 			if(isset($this->itemTemplate) || isset($item['template']))
 			{
 				$template=isset($item['template']) ? $item['template'] : $this->itemTemplate;
@@ -125,7 +127,7 @@ class SuAdminMenu extends CMenu
 	 * @return string
 	 * @since 1.1.6
 	 */
-	protected function renderMenuItem($item, $isSubmenu)
+	protected function renderMenuItem($item)
 	{
 		if(isset($item['url']))
 		{
@@ -135,7 +137,7 @@ class SuAdminMenu extends CMenu
 			$label=$this->linkLabelWrapper===null ? $item['label'] : CHtml::tag($this->linkLabelWrapper, $this->linkLabelWrapperHtmlOptions, $item['label']);
 			if(isset($item['items']) && count($item['items']))
 			{
-				if ($isSubmenu){
+				if ($item['isSubmenu']){
 					$linkOptions['class'] ='trigger right-caret';
 				} else {
 					$label .=CHtml::tag('span',array('class'=>'caret'));
