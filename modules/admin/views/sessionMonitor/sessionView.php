@@ -28,12 +28,18 @@ function createEditButton($session){
         "status"=>$session->status,
         "status_note"=>$session->status_note,
         "teacher_paid"=>$session->teacher_paid,
-        "using_platform"=>$session->note->using_platform,
-        "note"=>$session->note->note,
         "content"=>$session->content,
-        "teacher_fine_points"=>$session->teacherFine->points,
-        "taecher_fine_note"=>$session->teacherFine->notes,
     );
+
+    if ($session->note != null){
+        $formFields["using_platform"] = $session->note->using_platform;
+        $formFields["note"] = $session->note->note;
+    }
+
+    if ($session->teacherFine != null){
+        $formFields["teacher_fine_points"] = $session->teacherFine->points;
+        $formFields["taecher_fine_note"] = $session->teacherFine->notes;
+    }
 
     $onclick = "editSessionNote(".json_encode($formFields)."); return false;";
     
@@ -146,27 +152,27 @@ function getStatusDisplay($session){
 		   'type'=>'raw',
 		),
 		array(
-		   'header' => 'Buổi học trên hệ thống',
-		   'value'=>'$data->note->using_platform ? "Có" : ($data->note->using_platform === "0" ? "Không" : "")',
-		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
-		),
+           'header' => 'Skype / Platform',
+           'value'=>'$data->note != null ? ($data->note->using_platform ? "Platform" : "Skype") : ""',
+           'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
+        ),
         array(
            'header' => 'Tính tiền cho giáo viên',
            'value'=>'$data["teacher_paid"] ? "Paid" : ($data["teacher_paid"] === "0" ? "Unpaid" : "")',
            'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
         ),
-		array(
-		   'header' => 'Ghi chú',
-		   'value'=>'nl2br($data->note->note)',
-		   'htmlOptions'=>array('style'=>'width:250px;vertical-align:top;'),
-		   'type'=>'raw',
-		),
-		array(
-			'header'=>'',
-			'value'=>'createEditButton($data)',
-			'type'=>'raw',
-			'htmlOptions'=>array('style'=>'width:40px; text-align:center;vertical-align:top;'),
-		),
+        array(
+           'header' => 'Ghi chú',
+           'value'=>'$data->status == Session::STATUS_CANCELED ? $data->status_note : ($data->note != null ? $data->note->note : "")',
+           'htmlOptions'=>array('style'=>'width:250px;vertical-align:top;'),
+           'type'=>'raw',
+        ),
+        array(
+            'header'=>'',
+            'value'=>'createEditButton($data)',
+            'type'=>'raw',
+            'htmlOptions'=>array('style'=>'width:40px; text-align:center;vertical-align:top;'),
+        ),
 	),
 )); ?>
 <div id="session-form" class="container-fluid dpn">

@@ -89,10 +89,7 @@ class SuAdminMenu extends CMenu
 					$options['class'].=' '.implode(' ',$class);
 			}
 
-
-			if ($isSubmenu){
-				$item['isSubmenu'] = true;
-			}
+			$item['isSubmenu'] = $isSubmenu;
 
 			echo CHtml::openTag('li', $options);
 

@@ -27,12 +27,18 @@ function createEditButton($session){
         "status"=>$session->status,
         "status_note"=>$session->status_note,
         "teacher_paid"=>$session->teacher_paid,
-        "using_platform"=>$session->note->using_platform,
-        "note"=>$session->note->note,
         "content"=>$session->content,
-        "teacher_fine_points"=>$session->teacherFine->points,
-        "taecher_fine_note"=>$session->teacherFine->notes,
     );
+
+    if ($session->note != null){
+        $formFields["using_platform"] = $session->note->using_platform;
+        $formFields["note"] = $session->note->note;
+    }
+
+    if ($session->teacherFine != null){
+        $formFields["teacher_fine_points"] = $session->teacherFine->points;
+        $formFields["taecher_fine_note"] = $session->teacherFine->notes;
+    }
 
     $onclick = "editSessionNote(".json_encode($formFields)."); return false;";
     
@@ -124,7 +130,7 @@ function getStatusDisplay($session){
                 ),
                 array(
                    'header' => 'Skype / Platform',
-                   'value'=>'$data->note->using_platform ? "Platform" : ($data->note->using_platform === "0" ? "Skype" : "")',
+                   'value'=>'$data->note != null ? ($data->note->using_platform ? "Platform" : "Skype") : ""',
                    'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
                 ),
                 array(
@@ -134,7 +140,7 @@ function getStatusDisplay($session){
                 ),
                 array(
                    'header' => 'Ghi chú',
-                   'value'=>'$data->status == Session::STATUS_CANCELED ? $data->status_note : nl2br($data->note->note)',
+                   'value'=>'$data->status == Session::STATUS_CANCELED ? $data->status_note : ($data->note != null ? $data->note->note : "")',
                    'htmlOptions'=>array('style'=>'width:250px;vertical-align:top;'),
                    'type'=>'raw',
                 ),
