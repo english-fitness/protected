@@ -1,3 +1,16 @@
+<?php 
+$referrer = "";
+if (isset($_REQUEST['ref'])){
+    $knownReferrer = array(
+        'facebook'=>'Online - Facebook',
+        'hocmai'=>'Offline - Hocmai',
+    );
+    if (isset($knownReferrer[$_REQUEST['ref']])){
+        $referrer = $knownReferrer[$_REQUEST['ref']];
+    }
+}
+?>
+
 <link rel="stylesheet" href="/media/home/style/landing-2.css" />
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,900,300' rel='stylesheet' type='text/css'>
 <div id="main">
@@ -221,6 +234,9 @@
                     <div class="inner-form">
                         <!--main form-->
                         <form id="main-registration-form" class="registration-form">
+                            <?php if ($referrer != ""):?>
+                                <input type="hidden" name="referrer" value="<?php echo $referrer?>">
+                            <?php endif;?>
                             <div class="main-form">
                                 <div class="title">ĐĂNG KÝ TRẢI NGHIỆM MIỄN PHÍ</div>
                                 <div class="form-input">
@@ -319,6 +335,9 @@
 </div>
 <div id="popup-registration-form">
     <form id="small-registration-form" class="registration-form">
+        <?php if ($referrer != ""):?>
+            <input type="hidden" name="referrer" value="<?php echo $referrer?>">
+        <?php endif;?>
         <div id="inner-clone-form" class="main-form">
             <div class="title">ĐĂNG KÝ TRẢI NGHIỆM MIỄN PHÍ</div>
             <div class="form-input">

@@ -1,3 +1,16 @@
+<?php 
+$referrer = "";
+if (isset($_REQUEST['ref'])){
+    $knownReferrer = array(
+        'facebook'=>'Online - Facebook',
+        'hocmai'=>'Offline - Hocmai',
+    );
+    if (isset($knownReferrer[$_REQUEST['ref']])){
+        $referrer = $knownReferrer[$_REQUEST['ref']];
+    }
+}
+?>
+
 <link rel="stylesheet" href="/media/home/style/landing.css" />
 <div id="main">
     <!--banner-->
@@ -215,17 +228,7 @@
                 <div class="inner-form">
                     <!--main form-->
                     <form id="main-registration-form" class="registration-form">
-                        <?php if (isset($_REQUEST['ref'])):
-                            $knownReferrer = array(
-                                'facebook'=>'Online - Facebook',
-                                'hocmai'=>'Offline - Hocmai',
-                            );
-                            if (isset($knownReferrer[$_REQUEST['ref']])){
-                                $referrer = $knownReferrer[$_REQUEST['ref']];
-                            } else {
-                                $referrer = "";
-                            }
-                        ?>
+                        <?php if ($referrer):?>
                             <input type="hidden" name="referrer" value="<?php echo $referrer?>">
                         <?php else:?>
                             <input type="hidden" name="referrer" value="Online - Facebook">
@@ -325,17 +328,7 @@
 </div>
 <div id="popup-registration-form">
     <form id="small-registration-form" class="registration-form">
-        <?php if (isset($_REQUEST['ref'])):
-            $knownReferrer = array(
-                'facebook'=>'Online - Facebook',
-                'hocmai'=>'Offline - Hocmai',
-            );
-            if (isset($knownReferrer[$_REQUEST['ref']])){
-                $referrer = $knownReferrer[$_REQUEST['ref']];
-            } else {
-                $referrer = "";
-            }
-        ?>
+        <?php if ($referrer):?>
             <input type="hidden" name="referrer" value="<?php echo $referrer?>">
         <?php else:?>
             <input type="hidden" name="referrer" value="Online - Facebook">
