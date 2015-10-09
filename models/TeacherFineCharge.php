@@ -48,7 +48,7 @@ class TeacherFineCharge extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'teacher' => array(self::HAS_MANY, 'Teacher', 'teacher_id'),
+			'teacher' => array(self::BELONGS_TO, 'User', 'teacher_id'),
 		);
 	}
 
@@ -77,7 +77,7 @@ class TeacherFineCharge extends CActiveRecord
 	 * @return CActiveDataProvider the data provider that can return the models
 	 * based on the search/filter conditions.
 	 */
-	public function search($teacherId=null, $order='created_date desc')
+	public function search($teacherId=null, $order=null)
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
@@ -89,7 +89,9 @@ class TeacherFineCharge extends CActiveRecord
 		$criteria->compare('points',$this->points);
 		$criteria->compare('created_date',$this->created_date);
 		
-		$criteria->order = $order;
+		if ($order != null){
+			$criteria->order = $order;
+		}
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array('pageVar'=>'page'),
@@ -129,10 +131,11 @@ class TeacherFineCharge extends CActiveRecord
 	}
 	
 	public static function chargeFine($teacher, $points){
-		$query = "SELECT * FROM tbl_teacher_fine " .
-				 "WHERE teacher_id = " . $teacher . " " .
+		$query = "SELECT tbl_teacher_fine.* FROM tbl_teacher_fine " .
+				 "JOIN tbl_session ON tbl_session.id = tbl_teacher_fine.session_id " .
+				 "WHERE tbl_teacher_fine.teacher_id = " . $teacher . " " .
 				 "AND points_to_be_fined > 0 " .
-				 "ORDER BY created_date ASC";
+				 "ORDER BY tbl_session.plan_start ASC";
 		$unfinedRecords = TeacherFine::model()->findAllBySql($query);
 		
 		$remainingPoints = $points;
@@ -180,14 +183,16 @@ class TeacherFineCharge extends CActiveRecord
 	public static function getTeachersToBeCharged(){
 		$countQuery = "SELECT count(*) FROM(".
 						 "SELECT tbl_teacher_fine.teacher_id FROM tbl_teacher_fine " .
-						 "WHERE tbl_teacher_fine.created_date > CURRENT_DATE - INTERVAL '2' MONTH " .
+						 "JOIN tbl_session ON tbl_session.id = tbl_teacher_fine.session_id " .
+						 "WHERE tbl_session.plan_start > CURRENT_DATE - INTERVAL '2' MONTH " .
 						 "GROUP BY teacher_id " .
 						 "HAVING sum(points_to_be_fined) >= 10".
 					  ") results";
 		$count = Yii::app()->db->createCommand($countQuery)->queryScalar();
 		
 		$query = "SELECT tbl_teacher_fine.teacher_id, sum(points_to_be_fined) AS total_points FROM tbl_teacher_fine " .
-				 "WHERE tbl_teacher_fine.created_date > CURRENT_DATE - INTERVAL '2' MONTH " .
+				 "JOIN tbl_session ON tbl_session.id = tbl_teacher_fine.session_id " .
+				 "WHERE tbl_session.plan_start > CURRENT_DATE - INTERVAL '2' MONTH " .
 				 "GROUP BY teacher_id " .
 				 "HAVING total_points >= 10";
 				 
@@ -208,15 +213,17 @@ class TeacherFineCharge extends CActiveRecord
 	public static function getAllTeachersFine(){
 		$countQuery = "SELECT count(*) FROM(".
 						 "SELECT tbl_teacher_fine.teacher_id FROM tbl_teacher_fine " .
-						 "WHERE tbl_teacher_fine.created_date > CURRENT_DATE - INTERVAL '2' MONTH " .
+						 "JOIN tbl_session ON tbl_teacher_fine.session_id = tbl_session.id " .
+						 "WHERE tbl_session.plan_start > CURRENT_DATE - INTERVAL '2' MONTH " .
 						 "GROUP BY teacher_id" .
 					  ") results";
 		$count = Yii::app()->db->createCommand($countQuery)->queryScalar();
 		
 		$query = "SELECT tbl_teacher_fine.teacher_id, sum(points_to_be_fined) AS total_points FROM tbl_teacher_fine " .
-				 "WHERE tbl_teacher_fine.created_date > CURRENT_DATE - INTERVAL '2' MONTH " .
+				 "JOIN tbl_session ON tbl_teacher_fine.session_id = tbl_session.id " .
+				 "WHERE tbl_session.plan_start > CURRENT_DATE - INTERVAL '2' MONTH " .
 				 "GROUP BY teacher_id ";
-				 
+
 		return new CSqlDataProvider($query, array(
 			'totalItemCount'=>$count,
 			'pagination'=>array(

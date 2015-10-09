@@ -34,18 +34,6 @@
 <fieldset>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'created_date'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php
-				$created_date = isset($model['created_date'])? $model['created_date']: date('Y-m-d');
-			?>
-			<input type="text" class="datepicker" name="TeacherFine[created_date]" id="created_date" value="<?php echo $created_date?>" readonly>
-			<?php echo $form->error($model,'created_date'); ?>
-		</div>
-	</div>	
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'teacher_id'); ?>
 		</div>
 		<div class="col col-lg-9">

@@ -9,5 +9,19 @@ class ClsUser {
         $lastUsernameIndex = preg_replace("/[^0-9]/", "", $lastUsername);
         return $lastUsernameIndex + 1;
     }
+
+    public static function getViewLink($id){
+    	$user = User::model()->findByPk($id);
+    	switch ($user->role){
+			case User::ROLE_STUDENT:
+				return '<a href="' . Yii::app()->baseUrl . '/admin/student/view/id/' . $user->id . '">' . $user->fullname() . '</a>';
+				break;
+			case User::ROLE_TEACHER:
+				return '<a href="' . Yii::app()->baseUrl . '/admin/teacher/view/id/' . $user->id . '">' . $user->fullname() . '</a>';
+				break;
+			default:
+				break;
+		}
+    }
 }
 ?>

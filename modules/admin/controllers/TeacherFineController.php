@@ -75,8 +75,11 @@ class TeacherFineController extends Controller
 				}
 				$teacherFine->getDbCriteria()->addCondition("teacher_id in (" . $teacherIdString . ")");
 			}
+
 		}
-		
+
+		$teacherFine = $teacherFine->with(array('session', 'teacher'=>array('alias'=>'ft')))->search('t.id desc');
+
 		$this->render('fineRecords', array(
 			"model"=>$teacherFine,
 			"view"=>"all",
@@ -140,7 +143,6 @@ class TeacherFineController extends Controller
 		$teacherFine->unsetAttributes();
 		$criteria = $teacherFine->getDbCriteria();
 		$criteria->addCondition("points_to_be_fined > 0");
-		$criteria->addCondition("created_date < '" . date('Y-m-d', strtotime('-2 month')) . "'");
 		if (isset($_REQUEST['TeacherFine'])){
 			$teacherFine->attributes = $_REQUEST['TeacherFine'];
 			if (isset($_REQUEST['TeacherFine']['teacher_fullname'])){
@@ -156,7 +158,13 @@ class TeacherFineController extends Controller
 				}
 				$teacherFine->getDbCriteria()->addCondition("teacher_id in (" . $teacherIdString . ")");
 			}
+
 		}
+
+		$teacherFine = $teacherFine->with(array(
+			'session'=>array('alias'=>'s', 'joinType'=>'RIGHT JOIN', 'on'=>"s.plan_start < '" . date('Y-m-d', strtotime('-2 month')) . "'"),
+			'teacher'=>array('alias'=>'ft')
+		))->search();
 		
 		$this->render('fineRecords', array(
 			'model'=>$teacherFine,
@@ -187,9 +195,15 @@ class TeacherFineController extends Controller
 	
 	public function actionView($id){
 		$this->subPageTitle = 'Chi tiết';
+
+		$model = TeacherFine::model()->with("teacher", "session")->findByPk($id);
+		if ($model == null){
+			throw new CHttpException(404, "The requested page could not be found");
+			
+		}
 		
 		$this->render('view', array(
-			'model'=>$this->loadModel($id),
+			'model'=>$model,
 		));
 	}
 	
@@ -283,7 +297,6 @@ class TeacherFineController extends Controller
             }
             
             $fine->attributes = $_POST["TeacherFine"];
-            $fine->created_date = date("Y-m-d", strtotime($fine->session->plan_start));
             $fine->teacher_id = $fine->session->teacher_id;
             if ($fine->save()){
                 $success = true;

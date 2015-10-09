@@ -22,7 +22,7 @@
 	'columns'=>array(
 		array(
 			'header'=>'Giáo viên',
-			'value'=>'User::getLink($data["teacher_id"])',
+			'value'=>'ClsUser::getViewLink($data["teacher_id"])',
 			'filter'=>'<input type="text" value="'.$teacherFullname.'" name="TeacherFineCharge[teacher_fullname]">',
 			'htmlOptions'=>array('style'=>'width:200px; text-align:center;'),
 			'headerHtmlOptions'=>array('style'=>'width:200px;'),

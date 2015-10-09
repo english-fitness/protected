@@ -160,6 +160,9 @@ class SessionMonitorController extends Controller
 				$teacherFine->teacher_id = $session->teacher_id;
 			}
 			$teacherFine->attributes = $_POST["TeacherFine"];
+			if ($teacherFine->isNewRecord){
+				$teacherFine->points_to_be_fined = $teacherFine->points;
+			}
 			$changed[] = $teacherFine;
 		}
 

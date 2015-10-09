@@ -2,15 +2,6 @@
     <div class="col col-lg-6">
         <h2 class="page-title mT10">Teacher Penalty Records</h2>
     </div>
-	<?php if($view == 'all'):?>
-    <div class="col col-lg-6 for-toolbar-buttons">
-        <div class="btn-group">
-            <a class="top-bar-button btn btn-primary" href="<?php echo Yii::app()->baseUrl; ?>/admin/TeacherFine/create">
-			<i class="icon-plus"></i>New Record
-			</a>
-        </div>
-    </div>
-	<?php endif;?>
 </div>
 <?php 
 	$teacherFullname = Yii::app()->controller->getQuery('TeacherFine[teacher_fullname]', '');
@@ -24,7 +15,7 @@
 		),
 		array(
 			'name'=>'teacher_id',
-			'value'=>'User::getLink($data->teacher_id)',
+			'value'=>'$data->teacher->getViewLink()',
 			'filter'=>'<input type="text" value="'.$teacherFullname.'" name="TeacherFine[teacher_fullname]">',
 			'htmlOptions'=>array('style'=>'width:200px; text-align:center;'),
 			'headerHtmlOptions'=>array('style'=>'width:200px;'),
@@ -53,8 +44,8 @@
 			'headerHtmlOptions'=>array('style'=>'width:300px;'),
 		),
 		array(
-			'name'=>'created_date',
-			'value'=>'date("d-m-Y", strtotime($data->created_date))',
+			'header'=>'Ngày',
+			'value'=>'date("d-m-Y", strtotime($data->session->plan_start))',
 			'filter'=>'',
 			'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
 			'headerHtmlOptions'=>array('style'=>'width:100px;'),
@@ -114,8 +105,7 @@
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'gridView',
-	'dataProvider'=>$model->search('id desc'),
-	'filter'=>$model,
+	'dataProvider'=>$model,
 	'enableHistory'=>true,
 	'ajaxVar'=>'',
 	'pager' => array('class'=>'CustomLinkPager'),

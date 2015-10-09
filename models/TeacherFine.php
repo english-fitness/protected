@@ -14,10 +14,9 @@ class TeacherFine extends CActiveRecord
             array('notes', 'length', 'max'=>256),
 			array('teacher_id', 'safe'),
 			array('teacher_id, points, session_id', 'required'),
-			array('created_date', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, teacher_id, created_date', 'safe', 'on'=>'search'),
+			array('id, teacher_id', 'safe', 'on'=>'search'),
 		);
 		return $modelRules;//Return model rules
 	}
@@ -58,6 +57,7 @@ class TeacherFine extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
             'session' => array(self::BELONGS_TO, 'Session', 'session_id'),
+            'teacher'=>array(self::BELONGS_TO, 'User', 'teacher_id'),
 		);
 	}
 
@@ -70,7 +70,6 @@ class TeacherFine extends CActiveRecord
 			'id' => 'ID',
 			'teacher_id' => 'Giáo viên',
 			'points' => 'Số điểm phạt',
-			'created_date' => 'Ngày',
 			'notes' => 'Ghi chú',
 		);
 	}
@@ -87,7 +86,7 @@ class TeacherFine extends CActiveRecord
 	 * @return CActiveDataProvider the data provider that can return the models
 	 * based on the search/filter conditions.
 	 */
-	public function search($order='created_date desc')
+	public function search($order=null)
 	{
 		// @todo Please modify the following code to remove attributes that should not be searched.
 
@@ -97,9 +96,10 @@ class TeacherFine extends CActiveRecord
 		$teacher_id = $this->teacher_id;
 		$criteria->compare('teacher_id',$teacher_id);
 		$criteria->compare('points',$this->points);
-		$criteria->compare('created_date',$this->created_date);
 		
-		$criteria->order = $order;
+		if ($order != null){
+			$criteria->order = $order;
+		}
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array('pageVar'=>'page'),

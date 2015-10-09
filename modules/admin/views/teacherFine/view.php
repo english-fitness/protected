@@ -10,15 +10,15 @@
 		'id',
 		array(
 			'name'=>'teacher_id',
-			'value'=>User::getLink($model->teacher_id),
+			'value'=>$model->teacher->getViewLink(),
 			'type'=>'raw',
 		),
 		'points',
 		'points_to_be_fined',
 		'notes',
 		array(
-			'name'=>'created_date',
-			'value'=>date("d-m-Y", strtotime($model->created_date)),
+			'name'=>'Ngày',
+			'value'=>date("d-m-Y", strtotime($model->session->plan_start)),
 		),
 	),
 )); ?>

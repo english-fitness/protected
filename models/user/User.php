@@ -684,14 +684,13 @@ class User extends CActiveRecord
 		return $html;
 	}
 	
-	public function getLink($id){
-		$model = self::model()->findByPk($id);
-		switch ($model->role){
+	public function getViewLink(){
+		switch ($this->role){
 			case self::ROLE_STUDENT:
-				return '<a href="' . Yii::app()->baseUrl . '/admin/student/view/id/' . $model->id . '">' . $model->fullname() . '</a>';
+				return '<a href="' . Yii::app()->baseUrl . '/admin/student/view/id/' . $this->id . '">' . $this->fullname() . '</a>';
 				break;
 			case self::ROLE_TEACHER:
-				return '<a href="' . Yii::app()->baseUrl . '/admin/teacher/view/id/' . $model->id . '">' . $model->fullname() . '</a>';
+				return '<a href="' . Yii::app()->baseUrl . '/admin/teacher/view/id/' . $this->id . '">' . $this->fullname() . '</a>';
 				break;
 			default:
 				break;

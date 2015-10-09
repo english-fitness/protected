@@ -7,7 +7,7 @@
 	$teacherFullname = Yii::app()->controller->getQuery('TeacherFineCharge[teacher_fullname]', '');
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'dataProvider'=>$model->search(null, 'id desc'),
+	'dataProvider'=>$model->with("teacher")->search(null, 't.id desc'),
 	'filter'=>$model,
 	'enableHistory'=>true,
 	'ajaxVar'=>'',
@@ -21,7 +21,7 @@
 		),
 		array(
 			'name'=>'teacher_id',
-			'value'=>'User::getLink($data->teacher_id)',
+			'value'=>'$data->teacher->getViewLink()',
 			'htmlOptions'=>array('style'=>'width:200px; text-align:center;'),
 			'headerHtmlOptions'=>array('style'=>'width:200px;'),
 			'type'=>'raw',
