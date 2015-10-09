@@ -90,10 +90,10 @@ class ReportController extends Controller
             
             switch($report){
                 case 'session':
-                    $this->renderSessionReport($_REQUEST);
+                    $this->renderSessionReport($_GET);
                     break;
                 case 'userRegistration':
-                    $this->renderUserRegistrationReport($_REQUEST);
+                    $this->renderUserRegistrationReport($_GET);
                     break;
                 default:
                     break;
@@ -105,7 +105,7 @@ class ReportController extends Controller
     
     private function renderUserRegistrationReport($requestParams){
         $users = ReportBuilder::getUserRegistrationReport($requestParams);
-        array_splice($requestParams, 0, 1);
+
         $this->render('index', array(
             "records"=>$users,
             "requestParams"=>$requestParams,
@@ -114,8 +114,6 @@ class ReportController extends Controller
     
     private function renderSessionReport($requestParams){
         $sessions = ReportBuilder::getSessionReport($requestParams);
-        
-        array_splice($requestParams, 0, 1);
         
         $this->render('index', array(
             "records"=>$sessions,

@@ -1,7 +1,69 @@
+<script src="/media/js/bootstrap/bootstrap-dialog.min.js"></script>
+<link rel="stylesheet" href="/media/css/bootstrap/bootstrap-dialog.min.css">
+<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
+<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/popup.css" type="text/css" rel="stylesheet">
+
+<style type="text/css">
+    .modal-dialog{
+        left:15px !important;
+        width:960px;
+        margin-top:0;
+    }
+    .row{
+        margin-bottom: 10px;
+    }
+    label.form-row-label{
+        line-height: 31px;
+    }
+</style>
+
 <?php
-/* @var $this SessionMonitorController */
-/* @var $sessions CSqlDataProvider */
+function createEditButton($session){
+    if ($session->status != Session::STATUS_ENDED && !$session->isTimedOut()){
+        return "";
+    }
+
+    $formFields = array(
+        "session_id"=>$session->id,
+        "status"=>$session->status,
+        "status_note"=>$session->status_note,
+        "teacher_paid"=>$session->teacher_paid,
+        "using_platform"=>$session->note->using_platform,
+        "note"=>$session->note->note,
+        "content"=>$session->content,
+        "teacher_fine_points"=>$session->teacherFine->points,
+        "taecher_fine_note"=>$session->teacherFine->notes,
+    );
+
+    $onclick = "editSessionNote(".json_encode($formFields)."); return false;";
+    
+    return CHtml::link(
+        "",
+        "#",
+        array(
+            "class"=>"btn-edit mL10",
+            "onclick"=>$onclick,
+        )
+    );
+}
+
+function getStatusDisplay($session){
+    $status = $session->status;
+    if($status != Session::STATUS_ENDED && $status != Session::STATUS_CANCELED){
+        if ($session->isTimedOut()){
+            return '<span style="color:orange">' . Session::statusOptions()[$status] . '<br>(Hết giờ)</span>';
+        } else {
+            return Session::statusOptions()[$status];
+        }
+    } else {
+        $redText = $status == Session::STATUS_CANCELED ? 'style="color:red"' : '';
+        return '<span ' . $redText . '>' .
+                    Session::statusOptions()[$status] .
+                '</span>';
+    }
+}
 ?>
+
 <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
 <link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/popup.css" type="text/css" rel="stylesheet">
 <div class="page-header-toolbar-container row">
@@ -43,51 +105,6 @@
     	</p>
     </div>
 </div>
-<?php
-	$courseId = $course->id;
-	function createEditButton($sessionId, $status, $usingPlatform, $paidSession, $note){
-		if ($status != Session::STATUS_ENDED){
-			return "";
-		}
-		
-		if ($usingPlatform != ""){
-			$onclick = "editSessionNote(" . $sessionId . "," . $usingPlatform . "," . json_encode($note) . "); return false;";
-		} else {
-			$onclick = "editSessionNote(" . $sessionId . "); return false;";
-		}
-		
-		return CHtml::link(
-			"",
-			"#",
-			array(
-				"class"=>($usingPlatform != "" ? "btn-edit" : "icon-plus") . " mL15",
-				"onclick"=>$onclick,
-			)
-		);
-	}
-	
-	function getStatusDisplay($session){
-		//session is an array since we are using CSqlDataProvider
-		$endTime = date('Y-m-d H:i', strtotime('+' . $session['plan_duration'] . ' minutes', strtotime($session['plan_start'])));
-		$now = date('Y-m-d H:i');
-		$status = $session['status'];
-        $teacher_paid = !empty($session['teacher_paid']) ? $session['teacher_paid'] : 1;
-		if($status != Session::STATUS_ENDED && $status != Session::STATUS_CANCELED){
-            if ($endTime < $now){
-                return '<a href="#" onclick="endSession(' . $session['id'] . '); return false;" class="changeStatusLink" style="color:orange">' .
-						Session::statusOptions()[$status] . '<br>(Hết giờ)' .
-					'</a>';
-            } else {
-                return Session::statusOptions()[$status];
-            }
-		} else {
-            $redText = $status == Session::STATUS_CANCELED ? 'style="color:red"' : '';
-			return '<a href="#" onclick="endSession(' . $session['id'] . ', ' . $session['status'] . ', ' . $teacher_paid . '); return false;" class="changeStatusLink" ' . $redText . '>' .
-						Session::statusOptions()[$status] .
-					'</a>';
-		}
-	}
-?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'gridView',
 	'dataProvider'=>$sessions,
@@ -130,7 +147,7 @@
 		),
 		array(
 		   'header' => 'Buổi học trên hệ thống',
-		   'value'=>'$data["using_platform"] ? "Có" : ($data["using_platform"] === "0" ? "Không" : "")',
+		   'value'=>'$data->note->using_platform ? "Có" : ($data->note->using_platform === "0" ? "Không" : "")',
 		   'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
 		),
         array(
@@ -140,149 +157,245 @@
         ),
 		array(
 		   'header' => 'Ghi chú',
-		   'value'=>'nl2br($data["note"])',
+		   'value'=>'nl2br($data->note->note)',
 		   'htmlOptions'=>array('style'=>'width:250px;vertical-align:top;'),
 		   'type'=>'raw',
 		),
 		array(
 			'header'=>'',
-			'value'=>'createEditButton($data["id"], $data["status"], $data["using_platform"], $data["teacher_paid"], $data["note"])',
+			'value'=>'createEditButton($data)',
 			'type'=>'raw',
 			'htmlOptions'=>array('style'=>'width:40px; text-align:center;vertical-align:top;'),
 		),
 	),
 )); ?>
+<div id="session-form" class="container-fluid dpn">
+    <input type="hidden" id="session-id">
+    <form id="form">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-row-label">Trạng thái</label>
+            </div>
+            <div class="col-md-9">
+                <select id="status" name="Session[status]">
+                    <option value="3">Đã kết thúc</option>
+                    <option value="4">Đã hủy</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-row-label">Tính tiền cho giáo viên</label>
+            </div>
+            <div class="col-md-9">
+                <select id="teacher_paid" name="Session[teacher_paid]">
+                    <option value="1">Có</option>
+                    <option value="0">Không</option>
+                </select>
+            </div>
+        </div>
+        <div id="status-note" class="row dpn">
+            <div class="col-md-3">
+                <label>Lý do hoãn/hủy</label>
+            </div>
+            <div class="col-md-9">
+                <textarea id="session-status-note" name="Session[status_note]" style="height:100px;max-width:651px"></textarea>
+            </div>
+        </div>
+        <div class="session-note dpn">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-row-label">Platform/Skype</label>
+                </div>
+                <div class="col-md-9">
+                    <select id="using_platform" name="SessionNote[using_platform]">
+                        <option value="1">Platform</option>
+                        <option value="0">Skype</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Nội dung</label>
+                </div>
+                <div class="col-md-9">
+                    <textarea id="session-content" name="Session[content]" style="height:100px;max-width:651px"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Ghi chú</label>
+                </div>
+                <div class="col-md-9">
+                    <textarea id="session-note" name="SessionNote[note]" style="height:100px;max-width:651px"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3">
+                <span><input type="checkbox" class="teacher-fine-ckbox" value="teacher-fined"><b>&nbsp;Giáo viên bị phạt</b></span>
+            </div>
+        </div>
+        <div class="teacher-fine dpn">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Điểm phạt <span style="color:red">*</span></label>
+                </div>
+                <div class="col-md-9">
+                    <input id="teacher-fine-points" type="text" name="TeacherFine[points]" style="width:100%">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Ghi chú</label>
+                </div>
+                <div class="col-md-9">
+                    <textarea id="teacher-fine-note" name="TeacherFine[notes]" style="max-width:651px;height:100px"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 <script>
-	function editSessionNote(sessionId, using_platform, note){
-		if (using_platform == undefined){
-			var title = "Ghi chú mới"
-			using_platform = 1;
-		} else {
-			var title = "Sửa ghi chú"
-		}
-		if (note == undefined){
-			note = "";
-		}
-		popup({
-			width:"600px",
-			title:title,
-			content:function(formCreator){
-				var elementCreator = formCreator.popupForm();
-				
-				var form = formCreator.getForm({id:"sessionNoteForm",method:"post","class":"myFormPopup"});
-				
-				var using_platform_options = elementCreator.option("1", "Có", using_platform == 1 ? "selected" : "");
-				using_platform_options += elementCreator.option("0", "Không", using_platform == 0 ? "selected" : "");
-				form += formCreator.newRow(
-					"Buổi học trên hệ thống",
-					elementCreator.select({id:"using_platform",name:"SessionNote[using_platform]"},using_platform_options)
-				);
-                
-				form += formCreator.newHtmlRow(
-					'<div class="label" style="vertical-align:top">Ghi chú</div>' +
-					'<div class="value">' + elementCreator.textarea({id:"note",name:"SessionNote[note]"}, note) + "</div>"
-				);
-				form += formCreator.newRow("&nbsp;","<button id='saveNote'>Lưu lại</button>" +
-													 "<button id='cancel' onclick='removePopupByID"+'("popupAll")'+";return false;'>Đóng</button>");
-				form += '</form>';
-                return form;
-			}
-		});
-		
-		$('#saveNote').on('click', function(e){
-			updateSessionNote(sessionId);
-			removePopupByID('popupAll');
-			e.preventDefault();
-			return false;
-		});
-	}
-	
-	function updateSessionNote(sessionId){
-		$.ajax({
-			url: "/admin/sessionMonitor/update/id/" + sessionId,
-			type:'post',
-			data:$('#sessionNoteForm').serialize(),
-			success: function(response){
-				if (response.success){
-					$.fn.yiiGridView.update("gridView")
-				} else {
-					$("<div>Đã có lỗi xảy ra, vui lòng thử lại sau</div>").dialog({
-						modal:true,
-						resizable:false,
-						buttons:{
-							"Đóng": function(){
-								$(this).dialog('close');
-							}
-						}
-					});
-				}
-			},
-		});
-	}
-	
-	function endSession(sessionId, status, teacher_paid){
-        popup({
-            title:"Kết thúc buổi học",
-            width:"500px",
-            content:function(formCreator){
-                var elementCreator = formCreator.popupForm();
-                var form = formCreator.getForm({id:"sessionEndForm",method:"post","class":"myFormPopup"});
-                
-                var statusOptions = elementCreator.option(<?php echo Session::STATUS_ENDED?>, "Đã kết thúc", status == <?php echo Session::STATUS_ENDED?> ? 'selected' : '');
-                statusOptions += elementCreator.option(<?php echo Session::STATUS_CANCELED?>, "Đã hủy", status == <?php echo Session::STATUS_CANCELED?> ? 'selected' : '');
-                
-                form += formCreator.newRow(
-                    'Trạng thái',
-                    elementCreator.select({id:"status", name:"status"}, statusOptions)
-                );
-                
-                var paidOptions = elementCreator.option(1, "Có", teacher_paid == 1 ? 'selected' : '');
-                paidOptions += elementCreator.option(0, "Không", teacher_paid == 0 ? 'selected' : '');
-                
-                form += formCreator.newRow(
-                    'Tính tiền cho giáo viên?',
-                    elementCreator.select({id:"teacher_paid", name:"teacher_paid"}, paidOptions)
-                );
-                
-                form += formCreator.newRow("&nbsp;","<button id='saveStatus'>Lưu lại</button>" +
-													 "<button id='cancel' onclick='removePopupByID"+'("popupAll")'+";return false;'>Đóng</button>");
-                                                     
-				form += '</form>';
-                
-                return form;
+    var STATUS_ENDED = <?php echo Session::STATUS_ENDED?>;
+    var STATUS_CANCELED = <?php echo Session::STATUS_CANCELED?>;
+    var form;
+    var popupDialog = new BootstrapDialog({
+        title: "Ghi chú buổi học",
+        message: function(){
+            form = $("#session-form").removeClass("dpn");
+
+            form.find(".teacher-fine-ckbox").change(function(){
+                if ($(this).is(":checked")){
+                    form.find(".teacher-fine").show().find("input, textarea").prop("disabled", false);
+                } else {
+                    form.find(".teacher-fine").hide().find("input, textarea").prop("disabled", true);
+                }
+            });
+
+            form.find("#status").change(function(){
+                var $this = $(this);
+                if ($this.val() == STATUS_ENDED){
+                    form.find(".session-note").show().find("input, textarea, select").prop("disabled", false);
+                    form.find("#status-note").hide().prop("disabled", true);
+                } else if ($this.val() == STATUS_CANCELED) {
+                    form.find(".session-note").hide().find("input, textarea, select").prop("disabled", true);
+                    form.find("#status-note").show().prop("disabled", false);
+                }
+            })
+
+            return form;
+        },
+        buttons:[
+            {
+                label:"Lưu lại",
+                action:function(dialog){
+                    var button = this;
+                    button.spin();
+                    var sessionId = form.find("#session-id").val();
+                    var formData = form.find("#form").serialize();
+
+                    saveSessionNote(sessionId, formData, function(success){
+                        button.stopSpin();
+                        dialog.close();
+                        if (!success){
+                            BootstrapDialog.show({
+                                title: "Ghi chú chưa được lưu",
+                                message: "Đã có lỗi xảy ra, vui lòng thử lại sau",
+                                buttons:[{
+                                    label:"Đóng",
+                                    action:function(errDialog){
+                                        errDialog.close();
+                                    }
+                                }]
+                            })
+                        }
+                    })
+
+                }
+            },
+            {
+                label:"Hủy",
+                action:function(dialog){
+                    dialog.close();
+                }
             }
-        });
-        
-        $('#saveStatus').click(function(e){
-            e.preventDefault();
-            var form = document.getElementById('sessionEndForm');
-            $.ajax({
-				url:'/admin/session/ajaxChangeStatus',
-				type:'post',
-				data:{
-					sessionId:sessionId,
-                    teacher_paid:document.getElementById('teacher_paid').value,
-					status:document.getElementById('status').value,
-				},
-				success:function(){
-					$.fn.yiiGridView.update("gridView");
-                    removePopupByID('popupAll');
-				}
-			});
-        });
-        
-		// if (confirm('Buổi học này đã kết thúc. Chuyển trạng thái thành kết thúc?')){
-			// $.ajax({
-				// url:'/admin/session/ajaxChangeStatus',
-				// type:'post',
-				// data:{
-					// sessionId:sessionId,
-					// status:<?php echo Session::STATUS_ENDED?>,
-				// },
-				// success:function(){
-					// $.fn.yiiGridView.update("gridView");
-				// }
-			// });
-		// }
+        ],
+        autodestroy:false,
+    });
+    popupDialog.realize();
+	function editSessionNote(formFields){
+        // console.log(formFields);
+        form.find("#session-id").val(formFields.session_id);
+
+        if (formFields.status == STATUS_ENDED || formFields.status == STATUS_CANCELED){
+            form.find("#status").val(formFields.status).prop("disabled", true);
+        } else {
+            form.find("#status").val(STATUS_ENDED).prop("disabled", false);
+        }
+
+        form.find("#status").change();
+
+        //empty or equal to 0
+        if (formFields.teacher_paid == 0){
+            form.find("#teacher_paid").val(0);
+        } else {
+            form.find("#teacher_paid").val(1);
+        }
+
+        //empty or equal to 0
+        if (formFields.using_platform == 0){
+            form.find("#using_platform").val(0);
+        } else {
+            form.find("#using_platform").val(1);
+        }
+
+        if (!formFields.note){
+            form.find("#session-note").val("");
+        } else {
+            form.find("#session-note").val(formFields.note);
+        }
+
+        if (!formFields.status_note){
+            form.find("#session-status-note").val("");
+        } else {
+            form.find("#session-status-note").val(formFields.status_note);
+        }
+
+        if (!formFields.content){
+            form.find("#session-content").val("");
+        } else {
+            form.find("#session-content").val(formFields.content);
+        }
+
+        if (formFields.teacher_fine_points){
+            form.find(".teacher-fine-ckbox").prop("checked", true).prop("disabled", true).change();
+            form.find("#teacher-fine-points").val(formFields.teacher_fine_points);
+            if (formFields.taecher_fine_note){
+                form.find("#teacher-fine-note").val(formFields.taecher_fine_note);
+            }
+        } else {
+            form.find(".teacher-fine-ckbox").prop("checked", false).prop("disabled", false).change();
+            form.find("#teacher-fine-points").val("");
+            form.find("#teacher-fine-note").val("");
+        }
+
+        popupDialog.open();
 	}
+
+    function saveSessionNote(sessionId, formData, callback){
+        $.ajax({
+            url: "/admin/sessionMonitor/saveSessionNote/id/"+sessionId,
+            type:"post",
+            data:formData,
+            success: function(response){
+                if (response.success){
+                    $.fn.yiiGridView.update("gridView");
+                    callback(true);
+                } else {
+                    callback(false);
+                }
+            },
+        });
+    }
 </script>

@@ -107,6 +107,8 @@ class Session extends CActiveRecord
 			'course' => array(self::BELONGS_TO, 'Course', 'course_id'),
 			'sessionComments' => array(self::HAS_MANY, 'SessionComment', 'session_id'),
 			'teacher' => array(self::BELONGS_TO, 'User', 'teacher_id'),
+			'note'=>array(self::HAS_ONE, 'SessionNote', 'session_id'),
+			'teacherFine'=>array(self::HAS_ONE, 'TeacherFine', 'session_id'),
 		);
 	}
 
@@ -779,4 +781,10 @@ class Session extends CActiveRecord
             $this->getDbCriteria()->addCondition("id in (" . $sessionIdString . ")");
         }
     }
+
+    public function isTimedOut(){
+		$endTime = strtotime('+' . $this->plan_duration . ' minutes', strtotime($this->plan_start));
+    	$now = time();
+    	return $endTime < $now;
+	}
 }

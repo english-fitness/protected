@@ -25,7 +25,7 @@
         <div id="dateSelector" class="selector dpn" style="width:100px">
             <input type="text" id="date" name="date" class="datepicker-input" value="<?php echo date('Y-m-d', strtotime('-1 day'))?>"/>
         </div>
-        <div id="weekSelector" class="selector dpn"" style="width:280px">
+        <div id="weekSelector" class="selector dpn" style="width:280px">
             <select id="week" name="week">
                 <?php
 					$week = date('W');

@@ -208,7 +208,7 @@ class PreregisterUser extends CActiveRecord
 	/**
 	 * Care status label statuses
 	 */
-	public function careStatusOptions($careStatus=null)
+	public static function careStatusOptions($careStatus=null)
 	{
 		$careStatusOptions = array(
 			self::CARE_STATUS_PENDING => 'Chưa chăm sóc',

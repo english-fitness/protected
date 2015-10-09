@@ -28,7 +28,7 @@ class SessionMonitorController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index', 'courseView', 'sessionView', 'update', 'student'),
+                'actions'=>array('index', 'courseView', 'sessionView', 'student', 'saveSessionNote'),
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -43,19 +43,20 @@ class SessionMonitorController extends Controller
     
     public function actionIndex(){
         $this->subPageTitle = "Theo dõi buổi học";
-        
+
         if (isset($_REQUEST['type'])){
+        	$this->loadJQuery = false;
             try {
                 $sessions = SessionNote::getSessionNote($_REQUEST);
                 
-                $requestParams = $_REQUEST;
-                array_splice($requestParams, 0, 1);
+                $requestParams = $_GET;
                 
                 $this->render('index', array(
                     'sessions'=>$sessions,
                     'requestParams'=>$requestParams,
                 ));
             } catch (Exception $e){
+            	exit($e);
                 throw new CHttpException('500', 'Internal Server Error');
             }
         }
@@ -130,46 +131,51 @@ class SessionMonitorController extends Controller
 			"course"=>$course,
 		));
 	}
-	
-	public function actionUpdate($id){
-		$sessionNote = SessionNote::model()->findByPk($id);
-		if ($sessionNote == null){
-			$sessionNote = new SessionNote;
-			$sessionNote->session_id = $id;
+
+	public function actionSaveSessionNote($id){
+		$session = Session::model()->findByPk($id);
+		if ($session == null){
+			throw new CHttpException(404, "The requested page could not be found");
 		}
-		
-		$success = false;
-		if (isset($_POST['SessionNote'])){
-			$sessionNote->attributes = $_POST['SessionNote'];
-			if ($sessionNote->save()){
-				$success = true;
+
+		$session->attributes = $_POST["Session"];
+
+		$changed = array($session);
+
+		if (isset($_POST["SessionNote"]["using_platform"]) && $_POST["SessionNote"]["using_platform"] != ""){
+			$sessionNote = $session->note;
+			if ($sessionNote == null){
+				$sessionNote = new SessionNote();
+				$sessionNote->session_id = $session->id;
 			}
+			$sessionNote->attributes = $_POST["SessionNote"];
+			$changed[] = $sessionNote;
 		}
-		
-		$this->renderJSON(array("success"=>$success));
-	}
-	
-	public function actionUpdateUseForm($id){
-		$this->subPageTitle = "Sửa ghi chú";
-		
-		$sessionNote = SessionNote::model()->findByPk($id);
-		if ($sessionNote == null){
-			$sessionNote = new SessionNote;
+
+		if (isset($_POST["TeacherFine"]["points"]) && $_POST["TeacherFine"]["points"] != ""){
+			$teacherFine = $session->teacherFine;
+			if ($teacherFine == null){
+				$teacherFine = new TeacherFine();
+				$teacherFine->session_id = $session->id;
+				$teacherFine->teacher_id = $session->teacher_id;
+			}
+			$teacherFine->attributes = $_POST["TeacherFine"];
+			$changed[] = $teacherFine;
 		}
-		if (isset($_POST['SessionNote'])){
-			if ($sessionNote != null){
-				$sessionNote->attributes = $_POST['SessionNote'];
-				if ($sessionNote->save()){
-					$this->redirect("/admin/sessionMonitor/sessionView?cid=" . $_REQUEST['cid']);
+
+		$transaction = Yii::app()->db->beginTransaction();
+
+		try {
+			foreach ($changed as $model) {
+				if (!$model->save()){
+					throw new Exception("Error saving model: " . get_class($model) . ". The model error is " . var_dump($model->getErrors()));
 				}
-			} else {
-				throw new CHttpException(404,'The requested page does not exist.');
 			}
+			$transaction->commit();
+			$this->renderJSON(array("success"=>true));
+		} catch (Exception $e) {
+			$transaction->rollback();
+			$this->renderJSON(array("success"=>false, "error"=>$e->getMessage()));
 		}
-		
-		$this->render('update', array(
-			'model'=>$sessionNote,
-			'course_id'=>$_REQUEST['cid'],
-		));
 	}
 }

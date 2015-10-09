@@ -18,8 +18,8 @@ class SessionNote extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('using_platform', 'required'),
-			array('using_platform', 'numerical', 'integerOnly'=>true),
+			array('using_platform, session_id', 'required'),
+			array('using_platform, session_id', 'numerical', 'integerOnly'=>true),
 			array('note', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -100,14 +100,14 @@ class SessionNote extends CActiveRecord
 			$query = "SELECT count(*) FROM tbl_session_note JOIN tbl_session " .
 					 "ON tbl_session_note.session_id = tbl_session.id " .
 					 "WHERE tbl_session.course_id = " . $courseId . " " .
-					 "AND status = " . Session::STATUS_ENDED . " " .
+					 // "AND status = " . Session::STATUS_ENDED . " " .
 					 "AND tbl_session_note.using_platform = " . $usingPlatform;
 		} else {
 			$query = "SELECT count(*) FROM tbl_session " .
 					 "WHERE course_id = " . $courseId . " " .
 					 "AND status = " . Session::STATUS_ENDED;
 		}
-		
+
 		return Yii::app()->db->createCommand($query)->queryScalar();
 	}
 	
@@ -162,41 +162,18 @@ class SessionNote extends CActiveRecord
     }
     
     public static function getSessionNote($requestParams){
-        $dateConstraint = self::getDateConstraint($requestParams, 's.plan_start');
-        
-        $countQuery = " SELECT COUNT(s.id)
-                        FROM (
-                            tbl_session s LEFT JOIN tbl_session_note n ON s.id = n.session_id
-                        ) JOIN tbl_session_student ss ON s.id = ss.session_id
-                        WHERE " . $dateConstraint;
-                        
-        $count = Yii::app()->db->createCommand($countQuery)->queryScalar();
-        
-        $query = "  SELECT  s.id,
-                            subject,
-                            teacher_id,
-                            plan_start,
-                            plan_duration,
-                            status,
-                            CASE 
-                                WHEN status = " . Session::STATUS_CANCELED . " THEN status_note
-                                ELSE note
-                            END AS note,
-                            using_platform,
-                            teacher_paid
-                    FROM (
-                        tbl_session s LEFT JOIN tbl_session_note n ON s.id = n.session_id
-                    ) JOIN tbl_session_student ss ON s.id = ss.session_id
-                    WHERE " . $dateConstraint . " " .
-                    "ORDER BY s.plan_start DESC";
-                    
-        return new CSqlDataProvider($query, array(
-            'totalItemCount'=>$count,
-			'pagination'=>array(
-				'pageSize'=>20,
-			),
-			'keyField'=>'id',
-        ));
+        $dateConstraint = self::getDateConstraint($requestParams, 'plan_start');
+
+        $criteria = new CDbCriteria();
+        $criteria->condition = $dateConstraint;
+        $criteria->order = "plan_start DESC";
+        $criteria->with= array("note", "teacherFine");
+
+        return new CActiveDataProvider('Session', array(
+        	'criteria'=>$criteria,
+        	'pagination'=>array('pageVar'=>'page'),
+		    'sort'=>array('sortVar'=>'sort'),
+    	));
     }
 	
 	public static function getSessionNoteByCourse($courseId, $usingPlatform = null, $ended=false){
@@ -205,36 +182,37 @@ class SessionNote extends CActiveRecord
 		} else {
 			$joinType = "LEFT JOIN";
 		}
-		
+
+		$condition = "course_id = :course_id";
+		$queryParams = array(":course_id"=>$courseId);
+
 		$otherFilter = '';
-		if ($usingPlatform !== null){
-			$otherFilter .= " AND tbl_session_note.using_platform = " . $usingPlatform;
-		}
+
 		if ($ended){
-			$otherFilter .= " AND tbl_session.status = " . Session::STATUS_ENDED;
+			$otherFilter .= " AND status = " . Session::STATUS_ENDED;
 		}
-		
-		$countQuery = "SELECT COUNT(tbl_session.id) " .
-					  "FROM (tbl_session " . $joinType . " tbl_session_note " .
-					  "ON tbl_session.id = tbl_session_note.session_id) " .
-					  "JOIN tbl_session_student ON tbl_session.id = tbl_session_student.session_id " .
-					  "WHERE tbl_session.course_id = " . $courseId . $otherFilter;
-					  
-		$count = Yii::app()->db->createCommand($countQuery)->queryScalar();
-		
-		$query = "SELECT tbl_session.id, subject, teacher_id, plan_start, plan_duration, status, note, using_platform, teacher_paid " .
-				 "FROM (tbl_session " . $joinType . " tbl_session_note " .
-				 "ON tbl_session.id = tbl_session_note.session_id) " .
-				 "JOIN tbl_session_student ON tbl_session.id = tbl_session_student.session_id " .
-				 "WHERE tbl_session.course_id = " . $courseId . $otherFilter . " " .
-				 "ORDER BY plan_start ASC";
-		
-		return new CSqlDataProvider($query, array(
-			'totalItemCount'=>$count,
-			'pagination'=>array(
-				'pageSize'=>20,
+
+		$condition .= $otherFilter;
+
+		$sessionNoteCriteria = array(
+			"joinType"=>$joinType,
+		);
+		if ($usingPlatform !== null){
+			$sessionNoteCriteria["on"] = "using_platform = :using_platform";
+			$sessionNoteCriteria["params"] = array(":using_platform"=>$usingPlatform);
+		}
+
+		return new CActiveDataProvider('Session', array(
+			"criteria"=>array(
+				"condition"=>$condition,
+				"params"=>$queryParams,
+				"order"=>"plan_start ASC",
+				"with"=>array(
+					"note"=>$sessionNoteCriteria,
+				),
 			),
-			'keyField'=>'id',
+			'pagination'=>array('pageVar'=>'page'),
+		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}
 }
