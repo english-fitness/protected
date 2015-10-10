@@ -36,6 +36,7 @@ class CourseReportController extends Controller
                 $report->student_id = $course->assignedStudents()[0];
                 $report->report_date = date('Y-m-d');
                 $report->reporting_teacher = Yii::app()->user->id;
+                $report->report_type = $_POST['CourseReport']['report_type'];
 
                 $uploadedFile = $_FILES['report_file'];
                 if ($report->handleReportFileUpload($uploadedFile) && $report->save()){

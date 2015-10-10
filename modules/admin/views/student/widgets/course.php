@@ -1,6 +1,14 @@
+<div style="margin-bottom:-20px;">
+	<?php if (isset($_GET["type"]) && $_GET["type"] != Course::TYPE_COURSE_NORMAL):?>
+		<a href="/admin/student/courseWidget/sid/<?php echo $studentId?>">Khóa học thường</a>
+	<?php else:?>
+		<a href="/admin/student/courseWidget/sid/<?php echo $studentId?>?type=3">Khóa học thử</a>
+	<?php endif;?>
+</div>
 <div class="overview-widget">
 	<?php 
 	$this->widget('zii.widgets.grid.CGridView', array(
+		'id'=>'widgetGridview',
 		'dataProvider'=>$course,
 		'enableHistory'=>true,
 		'pager' => array('class'=>'CustomLinkPager'),

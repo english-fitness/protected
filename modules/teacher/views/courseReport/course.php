@@ -45,7 +45,7 @@
 					</tr>
 				<?php endforeach;?>
 			<?php else:?>
-				<tr><td colspan="5">There is no progress report for this course</td></tr>
+				<tr><td colspan="6">There is no progress report for this course</td></tr>
 			<?php endif;?>
 			</tbody>
 		</table>

@@ -53,27 +53,41 @@
 	);
 	
 	if ($view == 'all'){
+		$buttons = array(
+	        'view'=>array(
+	            'label'=>'', 'imageUrl'=>'',
+	            'options'=>array( 'class'=>'btn-view mL5' ),
+				'url'=>'Yii::app()->createUrl("admin/teacherFine/view/id/$data->id")',
+	        ),
+		);
+		if (Yii::app()->user->isAdmin()){
+			$buttons["update"] = array(
+				'label'=>'', 'imageUrl'=>'',
+	            'options'=>array( 'class'=>'btn-edit mL15' ),
+				'url'=>'Yii::app()->createUrl("admin/teacherFine/update/id/$data->id")',
+			);
+			$buttons["delete"] = array(
+				'label'=>'', 'imageUrl'=>'',
+	            'options'=>array( 'class'=>'btn-remove mL15' ),
+				'url'=>'Yii::app()->createUrl("admin/teacherFine/delete/id/$data->id")',
+			);
+		} else {
+			$buttons["update"] = array(
+				'label'=>'', 'imageUrl'=>'',
+	            'options'=>array( 'class'=>'dpn' ),
+				'url'=>'Yii::app()->createUrl("")',
+			);
+			$buttons["delete"] = array(
+				'label'=>'', 'imageUrl'=>'',
+	            'options'=>array( 'class'=>'dpn' ),
+				'url'=>'Yii::app()->createUrl("")',
+			);
+		}
 		$columns[] = array(
 			'class'=>'CButtonColumn',
 			'template'=>'{view}{update}{delete}',
 			'afterDelete'=>'function(link, success, data){if (success) window.location.reload(); else alert(data);}',
-			'buttons'=>array (
-		        'update'=> array(
-					'label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'btn-edit mL15' ),
-					'url'=>'Yii::app()->createUrl("admin/teacherFine/update/id/$data->id")',
-		        ),
-		        'view'=>array(
-		            'label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'btn-view mL5' ),
-					'url'=>'Yii::app()->createUrl("admin/teacherFine/view/id/$data->id")',
-		        ),
-		        'delete'=>array(
-		            'label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'btn-remove mL15' ),
-					'url'=>'Yii::app()->createUrl("admin/teacherFine/delete/id/$data->id")',
-		        ),
-    		),
+			'buttons'=>$buttons,
 			'htmlOptions'=>array('style'=>'width:80px;'),
 			'headerHtmlOptions'=>array('style'=>'width:80px;'),
 		);

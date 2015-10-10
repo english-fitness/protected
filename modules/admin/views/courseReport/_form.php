@@ -54,6 +54,26 @@
 		</div>
 	</div>
     <div class="form-element-container row">
+        <div class="col col-lg-3">
+            <?php echo $form->labelEx($model, 'report_type')?>
+        </div>
+        <div class="col col-lg-9">
+            <?php
+            if ($model->report_type != null){
+                $type = $model->report_type;
+            } else {
+                if ($model->course->type == Course::TYPE_COURSE_NORMAL){
+                    $type = CourseReport::REPORT_TYPE_PROGRESS;
+                } else {
+                    $type = CourseReport::REPORT_TYPE_ENTRY;
+                }
+            }
+            echo $form->dropdownList($model, 'report_type', $model->reportTypeOptions(), array("options"=>array($type=>array("selected"=>true))))
+            ?>
+            <?php echo $form->error($model, 'report_type')?>
+        </div>
+    </div>
+    <div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model, 'report_date')?>
 		</div>

@@ -3,6 +3,9 @@
 class CourseReport extends CActiveRecord
 {
     const REPORT_UPLOAD_DIR = "media/uploads/documents";
+
+    const REPORT_TYPE_ENTRY = 0;
+    const REPORT_TYPE_PROGRESS = 1;
     
 	/**
 	 * @return string the associated database table name
@@ -20,7 +23,7 @@ class CourseReport extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		$modelRules =  array(
-			array('course_id, student_id, reporting_teacher, report_date, report_file', 'required'),
+			array('course_id, student_id, reporting_teacher, report_date, report_file, report_type', 'required'),
 			array('course_id, student_id, reporting_teacher', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -37,6 +40,19 @@ class CourseReport extends CActiveRecord
             $modelRules[] = array('last_modified_user', 'default', 'value'=>Yii::app()->user->id, 'setOnEmpty'=>false, 'on'=>'update');
 		}
         return $modelRules;
+	}
+
+	public function reportTypeOptions($type=null){
+		$typeOptions = array(
+			self::REPORT_TYPE_ENTRY=>"Đánh giá đầu vào",
+			self::REPORT_TYPE_PROGRESS=>"Đánh giá khóa học",
+		);
+
+		if ($type != null){
+			return $typeOptions[$type];
+		}
+
+		return $typeOptions;
 	}
 
 	/**
@@ -66,6 +82,7 @@ class CourseReport extends CActiveRecord
             'student_id'=>'Học viên',
 			'reporting_teacher' => 'Giáo viên báo cáo',
 			'report_date' => 'Ngày báo cáo',
+			'report_type'=>'Loại đánh giá',
             'student_comment' => 'Nhận xét của học sinh',
             'report_file' => 'File báo cáo',
             'last_modified_user' => 'Người sửa cuối',

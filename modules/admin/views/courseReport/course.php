@@ -1,4 +1,4 @@
-<?php?><?php
+<?php
 /* @var $this CoursePaymentController */
 /* @var $model CoursePayment */
 
@@ -88,6 +88,11 @@
         array(
             'name'=>'reporting_teacher',
             'value'=>'$data->reportingTeacher->fullname()',
+            'htmlOptions'=>array('style'=>'width:150px;text-align:center'),
+        ),
+        array(
+            'name'=>'report_type',
+            'value'=>'$data->reportTypeOptions($data->report_type)',
             'htmlOptions'=>array('style'=>'width:150px;text-align:center'),
         ),
         array(

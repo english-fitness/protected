@@ -389,15 +389,18 @@ class StudentController extends Controller
 		if(count($assignedCourses)==0) $assignedCourses = array(0);
 		$course->id = $assignedCourses;
 
-		$course->type = Course::TYPE_COURSE_NORMAL;
+		if (isset($_GET["type"])){
+			$course->type = $_GET["type"];
+		} else {
+			$course->type = Course::TYPE_COURSE_NORMAL;
+		}
 
 		$course = $course->search("created_date DESC");
 		$course->pagination = array('pageSize' => 5);
 
-
-
 		$this->render('widgets/course', array(
 			'course'=>$course,
+			'studentId'=>$sid,
 		));
 	}
 

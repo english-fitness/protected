@@ -28,11 +28,11 @@ class TeacherFineController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('chargeFine', 'fineRecords', 'fineChargeRecords', 'fineChargeList', 'expiredFine', 'deleteFine',
-								 'create', 'view', 'update', 'delete', 'ajaxGetFine', 'ajaxUpdateFine'),
+								 'create', 'view', 'ajaxGetFine', 'ajaxUpdateFine'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array(''),
+				'actions'=>array('update, delete'),
 				'users'=>array('*'),
 				'expression' => 'Yii::app()->user->isAdmin()',
 			),
@@ -170,27 +170,6 @@ class TeacherFineController extends Controller
 			'model'=>$teacherFine,
 			'view'=>'expired',
 		));
-	}
-	
-	public function actionCreate(){
-		$this->subPageTitle = 'Ghi nhận phạt mới';
-		$teacherFine = new TeacherFine;
-		if (isset($_POST['TeacherFine'])){
-			$teacherFine->attributes = $_POST['TeacherFine'];
-			$teacherFine->points_to_be_fined = $_POST['TeacherFine']['points'];
-			if($teacherFine->save()){
-				$this->redirect('/admin/teacherFine/fineRecords');
-			}else {
-				throw new CHttpException(500,'Internal server error');
-			}
-		} else {
-			if(isset($_REQUEST['teacherId'])){
-				$teacherFine->teacher_id = $_REQUEST['teacherId'];
-			}
-			$this->render('create', array(
-				'model'=>$teacherFine,
-			));
-		}
 	}
 	
 	public function actionView($id){
