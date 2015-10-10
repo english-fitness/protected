@@ -1,4 +1,4 @@
-<div style="margin-bottom:-20px;">
+<div id="switch-course-type">
 	<?php if (isset($_GET["type"]) && $_GET["type"] != Course::TYPE_COURSE_NORMAL):?>
 		<a href="/admin/student/courseWidget/sid/<?php echo $studentId?>">Khóa học thường</a>
 	<?php else:?>
@@ -59,3 +59,8 @@
 		),
 	)); ?>
 </div>
+<script type="text/javascript">
+	if ($("#widgetGridview > .summary").length > 0){
+		$("#switch-course-type").css("margin-bottom", "-20px");
+	}
+</script>
