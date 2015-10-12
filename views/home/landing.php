@@ -9,6 +9,10 @@ if (isset($_REQUEST['ref'])){
         $referrer = $knownReferrer[$_REQUEST['ref']];
     }
 }
+
+if ($referrer == ""){
+    $referrer = "Online - Facebook";
+}
 ?>
 
 <link rel="stylesheet" href="/media/home/style/landing.css" />
@@ -230,8 +234,6 @@ if (isset($_REQUEST['ref'])){
                     <form id="main-registration-form" class="registration-form">
                         <?php if ($referrer):?>
                             <input type="hidden" name="referrer" value="<?php echo $referrer?>">
-                        <?php else:?>
-                            <input type="hidden" name="referrer" value="Online - Facebook">
                         <?php endif;?>
                         <div class="main-form">
                             <div class="title">ĐĂNG KÝ TRẢI NGHIỆM MIỄN PHÍ</div>
@@ -330,8 +332,6 @@ if (isset($_REQUEST['ref'])){
     <form id="small-registration-form" class="registration-form">
         <?php if ($referrer):?>
             <input type="hidden" name="referrer" value="<?php echo $referrer?>">
-        <?php else:?>
-            <input type="hidden" name="referrer" value="Online - Facebook">
         <?php endif;?>
         <div id="inner-clone-form" class="main-form">
             <div class="title">ĐĂNG KÝ TRẢI NGHIỆM MIỄN PHÍ</div>

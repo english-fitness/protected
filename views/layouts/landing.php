@@ -94,11 +94,9 @@
             $utmParams['utm_content'] = $_REQUEST['utm_content'];
         if (isset($_REQUEST['utm_campaign']))
             $utmParams['utm_campaign'] = $_REQUEST['utm_campaign'];
+
+        setcookie('utmParams', json_encode($utmParams), time()+60*60, '/');
     ?>
-    <script>
-        var utmParams = <?php echo json_encode($utmParams);?>;
-        document.cookie = "utmParams="+JSON.stringify(utmParams);
-    </script>
     <?php echo $content; ?>
     </body>
 </html>

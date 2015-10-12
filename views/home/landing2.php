@@ -9,6 +9,10 @@ if (isset($_REQUEST['ref'])){
         $referrer = $knownReferrer[$_REQUEST['ref']];
     }
 }
+
+if ($referrer == ""){
+    $referrer = "Online - Facebook";
+}
 ?>
 
 <link rel="stylesheet" href="/media/home/style/landing-2.css" />
