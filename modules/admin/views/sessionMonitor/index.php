@@ -18,7 +18,7 @@
 
 <?php
 function createEditButton($session){
-    if ($session->status != Session::STATUS_ENDED && !$session->isTimedOut()){
+    if ($session->status != Session::STATUS_ENDED && $session->status != Session::STATUS_CANCELED && !$session->isTimedOut()){
         return "";
     }
 
