@@ -110,7 +110,7 @@ function getStatusDisplay($session){
                    'header' => 'Học sinh',
                    'value'=>'implode(", ", Session::model()->findByPk($data["id"])->getAssignedStudentsArrs("/admin/student/view/id"))',
                    'type'  => 'raw',
-                   'htmlOptions'=>array('style'=>'min-width:150px; max-width:400px;'),
+                   'htmlOptions'=>array('style'=>'min-width:150px; max-width:400px; vertical-align:top;'),
                 ),
                 array(
                    'header'=>'Ngày học',

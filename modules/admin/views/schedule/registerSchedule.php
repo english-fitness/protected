@@ -24,14 +24,6 @@ button.schedule{
     outline: none;
     border: solid rgba(120,120,120,0.35) 1px;
 }
-.bulk-select{
-	cursor:pointer !important;
-	z-index:-999;
-}
-.bulk-selected{
-	border-color:rgba(82, 168, 236, 0.8);
-	border-width:2px;
-}
 .booked{
 	background-color:lime !important;
     cursor:not-allowed !important;

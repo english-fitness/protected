@@ -45,6 +45,8 @@ class SessionStudent extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'student'=> array(self::BELONGS_TO, 'User', 'student_id'),
+			'session'=> array(self::BELONGS_TO, 'Session', 'session_id'),
 		);
 	}
 

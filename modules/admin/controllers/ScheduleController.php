@@ -30,7 +30,7 @@ class ScheduleController extends Controller
             array('allow',  // allow all users to perform 'index' and 'view' actions
                 'actions'=>array('index', 'view', 'calendarCreateSession', 'calendarUpdateSession', 'calendarDeleteSession',
 				'ajaxSearchTeacher', 'calendarTeacherView', 'getSessions', 'registerSchedule', 'getTeacherSchedule', 'saveSchedule',
-				'ajaxLoadCourse', 'countSession', 'changeSchedule'),
+				'ajaxLoadCourse', 'countSession', 'changeSchedule', 'overview', 'getWeekSchedule'),
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -94,6 +94,68 @@ class ScheduleController extends Controller
 			$this->render('teacher', $_REQUEST);
 		}
 		//remember to do some timezone too
+	}
+
+	public function actionOverview(){
+		$this->render("overview");
+	}
+
+	public function actionGetWeekSchedule(){
+		if (isset($_GET["w"]) && ctype_digit($_GET["w"])){
+			if (isset($_GET["y"]) && ctype_digit($_GET["y"])){
+				$y = $_GET["y"];
+			} else {
+				$y = date("Y");
+			}
+			$weekStartTimestamp = strtotime($y."W".$_GET["w"]);
+			$weekStart = date("Y-m-d", $weekStartTimestamp);
+
+			$criteria = new CDbCriteria;
+			$criteria->condition = "week_start = '" . $weekStart . "'";
+			$criteria->select = array("teacher_id", "timeslots");
+			$schedules = TeacherTimeslots::model()->findAll($criteria);
+
+			$weekSchedule = array();
+			$availableTeachers = array();
+			foreach($schedules as $schedule){
+				$weekSchedule[$schedule->teacher_id] = $schedule->timeslots;
+				//since teacher_id, week_start is a unique pair, it is safe to do this
+				// $availableTeachers[] = $schedule->teacher_id;
+			}
+
+			$weekStart = date("Y-m-d 00:00:00", $weekStartTimestamp);
+			$weekEnd = date("Y-m-d 00:00:00", strtotime("+7 days", $weekStartTimestamp));
+			$criteria = new CDbCriteria;
+			$criteria->alias = "s";
+			$criteria->condition =  "plan_start >= '" . $weekStart . "' AND plan_start < '" . $weekEnd . "' " .
+									// "AND teacher_id IN (" . implode(",", $availableTeachers) . ") " .
+									"AND s.status <> " . Session::STATUS_CANCELED . " " .
+									"AND s.deleted_flag = 0";
+			$criteria->select = array("teacher_id", "plan_start");
+			$sessions = Session::model()->with(array(
+				"students"=>array(
+					"select"=>array("student_id"),
+				),
+			))->findAll($criteria);
+
+			$bookedSlots = array();
+			foreach ($sessions as $session){
+				$students = array();
+				foreach ($session->students as $student) {
+					$students[] = $student->student_id;
+				}
+				$bookedSlots[] = array(
+					"teacher_id"=>$session->teacher_id,
+					"plan_start"=>$session->plan_start,
+					"students"=>$students,
+				);
+			}
+
+			$this->renderJSON(array(
+				"schedule"=>$weekSchedule,
+				"booked"=>$bookedSlots,
+			));
+		}
 	}
 
 	public function actionCalendarCreateSession()

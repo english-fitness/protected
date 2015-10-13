@@ -128,6 +128,7 @@ class MenuAdmin extends CWidget
                 'items'=>array(
                     array('label'=>'Lịch học','url'=>array('/admin/schedule/view')),
 					array('label'=>'Lịch dạy của giáo viên','url'=>array('/admin/schedule/registerSchedule')),
+                    array('label'=>'Tổng hợp','url'=>array('/admin/schedule/overview')),
                 )
             ),
 			array(

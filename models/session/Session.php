@@ -105,6 +105,7 @@ class Session extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'course' => array(self::BELONGS_TO, 'Course', 'course_id'),
+			'students'=> array(self::HAS_MANY, 'SessionStudent', 'session_id'),
 			'sessionComments' => array(self::HAS_MANY, 'SessionComment', 'session_id'),
 			'teacher' => array(self::BELONGS_TO, 'User', 'teacher_id'),
 			'note'=>array(self::HAS_ONE, 'SessionNote', 'session_id'),

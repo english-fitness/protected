@@ -13,4 +13,24 @@ class UserController extends Controller
             $this->renderJSON(array("results"=>$results));
         }
     }
+
+    public function actionGetName(){
+        if (isset($_REQUEST['id'])){
+            $id = $_REQUEST['id'];
+            if (is_array($id)){
+                $condition = "id IN (" . implode(",", $id) . ")";
+            } else {
+                $condition = "id = " . $id;
+            }
+            $criteria = new CDbCriteria;
+            $criteria->select = array("id", "firstname", "lastname");
+            $criteria->condition = $condition;
+            $users = User::model()->findAll($criteria);
+            $name = array();
+            foreach ($users as $user) {
+                $name[$user->id] = $user->fullname();
+            }
+            $this->renderJSON(array("users"=>$name));
+        }
+    }
 }
