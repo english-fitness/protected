@@ -3,7 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=1366, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="viewport" content="width=1366">
         <title>Speak up - Học tiếng Anh online</title>
         <!--favicon-->
         <link rel="apple-touch-icon" sizes="57x57" href="/media/images/favicons/apple-touch-icon-57x57.png">
