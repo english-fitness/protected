@@ -6,11 +6,6 @@ $this->breadcrumbs=array(
 	'Carts'=>array('index'),
 	'Create',
 );
-
-$this->menu=array(
-    array('label'=>'<i class="glyphicon glyphicon-th-list"></i> Danh sách thẻ', 'url'=>array('index')),
-    array('label'=>'<i class="glyphicon glyphicon-list-alt"></i> Quản lý thẻ', 'url'=>array('admin')),
-);
 ?>
 
 <h1 class="page-header">Tạo mã thẻ</h1>

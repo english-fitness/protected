@@ -8,6 +8,13 @@ class CartController extends Controller
 	 */
 	public $layout='//layouts/column2';
 
+	public function init(){
+		$this->menu=array(
+		    array('label'=>'<i class="glyphicon glyphicon-th-list"></i> Danh sách thẻ', 'url'=>array('index')),
+		    array('label'=>'<i class="glyphicon glyphicon-list-alt"></i> Quản lý thẻ', 'url'=>array('admin')),
+		);
+	}
+
 	/**
 	 * @return array action filters
 	 */
@@ -68,13 +75,20 @@ class CartController extends Controller
 
 		if(isset($_POST['Cart']))
 		{
-			$model->attributes=$_POST['Cart'];
-            $model->cart_code = mt_rand(1000000000,9999999999).rand(10,99);
-            $model->cart_status = 1;
-			if($model->save()) {
-                CartLog::model()->log($model,'Tạo thẻ khuyến mãi mới');
-                $this->redirect(array('view','id'=>$model->cart_id));
-            }
+			if (isset($_POST['amount']) && $_POST['amount'] > 1){
+				if (Cart::batchCreate($_POST['Cart']['cart_price'], $_POST['amount'])){
+					CartLog::model()->log($_POST['amount'],'Tạo thẻ khuyến mãi mới');
+					$this->redirect(array('admin'));
+				}
+			} else {
+				$model->attributes=$_POST['Cart'];
+	            $model->cart_code = mt_rand(1000000000,9999999999).rand(10,99);
+	            $model->cart_status = 1;
+				if($model->save()) {
+	                CartLog::model()->log(1,'Tạo thẻ khuyến mãi mới');
+	                $this->redirect(array('view','id'=>$model->cart_id));
+	            }
+	        }
 
 		}
 

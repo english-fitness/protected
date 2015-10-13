@@ -30,11 +30,11 @@ class CartLog extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id, cart_id, log_value, created_time, ip_address', 'required'),
-			array('type, user_id, cart_id, created_time', 'numerical', 'integerOnly'=>true),
+			array('user_id, amount, log_value, created_time, ip_address', 'required'),
+			array('type, user_id, amount, created_time', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, type, user_id, cart_id, log_value, created_time, ip_address', 'safe', 'on'=>'search'),
+			array('id, type, user_id, amount, log_value, created_time, ip_address', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -47,7 +47,6 @@ class CartLog extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
             'user' => array(self::BELONGS_TO, 'User', 'user_id'),
-            'cart' => array(self::BELONGS_TO, 'Cart', 'cart_id'),
 		);
 	}
 
@@ -60,7 +59,7 @@ class CartLog extends CActiveRecord
 			'id' => 'ID',
 			'type' => 'Type',
 			'user_id' => 'User',
-			'cart_id' => 'Cart',
+			'amount' => 'Amount',
 			'log_value' => 'Log Value',
 			'created_time' => 'Create Time',
 			'ip_address' => 'Ip Address',
@@ -71,12 +70,12 @@ class CartLog extends CActiveRecord
      * @param $cart Cart
      * @param  string $value
      */
-    public function log($cart,$value)
+    public function log($amount,$value)
     {
         $model = new CartLog();
         $model->user_id = Yii::app()->user->id;
         $model->type = 1;
-        $model->cart_id = $cart->cart_id;
+        $model->amount = $amount;
         $model->created_time = time();
         $model->log_value = $value;
         $model->ip_address = Yii::app()->request->userHostAddress;
@@ -105,7 +104,7 @@ class CartLog extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('type',$this->type);
 		$criteria->compare('user_id',$this->user_id);
-		$criteria->compare('cart_id',$this->cart_id);
+		$criteria->compare('amount',$this->amount);
 		$criteria->compare('log_value',$this->log_value,true);
 		$criteria->compare('created_time',$this->created_time);
 		$criteria->compare('ip_address',$this->ip_address);

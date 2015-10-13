@@ -135,6 +135,8 @@ class Cart extends CActiveRecord
 		$criteria->compare('cart_price',$this->cart_price);
 		$criteria->compare('cart_status',$this->cart_status);
 
+		$criteria->order = "cart_id asc";
+
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
@@ -150,4 +152,21 @@ class Cart extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+
+	public static function batchCreate($price, $amount){
+		$query = "INSERT INTO `tbl_cart` (`cart_type`, `cart_code`, `cart_price`, `cart_status`) VALUES ";
+		for ($i = 0; $i < $amount; $i++){
+			$cart_code = mt_rand(1000000000,9999999999).rand(10,99);
+			$query .= "(0, " . $cart_code . ", " . $price . ", 1),";
+		}
+		$query = trim($query, ',');
+		try {
+			if (Yii::app()->db->createCommand($query)->execute()){
+				return true;
+			}
+		} catch(Exception $e){
+			return false;
+		}
+	}
+
 }
