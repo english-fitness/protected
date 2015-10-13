@@ -251,8 +251,8 @@
 			view = "available"
 		}
 
-		// $('.has-tooltip').qtip('destroy', true);
-		// $(".schedule").css("background-color", "white").removeClass("has-tooltip").html("");
+		$('.has-tooltip').qtip('destroy', true);
+		$(".schedule").css("background-color", "white").removeClass("has-tooltip").html("");
 
 		if (view == "available"){
 			for (var slot in schedule){
@@ -353,6 +353,7 @@
 
 	$("#week_start").change(function(){
 		setHeader();
+		//temporary use these two lines to show that the view is reloaded, will find another way
 		$('.has-tooltip').qtip('destroy', true);
 		$(".schedule").css("background-color", "white").removeClass("has-tooltip").html("");
 		getAllTeacherSchedule(this.value);
