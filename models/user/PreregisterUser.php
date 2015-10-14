@@ -162,7 +162,7 @@ class PreregisterUser extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>array('pageVar'=>'page'),
+			'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
 		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}

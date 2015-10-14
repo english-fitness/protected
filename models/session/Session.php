@@ -223,7 +223,7 @@ class Session extends CActiveRecord
 		if($order!==null) $criteria->order = $order;
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>array('pageVar'=>'page'),
+			'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
 		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}
@@ -311,7 +311,7 @@ class Session extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>array('pageVar'=>'page'),
+			'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
 		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}
@@ -328,7 +328,7 @@ class Session extends CActiveRecord
 		$criteria->compare('deleted_flag', 0);//Not deleted
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>array('pageVar'=>'page'),
+			'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
 		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}
@@ -339,7 +339,7 @@ class Session extends CActiveRecord
 		$criteria->addCondition("record = 1");
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>array('pageVar'=>'page'),
+			'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
 		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}

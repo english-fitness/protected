@@ -74,6 +74,8 @@ class SessionNote extends CActiveRecord
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
+		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}
 
@@ -171,7 +173,7 @@ class SessionNote extends CActiveRecord
 
         return new CActiveDataProvider('Session', array(
         	'criteria'=>$criteria,
-        	'pagination'=>array('pageVar'=>'page'),
+        	'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
 		    'sort'=>array('sortVar'=>'sort'),
     	));
     }
@@ -211,7 +213,7 @@ class SessionNote extends CActiveRecord
 					"note"=>$sessionNoteCriteria,
 				),
 			),
-			'pagination'=>array('pageVar'=>'page'),
+			'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
 		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}

@@ -179,7 +179,7 @@ class Course extends CActiveRecord
 		if($order!==null) $criteria->order = $order;
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>array('pageVar'=>'page'),
+			'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
 		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}
@@ -207,7 +207,7 @@ class Course extends CActiveRecord
 		if($order!==null) $criteria->order = $order;
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>array('pageVar'=>'page'),
+			'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
 		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}
