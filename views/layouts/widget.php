@@ -12,6 +12,12 @@
 		.grid-view{
 			padding: 0 0 0 0;
 		}
+		.row{
+			max-width: 100%;
+		}
+		span{
+			word-break: break-word;
+		}
 	</style>
 </head>
 <body>

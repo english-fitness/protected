@@ -131,7 +131,7 @@ class Cart extends CActiveRecord
         $criteria->order = "cart_status asc";
 		$criteria->compare('cart_id',$this->cart_id);
 		$criteria->compare('cart_type',$this->cart_type);
-		$criteria->compare('cart_code',$this->cart_code);
+		$criteria->compare('cart_code',$this->cart_code, true);
 		$criteria->compare('cart_price',$this->cart_price);
 		$criteria->compare('cart_status',$this->cart_status);
 
