@@ -19,9 +19,7 @@ class FileAsset extends ACAssetManager
     public $js = array(
 	    
 		'tinymce/js/tinymce/tinymce.min.js',
-        'fancybox/jquery.mousewheel-3.0.4.pack.js',
-        'fancybox/jquery.easing-1.3.pack.js',
-		'fancybox/jquery.fancybox-1.3.4.pack.js',
+		'jquery.fancybox/jquery.fancybox.pack.js',
         'file.js',
     );
 
@@ -30,7 +28,7 @@ class FileAsset extends ACAssetManager
      *  */
     public $css = array(
 		'file.css',
-		'fancybox/jquery.fancybox-1.3.4.css'
+		'jquery.fancybox/jquery.fancybox.css'
 	);
 
     /*

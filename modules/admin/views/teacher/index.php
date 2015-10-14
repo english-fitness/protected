@@ -112,10 +112,12 @@ $this->breadcrumbs=array(
 <script type="text/javascript">
     $(document).ready(function() {
         $(".view-document-from-teacher").fancybox({
-            'width'		: 900,
-            'height'	: 600,
-            'type'		: 'iframe',
-            'autoScale'    	: false
+            width: 900,
+            height: 600,
+            type: 'iframe',
+            autoSize: false,
+            openEffect: 'fade',
+            closeEffect: 'fade'
         });
     });
 </script>
