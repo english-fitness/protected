@@ -151,7 +151,7 @@ class ReportBuilder {
                         ELSE 'N/a'
                     END AS 'session_status',
                     CASE
-                        WHEN sessions.status = 4 OR note.note = NULL THEN 'X'
+                        WHEN sessions.status = 4 OR note.note IS NULL THEN 'X'
                         WHEN note.using_platform = 1 THEN 'Platform'
                         ELSE 'Skype'
                     END AS 'session_tool',
