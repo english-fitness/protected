@@ -68,8 +68,10 @@
 		<div class="fR" style="margin-right:10px; margin-top:-25px">
 			<label for="view-select">View</label>
 			<select id="view-select">
+				<option value="all">All</option>
 				<option value="available">Teacher Availability</option>
 				<option value="booked">Scheduled Sessions</option>
+				<option value="test">Test Schedule</option>
 			</select>
 		</div>
 	</div>
@@ -116,9 +118,14 @@
 	var teacherName = {};
 	var studentName = {};
 
-	function getAllTeacherSchedule(week){
+	function getAllTeacherSchedule(week, teacherStatus){
+		if (teacherStatus){
+			var url = "/admin/schedule/getWeekSchedule?w="+week+"&teacher_status="+teacherStatus;
+		} else {
+			var url = "/admin/schedule/getWeekSchedule?w="+week;
+		}
 		$.ajax({
-			url:"/admin/schedule/getWeekSchedule?w="+week,
+			url:url,
 			type:"get",
 			success:function(response){
 				var teacherSchedule = [];
@@ -248,32 +255,58 @@
 
 	function displayWeekSchedule(schedule, view){
 		if (!view){
-			view = "available"
+			view = "all"
 		}
 
 		$('.has-tooltip').qtip('destroy', true);
-		$(".schedule").css("background-color", "white").removeClass("has-tooltip").html("");
+		$(".schedule").css("background-color", "white").css("line-height", "").removeClass("has-tooltip").html("");
 
-		if (view == "available"){
+		if (view == "available" || view == "all" || view=="test"){
 			for (var slot in schedule){
 				var thisSlot = schedule[slot];
+
+				if (thisSlot.available > 1){
+					var teacherText = "teachers";
+				} else {
+					var teacherText = "teacher";
+				}
+				if (thisSlot.booked > 1){
+					var sessionText = "sessions";
+				} else {
+					var sessionText = "session";
+				}
+
 				var rate = thisSlot.available/thisSlot.totalAvailable;
+				var slotElement = $("#"+slot);
+				if (thisSlot.totalAvailable > 0 || thisSlot.booked > 0){
+					slotElement.addClass("has-tooltip");
+				}
 				if (thisSlot.totalAvailable > 0){
 					if (thisSlot.available <= 0){
-						$("#"+slot).css("background-color", "darkorange").addClass("has-tooltip").html("No teacher available");
-					} else if (rate > 0.5 && rate != 1) {
-						var thisSlot = schedule[slot];
-						$("#"+slot).css("background-color", "greenyellow").addClass("has-tooltip").html(thisSlot.available + "/"
-							+ thisSlot.totalAvailable + " teacher(s) available");
-					} else if (rate > 0.5) {
-						var thisSlot = schedule[slot];
-						$("#"+slot).css("background-color", "lime").addClass("has-tooltip").html(thisSlot.available + "/"
-							+ thisSlot.totalAvailable + " teacher(s) available");
+						slotElement.css("background-color", "darkorange").addClass("has-tooltip").html("No teacher available");
 					} else {
-						var thisSlot = schedule[slot];
-						$("#"+slot).css("background-color", "gold").addClass("has-tooltip").html(thisSlot.available + "/"
-							+ thisSlot.totalAvailable + " teacher(s) available");
+						slotElement.html(thisSlot.available + "/"
+							+ thisSlot.totalAvailable + " " + teacherText + " available");
+						
+						if (rate > 0.5 && rate != 1) {
+							slotElement.css("background-color", "greenyellow");
+						} else if (rate > 0.5) {
+							slotElement.css("background-color", "lime");
+						} else {
+							slotElement.css("background-color", "gold");
+						}
 					}
+				}
+
+				if (view != "available" && thisSlot.booked > 0){
+					var bookedText = thisSlot.booked + " " + sessionText + " scheduled";
+					if (thisSlot.totalAvailable <= 0){
+						slotElement.css("background-color", "lime");
+					} else {
+						var bookedText = slotElement.html() + "<br>" + bookedText;
+						slotElement.css("line-height", "15px")
+					}
+					slotElement.html(bookedText);
 				}
 			}
 		} else if (view == "booked"){
@@ -293,10 +326,10 @@
 				content: {
 					title: getTimeslotText(slotNumber, weekstart),
 		            text: function(){
-			            	var slot = schedule[slotNumber];
-			            	var text="";
-			            	var scheduledTeacher = slot.bookedTeacher;
-			            	if (view != "booked"){
+		            	var slot = schedule[slotNumber];
+		            	var text="";
+		            	var scheduledTeacher = slot.bookedTeacher;
+		            	if (view != "booked"){
 			            	var allTeacher = slot.availableTeacher;
 			            	for (var i in allTeacher){
 			            		if (!inArrayByProp(scheduledTeacher, 'teacher', allTeacher[i])){
@@ -309,6 +342,7 @@
 			            	}
 			            }
 
+			            console.log(scheduledTeacher.length);
 		            	if (scheduledTeacher.length > 0){
 			            	text += "<b>Scheduled:</b><br>"
 			            	for (var i in scheduledTeacher){
@@ -335,16 +369,20 @@
 	}
 
 	function getUserName(users, callback){
-		$.ajax({
-			url:"/user/getName",
-			type:"get",
-			data:{
-				id:users,
-			},
-			success:function(response){
-				callback(response.users);
-			}
-		});
+		if (users.length > 0){
+			$.ajax({
+				url:"/user/getName",
+				type:"get",
+				data:{
+					id:users,
+				},
+				success:function(response){
+					callback(response.users);
+				}
+			});
+		} else {
+			callback({});
+		}
 	}
 
 	$(".page-content-container").click(function(){
@@ -356,7 +394,10 @@
 		//temporary use these two lines to show that the view is reloaded, will find another way
 		$('.has-tooltip').qtip('destroy', true);
 		$(".schedule").css("background-color", "white").removeClass("has-tooltip").html("");
-		getAllTeacherSchedule(this.value);
+		if ($("#view-select").val() == "test"){
+			var teacher_status = <?php echo Teacher::STATUS_TESTER?>;
+		}
+		getAllTeacherSchedule(this.value, teacher_status);
 		weekstart = this.value;
 	});
 
@@ -375,14 +416,33 @@
 		return false;
 	};
 
-	$("#view-select").change(function(){
-		displayWeekSchedule(schedule, this.value);
-	})
+	$("#view-select").change(function(data){
+		var $this = $(this);
+		document.cookie = "view-select="+$this.val()+"; expires="+moment().add(1, 'days').toDate().toUTCString()+"; path=/admin/schedule/overview";
+		if ($this.val() != 'test' && $this.data('prev') != 'test'){
+			displayWeekSchedule(schedule, this.value);
+		} else {
+			if ($this.val() == 'test'){
+				getAllTeacherSchedule($('#week_start').val(), <?php echo Teacher::STATUS_TESTER?>);
+			} else if ($this.data('prev') == 'test'){
+				getAllTeacherSchedule($('#week_start').val());
+			}
+		}
+
+		$this.attr('data-prev', $this.val());
+	});
 
 	$(function(){
 		setHeader();
+		if (docCookies.hasItem("view-select")){
+			// console.log(docCookies.getItem("view-select"));
+			$('#view-select').val(docCookies.getItem("view-select"));
+		}
 		$("#week_start").change();
+		var viewSelect = $("#view-select");
+		viewSelect.attr("data-prev", viewSelect.val());
 	});
+
 
 	function setHeader(){
 		$('.wday').each(function(){

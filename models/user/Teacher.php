@@ -16,6 +16,28 @@
  */
 class Teacher extends CActiveRecord
 {
+	const STATUS_DISABLED = -1;
+	const STATUS_NEW_REGISTER = 0;
+	const STATUS_APPROVED = 1;
+	const STATUS_TESTER = 6;
+	const STATUS_OFFICIAL = 7;
+
+	public static function statusOptions($status=null){
+        $statusOptions = array(
+            self::STATUS_DISABLED => 'Đã ngừng dạy',
+			self::STATUS_NEW_REGISTER => 'GV mới',
+			self::STATUS_APPROVED => 'Đã xác nhận',
+			self::STATUS_TESTER => 'Tester',
+			self::STATUS_OFFICIAL => 'GV chính thức',
+		);
+		if($status==null){
+			return $statusOptions;
+		}elseif(isset($statusOptions[$status])){
+			return $statusOptions[$status];
+		}
+		return null;
+    }
+
 	/**
 	 * @return string the associated database table name
 	 */
@@ -54,6 +76,8 @@ class Teacher extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'user' => array(self::BELONGS_TO, 'User', 'user_id'),
+			'timeslots'=>array(self::HAS_MANY, 'TeacherTimeslots', 'teacher_id'),
+			'sessions'=>array(self::HAS_MANY, 'Session', 'teacher_id'),
 		);
 	}
 	

@@ -100,24 +100,32 @@ class User extends CActiveRecord
 	 */
 	public function statusOptions($status=null)
 	{
-        if ($this->role == self::ROLE_STUDENT){
-            return Student::statusOptions($status);
-        }
-		$statusOptions = array(
-			self::STATUS_PENDING => 'Đang chờ',
-			self::STATUS_APPROVED => 'Đã xác nhận',
-			self::STATUS_ENOUGH_PROFILE => 'Đã đủ thông tin',
-			self::STATUS_ENOUGH_AUDIO => 'Đã test loa mic',
-			self::STATUS_REGISTERED_COURSE => 'Đã đăng ký K/H',
-			self::STATUS_TRAINING_SESSION => 'Đang dạy/học thử',
-			self::STATUS_ENDED_TRAINING => 'Đã dạy/học thử',
-			self::STATUS_OFFICIAL_USER => 'GV/HS chính thức',
-		);
-		if($status==null){
-			return $statusOptions;
-		}elseif(isset($statusOptions[$status])){
-			return $statusOptions[$status];
+		switch ($this->role){
+			case self::ROLE_STUDENT:
+				return Student::statusOptions($status);
+				break;
+			case self::ROLE_TEACHER:
+				return Teacher::statusOptions($status);
+				break;
+			default:
+				$statusOptions = array(
+					self::STATUS_PENDING => 'Đang chờ',
+					self::STATUS_APPROVED => 'Đã xác nhận',
+					self::STATUS_ENOUGH_PROFILE => 'Đã đủ thông tin',
+					self::STATUS_ENOUGH_AUDIO => 'Đã test loa mic',
+					self::STATUS_REGISTERED_COURSE => 'Đã đăng ký K/H',
+					self::STATUS_TRAINING_SESSION => 'Đang dạy/học thử',
+					self::STATUS_ENDED_TRAINING => 'Đã dạy/học thử',
+					self::STATUS_OFFICIAL_USER => 'GV/HS chính thức',
+				);
+				if($status==null){
+					return $statusOptions;
+				}elseif(isset($statusOptions[$status])){
+					return $statusOptions[$status];
+				}
+				break;
 		}
+		
 		return null;
 	}
 

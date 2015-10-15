@@ -107,49 +107,66 @@ class ScheduleController extends Controller
 			} else {
 				$y = date("Y");
 			}
-			$weekStartTimestamp = strtotime($y."W".$_GET["w"]);
-			$weekStart = date("Y-m-d", $weekStartTimestamp);
 
-			$criteria = new CDbCriteria;
-			$criteria->condition = "week_start = '" . $weekStart . "'";
-			$criteria->select = array("teacher_id", "timeslots");
-			$schedules = TeacherTimeslots::model()->findAll($criteria);
-
-			$weekSchedule = array();
-			$availableTeachers = array();
-			foreach($schedules as $schedule){
-				$weekSchedule[$schedule->teacher_id] = $schedule->timeslots;
-				//since teacher_id, week_start is a unique pair, it is safe to do this
-				// $availableTeachers[] = $schedule->teacher_id;
+			if (isset($_GET["teacher_status"])){
+				$teacherStatus = $_GET["teacher_status"];
+			} else {
+				$teacherStatus = Teacher::STATUS_OFFICIAL;
 			}
 
-			$weekStart = date("Y-m-d 00:00:00", $weekStartTimestamp);
-			$weekEnd = date("Y-m-d 00:00:00", strtotime("+7 days", $weekStartTimestamp));
-			$criteria = new CDbCriteria;
-			$criteria->alias = "s";
-			$criteria->condition =  "plan_start >= '" . $weekStart . "' AND plan_start < '" . $weekEnd . "' " .
-									// "AND teacher_id IN (" . implode(",", $availableTeachers) . ") " .
-									"AND s.status <> " . Session::STATUS_CANCELED . " " .
-									"AND s.deleted_flag = 0";
-			$criteria->select = array("teacher_id", "plan_start");
-			$sessions = Session::model()->with(array(
-				"students"=>array(
-					"select"=>array("student_id"),
-				),
-			))->findAll($criteria);
+			$validTeachers = Yii::app()->db->createCommand()
+			    ->select("id")
+			    ->from(User::model()->tableSchema->name)
+			    ->where("role = '".User::ROLE_TEACHER."' AND status = ".$teacherStatus)
+			    ->queryColumn();
 
-			$bookedSlots = array();
-			foreach ($sessions as $session){
-				$students = array();
-				foreach ($session->students as $student) {
-					$students[] = $student->student_id;
+		    $weekSchedule = array();
+		    $bookedSlots = array();
+		    if (count($validTeachers) > 0){
+				$teacherCondition = "AND teacher_id IN (" . implode(",", $validTeachers) . ")";
+
+				$weekStartTimestamp = strtotime($y."W".$_GET["w"]);
+				$weekStart = date("Y-m-d", $weekStartTimestamp);
+
+				$criteria = new CDbCriteria;
+				$criteria->condition = "week_start = '" . $weekStart . "' " . $teacherCondition;
+				$criteria->select = array("teacher_id", "timeslots");
+				$schedules = TeacherTimeslots::model()->findAll($criteria);
+
+				$availableTeachers = array();
+				foreach($schedules as $schedule){
+					$weekSchedule[$schedule->teacher_id] = $schedule->timeslots;
 				}
-				$bookedSlots[] = array(
-					"teacher_id"=>$session->teacher_id,
-					"plan_start"=>$session->plan_start,
-					"students"=>$students,
-				);
+
+				$weekStart = date("Y-m-d 00:00:00", $weekStartTimestamp);
+				$weekEnd = date("Y-m-d 00:00:00", strtotime("+7 days", $weekStartTimestamp));
+				$criteria = new CDbCriteria;
+				$criteria->alias = "s";
+				$criteria->condition =  "plan_start >= '" . $weekStart . "' AND plan_start < '" . $weekEnd . "' " .
+										$teacherCondition . " " .
+										"AND s.status <> " . Session::STATUS_CANCELED . " " .
+										"AND s.deleted_flag = 0";
+				$criteria->select = array("teacher_id", "plan_start");
+				$sessions = Session::model()->with(array(
+					"students"=>array(
+						"select"=>array("student_id"),
+					),
+				))->findAll($criteria);
+
+				foreach ($sessions as $session){
+					$students = array();
+					foreach ($session->students as $student) {
+						$students[] = $student->student_id;
+					}
+					$bookedSlots[] = array(
+						"teacher_id"=>$session->teacher_id,
+						"plan_start"=>$session->plan_start,
+						"students"=>$students,
+					);
+				}
+
 			}
+
 
 			$this->renderJSON(array(
 				"schedule"=>$weekSchedule,
