@@ -2,7 +2,7 @@
     .ui-autocomplete { max-height: 200px; overflow-y: scroll;}
 </style>
 <span class="addUser">
-	<span class="loadUser" id="ajaxLoadSelectedUser"></span>  
+    <span class="loadUser" id="ajaxLoadSelectedUser"></span>  
     <span class="input pL5">
         <input id="ajaxSearchUser" class="form-control class_email" name="ajaxSearchUser" placeholder="Họ tên hoặc Username" value="<?php echo isset($ajaxSearchUser)? $ajaxSearchUser: "";?>"/>
         <button type="button" id="ajaxSearch"><i class="icon-search"></i></button>

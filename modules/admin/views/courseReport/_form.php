@@ -3,7 +3,6 @@
 	background-color: white;
 }
 </style>
-<script src="/media/js/utils.js"></script>
 <?php $readOnlyAttrs = (!$model->isNewRecord)? array('readonly'=>'readonly','ondblclick'=>'$(this).removeAttr("readonly")'): array();?>
 <div class="form">
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -128,7 +127,7 @@
         SearchBox.autocomplete({
             searchBox:'#teacher-search',
             results:results,
-            resultDisplay:'usernameAndFullName',
+            resultLabel:'usernameAndFullName',
             selectCallback:function(id){
                 $('#hidden-teacher-id').val(id);
             }

@@ -232,16 +232,8 @@
 			<label for="Course_class">Gán học sinh</label>
 		</div>
 		<div class="col col-lg-9">
-			<?php
-				$ajaxSearchUser = Yii::app()->request->getPost('ajaxSearchUser', "");
-				if($ajaxSearchUser=="" && isset($preCourse)) $ajaxSearchUser = $preCourse->getEmail();
-			?>
-            <?php $this->renderPartial("widget/ajaxAddUser", array("ajaxSearchUser"=>$ajaxSearchUser)); ?>
-            <?php if(isset($preCourse)):?>
-			<label class="hint">Gợi ý từ đơn xin học: <?php echo $preCourse->getEmail();?></label>
-			<?php else:?>
+            <?php $this->renderPartial("/widgets/addUser", array("userRole"=>User::ROLE_STUDENT)); ?>
 			<label class="hint">Gán các học sinh có nhu cầu tham gia vào khóa học này(tùy chọn hoặc gán sau)!</label>
-			<?php endif;?>
 		</div>
 	</div>
 </fieldset>

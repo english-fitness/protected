@@ -56,8 +56,7 @@
 		</div>
 		<div class="col col-lg-9">
 			<?php if($model->isNewRecord):?>
-				<?php $receivedEmails = Yii::app()->request->getPost('receivedEmails', "");?>
-                <?php $this->renderPartial("/course/widget/ajaxAddUser",array("ajaxSearchUser"=>"","ajaxBaseUrl"=>"/notification/ajaxLoadUser")); ?>
+                <?php $this->renderPartial("/widgets/addUser",array()); ?>
                 <label class="hint"><b class="clrBlack">all_students@hocmai.vn</b> = Tất cả học sinh, <b class="clrBlack">all_teachers@hocmai.vn</b> = Tất cả giáo viên!</label>
 			<?php else:?>
 				<input type="text" value="<?php echo $model->getReceivedUser()->email;?>" disabled="disabled"/>

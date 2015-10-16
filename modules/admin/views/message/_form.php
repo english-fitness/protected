@@ -62,8 +62,11 @@
 			<label>Gán người nhận &nbsp;<span class="required"></span></label>
 		</div>
 		<div class="col col-lg-9">
-			<?php $ajaxSearchUser = isset($receiver)? $receiver->email: "";?>
-	        <?php $this->renderPartial("/course/widget/ajaxAddUser",array("ajaxSearchUser"=>$ajaxSearchUser,"ajaxBaseUrl"=>"/notification/ajaxLoadUser")); ?>
+			<?php if (!isset($receiver)){
+				$receiver = null;
+			}
+			?>
+	        <?php $this->renderPartial("/widgets/addUser",array("assignedUser"=>$receiver)); ?>
         </div>
 	</div>
     <div class="form-element-container row">
@@ -71,7 +74,11 @@
             <label>Tiêu đề tin nhắn &nbsp;<span class="required">*</span></label>
         </div>
         <div class="col col-lg-9">
+        	<?php if (isset($message)):?>
+        		<input class="class_title" size="60" maxlength="256" name="Message[title]" id="Message_title" type="text" value="<?php echo "Re: ".$message->title?>">
+        	<?php else:?>
             <?php echo $form->textField($model,'title',array('class'=>'class_title','size'=>60,'maxlength'=>256)); ?>
+        	<?php endif;?>
             <?php echo $form->error($model,'title'); ?>
         </div>
     </div>

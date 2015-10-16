@@ -1,6 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/utils.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/jquery/jquery.qtip.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/media/css/jquery/jquery.qtip.min.css" />

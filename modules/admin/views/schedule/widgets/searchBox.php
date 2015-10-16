@@ -15,7 +15,7 @@
         SearchBox.autocomplete({
             searchBox:'#teacherSearchBox',
             results:results,
-            resultDisplay:'usernameAndFullName',
+            resultLabel:'usernameAndFullName',
             selectCallback:function(id){
                 $('#searchTeacherId').val(id);
             }

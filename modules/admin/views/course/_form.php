@@ -243,8 +243,7 @@
 	<div class="form-element-container row">
 		<div class="col col-lg-3"><label for="Course_class">Tìm kiếm & gán thêm học sinh</label></div>
 		<div class="col col-lg-9">
-			<?php $ajaxSearchUser = Yii::app()->request->getPost('ajaxSearchUser', "");?>
-            <?php $this->renderPartial("widget/ajaxAddUser",array("ajaxSearchUser"=>$ajaxSearchUser)); ?>
+            <?php $this->renderPartial("/widgets/addUser",array("userRole"=>User::ROLE_STUDENT));?>
             <label class="hint">Gán thêm các học sinh có nhu cầu tham gia vào khóa học này!</label>
 		</div>
 	</div>
