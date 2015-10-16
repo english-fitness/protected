@@ -19,6 +19,15 @@
 		),
 		'email',
 		array(
+		   'name'=>'status',
+		   'value'=>'($data->statusOptions($data->status))',
+		   'filter'=>array(
+		   		Teacher::STATUS_OFFICIAL=>"GV chính thức",
+		   		Teacher::STATUS_TESTER=>"Tester",
+		   	),
+		   'htmlOptions'=>array('style'=>'width:135px;'),
+		),
+		array(
 		   'name' => 'phone',
 		   'value'=>'$data->displayContactIcons()', 
 		),

@@ -61,9 +61,11 @@ class ScheduleController extends Controller
 		}
 
 		if ($view == 'day'){
-			//get teacher id
-			//render the day view page
-			//do some pagination
+			if (isset($_GET['status']) && isset(Teacher::statusOptions()[$_GET['status']])){
+				$teacherStatus = $_GET['status'];
+			} else {
+				$teacherStatus = Teacher::STATUS_OFFICIAL;
+			}
 
 			if (isset($_REQUEST['page'])){
 				$page = $_REQUEST['page'];
@@ -80,7 +82,7 @@ class ScheduleController extends Controller
 
 			$query = "SELECT id FROM tbl_user " .
 					 "WHERE role = '" . User::ROLE_TEACHER . "' ".
-					 "AND status = " . User::STATUS_OFFICIAL_USER . " " .
+					 "AND status = " . $teacherStatus . " " .
 					 "LIMIT 12 OFFSET " . (($page - 1) * 12);
 			$teachers = Yii::app()->db->createCommand($query)->queryColumn();
 
@@ -460,8 +462,8 @@ class ScheduleController extends Controller
 			$teacher->unsetAttributes();
 			$criteria = new CDbCriteria();
 			$criteria->compare('role',User::ROLE_TEACHER);
-			$criteria->compare('status', User::STATUS_OFFICIAL_USER);
 			$criteria->compare('deleted_flag', 0);
+			$criteria->addCondition("status = " . Teacher::STATUS_OFFICIAL . " OR status = " . Teacher::STATUS_TESTER);
 			$teacher->setDbCriteria($criteria);
 			if(isset($_GET['User'])){
 				$teacher->attributes=$_GET['User'];

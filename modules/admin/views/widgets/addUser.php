@@ -49,17 +49,21 @@
     SearchBox.bindSearchEvent("#ajaxSearchUser", <?php echo $ajaxCall?>, displayUserSearchResult);
 
     $("#ajaxSearch").click(function(){
-        SearchBox.search("#ajaxSearchUser", <?php echo $ajaxCall?>, displayUserSearchResult);
+        var searchBox = $("#ajaxSearchUser");
+        SearchBox.search(searchBox, <?php echo $ajaxCall?>, function(results){
+            displayUserSearchResult(results, true);
+            searchBox.focus();
+        });
     });
 
-    function displayUserSearchResult(results){
+    function displayUserSearchResult(results, search){
         SearchBox.autocomplete({
             searchBox:'#ajaxSearchUser',
             results:results,
             resultLabel:'usernameAndFullName',
             resultValue:'fullName',
             selectCallback:AddUser,
-        }, true);
+        }, search);
     }
 
     function AddUser(id, value, label){

@@ -78,6 +78,13 @@
 ?>
 
 <div class="details-class">
+	<div class="text-center pB10">
+		<?php if (!isset($_GET['status']) || $_GET['status'] != Teacher::STATUS_TESTER):?>
+			<a href="/admin/schedule/view?status=<?php echo Teacher::STATUS_TESTER?>">Lịch kiểm tra hệ thống</a>
+		<?php else:?>
+			<a href="/admin/schedule/view">Lịch học</a>
+		<?php endif;?>
+	</div>
 	<?php $this->renderPartial('widgets/searchBox')?>
 	<?php $this->renderPartial('widgets/colorLegend')?>
 	<div style='margin:0 auto; text-align:center'>
