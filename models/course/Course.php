@@ -58,7 +58,8 @@ class Course extends CActiveRecord
 			array('created_user_id, teacher_id, subject_id, status, type, final_price, total_sessions, payment_type,
                    total_of_student, modified_user_id, deleted_flag', 'numerical', 'integerOnly'=>true),
 			array('title', 'length', 'max'=>256),
-			array('content, level, curriculum, modified_date, final_price, total_of_student, deleted_flag, teacher_form_url, student_form_url', 'safe'),
+			array('level, curriculum', 'requireLevel'),
+			array('content, modified_date, final_price, total_of_student, deleted_flag, teacher_form_url, student_form_url', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, created_user_id, teacher_id, subject_id, title, content, type, status, total_of_student, created_date, modified_date, modified_user_id', 'safe', 'on'=>'search'),
@@ -72,6 +73,17 @@ class Course extends CActiveRecord
 			$modelRules[] = array('modified_user_id', 'default', 'value'=>Yii::app()->user->id, 'setOnEmpty'=>false, 'on'=>'update');
 		}
 		return $modelRules;//Return model rules
+	}
+
+	public function requireLevel(){
+		if ($this->type == self::TYPE_COURSE_NORMAL){
+			if (empty($this->level)){
+				$this->addError("level", "Trình độ không được phép trống");
+			}
+			if (empty($this->curriculum)){
+				$this->addError("curriculum", "Giáo trình không được phép trống");
+			}
+		}
 	}
 
 	/**

@@ -156,6 +156,7 @@
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'level'); ?>
+			<span class="required">*</span>
 		</div>
 		<div class="col col-lg-9">
 			<?php echo $form->textField($model,'level',array_merge(array('size'=>60,'maxlength'=>50))); ?>
@@ -165,6 +166,7 @@
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'curriculum'); ?>
+			<span class="required">*</span>
 		</div>
 		<div class="col col-lg-9">
 			<?php echo $form->textField($model,'curriculum',array_merge(array('size'=>60,'maxlength'=>50))); ?>
@@ -247,26 +249,7 @@
             <label class="hint">Gán thêm các học sinh có nhu cầu tham gia vào khóa học này!</label>
 		</div>
 	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'teacher_form_url'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->textField($model,'teacher_form_url', array()); ?>
-			<?php echo $form->error($model,'teacher_form_url'); ?>
-		</div>
-	</div>
-	<div class="form-element-container row">
-		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'student_form_url'); ?>
-		</div>
-		<div class="col col-lg-9">
-			<?php echo $form->textField($model,'student_form_url', array()); ?>
-			<?php echo $form->error($model,'student_form_url'); ?>
-		</div>
-	</div>
 </fieldset>
-<div class="clearfix h20">&nbsp;</div>	
 <?php endif;?>
 <?php if ($action == 'update'):?>
 <div class="clearfix h20">&nbsp;</div>

@@ -74,11 +74,13 @@ class CourseController extends Controller
 			$model->attributes=$_POST['Course'];
 			$model->created_user_id=Yii::app()->user->getId();
 			$model->status = Course::STATUS_PENDING;//Pending status
-			$sessionValues = $_POST['Session'];//Session schedule values
-			$checkValidTime = $registration->validateGenerateSession($sessionValues);
             
-			if(isset($sessionValues['dayOfWeek']) && $checkValidTime){
-				if($model->save()){
+            //TODO: Must rework
+            $transaction = Yii::app()->db->beginTransaction();
+
+            if($model->save()){
+            	$sessionValues = $_POST['Session'];//Session schedule values
+				if(isset($sessionValues['dayOfWeek']) && $registration->validateGenerateSession($sessionValues)){
 					//Create schedule session of Course					
 					$sessionValues['course_id'] = $model->id;//Set session course id
 					$sessionValues['teacher_id'] = $model->teacher_id;//Set session teacher id
@@ -113,10 +115,12 @@ class CourseController extends Controller
                             $model->save();
                         }
                     }
+                    $transaction->commit();
+                    $this->redirect(array('index?type='.$model->type));
+				} else{
+					$transaction->rollback();
+					$params['error'] = "Vui lòng kiểm tra lại kế hoạch chi tiết trong tuần!";
 				}
-				$this->redirect(array('index?type='.$model->type));
-			}else{
-				$params['error'] = "Vui lòng kiểm tra lại kế hoạch chi tiết trong tuần!";
 			}
 		}
 		$params['model'] = $model;
@@ -140,7 +144,7 @@ class CourseController extends Controller
 		if(count($assignedStudentIds)==0) $assignedStudentIds = array(0);
 		$availableStudents = User::model()->findAll(array("condition"=>"id IN (".implode(",", $assignedStudentIds).")"));
 		$priorityTeachers = $model->priorityTeachers();//Priority Teachers
-		if(isset($_POST['Course']) || isset($_POST['Course']))
+		if(isset($_POST['Course']))
 		{
 			$model->attributes=$_POST['Course'];
 			if($model->save()){
@@ -160,36 +164,36 @@ class CourseController extends Controller
 					$changeStatus = true;
 				}
 				$model->resetStatusSessions($changeStatus);//Reset status of sessions
-				// $this->redirect(array('index?type='.$model->type));
-			}
-			if (isset($_POST['scheduleChange']) && isset($_POST['Session']))
-			{
-				$sessionValues = $_POST['Session'];
-				$planSet = isset($sessionValues['plan_duration']) 
-						&& isset($sessionValues['dayOfWeek']) 
-						&& isset($sessionValues['startHour']) 
-						&& isset($sessionValues['startMin']);
-				if ($planSet)
+
+				if (isset($_POST['scheduleChange']) && isset($_POST['Session']))
 				{
-                    switch ($_POST['scheduleChange']){
-                        case 'add':
-                            if ($_POST['Session']['numberOfSession'] > 0){
-                                $students = $_POST['Student'];
-                                if (count($extraUserIds) > 0){
-                                    array_push($students, $extraUserIds);
-                                }
-                                $model->addSchedule($sessionValues, $students);
-                            }
-                            break;
-                        case 'change':
-                            $model->changeSchedule($sessionValues);
-                            break;
-                        default:
-                            break;
-                    }
+					$sessionValues = $_POST['Session'];
+					$planSet = isset($sessionValues['plan_duration']) 
+							&& isset($sessionValues['dayOfWeek']) 
+							&& isset($sessionValues['startHour']) 
+							&& isset($sessionValues['startMin']);
+					if ($planSet)
+					{
+	                    switch ($_POST['scheduleChange']){
+	                        case 'add':
+	                            if ($_POST['Session']['numberOfSession'] > 0){
+	                                $students = $_POST['Student'];
+	                                if (count($extraUserIds) > 0){
+	                                    array_push($students, $extraUserIds);
+	                                }
+	                                $model->addSchedule($sessionValues, $students);
+	                            }
+	                            break;
+	                        case 'change':
+	                            $model->changeSchedule($sessionValues);
+	                            break;
+	                        default:
+	                            break;
+	                    }
+					}
 				}
+				$this->redirect(array('index?type='.$model->type));
 			}
-			$this->redirect(array('index?type='.$model->type));
 		}
 
 		$this->render('update',array(

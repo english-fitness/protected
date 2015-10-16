@@ -88,9 +88,6 @@
 				</select>
 			</div>
 			<?php echo $form->error($model,'subject_id'); ?>
-			<?php if(isset($preCourse)):?>
-			<label class="hint">Gợi ý từ đơn xin học: <?php echo Subject::model()->displayClassSubject($preCourse->subject_id);?></label>
-			<?php endif;?>
 		</div>
 	</div>
 	<div class="form-element-container row">
@@ -129,6 +126,7 @@
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'level'); ?>
+			<span class="required">*</span>
 		</div>
 		<div class="col col-lg-9">
 			<?php echo $form->textField($model,'level',array_merge(array('size'=>60,'maxlength'=>50))); ?>
@@ -138,6 +136,7 @@
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'curriculum'); ?>
+			<span class="required">*</span>
 		</div>
 		<div class="col col-lg-9">
 			<?php echo $form->textField($model,'curriculum',array_merge(array('size'=>60,'maxlength'=>50))); ?>
