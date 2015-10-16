@@ -40,6 +40,7 @@ class PreregisterUser extends CActiveRecord
     const CARE_STATUS_DISABLED = 3;//Disabled status
     const CARE_STATUS_REGISTERED = 4;
     const CARE_STATUS_LATER = 5;
+    const CARE_STATUS_SCHEDULED = 6;
 	
 	/**
 	 * @return string the associated database table name
@@ -214,9 +215,10 @@ class PreregisterUser extends CActiveRecord
 			self::CARE_STATUS_PENDING => 'Chưa chăm sóc',
 			self::CARE_STATUS_APPROVED => 'Hẹn chăm sóc',
 			self::CARE_STATUS_WORKING => 'Đang chăm sóc',
-            self::CARE_STATUS_REGISTERED => 'Đăng ký hệ thống',
-			self::CARE_STATUS_DISABLED => 'Hủy chăm sóc',
 			self::CARE_STATUS_LATER => 'Chăm sóc sau',
+            self::CARE_STATUS_REGISTERED => 'Đăng ký hệ thống',
+            self::CARE_STATUS_SCHEDULED => 'Đã xếp lịch',
+			self::CARE_STATUS_DISABLED => 'Hủy chăm sóc',
 		);
 		if($careStatus==null){
 			return $careStatusOptions;
@@ -224,6 +226,32 @@ class PreregisterUser extends CActiveRecord
 			return $careStatusOptions[$careStatus];
 		}
 		return null;
+	}
+
+	public static function registeredCareStatusOptions($careStatus=null){
+		$careStatusOptions = array(
+            self::CARE_STATUS_REGISTERED => 'Đăng ký hệ thống',
+			self::CARE_STATUS_SCHEDULED => 'Đã xếp lịch',
+		);
+		if($careStatus==null){
+			return $careStatusOptions;
+		}elseif(isset($careStatusOptions[$careStatus])){
+			return $careStatusOptions[$careStatus];
+		}
+		return null;
+	}
+
+	public static function allowableSource(){
+		return array(
+			'Online'=>'Online',
+			'Online - Hocmai.vn'=>'Online - Hocmai.vn',
+			'Online - Facebook'=>'Online - Facebook',
+			'Offline'=>'Offline',
+			'Offline - Ba đình'=>'Offline - Ba đình',
+			'Offline - Ngôi sao'=>'Offline - Ngôi sao',
+			'Người quen'=>'Người quen',
+			'Nhân viên - HM'=>'Nhân viên - HM',
+		);
 	}
 	
 	public function getWeekdays(){

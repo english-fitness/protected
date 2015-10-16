@@ -1,4 +1,5 @@
 <style type="text/css">
+	/* notable */
 	.notable{
 		color: darkviolet;
 		background-color: lightblue !important;
@@ -21,9 +22,49 @@
 	.notable.selected a{
 		color: white;
 	}
+	/* registeredUser */
+	.registeredUser{
+		color: crimson;
+		background-color: lightblue !important;
+		font-weight: bold;
+	}
+	.registeredUser a{
+		color: crimson;
+	}
+	.registeredUser:hover{
+		color: blue;
+		background-color: #BCE774 !important;
+	}
+	.registeredUser:hover a{
+		color: blue;
+	}
+	.registeredUser.selected{
+		color: white;
+		background-color: #245ba7 !important;
+	}
+	.registeredUser.selected a{
+		color: white;
+	}
 </style>
 <?php 
 	$createdDateFilter = Yii::app()->controller->getQuery('PreregisterUser[created_date]', '');
+
+	function setHighlightClass($status){
+		switch ($status) {
+			case PreregisterUser::CARE_STATUS_LATER:
+				return array("class"=>"notable");
+				break;
+			case PreregisterUser::CARE_STATUS_REGISTERED:
+				return array("class"=>"registeredUser");
+				break;
+			case PreregisterUser::CARE_STATUS_SCHEDULED:
+				return array("class"=>"scheduledUser");
+				break;
+			default:
+				return array();
+				break;
+		}
+	}
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'gridView',
@@ -32,7 +73,7 @@
 	'enableHistory'=>true,
 	'ajaxVar'=>'',
 	'pager' => array('class'=>'CustomLinkPager'),
-	'rowHtmlOptionsExpression'=>'($data->care_status == PreregisterUser::CARE_STATUS_LATER)?array("class"=>"notable"):array()',
+	'rowHtmlOptionsExpression'=>'setHighlightClass($data->care_status)',
 	'columns'=>array(
 		'fullname',
         array(
@@ -45,7 +86,7 @@
         array(
             'name'=>'source',
             'value'=>'$data->source',
-            'filter'=>PreregisterUser::getSelectFilter('source'),
+            'filter'=>PreregisterUser::allowableSource(),
             'htmlOptions'=>array('style'=>'min-width:100px;'),
         ),
 		array(

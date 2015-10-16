@@ -144,6 +144,10 @@
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-4">
+			<label>Nguồn:&nbsp;</label>
+			<?php echo $model->source;?>
+		</div>
+		<div class="col col-lg-4">
 			<label>Mã khuyến mại:&nbsp;</label>
 			<?php echo $model->promotion_code;?>
 		</div>

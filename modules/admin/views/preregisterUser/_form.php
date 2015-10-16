@@ -140,7 +140,7 @@
 		</div>
 		<div class="col col-lg-9">
 			<div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->textField($model,'source', array_merge($readOnlyAttrs, array('size'=>30,'maxlength'=>30))); ?>
+				<?php echo $form->dropDownList($model,'source', PreregisterUser::allowableSource(), $readOnlyAttrs); ?>
 					<?php echo $form->error($model,'source'); ?>
 			</div>
 		</div>
