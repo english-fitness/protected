@@ -104,9 +104,11 @@
 			<?php echo $form->labelEx($model,'whiteboard'); ?>
 		</div>
 		<div class="col col-lg-9" id="whiteboard<?php echo $model->id;?>">
-			<?php if($model->whiteboard && $model->status<=Session::STATUS_WORKING):?>
+			<?php if($model->whiteboard):?>
 				<span><?php echo Yii::app()->board->generateUrl($model->whiteboard); ?></span>
-				<a href="javascript:removeWhiteboard('<?php echo $model->id;?>', '<?php echo $model->whiteboard;?>')" class="fR pR5 clrRed">Xóa lớp ảo </a>
+				<?php if ($model->status<=Session::STATUS_WORKING || Yii::app()->user->isAdmin()):?>
+					<a href="javascript:removeWhiteboard('<?php echo $model->id;?>', '<?php echo $model->whiteboard;?>')" class="fR pR5 clrRed">Xóa lớp ảo </a>
+				<?php endif;?>
 			<?php else:?>
 				<!--<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 1, 0, 2);">Lớp nhỏ P2P Bình thường</a> hoặc-->
 				<a href="javascript: createBoard('<?php echo $model->id;?>', 0, 0, 0, 2);">Lớp nhỏ Server nhỏ Bình thường</a> hoặc
