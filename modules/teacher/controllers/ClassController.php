@@ -2,12 +2,6 @@
 
 class ClassController extends Controller
 {
-    public function init()
-    {
-        if(Yii::app()->user->isGuest)
-            $this->redirect("/");
-    }
-    
     public function actionIndex()
     {
 		$this->subPageTitle = 'Courses List';

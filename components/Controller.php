@@ -25,6 +25,10 @@ class Controller extends CController
 	 */
 	public $breadcrumbs=array();
 
+	public function init(){
+		Yii::app()->clientScript->registerCoreScript('jquery');
+	}
+
 	protected function renderJSON($data)
 	{
 		header('Content-type: application/json');

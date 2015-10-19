@@ -2,10 +2,6 @@
 
 class AccountController extends Controller
 {
-    public function init(){
-        if(Yii::app()->user->isGuest)
-        $this->redirect("/");
-    }
     //Account index
     public function actionIndex()
     {

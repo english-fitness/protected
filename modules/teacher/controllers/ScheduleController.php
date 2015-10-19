@@ -2,12 +2,6 @@
 
 class ScheduleController extends Controller
 {
-    public function init()
-    {
-        if(Yii::app()->user->isGuest)
-            $this->redirect("/");
-    }
-    
     public function actionRegisterSchedule(){
         $this->subPageTitle = 'Register Schedule';
     	$teacherId = Yii::app()->user->id;

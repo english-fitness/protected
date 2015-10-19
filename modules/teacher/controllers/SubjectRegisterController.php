@@ -2,11 +2,6 @@
 
 class SubjectRegisterController extends Controller
 {
-    public function init()
-    {
-
-    }
-
     public function actionIndex()
     {
 		$this->subPageTitle = 'Đăng ký môn dạy';

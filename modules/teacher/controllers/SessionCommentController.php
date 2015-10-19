@@ -2,12 +2,6 @@
 
 class SessionCommentController extends Controller
 {
-    public function init()
-    {
-        if(Yii::app()->user->isGuest)
-            $this->redirect("/");
-    }
-    
     public function actionView(){
 		$this->subPageTitle = "View Reminders";
 		if (isset($_REQUEST['sessionId'])){
