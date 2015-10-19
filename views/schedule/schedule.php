@@ -5,77 +5,17 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="/media/css/base/style.css" />
-        <link rel="stylesheet" type="text/css" href="/themes/daykem/css/admin.css" />
-        <link rel="stylesheet" type="text/css" href="/themes/daykem/bootstrap/css/bootstrap.min.css" />
-        <link href="/themes/daykem/css/student.css" type="text/css" rel="stylesheet">
-        <link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
-        <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
-        <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
-        <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/utils.js"></script>
         <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
         <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
+        <link rel="stylesheet" type="text/css" href="/media/css/base/style.css" />
+        <link rel="stylesheet" type="text/css" href="/themes/daykem/bootstrap/css/bootstrap.min.css" />
+        <link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
+        <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
+        <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/utils.js"></script>
     </head>
     <body>
         <style>
-            .reservedSlot{
-                -webkit-appearance:button;
-                -moz-appearance:button;
-            }
-            .ui-autocomplete-input, .ui-menu, .ui-menu-item {
-                z-index: 99999;
-            }
-            .fc-event{
-                cursor:pointer;
-            }
-            .fc-time-grid-event .fc-time{
-                display:none;
-            }
-            .fc-title{
-                margin:auto 0 auto 0;
-                vertical-align:middle;
-                width: 100%;
-                height:100%;
-                text-align:center;
-                overflow:hidden !important;
-                text-overflow: ellipsis;
-            }
-            .fc-content{
-                vertical-align:middle;
-                height:100%;
-            }
-            .wday-select{
-                outline:none !important;
-                float:left;
-                margin: 5px;
-            }
-            .fc-toolbar button{
-                display:none;
-            }
-            .week-nav{
-                width: 40px;
-                height: 54px;
-                float: left;
-                margin: 5px;
-                font-size: 20px;
-                font-weight: bold;
-            }
-            .calendar-holder{
-                margin:35px;
-                position:relative;
-            }
-            .calendar-loading-indicator{
-                display:none;
-                width:100%;
-                height:1170px;
-                position:absolute;
-                top:49px;
-                left:0;
-                background: url("/media/images/icon/large-loader-128.gif") no-repeat center center;
-                background-color: rgba(250,250,250,0.7);
-                z-index: 99999;
-            }
             .header{
                 padding:15px;
                 display:table-cell;

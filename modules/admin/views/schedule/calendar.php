@@ -2,6 +2,7 @@
 <!--
 <link href="/media/js/calendar/fullcalendar.print.css" rel="stylesheet" media="print">
 -->
+<link rel="stylesheet" type="text/css" href="/media/css/calendar.css">
 <link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/student.css" type="text/css" rel="stylesheet">
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
@@ -9,65 +10,6 @@
 <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/schedule.js"></script>
-
-<style>
-.reservedSlot{
-	-webkit-appearance:button;
-	-moz-appearance:button;
-}
-.ui-autocomplete-input, .ui-menu, .ui-menu-item {
-	z-index: 99999;
-}
-.fc-event{
-	cursor:pointer;
-}
-.fc-time-grid-event .fc-time{
-	display:none;
-}
-.fc-title{
-	margin:auto 0 auto 0;
-	vertical-align:middle;
-	width: 100%;
-	height:100%;
-	text-align:center;
-	overflow:hidden !important;
-    text-overflow: ellipsis;
-}
-.fc-content{
-	vertical-align:middle;
-	height:100%;
-}
-.wday-select{
-	float:left;
-	margin: 5px;
-}
-.fc-toolbar button{
-	display:none;
-}
-.week-nav{
-	width: 40px;
-	height: 54px;
-	float: left;
-	margin: 5px;
-	font-size: 20px;
-	font-weight: bold;
-}
-.calendar-holder{
-	margin:35px;
-	position:relative;
-}
-.calendar-loading-indicator{
-	display:none;
-	width:100%;
-	height:1170px;
-	position:absolute;
-	top:49px;
-	left:0;
-	background: url("/media/images/icon/large-loader-128.gif") no-repeat center center;
-	background-color: rgba(250,250,250,0.7);
-	z-index: 99999;
-}
-</style>
 
 <?php
 	$classModels = Classes::model()->findAll(array('order'=>'name ASC'));

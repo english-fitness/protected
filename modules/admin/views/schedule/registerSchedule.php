@@ -1,33 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
-<style>
-.calendar-td{
-	border: 1px solid;
-	border-color: white;
-	text-align: center;
-}
-.calendar-th{
-	width: 150px;
-	height:41px;
-	border: 1px solid;
-	border-color: white;
-	text-align: center;
-	background: buttonface;
-}
-button.schedule{
-	border-radius:0px !important;
-	-moz-appearance:none !important;
-	-webkit-appearance:none !important;
-    width: 100%;
-    height: 35px;
-    outline: none;
-    border: solid rgba(120,120,120,0.35) 1px;
-}
-.booked{
-	background-color:lime !important;
-    cursor:not-allowed !important;
-}
-</style>
 
 <?php
 	$teacherModel = User::model()->findByPk($teacher);
@@ -105,7 +77,7 @@ button.schedule{
 			
 		</div>
 		<div class="col-md-7">
-			<input type="button" id="saveSchedule" value="Lưu lịch dạy" class="text-center gui btn btn-primary" />
+			<input type="button" id="saveSchedule" value="Lưu lịch dạy" class="text-center schedule-submit btn btn-primary" />
 		</div>
 	</div>
 </div>

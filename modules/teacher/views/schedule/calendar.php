@@ -1,28 +1,9 @@
 <link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
 <link href="/media/js/calendar/fullcalendar.print.css" rel="stylesheet" media="print">
-<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/student.css" type="text/css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
+<link rel="stylesheet" type="text/css" href="/media/css/calendar.css">
+<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.min.js'></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
 
-<style>
-.reservedSlot{
-	-webkit-appearance:button;
-	-moz-appearance:button;
-}
-.fc-time-grid-event .fc-time{
-	display:none;
-}
-.fc-title{
-	margin:auto 0 auto 0;
-	height:32.5px;
-	vertical-align:middle;
-	max-width:120px;
-	text-align:center;
-	overflow:hidden !important;
-    text-overflow: ellipsis;
-}
-</style>
 <div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Schedule</p></div>
 <?php $this->renderPartial('teacher.views.class.myCourseTab'); ?>
 <div class="details-class">

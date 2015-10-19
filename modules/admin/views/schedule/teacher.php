@@ -1,51 +1,12 @@
 <link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
 <link href="/media/js/calendar/fullcalendar.print.css" rel="stylesheet" media="print">
-<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/student.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/media/css/calendar.css">
+<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
+<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
+<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/lang_vi.js'></script>
 <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
 <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/schedule.js"></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/lang_vi.js'></script>
-
-<style>
-.reservedSlot{
-	cursor:pointer;
-	-webkit-appearance:button;
-	-moz-appearance:button;
-}
-.ui-autocomplete-input, .ui-menu, .ui-menu-item {
-	z-index: 99999;
-}
-.fc-time-grid-event .fc-time{
-	display:none;
-}
-.fc-title{
-	margin:auto 0 auto 0;
-	vertical-align:middle;
-	width: 100%;
-	height:100%;
-	text-align:center;
-	overflow:hidden !important;
-    text-overflow: ellipsis;
-}
-.fc-content{
-	vertical-align:middle;
-	height:100%;
-}
-.wday-select{
-	float:left;
-	margin: 5px;
-}
-.week-nav{
-	width: 40px;
-	height: 54px;
-	float: left;
-	margin: 5px;
-	font-size: 20px;
-	font-weight: bold;
-}
-</style>
 
 <?php
 	$teacherModel = User::model()->findByPk($teacher);

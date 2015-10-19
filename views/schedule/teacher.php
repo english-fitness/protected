@@ -6,9 +6,7 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/media/css/base/style.css" />
-    <link rel="stylesheet" type="text/css" href="/themes/daykem/css/admin.css" />
     <link rel="stylesheet" type="text/css" href="/themes/daykem/bootstrap/css/bootstrap.min.css" />
-    <link href="/themes/daykem/css/student.css" type="text/css" rel="stylesheet">
     <link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
     <script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
@@ -16,45 +14,6 @@
     <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/utils.js"></script>
     <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
     <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.js'></script>
-
-    <style>
-        .reservedSlot{
-            cursor:pointer;
-            -webkit-appearance:button;
-            -moz-appearance:button;
-        }
-        .ui-autocomplete-input, .ui-menu, .ui-menu-item {
-            z-index: 99999;
-        }
-        .fc-time-grid-event .fc-time{
-            display:none;
-        }
-        .fc-title{
-            margin:auto 0 auto 0;
-            vertical-align:middle;
-            width: 100%;
-            height:100%;
-            text-align:center;
-            overflow:hidden !important;
-            text-overflow: ellipsis;
-        }
-        .fc-content{
-            vertical-align:middle;
-            height:100%;
-        }
-        .wday-select{
-            float:left;
-            margin: 5px;
-        }
-        .week-nav{
-            width: 40px;
-            height: 54px;
-            float: left;
-            margin: 5px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-    </style>
 </head>
 <?php
 	$teacherModel = User::model()->findByPk($teacher);

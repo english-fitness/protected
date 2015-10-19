@@ -2,42 +2,6 @@
 <?php $this->renderPartial('teacher.views.class.myCourseTab'); ?>
 <div class="details-class">
 <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
-<style>
-.calendar-td{
-	border: 1px solid;
-	border-color: white;
-	text-align: center;
-}
-.calendar-th{
-	width: 150px;
-	height:41px;
-	border: 1px solid;
-	border-color: white;
-	text-align: center;
-	background: buttonface;
-}
-button.schedule{
-	border-radius:0px !important;
-	-moz-appearance:none !important;
-	-webkit-appearance:none !important;
-    width: 100%;
-    height: 35px;
-    outline: none;
-    border: solid rgba(120,120,120,0.35) 1px;
-}
-.bulk-select{
-	cursor:pointer !important;
-	z-index:-999;
-}
-.bulk-selected{
-	border-color:rgba(82, 168, 236, 0.8);
-	border-width:2px;
-}
-.booked{
-	background-color:lime !important;
-    cursor:not-allowed !important;
-}
-</style>
 <form id="schedule" method="POST" style="height:1000px">
 	<div class="form-group" style='float:left'>
 		<label class="form-label">Week:</label>
@@ -62,18 +26,6 @@ button.schedule{
 			<button id='next-week' class='btn' style='float:left; height:36px'>Next</button>
 		</div>
 	</div>
-	<!--
-	<div class="form-group" style='float:right'>
-		<div style='margin-top:25px'>
-			<button id='bulk-action-activate' class='btn' style='float:left; height:36px'>Multiple Select</button>
-			<select id='bulk-select' class="form-control" style="width:120px; float:left; margin: 0px 10px 10px 10px; display:none">
-				<option value='0'>N/a</option>
-				<option value='1' style='background-color:yellow'>Available</option>
-			</select>
-			<button id='bulk-action-confirm' class='btn' style='float:left; height:36px; display:none'>OK</button>
-		</div>
-	</div>
-	-->
 	<div>
 		<table id="scheduleRegistration" class="table-calendar" style="clear:both">
 			<?php
