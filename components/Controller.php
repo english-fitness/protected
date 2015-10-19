@@ -11,6 +11,7 @@ class Controller extends CController
 	 */
 	public $layout='//layouts/main';
 	public $subPageTitle=null;//Sub Page Title
+	public $device=null;
 	public $loadJQuery=true;//Load Jquery
 	public $loadMathJax=false;//Load MathJax
 	/**

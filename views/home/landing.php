@@ -1,4 +1,4 @@
-<?php 
+<?php
 $referrer = "";
 if (isset($_REQUEST['ref'])){
     $knownReferrer = array(

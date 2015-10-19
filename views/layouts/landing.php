@@ -3,7 +3,11 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=1366">
+        <?php if ($this->device == 'mobile'):?>
+            <meta name="viewport" content="width=720">
+        <?php else:?>
+            <meta name="viewport" content="width=1366">
+        <?php endif;?>
         <title>Speak up - Học tiếng Anh online</title>
         <!--favicon-->
         <link rel="apple-touch-icon" sizes="57x57" href="/media/images/favicons/apple-touch-icon-57x57.png">
@@ -31,7 +35,17 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/flick/jquery-ui.css">
         <script src="/media/js/bootstrap.min.js"></script>
-        <script src="/media/home/js/landing.js"></script>
+        <?php if ($this->device == 'mobile'):?>
+            <script src="/media/home/js/landing-m.js"></script>
+            <script type="text/javascript">
+                $(document).bind('mobileinit',function(){
+                    $.mobile.loadingMessage = false;
+                })
+            </script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
+        <?php else:?>
+            <script src="/media/home/js/landing.js"></script>
+        <?php endif;?>
         <script src="/media/home/js/modernizr.js"></script>
         <script src="/media/home/js/masonry.pkgd.min.js"></script>
         <script src="/media/home/js/jquery/jquery.flexslider-min.js"></script>
