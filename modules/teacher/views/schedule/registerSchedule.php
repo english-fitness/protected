@@ -1,3 +1,4 @@
+<script src="/media/home/js/jquery.lightbox/html5lightbox.js"></script>
 <div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Register Schedules</p></div>
 <?php $this->renderPartial('teacher.views.class.myCourseTab'); ?>
 <div class="details-class">
@@ -25,6 +26,9 @@
 			</select>
 			<button id='next-week' class='btn' style='float:left; height:36px'>Next</button>
 		</div>
+	</div>
+	<div class="fR mR10">
+		<a href="https://youtu.be/-mzyrVrmR4U" class="html5lightbox">Click here for instruction video</a>
 	</div>
 	<div>
 		<table id="scheduleRegistration" class="table-calendar" style="clear:both">
