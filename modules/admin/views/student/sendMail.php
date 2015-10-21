@@ -7,7 +7,6 @@
 		switch ($student->status){
 			case Student::STATUS_NEW_REGISTER:
 			case Student::STATUS_TRIAL_TEST:
-				exit($student->status . " - " . Student::STATUS_NEW_REGISTER . " - " . Student::STATUS_TRIAL_TEST);
 				$template = "testSchedule";
 				break;
 			case Student::STATUS_TRIAL_TEACHER:
