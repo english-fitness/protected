@@ -29,7 +29,7 @@ class StudentController extends Controller
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
 				'actions'=>array('index','view','changeToTeacher','create','update', 'manage', 'saleUpdate',
-								 'courseWidget', 'tuitionWidget', 'studentWidget'),
+								 'courseWidget', 'tuitionWidget', 'studentWidget', 'sendMail', 'ajaxSendMail'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -295,7 +295,7 @@ class StudentController extends Controller
 	{
 		$this->subPageTitle = 'Danh sách học sinh';
 		$this->loadJQuery = false;//Not load jquery
-		$model = new User('search');
+		$model = new User();
 		$model->unsetAttributes();  // clear any default values
 		$studentFilters = Yii::app()->request->getQuery('Student', array());
 		if(isset($_GET['User'])){
@@ -347,9 +347,13 @@ class StudentController extends Controller
 	 * @return User the loaded model
 	 * @throws CHttpException
 	 */
-	public function loadModel($id)
+	public function loadModel($id, $with=array())
 	{
-		$model=User::model()->findByPk($id);
+		if (count($with) > 0){
+			$model=User::model()->with($with)->findByPk($id);
+		} else {
+			$model=User::model()->findByPk($id);
+		}
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -429,6 +433,46 @@ class StudentController extends Controller
 
 		$this->render('widgets/student', array(
 			'student' => $student,
+		));
+	}
+
+	public function actionSendMail($sid){
+		$this->subPageTitle="Gửi Email";
+
+		$student = $this->loadModel($sid, array("student"));
+
+		$this->render('sendMail', array(
+			'student'=>$student,
+		));
+	}
+
+	public function actionAjaxSendMail($sid){
+		$student = $this->loadModel($sid, array("student"));
+
+		if (isset($_POST['Mail'])){
+			$params = $_POST['Mail'];
+			$params['username'] = $student->username;
+			if (!empty($params['sender']) &&
+				!empty($params['template']) &&
+				!empty($params['email']) &&
+				ClsMailer::validateTemplate($params['template'], $params)
+				)
+			{
+				$receiver = array(
+					'name'=>$student->fullname(),
+					'email'=>$params['email'],
+				);
+				if (ClsMailer::sendMail($params['sender'], $receiver, $params['template'], $params) === true){
+					$this->renderJSON(array(
+						"success"=>true,
+					));
+				}
+
+			}
+		}
+
+		$this->renderJSON(array(
+			"success"=>false,
 		));
 	}
 }

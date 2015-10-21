@@ -8,6 +8,9 @@
 		border: none;
 	}
 </style>
+<div class="row">
+	<a href="/admin/student/sendMail/sid/<?php echo $sid?>" class="btn btn-primary fR mR10">Gửi Email</a>
+</div>
 <div class="col col-lg-3">
 	<div class="row">
 		<h3>

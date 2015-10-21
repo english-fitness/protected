@@ -45,6 +45,9 @@
 	        <h2 class="page-title mT10">Ghi chú chăm sóc, tư vấn</h2>
 	    </div>
 	    <div class="col col-lg-6 for-toolbar-buttons">
+	    	<div class="btn-group">
+	    		<a href="/admin/student/sendMail/sid/<?php echo $user->id?>" class="btn btn-primary fR mR10">Gửi Email</a>
+	    	</div>
 	        <div class="btn-group">
 	        	<button class="btn btn-primary" name="form_action" type="submit"><i class="icon-save"></i>Lưu lại</button>
 	        	<button class="btn btn-default cancel" name="form_action" type="button" onclick="cancel();"><i class="icon-undo"></i>Bỏ qua</button>
@@ -89,6 +92,12 @@
                 echo $student->official_start_date != '' ? date('d-m-Y', strtotime($student->official_start_date)) : '';
             ?>
 		</div>
+		<div class="col col-lg-4">
+			<label>Nguồn:&nbsp;</label>
+            <?php
+                echo $preregisterUser->source;
+            ?>
+		</div>
 	</div>
     <div class="form-element-container row">
         <div class="col col-lg-4">
@@ -112,7 +121,7 @@
 		</div>
 		<div class="col col-lg-9">
 			<div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->dropDownList($preregisterUser,'care_status', $preregisterUser->careStatusOptions(), array()); ?>
+				<?php echo $form->dropDownList($preregisterUser,'care_status', $preregisterUser->registeredCareStatusOptions(), array()); ?>
 				<?php echo $form->error($preregisterUser,'care_status'); ?>
 			</div>
 			<div class="col col-lg-7 pL0i pR0i">
@@ -134,21 +143,12 @@
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
-			<?php echo $form->labelEx($student,'sale_status'); ?>
+			<?php echo $form->labelEx($student,'last_sale_date'); ?>
 		</div>
 		<div class="col col-lg-9">
 			<div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->textField($student,'sale_status', array_merge($readonlyAttrs, array('size'=>60,'maxlength'=>80))); ?>
-				<?php echo $form->error($student,'sale_status'); ?>
-			</div>
-			<div class="col col-lg-7 pL0i pR0i">
-				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($preregisterUser,'last_sale_date', array('class'=>'mT10')); ?>
-				</div>
-				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textField($preregisterUser,'last_sale_date', array('class'=>'datepicker','placeholder'=>'Định dạng ngày tư vấn cuối yyyy-mm-dd')); ?>
-					<?php echo $form->error($preregisterUser,'last_sale_date'); ?>
-				</div>
+				<?php echo $form->textField($preregisterUser,'last_sale_date', array('class'=>'datepicker','placeholder'=>'Định dạng ngày tư vấn cuối yyyy-mm-dd')); ?>
+				<?php echo $form->error($preregisterUser,'last_sale_date'); ?>
 			</div>
 		</div>
 	</div>
@@ -234,15 +234,6 @@
 			<div class="col col-lg-5 pL0i pR0i">
 				<?php echo $form->textField($saleHistory,'sale_note', array('placeholder'=>'Ghi chú tư vấn, chăm sóc')); ?>
 				<?php echo $form->error($saleHistory,'sale_note'); ?>
-			</div>
-			<div class="col col-lg-7 pL0i pR0i">
-				<div class="col col-lg-4 pL0i text-right">
-					<?php echo $form->labelEx($saleHistory,'sale_status', array('class'=>'mT10')); ?>
-				</div>
-				<div class="col col-lg-8 pL0i pR0i">
-					<?php echo $form->textField($saleHistory,'sale_status', array('placeholder'=>'Trạng thái tư vấn. Ví dụ L0, L1...')); ?>
-					<?php echo $form->error($saleHistory,'sale_status'); ?>
-				</div>
 			</div>
 		</div>
 	</div>

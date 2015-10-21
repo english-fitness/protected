@@ -109,7 +109,12 @@
 	$disabledAttrs = (!$model->isNewRecord)? array('disabled'=>'disabled'):array();
 ?>
 <fieldset>
-<legend>Thông tin người đăng ký</legend>
+<legend>
+	Thông tin người đăng ký
+	<?php if (!$model->isNewRecord):?>
+		<span><a class="btn-edit" style="float:none;text-decoration:none" href="/admin/preregisterUser/update/id/<?php echo $model->id?>">&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
+	<?php endif;?>
+</legend>
 	<div class="form-element-container row">
 		<div class="col col-lg-4">
 			<label>Họ và tên:&nbsp;</label><?php echo $model->fullname;?>

@@ -5,24 +5,29 @@ class ClsMailer
 	public $fromName = 'Contact Daykem11';
 	public $expiredDays = 60;// 60 days
 
-	/**
-	 * Send Activation email to student
-	 */
-	public function sendEmail($subject, $content, $email)
-	{
-		$mail = new YiiMailer();
-		$mail->setFrom($this->fromEmail, $this->fromName);
-		$mail->setSubject($subject);
-		$mail->setTo($email);
-		$mail->setBody($content);
-		try {
-			$mail->send();
-			return true;
-		}catch(Exception $e){
-			return false;
+	public static function availableSenders(){
+		return array(
+			"speakup"=>"Speak up (speakup@hocmai.vn)"
+		);
+	}
+
+	private static function senderDetails($sender){
+		$senders = array(
+			"speakup"=>array(
+				"name"=>"Speak up",
+				"email"=>"speakup@hocmai.vn",
+				"username"=>"speakup@hocmai.com.vn",
+				"password"=>"hocmai.vn2015",
+			)
+		);
+
+		if ($sender){
+			return $senders[$sender];
+		} else {
+			return $senders;
 		}
 	}
-	
+
 	/**
 	 * Send Activation email to student
 	 */
@@ -74,8 +79,8 @@ class ClsMailer
 			'content' => $content,
 			'receiver_address' => $email,
 			'status' => 0,
-		);		
-		$emailQueue->save();      
+		);
+		$emailQueue->save();
     }
     
     public function sendSessionReminder($students, $content, $translation, $date, $time){
@@ -100,5 +105,98 @@ class ClsMailer
             }
         }
     }
+
+    public static function sendMail($sender, $receivers, $template, $params){
+    	$mailer = new PHPMailer;
+    	$mailer->isSMTP();
+    	$mailer->CharSet = 'UTF-8';
+    	$mailer->SMTPAuth = true;
+    	$mailer->Host = 'smtp.gmail.com';
+    	$mailer->Port = 587;
+    	$mailer->SMTPSecure = 'tls';
+    	$mailer->isHTML(true);
+
+    	$senderInfo = self::senderDetails($sender);
+    	$mailer->Username = $senderInfo['username'];
+    	$mailer->Password = $senderInfo['password'];
+    	$mailer->setFrom($senderInfo['email'], $senderInfo['name']);
+    	if (count($receivers) != count($receivers, 1)){
+    		foreach ($receiver as $receiver) {
+    			$mailer->addAddress($receiver['email'], $receiver['name']);
+    		}
+    	} else {
+    		$mailer->addAddress($receivers['email'], $receivers['name']);
+    	}
+
+    	$mailer->Subject = $params['subject'];
+
+    	$content = self::renderView('//../modules/admin/views/mailTemplate/mail/'.$template, $params);
+    	$signature = self::renderView('//../modules/admin/views/mailTemplate/mail/signature');
+    	$mailer->Body = $content.$signature;
+
+    	if ($mailer->send()){
+    		return true;
+    	} else {
+    		return false;
+    	}
+
+    }
+
+    public static function validateTemplate($template, $params){
+    	if (empty($params['name']) || empty($params['date']) || empty($params['time']) || empty($params['email'])){
+    		return false;
+    	}
+    	switch ($template){
+    		case 'trialSchedule' || 'testSchedule':
+    			return true;
+    			break;
+    		case 'classSchedule':
+    			if (empty($params['wday'])){
+    				return false;
+    			}
+    			break;
+    		default:
+    			return false;
+    			break;
+    	}
+    	return true;
+    }
+
+    //copied from YiiMailer
+    private static function renderView($viewName, $viewData=null){
+    	if(($viewFile=self::getViewFile($viewName))!==false)
+		{
+			//use controller instance if available or create dummy controller for console applications
+			if(isset(Yii::app()->controller))
+				$controller=Yii::app()->controller;
+			else
+				$controller=new CController(__CLASS__);
+
+			//render and return the result
+			return $controller->renderInternal($viewFile,$viewData,true);
+		}
+		else
+		{
+			//file name does not exist
+			throw new CException('View "'.$viewName.'" does not exist!');
+		}
+    }
+
+    private static function getViewFile($viewName)
+	{
+		//In web application, use existing method
+		if(isset(Yii::app()->controller))
+			return Yii::app()->controller->getViewFile($viewName);
+		//resolve the view file
+		//TODO: support for themes in console applications
+		if(empty($viewName))
+			return false;
+		
+		$viewFile=Yii::getPathOfAlias($viewName);
+		if(is_file($viewFile.'.php'))
+			return Yii::app()->findLocalizedFile($viewFile.'.php');
+		else
+			return false;
+	}
 }
 ?>

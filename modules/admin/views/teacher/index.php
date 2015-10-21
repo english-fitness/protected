@@ -21,7 +21,7 @@ $this->breadcrumbs=array(
     </div>
 </div>
 <?php 
-	$statusOptions = $model->statusOptions(); unset($statusOptions['-1']);
+	$statusOptions = Teacher::statusOptions(); unset($statusOptions['-1']);
 	$createdDateFilter = Yii::app()->controller->getQuery('User[created_date]', '');
 	$birthdayFilter = Yii::app()->controller->getQuery('User[birthday]', '');
 ?>

@@ -61,24 +61,6 @@ $this->breadcrumbs=array(
 </div>
 <?php $this->renderPartial('saleGridView', array('model'=>$model))?>
 <script>
-    $('#gridView').before('<input type="button" class="btn btn-primary clear-filter-button" data-gridview="gridView" value="Clear Filter" style="float:left; margin: 20px 0 2px; padding:5px 8px">');
-
-    $('.clear-filter-button').click(function(){
-        var id=$(this).data('gridview');
-        var inputSelector='#'+id+' .filters input, '+'#'+id+' .filters select';
-        
-        var needReload = false;
-        $(inputSelector).each( function(i,o) {
-            if (o.value != '')
-                needReload = true;
-        });
-        if (needReload){
-            window.location.href="<?php echo Yii::app()->controller->createUrl(Yii::app()->controller->action->id);?>";
-        }
-        
-        return false;
-    });
-    
     $(".statFilter").change(function(){
         var query = "";
         $(".statFilter").each(function(){

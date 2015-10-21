@@ -39,7 +39,7 @@
         	else:
         ?>
         <tr>
-            <td colspan="7">Không tìm thấy dữ liệu</td>
+            <td colspan="9">Không tìm thấy dữ liệu</td>
         </tr>
         <?php endif; ?>
     </table>
