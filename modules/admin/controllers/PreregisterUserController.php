@@ -240,13 +240,9 @@ class PreregisterUserController extends Controller
     public function actionImportData(){
         $columns = array(
             'fullname',
-            'birthday',
-            'source',
             'phone',
             'email',
-            'sale_note',
-            'planned_schedule',
-            'planned_course_package',
+            'source',
         );
         
         if (isset($_FILES['spreadsheet'])){
