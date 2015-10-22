@@ -19,13 +19,21 @@ class Student extends CActiveRecord
 {
     //these values are to match with current value
     //may need changes for better coherent
+    // const STATUS_NEW_REGISTER = 0;
+    // const STATUS_TRIAL_TEST = 5;
+    // const STATUS_TRIAL_TEACHER = 6;
+    // const STATUS_TRIAL_COMPLETE = 4;
+    // const STATUS_DISCONTINUED_STUDENT = 3;
+    // const STATUS_NEW_STUDENT = 7;
+    // const STATUS_OLD_STUDENT = 8;
+
     const STATUS_NEW_REGISTER = 0;
-    const STATUS_TRIAL_TEST = 5;
-    const STATUS_TRIAL_TEACHER = 6;
+    const STATUS_TRIAL_TEST = 2;
+    const STATUS_TRIAL_TEACHER = 3;
     const STATUS_TRIAL_COMPLETE = 4;
-    const STATUS_DISCONTINUED_STUDENT = 3;
-    const STATUS_NEW_STUDENT = 7;
-    const STATUS_OLD_STUDENT = 8;
+    const STATUS_DISCONTINUED_STUDENT = 5;
+    const STATUS_NEW_STUDENT = 6;
+    const STATUS_OLD_STUDENT = 7;
     
     public static function statusOptions($status=null){
         $statusOptions = array(
@@ -41,6 +49,25 @@ class Student extends CActiveRecord
 			return $statusOptions;
 		}elseif(isset($statusOptions[$status])){
 			return $statusOptions[$status];
+		}
+		return null;
+    }
+
+    public static function filterOptions($status=null){
+    	$filterOptions = array(
+            self::STATUS_NEW_REGISTER => 'Mới đăng ký',
+			self::STATUS_TRIAL_TEST => 'Đang học thử/Test',
+			self::STATUS_TRIAL_TEACHER => 'Đang học thử/GV',
+			self::STATUS_TRIAL_COMPLETE => 'Học viên/Quản lý',
+            self::STATUS_DISCONTINUED_STUDENT => 'Học viên/Nghỉ',
+            '>='.self::STATUS_NEW_STUDENT=>'Học viên',
+			self::STATUS_NEW_STUDENT => 'Học viên mới',
+			self::STATUS_OLD_STUDENT => 'Học viên VIP',
+		);
+		if($status==null){
+			return $filterOptions;
+		}elseif(isset($filterOptions[$status])){
+			return $filterOptions[$status];
 		}
 		return null;
     }

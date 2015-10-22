@@ -164,7 +164,7 @@
 			error:function(){
 				requesting = false;
 				$("#send-btn").show();
-				$("#sending").false();
+				$("#sending").hide();
 				alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
 			}
 		})

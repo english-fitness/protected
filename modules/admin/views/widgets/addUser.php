@@ -1,3 +1,14 @@
+<?php
+if (isset($assignedUser)){
+    if (!is_object($assignedUser) || get_class($assignedUser) != 'User'){
+        if (is_numeric($assignedUser)){
+            $assignedUser = User::model()->findByPk($assignedUser);
+        } else {
+            $assignedUser = null;
+        }
+    }
+}
+?>
 <style type="text/css">
     .ui-autocomplete { max-height: 200px; overflow-y: scroll;}
 </style>

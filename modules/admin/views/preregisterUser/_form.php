@@ -9,7 +9,7 @@
         <?php if(Yii::app()->request->urlReferrer != null):?>
 		window.location = '<?php echo Yii::app()->request->urlReferrer;?>';
         <?php else:?>
-        window.location = '<?php echo Yii::app()->baseUrl.'/admin/preregisterUser';?>';
+        window.location = '<?php echo Yii::app()->baseUrl?>/admin/preregisterUser';
         <?php endif?>
 	}
 	//Remove preset course
@@ -36,15 +36,6 @@
             "dateFormat":"yy-mm-dd"
         }).datepicker("show");;
     });
-    <?php if(Yii::app()->request->urlReferrer != null):?>
-    $(function(){
-        $("#preregister-user-form").append($('<input>')
-            .attr("type", "hidden")
-            .attr("name", "urlReferrer")
-            .val('<?php echo Yii::app()->request->urlReferrer?>')
-        );
-    });
-    <?php endif;?>
 </script>
 <div class="form">
 
@@ -177,6 +168,9 @@
 	</div>
 </fieldset>
 <div class="clearfix h20">&nbsp;</div>	
+<?php if(Yii::app()->request->urlReferrer != null):?>
+	<input type="hidden" name="urlReferrer" value="<?php echo Yii::app()->request->urlReferrer?>">
+<?php endif;?>
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->

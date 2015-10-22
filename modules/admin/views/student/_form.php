@@ -15,16 +15,22 @@ foreach ($usernamePrefixesOptions as $prefix){
 <script type="text/javascript">
 	function cancel(){
         <?php if($createFromRegistration):?>
-        window.location = '<?php echo Yii::app()->baseUrl; ?>/admin/preregisterUser';
-        <?php else:?>
-		window.location = '<?php echo Yii::app()->baseUrl; ?>/admin/student/';
+        history.go(-1);
+        <?php elseif (Yii::app()->request->urlReferrer != null):?>
+		window.location = '<?php echo Yii::app()->request->urlReferrer;?>';
+		<?php else:?>
+        window.location = '<?php echo Yii::app()->baseUrl?>/admin/student';
         <?php endif;?>
 	}
 	//Remove student
 	function removeStudent(studentId){
 		var checkConfirm = confirm("Bạn có chắc chắn muốn xóa học sinh này?");
 		if(checkConfirm){
-			window.location = '<?php echo Yii::app()->baseUrl; ?>/admin/student/delete/id/'+studentId;
+			var removeUrl = '<?php echo Yii::app()->baseUrl; ?>/admin/student/delete/id/'+studentId;
+			<?php if(Yii::app()->request->urlReferrer != null):?>
+                removeUrl += '?urlReferrer=<?php echo Yii::app()->request->urlReferrer?>';
+            <?php endif?>
+			window.location = removeUrl;
 		}
 	}
 	//Allow change password
@@ -157,12 +163,14 @@ foreach ($usernamePrefixesOptions as $prefix){
                 echo $form->error($model,'username');
             endif;?>
             
-			<?php if(!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
-			<div class="fL">
-				<a class="fs12 errorMessage" href="javascript: changeToTeacher(<?php echo $model->id;?>);">Chuyển học sinh này thành role giáo viên?</a>
-			</div>
+			<?php if(!$model->isNewRecord):?>
+			<?php if (Yii::app()->user->isAdmin()):?>
+				<div class="fL">
+					<a class="fs12 errorMessage" href="javascript: changeToTeacher(<?php echo $model->id;?>);">Chuyển học sinh này thành giáo viên?</a>
+				</div>
+			<?php endif;?>
 			<div class="fR">
-				<a class="fs12 errorMessage" href="javascript: changePassword();">Cho phép admin thay đổi mật khẩu của học sinh này?</a>
+				<a class="fs12 errorMessage" href="javascript: changePassword();">Cho phép thay đổi mật khẩu của học sinh này?</a>
 				<input type="hidden" id="changePasswordStatus" name="changeStatus" value="<?php echo $changeStatus;?>"/>
 			</div>
 			<?php endif;?>
@@ -225,7 +233,7 @@ foreach ($usernamePrefixesOptions as $prefix){
 <fieldset>
 	<legend>Thông tin cá nhân
 		<?php if(!$model->isNewRecord):?>
-			<label class="hint fR mR20"><span class="clrBlack">Click đúp vào các trường dữ  liệu cần sửa, để cho phép thay đổi giá trị</span></label>
+			<label class="hint fR"><span class="clrRed">Click đúp vào các trường dữ  liệu cần sửa, để cho phép thay đổi giá trị</span></label>
 		<?php endif;?>
 	</legend>
 	<div class="form-element-container row">
@@ -252,7 +260,7 @@ foreach ($usernamePrefixesOptions as $prefix){
 	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
-			<?php echo $form->labelEx($model,'phone'); ?>
+			<?php echo $form->labelEx($model,'phone'); ?>&nbsp;<span class="required">*</span>
 		</div>
 		<div class="col col-lg-9">
 			<div class="col col-lg-5 pL0i pR0i">
@@ -334,6 +342,9 @@ foreach ($usernamePrefixesOptions as $prefix){
 		</div>
 	</div>
 </fieldset>
+<?php if(Yii::app()->request->urlReferrer != null):?>
+	<input type="hidden" name="urlReferrer" value="<?php echo Yii::app()->request->urlReferrer?>">
+<?php endif;?>
 </div><!-- form -->
 <?php $this->endWidget(); ?>
 <?php if ($createFromRegistration):

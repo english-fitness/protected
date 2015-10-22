@@ -35,6 +35,7 @@
  */
 class User extends CActiveRecord
 {
+	public $source;
 
     /***
      * @var array
@@ -138,6 +139,7 @@ class User extends CActiveRecord
 		// will receive user inputs.
 		$modelRules = array(
 			array('username, email, password, firstname, lastname', 'required'),
+			array('phone', 'checkPhone'),
 			array('username', 'unique'),
 			array('username', 'match' ,'pattern'=>'/^[A-Za-z0-9-@.-_]+$/u',
                             'message'=> 'Tên người dùng chỉ bao gồm các ký tự và số, không được chứa các ký tự đặc biệt nào khác.'),			
@@ -154,7 +156,9 @@ class User extends CActiveRecord
 			array('birthday', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, username, email, password, firstname, lastname, birthday, gender, address, phone, profile_picture, role, created_date, last_login_time, status, activation_code, activation_expired, status_history, deleted_flag,created_user_id,modified_user_id', 'safe', 'on'=>'search'),
+			array('	id, username, email, password, firstname, lastname, birthday, gender, address, phone, profile_picture,
+					role, created_date, last_login_time, status, activation_code, activation_expired, status_history, deleted_flag,
+					created_user_id, modified_user_id, source', 'safe', 'on'=>'search'),
 			// Set the created and modified dates automatically on insert, update.
 			array('created_date', 'default', 'value'=>date('Y-m-d H:i:s'), 'setOnEmpty'=>false, 'on'=>'insert'),
 		);
@@ -165,6 +169,12 @@ class User extends CActiveRecord
 			$modelRules[] = array('modified_user_id', 'default', 'value'=>Yii::app()->user->id, 'setOnEmpty'=>false, 'on'=>'update');
 		}
 		return $modelRules;//Return model rules
+	}
+
+	public function checkPhone(){
+		if ($this->role == self::ROLE_STUDENT && empty($this->phone)){
+			$this->addError("phone", "Số điện thoại không được phép trống");
+		}
 	}
 
 	public function beforeSave()
@@ -236,7 +246,7 @@ class User extends CActiveRecord
 			'sessionAttendees' => array(self::HAS_MANY, 'SessionAttendee', 'user_id'),
 			'sessionComments' => array(self::HAS_MANY, 'SessionComment', 'user_id'),
 			'tblSubjects' => array(self::MANY_MANY, 'Subject', 'tbl_teacher_ability(user_id, subject_id)'),
-            'student'=>array(self::HAS_ONE, 'Student', 'user_id'),
+            'student'=>array(self::HAS_ONE, 'Student', 'user_id', 'condition'=>'role="'.self::ROLE_STUDENT.'"'),
 		);
 	}
 
@@ -306,6 +316,9 @@ class User extends CActiveRecord
 		$criteria->compare('status',$this->status);
 		$criteria->compare('activation_code',$this->activation_code,true);
 		$criteria->compare('activation_expired',$this->activation_expired,true);
+		//Column source is from tbl_preregister_user.
+		//There is no other ambiguous columns so let's do this for simplicity
+		$criteria->compare('source',$this->source, false);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

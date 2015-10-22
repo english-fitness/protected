@@ -231,7 +231,16 @@
 			<label for="Course_class">Gán học sinh</label>
 		</div>
 		<div class="col col-lg-9">
-            <?php $this->renderPartial("/widgets/addUser", array("userRole"=>User::ROLE_STUDENT)); ?>
+            <?php
+            	if (isset($_GET['sid'])){
+            		$this->renderPartial("/widgets/addUser", array(
+            			"userRole"=>User::ROLE_STUDENT,
+            			"assignedUser"=>$_GET['sid'],
+        			));
+            	} else {
+            		$this->renderPartial("/widgets/addUser", array("userRole"=>User::ROLE_STUDENT));
+            	}
+    		?>
 			<label class="hint">Gán các học sinh có nhu cầu tham gia vào khóa học này(tùy chọn hoặc gán sau)!</label>
 		</div>
 	</div>

@@ -5,7 +5,11 @@
 ?>
 <script type="text/javascript">
 	function cancel(){
-		window.location = '<?php echo Yii::app()->baseUrl; ?>/admin/student/';
+		<?php if (Yii::app()->request->urlReferrer != null):?>
+		window.location = '<?php echo Yii::app()->request->urlReferrer?>';
+		<?php else:?>
+        window.location = '<?php echo Yii::app()->baseUrl?>/admin/student';
+        <?php endif;?>
 	}
 	//Allow edit html object field
 	function allowEdit(htmlObject){
@@ -44,9 +48,11 @@
 	    <div class="col col-lg-6">
 	        <h2 class="page-title mT10">Ghi chú chăm sóc, tư vấn</h2>
 	    </div>
-	    <div class="col col-lg-6 for-toolbar-buttons">
-	    	<div class="btn-group">
-	    		<a href="/admin/student/sendMail/sid/<?php echo $user->id?>" class="btn btn-primary fR mR10">Gửi Email</a>
+	</div>
+	<div class="row pB10">
+		<div class="for-toolbar-buttons">
+	    	<div class="btn-group fL mL15">
+	    		<a href="/admin/student/sendMail/sid/<?php echo $user->id?>" class="btn btn-primary mR10">Gửi Email</a>
 	    	</div>
 	        <div class="btn-group">
 	        	<button class="btn btn-primary" name="form_action" type="submit"><i class="icon-save"></i>Lưu lại</button>
@@ -293,7 +299,10 @@
 	</div>
 	<?php endforeach; endif;?>
 </fieldset>
-<div class="clearfix h30">&nbsp;</div
+<div class="clearfix h30">&nbsp;</div>
+<?php if(Yii::app()->request->urlReferrer != null):?>
+	<input type="hidden" name="urlReferrer" value="<?php echo Yii::app()->request->urlReferrer?>">
+<?php endif;?>
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->

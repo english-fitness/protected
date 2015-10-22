@@ -179,7 +179,11 @@ class StudentController extends Controller
 				$student->user_id = $user->id;
 				$student->attributes = $_POST['Student'];
 				if($student->save()){
-					$this->redirect(array('index'));
+					if (isset($_POST['urlReferrer'])){
+	                    $this->redirect($_POST['urlReferrer']);
+	                } else {
+	                    $this->redirect(array('index'));
+	                }
 				}
 			}
 		}
@@ -229,7 +233,7 @@ class StudentController extends Controller
                             $updateStudent = true;
                         }
                     } else {
-                        throw new Exception('Error saving model: PreregisterUser');
+                        throw new Exception('Error saving model: PreregisterUser '.var_dump($preregisterUser->getErrors()));
                     }
                     
                     if ($updateStudent){
@@ -251,7 +255,11 @@ class StudentController extends Controller
                 }
                 
                 $transaction->commit();
-                $this->redirect(array('index'));
+                if (isset($_POST['urlReferrer'])){
+                    $this->redirect($_POST['urlReferrer']);
+                } else {
+                    $this->redirect(array('index'));
+                }
             } catch (Exception $e) {
                 $transaction->rollback();
                 exit($e);
@@ -284,6 +292,11 @@ class StudentController extends Controller
                 $student->save();
             }
 			$model->save();
+			if (isset($_GET['urlReferrer'])){
+                $this->redirect($_GET['urlReferrer']);
+            } else {
+                $this->redirect(array('/admin/preregisterUser'));
+            }
 		}
 		$this->redirect(array('/admin/student/index'));
 	}
@@ -307,11 +320,15 @@ class StudentController extends Controller
 				$model->birthday = Common::convertDateFilter($_GET['User']['birthday']);//Birthday filter
 			}
 			if(isset($_GET['User']['firstname'])){
-				$studentFilters['fullname'] = $_GET['User']['firstname'];
+				$model->getDbCriteria()->addCondition("CONCAT(`lastname`,' ',`firstname`) LIKE '%".$_GET['User']['firstname']."%'");
+			}
+			if(isset($_GET['Student']['source'])){
+				$model->source = $_GET['Student']['source'];
 			}
 		}
-		$model = Student::model()->filterModelUser($model, $studentFilters);//Filter user
-		$model->getDbCriteria()->order = 'created_date DESC';
+		$model->role = User::ROLE_STUDENT;
+		$model->deleted_flag = 0;
+		$model->getDbCriteria()->order = 't.created_date DESC';
 		$this->render('index',array(
 			'model'=>$model,
 		));

@@ -9,7 +9,8 @@
 	}
 </style>
 <div class="row">
-	<a href="/admin/student/sendMail/sid/<?php echo $sid?>" class="btn btn-primary fR mR10">Gửi Email</a>
+	<a href="<?php echo Yii::app()->request->urlReferrer?>" class="btn btn-primary fL mL10">Quay lại</a>
+	<a href="/admin/student/sendMail/sid/<?php echo $sid?>" class="btn btn-primary fR mR20">Gửi Email</a>
 </div>
 <div class="col col-lg-3">
 	<div class="row">
@@ -21,7 +22,14 @@
 	<iframe src="/admin/student/studentWidget/sid/<?php echo $sid?>" width="320" height=0 style="margin-left:-15px" onload='javascript:resizeIframe(this);'></iframe>
 </div>
 <div class="col col-lg-6" style="border-left:solid 1px black; padding-left:30px">
-	<div class="row"><h3><b>Thông tin khóa học</b></h3></div>
+	<div class="row">
+		<h3>
+			<b>Thông tin khóa học</b>
+			<a href="/admin/course/create?sid=<?php echo $sid?>" title="Thêm khóa học">
+				<img style="margin-top:-2px" src="/media/images/admin/icon/add.png">
+			</a>
+		</h3>
+	</div>
 	<div class="row">
 		<iframe src="/admin/student/courseWidget/sid/<?php echo $sid?>" width="960" height=0 onload='javascript:resizeIframe(this);'></iframe>
 	</div>

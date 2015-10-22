@@ -149,7 +149,7 @@ $this->breadcrumbs=array(
 <div class="clearfix h20">&nbsp;</div>
 <div class="form-element-container row">
 	<div class="col col-lg-3">
-		<a href="<?php echo Yii::app()->baseUrl.'/admin/student'; ?>"><div class="btn-back mT2"></div>&nbsp;Quay lại danh sách học sinh</a>
+		<a href="<?php echo Yii::app()->request->urlReferrer ?>"><div class="btn-back mT2"></div>&nbsp;Quay lại danh sách học sinh</a>
 	</div>
 </div>
 <div class="clearfix h20">&nbsp;</div>

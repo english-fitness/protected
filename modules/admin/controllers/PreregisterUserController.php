@@ -243,6 +243,7 @@ class PreregisterUserController extends Controller
             'phone',
             'email',
             'source',
+            'promotion_code',
         );
         
         if (isset($_FILES['spreadsheet'])){
@@ -275,7 +276,7 @@ class PreregisterUserController extends Controller
                                     $preregisterUser->attributes = $attributes;
                                     
                                     if (!$preregisterUser->save()){
-                                        throw new Exception("Error saving records");
+                                        throw new Exception("Error saving records: ".var_dump($preregisterUser->getErrors()));
                                     }
                                 }
                                 $transaction->commit();
@@ -287,6 +288,7 @@ class PreregisterUserController extends Controller
                                 $this->renderJSON(array(
                                     'success'=>false,
                                     'error'=>'error_saving_records',
+                                    'message'=>$se,
                                 ));
                             }
                         }
