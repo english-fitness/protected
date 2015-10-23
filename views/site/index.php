@@ -1,4 +1,13 @@
-
+<?php
+    $rand = rand(0,99);
+    if ($rand < 50){
+        $loginBgClass = "login-bg-1";
+        $loginBoxClass = "login-box-1";
+    } else {
+        $loginBgClass = "login-bg-2";
+        $loginBoxClass = "login-box-2";
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,11 +26,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
-  <body>
+  <body class="<?php echo $loginBgClass?>">
     <div class="container">
         <div class="row">
             <div class="col-sm-6 col-md-4" style="margin: 0 auto; float:none; min-width:400px">
-                <div class="account-wall">
+                <div class="account-wall <?php echo $loginBoxClass?>">
                     <div style="text-align:center; width:100%">
             		    <a href="/">
                             <img style="width: 180px;" src="<?php echo Yii::app()->baseUrl; ?>/media/images/logo/logo-white-bordered-500.png" alt="">
@@ -41,8 +50,12 @@
                         <button class="btn btn-lg btn-warning btn-block btn-login" type="submit">
                             Sign in
                         </button>
-                        <a href="/news/dang-ky" class="pull-left new-account">Create an account? </a> 
-                        <a href='/news/lien-he' class="pull-right need-help">Need help? </a>
+                        <div class="help-link">
+                            <a href="/news/dang-ky" class="new-account text-center">Don't have an account?</a>
+                            <!-- Hide need help since the contact form is not working
+                            <a href='/news/lien-he' class="pull-right need-help">Need help? </a>
+                            -->
+                        </div>
                         <span class="clearfix"></span>
                     </form>
                 </div>
