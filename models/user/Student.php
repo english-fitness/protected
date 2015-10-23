@@ -28,6 +28,7 @@ class Student extends CActiveRecord
     // const STATUS_OLD_STUDENT = 8;
 
     const STATUS_NEW_REGISTER = 0;
+    const STATUS_TEST = 1;
     const STATUS_TRIAL_TEST = 2;
     const STATUS_TRIAL_TEACHER = 3;
     const STATUS_TRIAL_COMPLETE = 4;

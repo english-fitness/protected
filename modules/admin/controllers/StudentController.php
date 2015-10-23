@@ -322,13 +322,16 @@ class StudentController extends Controller
 			if(isset($_GET['User']['firstname'])){
 				$model->getDbCriteria()->addCondition("CONCAT(`lastname`,' ',`firstname`) LIKE '%".$_GET['User']['firstname']."%'");
 			}
-			if(isset($_GET['Student']['source'])){
-				$model->source = $_GET['Student']['source'];
+			if(isset($_GET['User']['source'])){
+				$model->source = $_GET['User']['source'];
 			}
 		}
 		$model->role = User::ROLE_STUDENT;
 		$model->deleted_flag = 0;
 		$model->getDbCriteria()->order = 't.created_date DESC';
+		if (!Yii::app()->user->isAdmin()){
+			$model->getDbCriteria()->addCondition('status <> '.Student::STATUS_TEST);
+		}
 		$this->render('index',array(
 			'model'=>$model,
 		));

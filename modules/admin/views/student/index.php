@@ -71,8 +71,8 @@ $this->breadcrumbs=array(
 		),
 		array(
 			'header'=>'Nguồn',
-			'name'=>'student.preregisterUser.source',
-			'filter'=>CHtml::DropDownList("Student[source]", Yii::app()->controller->getQuery('Student[source]', ''), array_merge(array(""=>""), PreregisterUser::allowableSource())),
+			'name'=>'source',
+			'filter'=>PreregisterUser::allowableSource(Yii::app()->controller->getQuery('User[source]')),
 			'value'=>'@$data->student->preregisterUser->source',
 			'htmlOptions'=>array('style'=>'text-align:center'),
 		),
