@@ -52,6 +52,7 @@ return array(
 	'public_library'=>'Thư viện',
 	
 	//common
+	'today'=>'Hôm nay',
 	'all_teachers'=>'Tất cả giáo viên',
 	'search_teacher'=>'Tìm giáo viên',
 	'month_selection'=>'Tháng',

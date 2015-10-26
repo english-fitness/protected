@@ -1,9 +1,14 @@
 <link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
 <link href="/media/js/calendar/fullcalendar.print.css" rel="stylesheet" media="print">
 <link rel="stylesheet" type="text/css" href="/media/css/calendar.css">
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.min.js'></script>
+<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
 
+<style type="text/css">
+	.fc-button{
+		display: block !important;
+	}
+</style>
 <div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;">Schedule</p></div>
 <?php $this->renderPartial('teacher.views.class.myCourseTab'); ?>
 <div class="details-class">
@@ -79,9 +84,9 @@
 		$('.fc-title').css('cursor','default');
 		
 		$('#month-selection').on('change', function(){
-			var thisMonth = moment($(this).val(), 'MM');
-			start = moment(thisMonth).startOf('month');
-			end = moment(thisMonth).endOf('month');
+			var thisMonth = moment(parseInt($(this).val()) + 1, 'MM');
+			start = moment.utc(thisMonth).startOf('month');
+			end = moment.utc(thisMonth).endOf('month');
 			reloadCalendar();
 			var calendar = $('#calendar');
 			calendar.fullCalendar('gotoDate', start.format('YYYY-MM-DD'));
@@ -130,7 +135,7 @@
 		$('#calendar').fullCalendar('refetchEvents');
 		$.ajax({
 			url:'<?php echo Yii::app()->baseUrl?>/teacher/schedule/calendar',
-			type:'post',
+			type:'get',
 			data:{
 				refresh:true,
 				month:document.getElementById('month-selection').value,

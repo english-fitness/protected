@@ -29,16 +29,14 @@
                 font-size:25px;
                 font-weight:bold;
             }
-            .su-logo{
-                float:left;
-                height:40px;
-                margin-left:40px;
-            }
         </style>
 
 
         <div class="header text-center">
-            <p style="color:white">Teacher Schedule</p>
+            <img src="/media/images/logo/logo-white-bordered-500.png" style="float:left;height:45px;margin:-10px 160px">
+            <div style="width:400px; margin:0 auto">
+                <p style="color:white">Teacher Schedule</p>
+            </div>
         </div>
         <div class="details-class" style="padding:100px 0 50px">
             <?php $this->renderPartial('widgets/colorLegend')?>
@@ -113,7 +111,7 @@
             function createCalendar(divId, data, size){
                 var firstColumnWidth = 85;
                 var calendarWidth = firstColumnWidth+(1000-firstColumnWidth)*(size/4);
-                document.getElementById(divId).setAttribute("style","width:"+calendarWidth+"px; height:1220px;margin: 40px auto");
+                document.getElementById(divId).setAttribute("style","width:"+calendarWidth+"px; height:1300px;margin: 40px auto");
                 var sessions = data.sessions;
                 var availableSlots = data.availableSlots;
                 

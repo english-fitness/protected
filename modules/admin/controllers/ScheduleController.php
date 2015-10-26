@@ -338,26 +338,36 @@ class ScheduleController extends Controller
 				$month = date('m');
 			}
 
-			$year = date('Y');
-			$startWeek = date('W', mktime(0, 0, 0, $month, 1, $year));
-			$start = date('Y-m-d', strtotime($year.'W'.$startWeek));
-			$endWeek = $startWeek + (int)(date('t', mktime(0, 0, 0, $month, 1, $year))/7);
-			$end = date('Y-m-d', strtotime('+6 days', strtotime($year.'W'.$endWeek)));
+			if (isset($_GET['year'])){
+				$year = $_GET['year'];
+			} else {
+				$year = date('Y');
+			}
+
+			$monthStartTimestamp = strtotime($year.'-'.$month.'-01');
+			$monthEndTimestamp = strtotime(date('Y-m-t', $monthStartTimestamp));
+			$monthStartWday = date('w', $monthStartTimestamp);
+			if ($monthStartWday == 1){
+				$start = date('Y-m-d', $monthStartTimestamp);
+			} else {
+				$start = date('Y-m-d', strtotime('next monday -1 week', $monthStartTimestamp));
+			}
+			$end = date('Y-m-d', strtotime('next monday', $monthEndTimestamp));
 		} else {
 			//too lazy to write handling code for non-monday week_start
 			if (isset($_GET['week_start']) && date ('w', strtotime($_GET['week_start'])) == 1){
 				$weekStartTimestamp = strtotime($_REQUEST['week_start']);
 				$start = date('Y-m-d', $weekStartTimestamp);
-				$end = date('Y-m-d', strtotime('+6 days', $weekStartTimestamp));
+				$end = date('Y-m-d', strtotime('+7 days', $weekStartTimestamp));
 			} else {
 				$start = date('Y-m-d', strtotime('monday this week'));
-				$end = date('Y-m-d', strtotime('sunday this week'));
+				$end = date('Y-m-d', strtotime('monday next week'));
 			}
 		}
 
 		$query = "SELECT * FROM tbl_session " .
 				 "WHERE teacher_id IN (" . implode(', ',$teacherIds) . ") " .
-				 "AND plan_start BETWEEN '" . $start . "' AND '" . $end . "' " .
+				 "AND plan_start >= '" . $start . "' AND plan_start < '" . $end . "' " .
 				 "AND status <> " . Session::STATUS_CANCELED . " " .
 				 "AND deleted_flag = 0";
 		$sessions = Session::model()->findAllBySql($query);

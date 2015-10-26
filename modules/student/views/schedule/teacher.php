@@ -11,6 +11,11 @@
 <?php
 	$teacherModel = User::model()->findByPk($teacher);
 ?>
+<style type="text/css">
+	.fc-button{
+		display: block !important;
+	}
+</style>
 <div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;"><?php echo Yii::t('lang', 'schedule')?></p></div>
 <?php $this->renderPartial('student.views.class.myCourseTab'); ?>
 <div class="details-class">
@@ -60,9 +65,9 @@
 		$(document).ready(function(){
 			loadCalendar("calendar", [<?php echo $teacher?>]);
 			$('#month-selection').on('change', function(){
-				var thisMonth = moment($(this).val(), 'MM');
-				start = moment(thisMonth).startOf('month');
-				end = moment(thisMonth).endOf('month');
+				var thisMonth = moment(parseInt($(this).val()) + 1, 'MM');
+				start = moment.utc(thisMonth).startOf('month');
+				end = moment.utc(thisMonth).endOf('month');
 				reloadCalendar();
 				var calendar = $('#calendar');
 				calendar.fullCalendar('gotoDate', start.format('YYYY-MM-DD'));

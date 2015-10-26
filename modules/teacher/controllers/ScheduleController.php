@@ -62,17 +62,27 @@ class ScheduleController extends Controller
 		$this->subPageTitle = 'Calendar View';
         $uid = yii::app()->user->id;
 		
-		if (isset($_REQUEST['month'])){
-			$month = $_REQUEST['month'];
+		if (isset($_GET['month'])){
+			$month = $_GET['month'];
 		} else {
 			$month = date('m');
 		}
+
+		if (isset($_GET['year'])){
+			$year = $_GET['year'];
+		} else {
+			$year = date('Y');
+		}
 		
-		$year = date('Y');
-		$startWeek = date('W', mktime(0, 0, 0, $month, 1, $year));
-		$monthStart = date('Y-m-d', strtotime($year.'W'.$startWeek));
-		$endWeek = $startWeek + (int)(date('t', mktime(0, 0, 0, $month, 1, $year))/7);
-		$monthEnd = date('Y-m-d', strtotime('+6 days', strtotime($year.'W'.$endWeek)));
+		$monthStartTimestamp = strtotime($year.'-'.$month.'-01');
+		$monthEndTimestamp = strtotime(date('Y-m-t', $monthStartTimestamp));
+		$monthStartWday = date('w', $monthStartTimestamp);
+		if ($monthStartWday == 1){
+			$monthStart = date('Y-m-d', $monthStartTimestamp);
+		} else {
+			$monthStart = date('Y-m-d', strtotime('next monday -1 week', $monthStartTimestamp));
+		}
+		$monthEnd = date('Y-m-d', strtotime('next monday', $monthEndTimestamp));
         
 		$query = "SELECT * FROM tbl_session " .
 				 "WHERE teacher_id = " . $uid . " " .

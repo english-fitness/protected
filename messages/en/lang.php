@@ -132,6 +132,7 @@ return array(
 	'public_library'=>'Public Library',
 	
 	//common
+	'today'=>'Today',
 	'all_teachers'=>'All teachers',
 	'search_teacher'=>'Search teacher',
 	'month_selection'=>'Month',

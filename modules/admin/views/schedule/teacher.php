@@ -16,7 +16,11 @@
 		$classes[] = json_encode($class->getAttributes());
 	}
 ?>
-
+<style type="text/css">
+	.fc-button{
+		display: block !important;
+	}
+</style>
 <div class="details-class">
     <div style="width:700px; margin-left:150px">
         <?php $this->renderPartial('widgets/searchBox');?>
@@ -69,13 +73,13 @@
 		$(document).ready(function(){
 			loadCalendar();
 			$('#month-selection').on('change', function(){
-				var thisMonth = moment($(this).val(), 'MM');
-				start = moment(thisMonth).startOf('month');
-				end = moment(thisMonth).endOf('month');
+				var thisMonth = moment(parseInt($(this).val()) + 1, 'MM');
+				start = moment.utc(thisMonth).startOf('month');
+				end = moment.utc(thisMonth).endOf('month');
 				reloadCalendar();
 				$('#calendar').fullCalendar('gotoDate', start.format('YYYY-MM-DD'));
-				$(this).blur();
 				clampView($('#calendar').fullCalendar('getView'));
+				$(this).blur();
 			});
 			$('#cancelChangeSchedule').click(function(){
 				toggleChangeSchedule(false);
@@ -209,7 +213,7 @@
 			$('#calendar').fullCalendar('refetchEvents');
 			$.ajax({
 				url:'<?php echo Yii::app()->baseUrl?>/admin/schedule/getSessions',
-				type:'post',
+				type:'get',
 				data:{
 					teachers:JSON.stringify([<?php echo $teacher?>]),
 					view:'month',
@@ -487,8 +491,6 @@
 		}
 		
 		function changeSchedule(session, values){
-			console.log(session);
-			console.log(values);
 			$('<div>Bạn có muốn thay đổi lịch học sang khung giờ này?<br>- '+values.teacher+'<br>- '+values.start+'</div>').dialog({
 				title:"Đổi lịch học",
 				modal:true,
