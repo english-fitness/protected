@@ -9,15 +9,23 @@ class ReportBuilder {
     
     public static function getSessionReport($requestParams){
         $dateConstraint = self::getDateConstraint($requestParams, 'sessions.plan_start');
+
+        $subject_id = !empty($requestParams['subject']) && $requestParams['subject'] != 'all' ? $requestParams['subject'] : '';
+        if ($subject_id != ''){
+            $subjectCondition = "AND subject_id = " . $subject_id . " ";
+        } else {
+            $subjectCondition = '';
+        }
+
         $countQuery =   "SELECT count(sessions.id) FROM tbl_session sessions JOIN tbl_course c
                         ON sessions.course_id = c.id
-                        WHERE c.subject_id = 55
-                        AND sessions.deleted_flag = 0 
-                        AND " . $dateConstraint;
+                        WHERE " . $dateConstraint .
+                        $subjectCondition .
+                        "AND sessions.deleted_flag = 0";
         
         $count = Yii::app()->db->createCommand($countQuery)->queryScalar();
         
-        $query = self::getSessionReportQuery($dateConstraint);
+        $query = self::getSessionReportQuery($dateConstraint, $requestParams);
         
         return new CSqlDataProvider($query, array(
             'totalItemCount'=>$count,
@@ -30,21 +38,30 @@ class ReportBuilder {
     
     public static function getSessionReportExportData($requestParams){
         $dateConstraint = self::getDateConstraint($requestParams, 'sessions.plan_start');
-        $query = self::getSessionReportQuery($dateConstraint);
+        $query = self::getSessionReportQuery($dateConstraint, $requestParams);
         
         return Yii::app()->db->createCommand($query)->queryAll();
     }
     
     public static function getUserRegistrationReport($requestParams){
         $dateConstraint = self::getDateConstraint($requestParams, 'created_date');
+
+        $source = !empty($requestParams['source']) && $requestParams['source'] != 'all' ? $requestParams['source'] : '';
+        if ($source != ''){
+            $sourceCondition = "AND source = '" . $source . "' ";
+        } else {
+            $sourceCondition = '';
+        }
+
         $countQuery = "SELECT count(id) FROM tbl_preregister_user
-                       WHERE deleted_flag = 0
-                       AND " . $dateConstraint;
+                       WHERE " . $dateConstraint .
+                       $sourceCondition .
+                       "AND deleted_flag = 0";
                        
         $count = Yii::app()->db->createCommand($countQuery)->queryScalar();
         
-        $query = self::getUserRegistrationReportQuery($dateConstraint);
-        
+        $query = self::getUserRegistrationReportQuery($dateConstraint, $requestParams);
+
         return new CSqlDataProvider($query, array(
             'totalItemCount'=>$count,
             'pagination'=>array(
@@ -56,7 +73,7 @@ class ReportBuilder {
     
     public static function getUserRegistrationReportExportData($requestParams){
         $dateConstraint = self::getDateConstraint($requestParams, 'created_date');
-        $query = self::getUserRegistrationReportQuery($dateConstraint);
+        $query = self::getUserRegistrationReportQuery($dateConstraint, $requestParams);
         
         return Yii::app()->db->createCommand($query)->queryAll();
     }
@@ -120,7 +137,7 @@ class ReportBuilder {
                 break;
             case 'range':
                 $dateFrom = date('Y-m-d 00:00:00', strtotime($requestParams['dateFrom']));
-                $dateTo = date('Y-m-d 00:00:00', strtotime($requestParams['dateTo']));
+                $dateTo = date('Y-m-d 00:00:00', strtotime('+1 day', strtotime($requestParams['dateTo'])));
                 $dateConstraint = $columnName . " >= '" . $dateFrom . "' AND " . $columnName . " < '" . $dateTo . "'";
                 break;
             default:
@@ -130,7 +147,13 @@ class ReportBuilder {
         return $dateConstraint;
     }
     
-    private static function getSessionReportQuery($dateConstraint){
+    private static function getSessionReportQuery($dateConstraint, $params){
+        $subject_id = !empty($params['subject']) && $params['subject'] != 'all' ? $params['subject'] : '';
+        if ($subject_id != ''){
+            $subjectCondition = "AND subject_id = " . $subject_id . " ";
+        } else {
+            $subjectCondition = '';
+        }
         return "SELECT
                     sessions.id AS 'session_id',
                     DATE_FORMAT(sessions.plan_start, '%d/%m/%Y') AS 'session_date',
@@ -168,17 +191,24 @@ class ReportBuilder {
                 JOIN tbl_user teacher ON sessions.teacher_id = teacher.id
                 JOIN tbl_course course ON sessions.course_id = course.id
                 LEFT JOIN tbl_session_note note ON sessions.id = note.session_id
-                WHERE course.subject_id = 55
-                AND " . $dateConstraint . " " .
+                WHERE " . $dateConstraint .
+                $subjectCondition .
                 "AND sessions.deleted_flag = 0
                 ORDER BY sessions.plan_start ASC";
     }
     
-    private static function getUserRegistrationReportQuery($dateConstraint){
+    private static function getUserRegistrationReportQuery($dateConstraint, $params){
+        $source = !empty($params['source']) && $params['source'] != 'all' ? $params['source'] : '';
+        if ($source != ''){
+            $sourceCondition = "AND source = '" . $source . "' ";
+        } else {
+            $sourceCondition = '';
+        }
         return  "SELECT fullname, source, phone, email, created_date, care_status, sale_note FROM tbl_preregister_user
-                WHERE deleted_flag = 0
-                AND " . $dateConstraint . " " .
-                "ORDER BY created_date DESC";
+                WHERE " . $dateConstraint .
+                $sourceCondition .
+                "AND deleted_flag = 0
+                ORDER BY created_date DESC";
     }
 }
 ?>

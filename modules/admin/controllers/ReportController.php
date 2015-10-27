@@ -84,9 +84,8 @@ class ReportController extends Controller
 
 	public function actionIndex(){
         $this->subPageTitle = "Báo cáo";
-        
-        if (isset($_REQUEST['report'])){
-            $report = $_REQUEST['report'];
+        if (isset($_GET['report'])){
+            $report = $_GET['report'];
             
             switch($report){
                 case 'session':
@@ -108,7 +107,6 @@ class ReportController extends Controller
 
         $this->render('index', array(
             "records"=>$users,
-            "requestParams"=>$requestParams,
         ));
     }
     
@@ -117,20 +115,19 @@ class ReportController extends Controller
         
         $this->render('index', array(
             "records"=>$sessions,
-            "requestParams"=>$requestParams,
         ));
     }
     
     public function actionExport(){
-        if (isset($_REQUEST['report'])){
-            $report = $_REQUEST['report'];
+        if (isset($_GET['report'])){
+            $report = $_GET['report'];
             
             switch ($report){
                 case 'session':
-                    self::sendSessionReport($_REQUEST);
+                    self::sendSessionReport($_GET);
                     break;
                 case 'userRegistration':
-                    self::sendUserRegistrationReport($_REQUEST);
+                    self::sendUserRegistrationReport($_GET);
                 default:
                     break;
             }

@@ -7,22 +7,13 @@
     <h2 class="page-title mT10">Báo cáo</h2>
 </div>
 <?php 
-    $actionParams = array();
+    $this->renderPartial('widgets/dateSelector', array(
+        'recordCount'=>isset($records) ? $records->totalItemCount : null,
+        'maxRecordNumber'=>1000,
+    ));
     
-    if (isset($records)){
-        $actionParams['recordCount'] = $records->totalItemCount;
-        $actionParams['maxRecordNumber'] = 1000;
-    }
-    
-    if (isset($requestParams)){
-        $actionParams['requestParams'] = $requestParams;
-        $report = $requestParams['report'];
-    }
-    
-    $this->renderPartial('widgets/dateSelector', $actionParams);
-    
-    if (isset($report)){
-        switch($report){
+    if (isset($_GET['report'])){
+        switch($_GET['report']){
             case 'session':
                 $this->renderPartial('session', array('sessions'=>$records));
                 break;
