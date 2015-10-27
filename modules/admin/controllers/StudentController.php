@@ -328,7 +328,7 @@ class StudentController extends Controller
 		}
 		$model->role = User::ROLE_STUDENT;
 		$model->deleted_flag = 0;
-		$model->getDbCriteria()->order = 't.created_date DESC';
+		$model->getDbCriteria()->order = $model->getTableAlias(false, false).'.created_date DESC';
 		if (!Yii::app()->user->isAdmin()){
 			$model->getDbCriteria()->addCondition('status <> '.Student::STATUS_TEST);
 		}

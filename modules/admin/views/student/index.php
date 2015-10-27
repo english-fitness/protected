@@ -24,19 +24,11 @@ $this->breadcrumbs=array(
 <?php 
 	$createdDateFilter = Yii::app()->controller->getQuery('User[created_date]', '');
 	$birthdayFilter = Yii::app()->controller->getQuery('User[birthday]', '');
-    
-    function normalizeDate($d){
-        if ($d == ''){
-            return '';
-        }
-        $date = new DateTime($d);
-        return $date->format('d/m/Y');
-    }
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$model->with(array(
 		'student'=>array(
-			'select'=>array('preregister_id'),
+			'select'=>array('preregister_id', 'official_start_date'),
 			'together'=>true,
 		),
 		'student.preregisterUser'=>array(
@@ -84,7 +76,7 @@ $this->breadcrumbs=array(
 		),
         array(
             'header'=>'Học viên chính thức từ ngày',
-            'value'=>'normalizeDate($data->student->official_start_date)',
+            'value'=>'!empty($data->student->official_start_date) ? date("d-m-Y", strtotime($data->student->official_start_date)) : ""',
             'htmlOptions'=>array('style'=>'text-align:center;width:90px'),
         ),
 		array(

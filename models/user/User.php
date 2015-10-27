@@ -152,7 +152,8 @@ class User extends CActiveRecord
 			array('password', 'length', 'min'=>6),
 			array('address', 'length', 'max'=>256),
 			array('phone', 'length', 'max'=>20),
-			array('birthday, created_date, last_login_time, activation_expired, status_history, deleted_flag,created_user_id,modified_user_id', 'safe'),
+			array('id, birthday, created_date, last_login_time, activation_expired, status_history, deleted_flag, created_user_id,
+				   modified_user_id', 'safe'),
 			array('birthday', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -299,16 +300,18 @@ class User extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
+		$alias = $this->getTableAlias(false, false);
+
+		$criteria->compare($alias.'.id',$this->id);
 		$criteria->compare('username',$this->username,true);
-		$criteria->compare('email',$this->email,true);
+		$criteria->compare($alias.'.email',$this->email,true);
 		$criteria->compare('password',$this->password,true);
 		//$criteria->compare('firstname',$this->firstname,true);
 		//$criteria->compare('lastname',$this->lastname,true);
 		$criteria->compare('birthday',$this->birthday,true);
 		$criteria->compare('gender',$this->gender);
 		$criteria->compare('address',$this->address,true);
-		$criteria->compare('phone',$this->phone,true);
+		$criteria->compare($alias.'.phone',$this->phone,true);
 		$criteria->compare('profile_picture',$this->profile_picture,true);
 		$criteria->compare('role',$this->role,true);
 		$criteria->compare('created_date',$this->created_date,true);
@@ -316,8 +319,9 @@ class User extends CActiveRecord
 		$criteria->compare('status',$this->status);
 		$criteria->compare('activation_code',$this->activation_code,true);
 		$criteria->compare('activation_expired',$this->activation_expired,true);
-		//Column source is from tbl_preregister_user.
-		//There is no other ambiguous columns so let's do this for simplicity
+		//HACK
+		//Column source is actually from tbl_preregister_user.
+		//There is no other ambiguous columns so it's safe to do this
 		$criteria->compare('source',$this->source, false);
 
 		return new CActiveDataProvider($this, array(

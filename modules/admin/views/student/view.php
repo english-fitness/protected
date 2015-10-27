@@ -67,7 +67,7 @@ $this->breadcrumbs=array(
 		),
         array(
             'name'=>'Thành viên chính thức từ ngày',
-            'value'=>date('d-m-Y', strtotime($student->official_start_date)),
+            'value'=>!empty($student->official_start_date) ? date('d-m-Y', strtotime($student->official_start_date)): "",
         ),
 		array(
 		   'name'=>'created_user_id',
