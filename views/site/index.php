@@ -23,17 +23,16 @@
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl; ?>/media/css/bootstrap/login.css" />
   
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body class="<?php echo $loginBgClass?>">
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-6 col-md-4" style="margin: 0 auto; float:none; min-width:400px">
-                <div class="account-wall <?php echo $loginBoxClass?>">
-                    <div style="text-align:center; width:100%">
+            <div class="login-box-container">
+                <div class="login-box <?php echo $loginBoxClass?>">
+                    <div class="text-center">
             		    <a href="/">
-                            <img style="width: 180px;" src="<?php echo Yii::app()->baseUrl; ?>/media/images/logo/logo-white-bordered-500.png" alt="">
+                            <img class="logo" src="<?php echo Yii::app()->baseUrl; ?>/media/images/logo/logo-white-bordered-200.png" alt="">
             		    </a>
                     </div>
                     <form name="login-form" class="form-signin" action="<?php echo Yii::app()->baseurl;?>/site/signin" method="post">
@@ -50,8 +49,8 @@
                         <button class="btn btn-lg btn-warning btn-block btn-login" type="submit">
                             Sign in
                         </button>
-                        <div class="help-link">
-                            <a href="/news/dang-ky" class="new-account text-center">Don't have an account?</a>
+                        <div class="help-link text-center">
+                            <a href="/news/dang-ky" class="new-account">Don't have an account?</a>
                             <!-- Hide need help since the contact form is not working
                             <a href='/news/lien-he' class="pull-right need-help">Need help? </a>
                             -->
