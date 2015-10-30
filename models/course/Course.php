@@ -818,7 +818,7 @@ class Course extends CActiveRecord
     	$criteria->addCondition($condition);
     	$criteria->limit = 1;
     	$offset = ($reportCount+1) * 10 - 1;
-    	if ($offset > $this->sessionCount){
+    	if ($offset >= $this->sessionCount){
     		$offset = $this->sessionCount - 1;
     	}
     	$criteria->offset = $offset;
