@@ -188,6 +188,9 @@ class User extends CActiveRecord
             $this->$textField = trim($this->$textField);
 		}
 
+		$this->phone = preg_replace('/\s+/', '', $this->phone);
+		$this->phone = str_replace('+84', '0', $this->phone);
+
 		//conditions are on the function itself
 		$this->savePassword();
 		
@@ -237,7 +240,6 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'courses' => array(self::HAS_MANY, 'Course', 'created_user_id'),
 			'tblCourses' => array(self::MANY_MANY, 'Course', 'tbl_course_attendee(user_id, course_id)'),
 			'courseComments' => array(self::HAS_MANY, 'CourseComment', 'user_id'),
 			'coursePreferredTeachers' => array(self::HAS_MANY, 'CoursePreferredTeacher', 'teacher_id'),
@@ -314,9 +316,9 @@ class User extends CActiveRecord
 		$criteria->compare($alias.'.phone',$this->phone,true);
 		$criteria->compare('profile_picture',$this->profile_picture,true);
 		$criteria->compare('role',$this->role,true);
-		$criteria->compare('created_date',$this->created_date,true);
+		$criteria->compare($alias.'.created_date',$this->created_date,true);
 		$criteria->compare('last_login_time',$this->last_login_time,true);
-		$criteria->compare('status',$this->status);
+		$criteria->compare($alias.'.status',$this->status);
 		$criteria->compare('activation_code',$this->activation_code,true);
 		$criteria->compare('activation_expired',$this->activation_expired,true);
 		//HACK

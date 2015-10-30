@@ -20,58 +20,77 @@
         <h2 class="page-title mT10">Báo cáo trong khóa học</h2>
     </div>
     <?php if(isset($course) && $course!==NULL):?>
-    <div class="col col-lg-6 for-toolbar-buttons">
-        <div class="btn-group">
-            <a class="top-bar-button btn btn-primary" href="<?php echo Yii::app()->baseUrl; ?>/admin/courseReport/create?course_id=<?php echo $model->course_id;?>">
-			<i class="icon-plus"></i>Thêm báo cáo
-			</a>
+        <div class="col col-lg-6 for-toolbar-buttons">
+            <div class="btn-group">
+                <a class="top-bar-button btn btn-primary" href="<?php echo Yii::app()->baseUrl; ?>/admin/courseReport/create?course_id=<?php echo $model->course_id;?>">
+    			<i class="icon-plus"></i>Thêm báo cáo
+    			</a>
+            </div>
         </div>
-    </div>
-    <div class="col col-lg-12 pB10">
-    	<p>
-    		<div class="col col-lg-3 pL0i">
-    			<span class="fL"><b>Môn học:</b>&nbsp;<?php echo Subject::model()->displayClassSubject($course->subject_id);?></span>
+        <div class="col col-lg-12 pB10">
+        	<p>
+        		<div class="col col-lg-3 pL0i">
+        			<span class="fL"><b>Môn học:</b>&nbsp;<?php echo Subject::model()->displayClassSubject($course->subject_id);?></span>
+        		</div>
+        		<div class="col col-lg-8 pL0i">
+        			<span class="fL"><b>Chủ đề khóa học:</b>&nbsp;<?php echo $course->title;?></span>
+        			<span class="fL"><a class="btn-edit mL15" href="/admin/course/update/id/<?php echo $course->id?>" title=""></a></span>
+        			<span class="fL"><a class="btn-view mL15" href="/admin/course/view/id/<?php echo $course->id?>" title=""></a></span>
+        		</div>
+        	</p>
+        </div>    
+        <div class="col col-lg-12">
+        	<div class="col col-lg-3 pL0i">
+        		<b>Giáo viên:</b>&nbsp;<?php $teacher = $course->getTeacher("/admin/teacher/view/id");?>
+        		<?php echo ($teacher)? $teacher: "Chưa có giáo viên";?>
+        	</div>
+        	<div class="col col-lg-8 pL0i"><b>Học sinh:</b>&nbsp;
+    	        <?php $courseStudentValues = array_values($course->getAssignedStudentsArrs("/admin/student/view/id"));?>
+    			<?php $students = implode(', ', $courseStudentValues);?>
+    			<?php echo ($students!="")? $students: "Chưa có học sinh";?>
     		</div>
-    		<div class="col col-lg-8 pL0i">
-    			<span class="fL"><b>Chủ đề khóa học:</b>&nbsp;<?php echo $course->title;?></span>
-    			<span class="fL"><a class="btn-edit mL15" href="/admin/course/update/id/<?php echo $course->id?>" title=""></a></span>
-    			<span class="fL"><a class="btn-view mL15" href="/admin/course/view/id/<?php echo $course->id?>" title=""></a></span>
-    		</div>
-    	</p>
-    </div>    
-    <div class="col col-lg-12">
-    	<div class="col col-lg-3 pL0i">
-    		<b>Giáo viên:</b>&nbsp;<?php $teacher = $course->getTeacher("/admin/teacher/view/id");?>
-    		<?php echo ($teacher)? $teacher: "Chưa có giáo viên";?>
     	</div>
-    	<div class="col col-lg-8 pL0i"><b>Học sinh:</b>&nbsp;
-	        <?php $courseStudentValues = array_values($course->getAssignedStudentsArrs("/admin/student/view/id"));?>
-			<?php $students = implode(', ', $courseStudentValues);?>
-			<?php echo ($students!="")? $students: "Chưa có học sinh";?>
-		</div>
-	</div>
-	<div class="col col-lg-12">
-    	<p>
-    		<div class="col col-lg-3 pL0i">
-    			<span class="fL"><b>Kiểu khóa học:</b>&nbsp;
-    			<?php $typeOptions = $course->typeOptions(); echo $typeOptions[$course->type];?></span>
-    		</div>
-    		<div class="col col-lg-8 pL0i">
-    			<span class="fL"><b>Trạng thái:</b>&nbsp;<?php echo $course->getStatus();?></span>
-    		</div>
-    	</p>
-    </div>
-    <div class="col col-lg-12">
-    	<p>
-    		<div class="col col-lg-3 pL0i">
-    			<span class="fL"><b>Tổng học phí:</b>&nbsp;<?php echo number_format($course->final_price)?> đ</span>
-    		</div>
-            <div class="col col-lg-8 pL0i">
-    			<span class="fL"><b>Tổng số buổi học:</b>&nbsp;<?php echo $course->total_sessions?> buổi</span>
-    		</div>
-    	</p>
-    	</p>
-    </div>
+    	<div class="col col-lg-12">
+        	<p>
+        		<div class="col col-lg-3 pL0i">
+        			<span class="fL"><b>Kiểu khóa học:</b>&nbsp;
+        			<?php $typeOptions = $course->typeOptions(); echo $typeOptions[$course->type];?></span>
+        		</div>
+        		<div class="col col-lg-8 pL0i">
+        			<span class="fL"><b>Trạng thái:</b>&nbsp;<?php echo $course->getStatus();?></span>
+        		</div>
+        	</p>
+        </div>
+        <div class="col col-lg-12">
+            <p>
+                <div class="col col-lg-3 pL0i">
+                    <span class="fL"><b>Trình độ:</b>&nbsp;
+                    <?php $typeOptions = $course->typeOptions(); echo $course->level;?></span>
+                </div>
+                <div class="col col-lg-8 pL0i">
+                    <span class="fL"><b>Giáo trình:</b>&nbsp;<?php echo $course->curriculum;?></span>
+                </div>
+            </p>
+        </div>
+        <div class="col col-lg-12">
+        	<p>
+        		<div class="col col-lg-3 pL0i">
+        			<span class="fL"><b>Tổng học phí:</b>&nbsp;<?php echo number_format($course->final_price)?> đ</span>
+        		</div>
+                <div class="col col-lg-8 pL0i">
+        			<span class="fL"><b>Tổng số buổi học:</b>&nbsp;<?php echo $course->total_sessions?> buổi</span>
+        		</div>
+        	</p>
+        </div>
+        <?php if ($course->status != Course::STATUS_ENDED && $course->deleted_flag == 0):?>
+            <div class="col col-lg-12">
+                <p>
+                    <div class="col col-lg-3 pL0i">
+                        <span class="fL"><b>Ngày báo cáo tiếp theo:</b>&nbsp;<?php echo $course->getNextReportDate()?></span>
+                    </div>
+                </p>
+            </div>
+        <?php endif;?>
 	<?php endif;?>
 </div>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
@@ -99,14 +118,6 @@
             'name'=>'report_date',
             'value'=>'date("d/m/Y", strtotime($data->report_date))',
             'htmlOptions'=>array('style'=>'width:130px;text-align:center'),
-        ),
-        array(
-            'header'=>'Trình độ',
-            'value'=>'$data->course->level',
-        ),
-        array(
-            'header'=>'Giáo trình',
-            'value'=>'$data->course->curriculum',
         ),
         array(
             'header'=>'Báo cáo',

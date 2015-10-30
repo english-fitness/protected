@@ -68,11 +68,19 @@ $this->breadcrumbs=array(
     	</p>
     	</p>
     </div>
+    <?php if ($course->type == Course::TYPE_COURSE_NORMAL && $course->status != Course::STATUS_ENDED && $course->deleted_flag == 0):?>
+        <div class="col col-lg-12">
+            <p>
+                <div class="col col-lg-3 pL0i">
+                    <span class="fL"><b>Ngày báo cáo tiếp theo:</b>&nbsp;<?php echo $course->getNextReportDate()?></span>
+                </div>
+            </p>
+        </div>
+    <?php endif;?>
 	<?php endif;?>
 </div>
 <?php 
-	$registration = new ClsRegistration();//New Registration class
-	$startDateFilter = Yii::app()->controller->getQuery('Session[plan_start]', ''); 
+	$startDateFilter = Yii::app()->controller->getQuery('Session[plan_start]', '');
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$model->search(null, "plan_start asc"),

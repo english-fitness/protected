@@ -24,6 +24,15 @@
  */
 class Course extends CActiveRecord
 {
+	private $_sessionCount;
+
+	public function getSessionCount(){
+		if (!isset($this->_sessionCount)){
+			$this->_sessionCount = $this->countSessions(null, false);
+		}
+		return $this->_sessionCount;
+	}
+
 	const STATUS_PENDING = 0;//Pending status
 	const STATUS_APPROVED = 1;//Approved status
 	const STATUS_WORKING = 2;//On Working status
@@ -59,7 +68,7 @@ class Course extends CActiveRecord
                    total_of_student, modified_user_id, deleted_flag', 'numerical', 'integerOnly'=>true),
 			array('title', 'length', 'max'=>256),
 			array('level, curriculum', 'requireLevel'),
-			array('content, modified_date, final_price, total_of_student, deleted_flag, teacher_form_url, student_form_url', 'safe'),
+			array('id, content, modified_date, final_price, total_of_student, deleted_flag, teacher_form_url, student_form_url', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, created_user_id, teacher_id, subject_id, title, content, type, status, total_of_student, created_date, modified_date, modified_user_id', 'safe', 'on'=>'search'),
@@ -101,6 +110,7 @@ class Course extends CActiveRecord
 			'tblUsers' => array(self::MANY_MANY, 'User', 'tbl_course_student(course_id, student_id)'),
 			'sessions' => array(self::HAS_MANY, 'Session', 'course_id'),
 			'teacher' => array(self::BELONGS_TO, 'User', 'teacher_id'),
+			'students'=>array(self::HAS_MANY, 'CourseStudent', 'course_id'),
 			'reports'=> array(self::HAS_MANY, 'CourseReport', 'course_id'),
 		);
 	}
@@ -175,19 +185,21 @@ class Course extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
-		$criteria->compare('created_user_id',$this->created_user_id);
-		$criteria->compare('teacher_id',$this->teacher_id);
+		$alias = $this->getTableAlias(false, false);
+
+		$criteria->compare($alias.'.id',$this->id);
+		$criteria->compare($alias.'.created_user_id',$this->created_user_id);
+		$criteria->compare($alias.'.teacher_id',$this->teacher_id);
 		$criteria->compare('subject_id',$this->subject_id);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('content',$this->content,true);
-		$criteria->compare('status',$this->status);
-		$criteria->compare('deleted_flag',$this->deleted_flag);
-		$criteria->compare('type',$this->type);
+		$criteria->compare($alias.'.status',$this->status);
+		$criteria->compare($alias.'.deleted_flag',$this->deleted_flag);
+		$criteria->compare($alias.'.type',$this->type);
 		$criteria->compare('total_of_student',$this->total_of_student);
 		$criteria->compare('final_price',$this->final_price, true);
-		$criteria->compare('created_date',$this->created_date,true);
-		$criteria->compare('modified_date',$this->modified_date,true);
+		$criteria->compare($alias.'.created_date',$this->created_date,true);
+		$criteria->compare($alias.'.modified_date',$this->modified_date,true);
 		if($order!==null) $criteria->order = $order;
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -338,7 +350,7 @@ class Course extends CActiveRecord
 	{
 		$criteria = new CDbCriteria();
 		$criteria->condition = "course_id = $this->id";
-		if(!$countAll) $criteria->condition .= " AND deleted_flag=0";
+		if(!$countAll) $criteria->condition .= " AND deleted_flag=0 AND status <> ".Session::STATUS_CANCELED;
 		if($teacherId!==null){
 			$criteria->condition .= " AND (teacher_id=".$teacherId.")";
 		}
@@ -407,9 +419,13 @@ class Course extends CActiveRecord
 	 */
 	public function assignedStudents()
 	{
-		$query = "SELECT student_id FROM tbl_course_student WHERE course_id=".$this->id;
-		$studentIds = Yii::app()->db->createCommand($query)->queryColumn();
-		return $studentIds;
+		$assignedStudents = $this->students;
+		$assignedStudentsId = array();
+		foreach ($assignedStudents as $student) {
+			$assignedStudentsId[] = $student->student_id;
+		}
+
+		return $assignedStudentsId;
 	}
 	
  	/** 
@@ -785,5 +801,40 @@ class Course extends CActiveRecord
 		} else {
 			return Yii::app()->db->createCommand($query)->queryAll();
 		}    
+    }
+
+    public function getNextReportSession(){
+    	$reportCount = CourseReport::model()->countByAttributes(array('course_id'=>$this->id));
+
+    	if ($reportCount >= ceil($this->sessionCount/10)){
+    		return null;
+    	}
+
+    	$criteria = new CDbCriteria;
+    	$criteria->select = array("id", "plan_start");
+    	$condition = "course_id = ".$this->id." ".
+    				 "AND status <> ".Session::STATUS_CANCELED." ".
+    				 "AND deleted_flag = 0";
+    	$criteria->addCondition($condition);
+    	$criteria->limit = 1;
+    	$offset = ($reportCount+1) * 10 - 1;
+    	if ($offset > $this->sessionCount){
+    		$offset = $this->sessionCount - 1;
+    	}
+    	$criteria->offset = $offset;
+    	$criteria->order = "plan_start ASC";
+
+    	$plannedReportSession = Session::model()->find($criteria);
+
+    	return $plannedReportSession;
+    }
+
+    public function getNextReportDate(){
+    	$nextReportSession = $this->getNextReportSession();
+    	if ($nextReportSession != null){
+			return date("d-m-Y", strtotime($nextReportSession->plan_start));
+		} else {
+			return "";
+		}
     }
 }

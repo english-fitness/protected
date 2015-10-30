@@ -242,8 +242,9 @@ class CourseController extends Controller
 	{
 		$this->subPageTitle = 'Danh sách khóa học';
 		$this->loadJQuery = false;//Not load jquery
-		$model=new Course('search("created_date DESC")');		
+		$model=new Course();		
 		$model->unsetAttributes();  // clear any default values		
+		$alias = $model->getTableAlias(false, false);
 		if(isset($_GET['Course'])){
 			$model->attributes=$_GET['Course'];
             if (isset($_GET['Course']['student_name'])){
@@ -256,7 +257,7 @@ class CourseController extends Controller
 				if ($courseIdString == ''){
 					$courseIdString = "''";
 				}
-                $model->getDbCriteria()->addCondition("id in (" . $courseIdString . ")");
+                $model->getDbCriteria()->addCondition($alias.".id in (" . $courseIdString . ")");
             }
             if(isset($_GET['Course']['teacher_fullname'])){
 				$keyword = $_GET['Course']['teacher_fullname'];
