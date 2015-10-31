@@ -326,10 +326,19 @@ class User extends CActiveRecord
 		//There is no other ambiguous columns so it's safe to do this
 		$criteria->compare('source',$this->source, false);
 
+		$sort = new CSort;
+		$sort->attributes = array(
+			'student.official_start_date'=>array(
+				'asc'=>'student.official_start_date desc',
+				'desc'=>'student.official_start_date',
+			),
+			'*',
+		);
+
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
-		    'sort'=>array('sortVar'=>'sort'),
+			'sort'=>$sort,
 		));
 	}
 

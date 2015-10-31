@@ -76,8 +76,10 @@ $this->breadcrumbs=array(
 		),
         array(
             'header'=>'Học viên chính thức từ ngày',
+            'name'=>'student.official_start_date',
             'value'=>'!empty($data->student->official_start_date) ? date("d-m-Y", strtotime($data->student->official_start_date)) : ""',
             'htmlOptions'=>array('style'=>'text-align:center;width:90px'),
+            'sortable'=>true,
         ),
 		array(
 		   	'value'=>'CHtml::link("Quản lý", "/admin/student/manage/sid/".$data->id)',
