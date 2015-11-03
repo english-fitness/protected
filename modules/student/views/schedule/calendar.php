@@ -1,12 +1,3 @@
-<link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
-<link href="/media/js/calendar/fullcalendar.print.css" rel="stylesheet" media="print">
-<link rel="stylesheet" type="text/css" href="/media/css/calendar.css">
-<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/student.css" type="text/css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/utils.js"></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.js'></script>
 <?php if(Yii::app()->language=="vi"):?>
 <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/lang_vi.js'></script>
 <?php endif;?>

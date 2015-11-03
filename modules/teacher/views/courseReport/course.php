@@ -1,16 +1,10 @@
-<script src="/media/js/bootstrap/bootstrap.min.js"></script>
-<link href="<?php echo Yii::app()->theme->baseUrl; ?>/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
-<script src="/media/js/bootstrap/bootstrap-dialog.min.js"></script>
-<link rel="stylesheet" href="/media/css/bootstrap/bootstrap-dialog.min.css">
-
 <style type="text/css">
 	.table th{
 		text-align: center;
 	}
 	.modal-dialog{
-        left:0 !important;
+		margin-left: auto;
         width:960px;
-        margin-top:0;
     }
     .iframe-container{
         background:url(/media/images/icon/ripple-loader.gif) center center no-repeat;
@@ -57,7 +51,7 @@
 	    
 	    BootstrapDialog.show({
 	        title:"<?php echo Yii::t('lang', 'course_report_view_title')?>",
-	        message:'<div class="iframe-container"><iframe id="googleDocsViewer" height="520" width="910" src="' + this.getAttribute('href') + '"></div>',
+	        message:'<div class="iframe-container"><iframe id="googleDocsViewer" height="520" width="928" src="' + this.getAttribute('href') + '"></div>',
 	    });
 	    
 	    $('body').unbind('mousewheel DOMMouseScroll');

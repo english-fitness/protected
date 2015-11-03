@@ -2,6 +2,16 @@
 
 class ScheduleController extends Controller
 {
+	public function init(){
+		parent::init();
+		$baseUrl = Yii::app()->baseUrl;
+		$cs = Yii::app()->getClientScript();
+		$cs->registerScriptFile($baseUrl.'/media/js/calendar/fullcalendar.min.js');
+		$cs->registerScriptFile($baseUrl.'/media/js/calendar/calendar.js');
+		$cs->registerCssFile($baseUrl.'/media/js/calendar/fullcalendar.min.css');
+		$cs->registerCssFile($baseUrl.'/media/css/calendar.css');
+	}
+
     public function filters()
     {
         return array(

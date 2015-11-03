@@ -1,28 +1,3 @@
-<style>
-    .wday-selector{
-        margin:0 auto;
-        text-align:center;
-        width:871px;
-        height:65px;
-    }
-    .date-navigator{
-        margin:0 auto;
-        text-align:center;
-        width:250px;
-        margin-top:10px;
-    }
-    .date-navigator .ui-datepicker-trigger{
-        border:none;
-        width:34px;
-        height:34px;
-        background-color:#428bca;
-        border-radius:5px;
-        outline:none;
-    }
-    .date-navigator .ui-datepicker-trigger img{
-        height:30px;
-    }
-</style>
 <div class="wday-selector">
     <button class='week-nav btn btn-primary' nav='prev' title='Tuần trước'><</button>
     <button class='wday-select btn' day='0'>Thứ hai<br></button>

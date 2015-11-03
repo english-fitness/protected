@@ -1,6 +1,3 @@
-<link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
-
 <?php
 	$teacherModel = User::model()->findByPk($teacher);
 ?>

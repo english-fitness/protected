@@ -71,8 +71,6 @@
         <?php if (!$model->isNewRecord):?>
             var now = moment('<?php echo date('Y-m-d')?>');
             var lastSessionDate = moment('<?php echo date('Y-m-d', strtotime($model->getLastSessionDate()))?>');
-            console.log(now);
-            console.log(lastSessionDate);
             var minDate = lastSessionDate > now ? lastSessionDate : now;
             $("#start_date > .col > .datepicker").val(minDate.format("YYYY-MM-DD"));
             

@@ -1,9 +1,3 @@
-<link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
-<link href="/media/js/calendar/fullcalendar.print.css" rel="stylesheet" media="print">
-<link rel="stylesheet" type="text/css" href="/media/css/calendar.css">
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
-
 <style type="text/css">
 	.fc-button{
 		display: block !important;

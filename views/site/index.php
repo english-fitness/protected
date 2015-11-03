@@ -10,24 +10,16 @@
 ?>
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
-    <!-- Icon system-->
-    <link rel="shortcut icon" href="https://speakup.vn/news/wp-content/uploads/2015/06/android-chrome-96x961.png" />
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl; ?>/media/css/bootstrap/bootstrap.min.css" />
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl; ?>/media/css/bootstrap/bootstrap-theme.min.css" />
-
-    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl; ?>/media/css/bootstrap/login.css" />
-  
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body class="<?php echo $loginBgClass?>">
-    <div class="container-fluid">
-        <div class="row">
+    <head>
+    	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl; ?>/media/css/bootstrap/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->baseUrl; ?>/media/css/login.css" />
+      
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body class="<?php echo $loginBgClass?>">
+        <div class="container-fluid">
             <div class="login-box-container">
                 <div class="login-box <?php echo $loginBoxClass?>">
                     <div class="text-center">
@@ -60,20 +52,5 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="<?php echo Yii::app()->baseUrl; ?>/media/js/bootstrap/bootstrap.min.js"></script>
-
-	<script>
-  		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  		ga('create', 'UA-64042265-1', 'auto');
-  	ga('send', 'pageview');
-
-</script>
-  </body>
+    </body>
 </html>

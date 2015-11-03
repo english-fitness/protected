@@ -62,10 +62,10 @@
 		</div>
 	<?php endif;?>
 	<div class="row">
-		<div class="col col-lg-1">
+		<div class="col-lg-1">
 			<button class="btn btn-primary">Save report</button>
 		</div>
-		<div class="col col-lg-1" style="margin-left:40px">
+		<div class="col-lg-1" style="margin-left:40px">
 			<a class="btn btn-primary" href="<?php echo Yii::app()->request->urlReferrer?>">Cancel</a>
 		</div>
 	</div>

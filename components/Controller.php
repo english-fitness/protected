@@ -26,7 +26,12 @@ class Controller extends CController
 	public $breadcrumbs=array();
 
 	public function init(){
-		Yii::app()->clientScript->registerCoreScript('jquery');
+		if (!Yii::app()->request->isAjaxRequest){
+			$cs = Yii::app()->getClientScript();
+			$cs->registerCoreScript('jquery');
+			$cs->registerCoreScript('jquery.ui');
+			$cs->registerCssFile(Yii::app()->baseUrl."/media/css/jquery/jquery-ui.min.css");
+		}
 	}
 
 	protected function renderJSON($data)

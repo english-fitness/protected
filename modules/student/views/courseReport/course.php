@@ -3,9 +3,8 @@
 		text-align: center;
 	}
 	.modal-dialog{
-        left:0 !important;
+		margin-left: auto;
         width:960px;
-        margin-top:0;
     }
     .iframe-container{
         background:url(/media/images/icon/ripple-loader.gif) center center no-repeat;
@@ -50,7 +49,7 @@
 	    
 	    BootstrapDialog.show({
 	        title:"<?php echo Yii::t('lang', 'course_report_view_title')?>",
-	        message:'<div class="iframe-container"><iframe id="googleDocsViewer" height="520" width="910" src="' + this.getAttribute('href') + '"></div>',
+	        message:'<div class="iframe-container"><iframe id="googleDocsViewer" height="520" width="928" src="' + this.getAttribute('href') + '"></div>',
 	    });
 	    
 	    $('body').unbind('mousewheel DOMMouseScroll');

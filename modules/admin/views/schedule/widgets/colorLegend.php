@@ -8,7 +8,7 @@
 #secondary-datepicker{
     float:left;
     width:105px;
-    margin-top:0;
+    margin:0 5px;
     height:34px;
     min-height:34px !important;
 }
@@ -26,35 +26,37 @@
     border-radius:3px;
 }
 </style>
-<div class="left-floating-widget widget-box" style="bottom:10px;">
-	<span style="margin:3px"><b>Chú thích</b></span>
-	<div style="clear:both"></div>
-	<div style="width:25px;height:15px;background-color:yellow;float:left;margin:3px"></div><span style="float:left">Khung giờ trống</span>
-	<div style="clear:both"></div>
-	<div style="width:25px;height:15px;background-color:darkgray;float:left;margin:3px"></div><span style="float:left">Đã hết hạn</span>
-	<div style="clear:both"></div>
-	<div style="width:25px;height:15px;background-color:lime;float:left;margin:3px"></div><span style="float:left">Đã xác nhận</span>
-	<div style="clear:both"></div>
-	<div style="width:25px;height:15px;background-color:darkgreen;float:left;margin:3px"></div><span style="float:left">Đang chờ</span>
-	<div style="clear:both"></div>
-	<div style="width:25px;height:15px;background-color:turquoise;float:left;margin:3px"></div><span style="float:left">Đang diễn ra</span>
-	<div style="clear:both"></div>
-	<div style="width:25px;height:15px;background-color:darkorange;float:left;margin:3px"></div><span style="float:left">Đã kết thúc</span>
-	<div style="clear:both"></div>
-</div>
-<div id="floating-datepicker" class="left-floating-widget" style="bottom:165px;display:none">
-    <button class='today-select btn' style="margin-right:5px; outline:none;width:160px;padding:3px">Hôm nay (<?php echo date('d-m-Y')?>)</button>
-    <div style="margin-top:5px">
-        <button class='day-nav btn btn-primary' nav='prev' title='Ngày trước'><</button>
-        <input type="text" id="secondary-datepicker" readonly value="18-09-2015">
-        <button class='day-nav btn btn-primary' nav='next' title='Ngày tiếp theo'>></button>
+<div class="fs14">
+    <div class="left-floating-widget widget-box" style="bottom:10px;">
+    	<span style="margin:3px"><b>Chú thích</b></span>
+    	<div style="clear:both"></div>
+    	<div style="width:25px;height:15px;background-color:yellow;float:left;margin:3px"></div><span style="float:left">Khung giờ trống</span>
+    	<div style="clear:both"></div>
+    	<div style="width:25px;height:15px;background-color:darkgray;float:left;margin:3px"></div><span style="float:left">Đã hết hạn</span>
+    	<div style="clear:both"></div>
+    	<div style="width:25px;height:15px;background-color:lime;float:left;margin:3px"></div><span style="float:left">Đã xác nhận</span>
+    	<div style="clear:both"></div>
+    	<div style="width:25px;height:15px;background-color:darkgreen;float:left;margin:3px"></div><span style="float:left">Đang chờ</span>
+    	<div style="clear:both"></div>
+    	<div style="width:25px;height:15px;background-color:turquoise;float:left;margin:3px"></div><span style="float:left">Đang diễn ra</span>
+    	<div style="clear:both"></div>
+    	<div style="width:25px;height:15px;background-color:darkorange;float:left;margin:3px"></div><span style="float:left">Đã kết thúc</span>
+    	<div style="clear:both"></div>
     </div>
-</div>
-<div class="left-floating-widget widget-box" style="bottom:245px;text-align:justify; display:none"
-	 id="changingSchedule">
-	<p><b>Thay đổi lịch học</b></p>
-	<p>Chọn một khung giờ trống để đổi lịch học. Click nút "Cancel" để hủy thay đổi</p>
-	<button id="cancelChangeSchedule" class="btn" style="margin-left: 35px">Cancel</button>
+    <div id="floating-datepicker" class="left-floating-widget" style="bottom:165px;display:none">
+        <button class='today-select btn' style="margin-right:5px; outline:none;width:160px;padding:3px">Hôm nay (<?php echo date('d-m-Y')?>)</button>
+        <div style="margin-top:5px">
+            <button class='day-nav btn btn-primary' nav='prev' title='Ngày trước'><</button>
+            <input type="text" id="secondary-datepicker" readonly value="18-09-2015">
+            <button class='day-nav btn btn-primary' nav='next' title='Ngày tiếp theo'>></button>
+        </div>
+    </div>
+    <div class="left-floating-widget widget-box" style="bottom:245px; padding:10px; text-align:justify; display:none"
+    	 id="changingSchedule">
+    	<p><b>Thay đổi lịch học</b></p>
+    	<p>Chọn một khung giờ trống để đổi lịch học. Click nút "Cancel" để hủy thay đổi</p>
+    	<button id="cancelChangeSchedule" class="btn" style="margin-left: 35px">Cancel</button>
+    </div>
 </div>
 <script>
 $(function(){

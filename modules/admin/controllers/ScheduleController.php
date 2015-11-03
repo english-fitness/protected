@@ -2,6 +2,19 @@
 
 class ScheduleController extends Controller
 {
+	public function init(){
+		parent::init();
+		$baseUrl = Yii::app()->baseUrl;
+		$cs = Yii::app()->getClientScript();
+		$cs->registerScriptFile($baseUrl.'/media/js/calendar/fullcalendar.min.js');
+		$cs->registerScriptFile($baseUrl.'/media/js/calendar/calendar.js');
+		$cs->registerScriptFile($baseUrl.'/media/js/calendar/lang_vi.js');
+		$cs->registerScriptFile($baseUrl.'/media/js/admin/schedule.js');
+		$cs->registerCssFile($baseUrl.'/media/js/calendar/fullcalendar.min.css');
+		$cs->registerCssFile($baseUrl.'/media/css/calendar.css');
+		$cs->registerCssFile($baseUrl.'/themes/daykem/css/popup.css');
+	}
+
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
      * using two-column layout. See 'protected/views/layouts/column2.php'.
@@ -99,6 +112,11 @@ class ScheduleController extends Controller
 	}
 
 	public function actionOverview(){
+		$cs = Yii::app()->getClientScript();
+		$baseUrl = Yii::app()->baseUrl;
+		$cs->registerScriptFile($baseUrl."/media/js/jquery/jquery.qtip.min.js");
+		$cs->registerCssFile($baseUrl."/media/css/jquery/jquery.qtip.min.css");
+
 		$this->render("overview");
 	}
 

@@ -1,13 +1,3 @@
-<link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
-<link href="/media/js/calendar/fullcalendar.print.css" rel="stylesheet" media="print">
-<link rel="stylesheet" type="text/css" href="/media/css/calendar.css">
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/moment.min.js'></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/lang_vi.js'></script>
-<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/schedule.js"></script>
-
 <?php
 	$teacherModel = User::model()->findByPk($teacher);
 	$classModels = Classes::model()->findAll(array('order'=>'name ASC'));
@@ -24,7 +14,7 @@
 <div class="details-class">
     <div style="width:700px; margin-left:150px">
         <?php $this->renderPartial('widgets/searchBox');?>
-        <div>
+        <div class="mT10 mB10">
             <a href="<?php echo Yii::app()->baseUrl?>/admin/schedule/view">Tất cả giáo viên</a>
         </div>
     </div>

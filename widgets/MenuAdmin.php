@@ -135,13 +135,13 @@ class MenuAdmin extends CWidget
                 'label'=>'Thống kê buổi học',
                 'url'=>'/admin/TeacherPayment',
 				'items'=>array(
-                    array('label'=>'Buổi học', 'url'=>array('/admin/sessionMonitor')),
+                    array('label'=>'Buổi học', 'url'=>array('/admin/sessionMonitor/index')),
                     array('label'=>'Học sinh', 'url'=>array('/admin/sessionMonitor/student')),
 					array(
 						'label'=>'Giáo viên',
 						'url'=>array('#'),
 						'items'=>array(
-							array('label'=>'Buổi học','url'=>array('/admin/TeacherPayment')),
+							array('label'=>'Buổi học','url'=>array('/admin/TeacherPayment/index')),
 							array('label'=>'Điểm phạt', 'url'=>array('/admin/teacherFine/fineRecords')),
 							array('label'=>'Các lần trừ điểm', 'url'=>array('/admin/teacherFine/fineChargeRecords')),
 							array('label'=>'Giáo viên bị trừ điểm', 'url'=>array('/admin/teacherFine/fineChargeList?view=all')),

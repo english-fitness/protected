@@ -1,21 +1,3 @@
-<script src="/media/js/bootstrap/bootstrap-dialog.min.js"></script>
-<link rel="stylesheet" href="/media/css/bootstrap/bootstrap-dialog.min.css">
-<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
-<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/popup.css" type="text/css" rel="stylesheet">
-<style type="text/css">
-    .modal-dialog{
-        left:15px !important;
-        width:960px;
-        margin-top:0;
-    }
-    .row{
-        margin-bottom: 10px;
-    }
-    label.form-row-label{
-        line-height: 31px;
-    }
-</style>
-
 <?php
 function createEditButton($session){
     if ($session->status != Session::STATUS_ENDED && $session->status != Session::STATUS_CANCELED && !$session->isTimedOut()){
