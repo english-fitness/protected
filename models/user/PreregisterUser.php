@@ -249,6 +249,7 @@ class PreregisterUser extends CActiveRecord
 			'Offline - Ngôi sao'=>'Offline - Ngôi sao',
 			'Người quen'=>'Người quen',
 			'Nhân viên - HM'=>'Nhân viên - HM',
+			'Hocmai - Telesales'=>'Hocmai - Telesales',
 		);
 	}
 	
