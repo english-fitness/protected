@@ -30,11 +30,11 @@
         <meta name="msapplication-config" content="/media/images/favicons/browserconfig.xml">
         <meta name="theme-color" content="#ffffff">
         <!--end favicon-->
-        <link rel="stylesheet" href="/media/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/media/css/bootstrap/bootstrap.min.css" />
         <script src="/media/js/jquery/jquery-1.9.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/flick/jquery-ui.css">
-        <script src="/media/js/bootstrap.min.js"></script>
+        <script src="/media/js/bootstrap/bootstrap.min.js"></script>
         <?php if ($this->device == 'mobile'):?>
             <script src="/media/home/js/landing-m.js"></script>
             <script type="text/javascript">

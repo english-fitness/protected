@@ -54,13 +54,13 @@ class ClsAdminHtml
 			$displayBoard .= '</div>';
 		}else{
 			$displayBoard .= '<div id="whiteboard'.$sessionId.'">'
-			/*.'<a href="javascript: createBoard('.$sessionId.', 0, 1, 0, 2);">Lớp nhỏ P2P Bình thường</a> hoặc '*/
-			.'<a href="javascript: createBoard('.$sessionId.', 0, 0, 0, 2);">Lớp nhỏ Server nhỏ Bình thường</a> hoặc '
+			.'<a href="javascript: createBoard('.$sessionId.', 0, 1, 0, 2);">Lớp P2P</a> hoặc '
+			.'<a href="javascript: createBoard('.$sessionId.', 0, 0, 0, 2);">Lớp thường</a> hoặc '
 			// .'<a href="javascript: createBoard('.$sessionId.', 0, 0, 1, 2);">Lớp nhỏ Server lớn Bình thường</a> hoặc '
 			// .'<a href="javascript: createBoard('.$sessionId.', 1, 0, 1, 2);">Lớp lớn Bình thường</a>'
                         .'<br>'       
                         /*.'<a href="javascript: createBoard('.$sessionId.', 0, 1, 0, 1);">Lớp nhỏ P2P Đặc biệt</a> hoặc '*/
-			.'<a href="javascript: createBoard('.$sessionId.', 0, 0, 0, 1);">Lớp nhỏ Server nhỏ Đặc biệt</a> hoặc '
+			.'<a href="javascript: createBoard('.$sessionId.', 0, 0, 0, 1);">Lớp hạn chế</a>'
 			// .'<a href="javascript: createBoard('.$sessionId.', 0, 0, 1, 1);">Lớp nhỏ Server lớn Đặc biệt</a> hoặc '
 			// .'<a href="javascript: createBoard('.$sessionId.', 1, 0, 1, 1);">Lớp lớn Đặc biệt</a>'       
 			.'</div>';
