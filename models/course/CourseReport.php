@@ -23,7 +23,8 @@ class CourseReport extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		$modelRules =  array(
-			array('course_id, student_id, reporting_teacher, report_date, report_file, report_type', 'required'),
+			array('course_id, student_id, reporting_teacher, report_date, report_type', 'required'),
+			array('report_file', 'requireReportFile'),
 			array('course_id, student_id, reporting_teacher', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
@@ -40,6 +41,12 @@ class CourseReport extends CActiveRecord
             $modelRules[] = array('last_modified_user', 'default', 'value'=>Yii::app()->user->id, 'setOnEmpty'=>false, 'on'=>'update');
 		}
         return $modelRules;
+	}
+
+	public function requireReportFile(){
+		if ($this->isNewRecord && empty($this->report_file)){
+			$this->addError('report_file', 'Hãy chọn file báo cáo');
+		}
 	}
 
 	public function reportTypeOptions($type=null){
@@ -131,20 +138,45 @@ class CourseReport extends CActiveRecord
 	}
 	
     public function handleReportFileUpload($uploadedFile){
+    	if (empty($this->course_id) || empty($this->student_id) || empty($this->report_date)){
+    		return false;
+    	}
+
         if(isset($uploadedFile['name']) &&  !$uploadedFile["error"])
         {
+        	if (empty($this->course_id) || empty($this->student_id) || empty($this->report_date)){
+        		return false;
+        	}
             $uploadedFileName = $uploadedFile['name'];
             
             $allowableTypes = array('.doc','.docx','.pdf','.odt');
             $extension = ".".strtolower(pathinfo($uploadedFileName, PATHINFO_EXTENSION));
-            $studentName = str_replace(' ', '-', $this->student->fullname());
-            $fileName = "ProgressReport_".$studentName."_".date("d-m-Y", strtotime($this->report_date));
             
             if(in_array($extension,$allowableTypes)){
+            	$studentName = str_replace(' ', '-', $this->student->fullname());
+            	$fileName = "ProgressReport_".$studentName."_".date("d-m-Y", strtotime($this->report_date));
+
                 $saveFileName = $fileName.$extension;
-                if (move_uploaded_file($uploadedFile['tmp_name'], self::REPORT_UPLOAD_DIR."/".$saveFileName)){
-                	if (!$this->isNewRecord){
-                		$oldReport = self::REPORT_UPLOAD_DIR."/".$this->report_file;
+                $uploadDir = self::REPORT_UPLOAD_DIR."/".$this->course_id;
+                if (!file_exists($uploadDir)){
+                	mkdir(self::REPORT_UPLOAD_DIR."/".$this->course_id, 0755);
+                } else {
+                	if ($this->isNewRecord || strpos(basename($this->report_file), $fileName) === false){
+                		if (file_exists($uploadDir."/".$saveFileName)){
+                			$fileCount = 2;
+                			while(file_exists($uploadDir.'/'.$fileName.'_'.$fileCount.$extension)){
+                				$fileCount++;
+                			}
+                			$saveFileName = $fileName.'_'.$fileCount.$extension;
+                		}
+                	} else {
+                		$saveFileName = $this->report_file;
+                	}
+                	$fileFullPath = $uploadDir."/".$saveFileName;
+                }
+                if (move_uploaded_file($uploadedFile['tmp_name'], $fileFullPath)){
+                	if ($this->report_file != $saveFileName && !$this->isNewRecord){
+                		$oldReport = $uploadDir.'/'.$this->report_file;
                 		if (file_exists($oldReport)){
                 			unlink($oldReport);
                 		}
@@ -173,6 +205,6 @@ class CourseReport extends CActiveRecord
     public function getReportUrl(){
         $https = isset($_SERVER['HTTPS']) && (strcasecmp('off', $_SERVER['HTTPS']) !== 0);
         $protocol = $https ? "https://" : "http://";
-        return $protocol . $_SERVER['HTTP_HOST']. '/' . self::REPORT_UPLOAD_DIR . '/' . $this->report_file;
+        return $protocol . $_SERVER['HTTP_HOST']. '/' . self::REPORT_UPLOAD_DIR . '/' . $this->course_id . '/' . $this->report_file;
     }
 }
