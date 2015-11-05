@@ -40,7 +40,7 @@ class UtmSaleStat extends CActiveRecord
         unset($utmParams['register_id']);
         foreach($utmParams as $key=>$value){
             if ($value != null && $value != ""){
-                $query .= "INSERT IGNORE INTO tbl_utm_sale_meta (meta_key, meta_value) VALUES ('".$key."', '".$value."');";
+                $query .= "INSERT IGNORE INTO tbl_utm_sale_params (name, value) VALUES ('".$key."', '".$value."');";
             }
         }
         Yii::app()->db->createCommand($query)->execute();
@@ -68,8 +68,8 @@ class UtmSaleStat extends CActiveRecord
         return Yii::app()->db->createCommand($query)->queryColumn();
     }
     
-    public static function getFilterValues($key){
-        $query = "SELECT meta_value FROM tbl_utm_sale_meta WHERE meta_key = '" . $key . "'";
+    public static function getFilterValues($name){
+        $query = "SELECT value FROM tbl_utm_sale_params WHERE name = '" . $name . "'";
         return Yii::app()->db->createCommand($query)->queryColumn();
     }
 }
