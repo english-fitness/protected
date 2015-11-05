@@ -120,7 +120,7 @@ class UserActionHistory extends CActiveRecord
 	/**
 	 * Auto creating user action history
 	 */
-	public function saveActionLog($tableName, $primaryKey=null, $isNewRecord=false, $isDeleted=false)
+	public function saveActionLog($tableName, $primaryKey=null, $isNewRecord=false, $isDeleted=false, $description=null)
 	{
 		$adminRules = array(User::ROLE_ADMIN, User::ROLE_MONITOR, User::ROLE_SUPPORT);
 		if(isset(Yii::app()->params['isUserAction']) && isset(Yii::app()->user->id) 
@@ -132,9 +132,17 @@ class UserActionHistory extends CActiveRecord
 				'controller'=>$controllerName,
 				'action'=>$actionName
 			);
+
 			$permission = Permission::model()->findByAttributes($attributes);
 			if(isset($permission->id)){
 				$attributes['description'] = $permission->title;
+			}
+			if ($description != null){
+				if (isset($attributes['description'])){
+					$attributes['description'] .= "<br>".$description;
+				} else {
+					$attributes['description'] = $description;
+				}
 			}
 			$attributes['table_name'] = $tableName;
 			$attributes['primary_key'] = $primaryKey;

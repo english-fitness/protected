@@ -49,6 +49,7 @@ class User extends CActiveRecord
 	const ROLE_STUDENT = 'role_student';//Student user
 	const ROLE_MONITOR = 'role_monitor';//Monitor user
     const ROLE_SUPPORT = 'role_support';//Support user
+    const ROLE_TELESALES = 'role_telesales';//Telesales subrole
     //Const for status of user
     const STATUS_PENDING = 0;//Pending status
     const STATUS_APPROVED = 1;//Approved status
@@ -67,6 +68,22 @@ class User extends CActiveRecord
      * @var string $repeatPassword
      */
     public $repeatPassword;
+
+    public static function adminRoles(){
+    	return array(
+    		self::ROLE_ADMIN,
+    		self::ROLE_MONITOR,
+    		self::ROLE_TELESALES,
+		);
+    }
+
+    public static function monitorRoles(){
+    	return array(
+    		self::ROLE_MONITOR,
+    		self::ROLE_TELESALES,
+    		self::ROLE_SUPPORT,
+		);
+    }
 
     public function getStatusNewOrOld()
     {
@@ -158,8 +175,8 @@ class User extends CActiveRecord
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('	id, username, email, password, firstname, lastname, birthday, gender, address, phone, profile_picture,
-					role, created_date, last_login_time, status, activation_code, activation_expired, status_history, deleted_flag,
-					created_user_id, modified_user_id, source', 'safe', 'on'=>'search'),
+					role, created_date, last_login_time, status, activation_code, activation_expired, status_history,
+					deleted_flag, created_user_id, modified_user_id, source', 'safe', 'on'=>'search'),
 			// Set the created and modified dates automatically on insert, update.
 			array('created_date', 'default', 'value'=>date('Y-m-d H:i:s'), 'setOnEmpty'=>false, 'on'=>'insert'),
 		);
@@ -419,7 +436,7 @@ class User extends CActiveRecord
 		if($identityUserId){
         	$user = User::model()->findByPk($identityUserId);
         	//Not allow login by FB, Google, Hocmai with Admin user
-        	if(in_array($user->role, array(User::ROLE_ADMIN, User::ROLE_MONITOR, User::ROLE_USER))){
+        	if(in_array($user->role, self::adminRoles()+array(self::ROLE_USER))){
         		return false;
         	}
         	if(isset($user->id)){

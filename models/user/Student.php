@@ -356,7 +356,7 @@ class Student extends CActiveRecord
 	public function getSalesUserOptions($isShowEmail=true, $firstLabel="", $showFirst=true)
 	{
 		$criteria = new CDbCriteria();
-        $criteria->condition = "role IN('".User::ROLE_ADMIN."','".User::ROLE_MONITOR."')";
+        $criteria->condition = "role IN('".User::ROLE_TELESALES."','".User::ROLE_MONITOR."')";
         $criteria->compare('deleted_flag', 0);
         $users = User::model()->findAll($criteria);
         $saleUsers = array();//Init sale user

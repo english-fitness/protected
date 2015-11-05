@@ -49,7 +49,28 @@ class RegisterController extends Controller
             if (isset($_REQUEST['referrer'])){
                 $model->source = $_REQUEST['referrer'];
             }
-            
+
+            try {
+            	$cache = Yii::app()->cache;
+            	// $cache->flush();
+            	$availableSalesStaffs = $cache->get('availableSalesStaffs');
+            	if ($availableSalesStaffs === false){
+            		$availableSalesStaffs = ClsUser::getAvailableSalesStaff();
+            		$cache->add('availableSalesStaffs', $availableSalesStaffs);
+            	}
+            	$lastAssignedSale = $cache->get('lastAssignedSale');
+            	$currentSale = array_search($lastAssignedSale, $availableSalesStaffs);
+            	if ($lastAssignedSale === false || $currentSale == -1 || $currentSale == count($availableSalesStaffs) - 1){
+            		$lastAssignedSale = $availableSalesStaffs[0];
+            	} else {
+            		$lastAssignedSale = $availableSalesStaffs[$currentSale + 1];
+            	}
+            	$model->sale_user_id = $lastAssignedSale;
+            	$cache->set('lastAssignedSale', $lastAssignedSale);
+            } catch (Exception $e) {
+            	
+            }
+
 			if ($model->save()){
                 if (isset($utmParams)){
                     $utmStat = new UtmSaleStat;
@@ -61,7 +82,8 @@ class RegisterController extends Controller
 			}
 		}
 		
-		$this->renderJSON(array("success"=>$success, "model"=>$model));
+		// $this->renderJSON(array("success"=>$success, "model"=>$model, 'error'=>json_encode($model->getErrors())));
+		$this->renderJSON(array("success"=>$success));
 	}
     
     public function actionGetPreregisterUser(){

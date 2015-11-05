@@ -91,8 +91,7 @@ class PreregisterUserController extends Controller
 		// $this->performAjaxValidation($model);
 		if(isset($_POST['PreregisterUser']))
 		{
-			$preUserValues = $_POST['PreregisterUser'];
-			$model->attributes = $preUserValues;
+			$model->attributes = $_POST['PreregisterUser'];
 			if($model->save()){
                 if (isset($_REQUEST['urlReferrer'])){
                     $this->redirect($_REQUEST['urlReferrer']);
@@ -117,11 +116,15 @@ class PreregisterUserController extends Controller
 		// $this->performAjaxValidation($model);
 		if(isset($_POST['PreregisterUser']))
 		{
+			$oldSaleUserId = $model->sale_user_id;
 			$preUserValues = $_POST['PreregisterUser'];
 			if(trim($preUserValues['last_sale_date'])==''){
 				unset($preUserValues['last_sale_date']);
 			}
 			$model->attributes = $preUserValues;
+			if (!empty($oldSaleUserId) && $oldSaleUserId != $model->sale_user_id){
+				$model->extraAttributes['oldSaleUserId'] = $oldSaleUserId;
+			}
 			if($model->save()){
                 if (isset($_POST['urlReferrer'])){
                     $this->redirect($_POST['urlReferrer']);

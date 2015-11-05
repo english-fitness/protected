@@ -28,6 +28,8 @@
  */
 class PreregisterUser extends CActiveRecord
 {
+	public $extraAttributes = array();
+
 	//Const for role of user
 	const TYPE_USER_STUDENT = 0;//Type Student  user
 	const TYPE_USER_TEACHER = 1;//Type teacher user
@@ -67,10 +69,12 @@ class PreregisterUser extends CActiveRecord
 			array('phone', 'length', 'max'=>20),
 			array('sale_status', 'length', 'max'=>80),
 			array('birthday, last_sale_date', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
-			array('birthday, care_status, sale_note, last_sale_date, created_user_id, modified_user_id, created_date, promotion_code, modified_date, deleted_flag, source', 'safe'),
+			array('birthday, care_status, sale_note, last_sale_date, created_user_id, modified_user_id,
+				   created_date, promotion_code, modified_date, deleted_flag, source', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, email, fullname, birthday, gender, address, phone, promotion_code, care_status, sale_status, sale_note, sale_user_id, last_sale_date, created_date, modified_date', 'safe', 'on'=>'search'),
+			array('id, email, fullname, birthday, gender, address, phone, promotion_code, care_status, sale_status,
+				   sale_note, sale_user_id, last_sale_date, created_date, modified_date', 'safe', 'on'=>'search'),
 			array('created_date', 'default', 'value'=>date('Y-m-d H:i:s'), 'setOnEmpty'=>false, 'on'=>'insert'),
 		);
 		//Update model rules: modified date, created user, modified user
@@ -194,6 +198,18 @@ class PreregisterUser extends CActiveRecord
 	public function afterSave()
 	{
 		$userActionLog = new UserActionHistory();
+		if (!$this->isNewRecord && isset($this->extraAttributes['oldSaleUserId'])){
+			$oldSaleUser = User::model()->findByPk($this->extraAttributes['oldSaleUserId']);
+			$currentSaleUser = User::model()->findByPk($this->sale_user_id);
+			if ($oldSaleUser != null && $currentSaleUser != null){
+				$userActionLog = new UserActionHistory();
+				$description = "<b>Thay đổi người tư vấn: </b>".
+							   $oldSaleUser->fullname()." (".$oldSaleUser->username.") ➞ ".
+							   $currentSaleUser->fullname(). " (".$currentSaleUser->username.")";
+				return $userActionLog->saveActionLog(PreregisterUser::model()->tableName(), $this->id, false, false, $description);
+			}
+		}
+
 		return $userActionLog->saveActionLog($this->tableName(), $this->id, $this->isNewRecord);
 	}
 	

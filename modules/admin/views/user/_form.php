@@ -125,14 +125,19 @@
 			<?php echo $form->error($model,'firstname'); ?>
 		</div>
 	</div>
-	<?php if($isNewRecord || $model->role==User::ROLE_MONITOR || $model->role==User::ROLE_SUPPORT):?>
+	<?php if($isNewRecord || in_array($model->role, User::monitorRoles())):?>
 	<?php $disabledAttrs = (!$isNewRecord)? array('disabled'=>'disabled','ondblclick'=>'enableEdit(this)'):array();?>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'role'); ?>
 		</div>
 		<div class="col col-lg-9">
-			<?php $userRoleOptions = array(User::ROLE_MONITOR=>User::ROLE_MONITOR, User::ROLE_SUPPORT=>User::ROLE_SUPPORT);?>
+			<?php
+				$userRoleOptions = array();
+				foreach (User::monitorRoles() as $key) {
+					$userRoleOptions[$key] = $key;
+				}
+			?>
 			<?php echo $form->dropDownList($model,'role', $userRoleOptions, $disabledAttrs); ?>
 			<?php echo $form->error($model,'role'); ?>
 			<?php if(!$isNewRecord && $isAdmin):?>
@@ -142,7 +147,7 @@
 			<?php endif;?>
 		</div>
 	</div>
-	<?php endif;?>
+<?php endif;?>
 	<?php if(!$isNewRecord && $model->deleted_flag==1):?>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">

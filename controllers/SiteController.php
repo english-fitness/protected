@@ -50,7 +50,7 @@ class SiteController extends Controller
 	public function actionLoggedRedirect()
 	{
 		if(isset(Yii::app()->user->id)){
-        	$adminRules = array(User::ROLE_ADMIN, User::ROLE_MONITOR);
+        	$adminRules = User::adminRoles();
 			$userRole = Yii::app()->user->role;
 			$urlModule = in_array($userRole, $adminRules)? 'admin': str_replace("role_","",$userRole);
             $this->redirect(Yii::app()->baseurl."/".$urlModule);
@@ -65,7 +65,7 @@ class SiteController extends Controller
 	public function actionConnectedRedirect()
 	{
 		if(isset(Yii::app()->user->id)){
-        	$adminRules = array(User::ROLE_ADMIN, User::ROLE_MONITOR);
+        	$adminRules = User::adminRoles();
 			$userRole = Yii::app()->user->role;
 			$urlModule = in_array($userRole, $adminRules)? 'admin': str_replace("role_","",$userRole);
             $this->redirect(Yii::app()->baseurl."/".$urlModule.'/account/socialNetwork');
@@ -331,7 +331,7 @@ class SiteController extends Controller
 			$baseProtocolUrl = Yii::app()->getRequest()->getBaseUrl(true);
 			if(strpos($urlReferrer, $baseProtocolUrl)!==false){
 				if(isset(Yii::app()->user->id) && isset(Yii::app()->user->role)){
-					if(in_array(Yii::app()->user->role, array(User::ROLE_ADMIN, User::ROLE_MONITOR, User::ROLE_TEACHER))){
+					if(in_array(Yii::app()->user->role, User::adminRoles()+array(User::ROLE_TEACHER))){
 						$success = true;
 					}
 				}

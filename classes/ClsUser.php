@@ -23,5 +23,10 @@ class ClsUser {
 				break;
 		}
     }
+
+    public static function getAvailableSalesStaff(){
+        $query = "SELECT id FROM " . User::model()->tableName() . " WHERE role='".User::ROLE_TELESALES."'";
+        return Yii::app()->db->createCommand($query)->queryColumn();
+    }
 }
 ?>
