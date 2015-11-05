@@ -10,10 +10,15 @@ class WebUser extends CWebUser
     function init(){
         parent::init();
         
-        $this->_model = User::model()->findByPk($this->id);
+        if (isset($this->id)){
+	        $this->_model = User::model()->findByPk($this->id);
+	    }
     }
     
     function getModel(){
+    	if (!isset($this->_model)){
+    		$this->_model = User::model()->findByPk($this->id);
+    	}
         return $this->_model;
     }
 	// Return first name.
@@ -74,20 +79,20 @@ class WebUser extends CWebUser
 	// that means it's admin
 	// access it by Yii::app()->user->isAdmin()
 	function isAdmin(){
-		$user = $this->loadUser(Yii::app()->user->id);
+		$user = $this->loadUser();
 		if ($user!==null)
 			return $user->role == User::ROLE_ADMIN;
-		else return false;
+		
+		return false;
 	}
 	
 	// Load user model.
 	protected function loadUser($id=null) {
-		// if($this->_model===null)
-		// {
-			// if($id!==null)
-				// $this->_model=User::model()->findByPk($id);
-		// }
-		return $this->_model;
+		if ($id != null && $id != $this->id){
+			return User::model()->findByPk($id);
+		}
+
+		return $this->model;
 	}
 
 	public function login($identity, $duration=0)

@@ -136,17 +136,13 @@ class SiteController extends Controller
 				//do something when user is logged in
 				$success = true;
 				
-				$user = User::model()->findByPk(Yii::app()->user->id);
-				$user->active_session = uniqid("", true);
-				$user->save();
+				$user = Yii::app()->user->model;
+				if (!in_array($user->role, User::monitorRoles())){
+					$user->active_session = uniqid("", true);
+					$user->save();
+				}
 				
 				$_SESSION['active_session'] = $user->active_session;
-				
-				// $adminRules = array(User::ROLE_ADMIN, User::ROLE_MONITOR);
-				// $userRole = Yii::app()->user->role;
-				// $urlModule = in_array($userRole, $adminRules)? 'admin': str_replace("role_","",$userRole);
-				// $url = Yii::app()->baseurl."/".$urlModule;
-				
 			}else{
 				Yii::app()->user->setFlash('success','Incorrect username or password.');
 			}
@@ -344,9 +340,11 @@ class SiteController extends Controller
 	public function actionLogout()
 	{
 		if (isset(Yii::app()->user->id)){
-			$user = User::model()->findByPk(Yii::app()->user->id);
-			$user->active_session = NULL;
-			$user->save();
+			$user = Yii::app()->user->model;
+			if (!in_array($user->role, User::monitorRoles())){
+				$user->active_session = NULL;
+				$user->save();
+			}
 			Yii::app()->user->logout(true);
 		}
 		$this->redirect(Yii::app()->homeUrl);
