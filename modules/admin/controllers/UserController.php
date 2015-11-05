@@ -113,12 +113,17 @@ class UserController extends Controller
 				$changePassStatus = false;
 				unset($userValues['password']);//Not save/change password
 			}
+			$oldUserRole = $model->role;
 			$model->attributes = $userValues;			
 			if($changePassStatus){
 				$model->passwordSave = $model->password;
 				$model->repeatPassword = $model->passwordSave;
 			}
 			if($model->save()){
+				// Yii::app()->cache->flush();
+				if ($model->role != $oldUserRole && ($model->role == User::ROLE_TELESALES || $oldUserRole == User::ROLE_TELESALES)){
+					Yii::app()->cache->set('availableSalesStaffs', ClsUser::getAvailableSalesStaff());
+				}
 				$this->redirect(array('index'));
 			}
 		}
