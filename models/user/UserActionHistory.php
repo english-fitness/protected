@@ -52,6 +52,7 @@ class UserActionHistory extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'user'=>array(self::BELONGS_TO, 'User', 'user_id'),
 		);
 	}
 
@@ -90,18 +91,23 @@ class UserActionHistory extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
+		$alias = $this->getTableAlias(false, false);
+
+		$criteria->compare($alias.'.id',$this->id);
 		$criteria->compare('user_id',$this->user_id);
 		$criteria->compare('table_name',$this->table_name,true);
 		$criteria->compare('controller',$this->controller,true);
 		$criteria->compare('action',$this->action,true);
 		$criteria->compare('primary_key',$this->primary_key,true);
 		$criteria->compare('description',$this->description,true);
-		$criteria->compare('created_date',$this->created_date,true);
+		$criteria->compare($alias.'.created_date',$this->created_date,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-			'pagination'=>array('pageVar'=>'page'),
+			'pagination'=>array(
+				'pageVar'=>'page',
+				'pageSize'=>20,
+			),
 		    'sort'=>array('sortVar'=>'sort'),
 		));
 	}
@@ -122,12 +128,21 @@ class UserActionHistory extends CActiveRecord
 	 */
 	public function saveActionLog($tableName, $primaryKey=null, $isNewRecord=false, $isDeleted=false, $description=null)
 	{
-		$adminRules = array(User::ROLE_ADMIN, User::ROLE_MONITOR, User::ROLE_SUPPORT);
-		if(isset(Yii::app()->params['isUserAction']) && isset(Yii::app()->user->id) 
+		$adminRules = User::monitorRoles();
+		$noLoggingActions = array(
+			'register'=>array('contact'),
+		);
+		$controllerName = trim(Yii::app()->controller->id);//Controller name
+		$actionName = trim(Yii::app()->controller->action->id);//Action name
+		if (isset($noLoggingActions[$controllerName]) && in_array($actionName, $noLoggingActions[$controllerName])){
+			$doLog = false;
+		} else {
+			$doLog = true;
+		}
+
+		if($doLog && isset(Yii::app()->params['isUserAction']) && isset(Yii::app()->user->id) 
 			&& isset(Yii::app()->user->role) && in_array(Yii::app()->user->role, $adminRules))
 		{
-			$controllerName = trim(Yii::app()->controller->id);//Controller name
-			$actionName = trim(Yii::app()->controller->action->id);//Action name
 			$attributes = array(
 				'controller'=>$controllerName,
 				'action'=>$actionName

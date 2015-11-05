@@ -52,7 +52,7 @@ class UserActionHistoryController extends Controller
 				$model->created_date = Common::convertDateFilter($_GET['UserActionHistory']['created_date']);//Created date filter
 			}
 		}
-		$model->getDbCriteria()->order = 'created_date DESC';
+		$model->getDbCriteria()->order = 't.created_date DESC';
 		$this->render('/user/actionHistory',array(
 			'model'=>$model,
 		));

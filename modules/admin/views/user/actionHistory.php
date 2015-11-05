@@ -14,7 +14,11 @@ $this->breadcrumbs=array(
 </div>
 <?php $createdDateFilter = Yii::app()->controller->getQuery('UserActionHistory[created_date]', '');?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'dataProvider'=>$model->search(),
+	'dataProvider'=>$model->with(array(
+		'user'=>array(
+			'select'=>array('id', 'firstname', 'lastname')
+		)
+	))->search(),
 	'filter'=>$model,
 	'enableHistory'=>true,
 	'ajaxVar'=>'',
@@ -54,7 +58,7 @@ $this->breadcrumbs=array(
 		),
 		array(
 		   'name'=>'user_id',
-		   'value'=>'($data->user_id)? User::model()->displayUserById($data->user_id):""',
+		   'value'=>'($data->user_id)? $data->user->getViewLink() :""',
 		   'type'=>'raw', 'htmlOptions'=>array('style'=>'width:150px;'),
 		),
 	),
