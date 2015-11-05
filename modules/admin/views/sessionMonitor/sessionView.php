@@ -1,6 +1,7 @@
 <?php
 function createEditButton($session){
-    if ($session->status != Session::STATUS_ENDED && $session->status != Session::STATUS_CANCELED && !$session->isTimedOut()){
+    if (($session->status != Session::STATUS_ENDED && $session->status != Session::STATUS_CANCELED && !$session->isTimedOut())
+        || $session->deleted_flag == 1){
         return "";
     }
 
@@ -35,6 +36,9 @@ function createEditButton($session){
 }
 
 function getStatusDisplay($session){
+    if ($session->deleted_flag == 1){
+        return "Đã xóa";
+    }
     $status = $session->status;
     if($status != Session::STATUS_ENDED && $status != Session::STATUS_CANCELED){
         if ($session->isTimedOut()){
@@ -98,6 +102,7 @@ function getStatusDisplay($session){
 	'enableHistory'=>true,
 	'ajaxVar'=>'',
 	'htmlOptions'=>array('style'=>'vertical-align:top;'),
+    'rowHtmlOptionsExpression'=>'($data->deleted_flag==1)?array("class"=>"deletedRecord"):array()',
 	'pager' => array('class'=>'CustomLinkPager'),
 	'columns'=>array(
 		array(

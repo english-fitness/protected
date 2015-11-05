@@ -167,7 +167,8 @@ class SessionNote extends CActiveRecord
         $dateConstraint = self::getDateConstraint($requestParams, 'plan_start');
 
         $criteria = new CDbCriteria();
-        $criteria->condition = $dateConstraint;
+        $criteria->addCondition($dateConstraint);
+        $criteria->addCondition("deleted_flag = 0");
         $criteria->order = "plan_start DESC";
         $criteria->with= array("note", "teacherFine");
 
