@@ -19,7 +19,7 @@ $this->breadcrumbs=array(
 </div>
 <?php
 	$checkUserForm = false;//Check to displaying permission form
-	if(isset($user) && in_array($user->role, array(User::ROLE_MONITOR, User::ROLE_SUPPORT))):
+	if(isset($user) && in_array($user->role, array(User::ROLE_MONITOR, User::ROLE_SUPPORT, User::ROLE_TELESALES))):
 		$checkUserForm = true;
 ?>
 <div class="page-header-toolbar-container row">

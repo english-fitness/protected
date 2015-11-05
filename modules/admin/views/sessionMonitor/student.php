@@ -40,7 +40,7 @@ $this->breadcrumbs=array(
 		array(
 		   'name' => 'phone',
 		   'value'=>'$data->displayContactIcons()',
-		   'htmlOptions'=>array('style'=>'width:100px;'),
+		   'htmlOptions'=>array('style'=>'width:135px;'),
 		),
 		array(
 		   'name'=>'status',

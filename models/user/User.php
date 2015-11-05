@@ -69,6 +69,7 @@ class User extends CActiveRecord
      */
     public $repeatPassword;
 
+    //Users of admin module
     public static function adminRoles(){
     	return array(
     		self::ROLE_ADMIN,
@@ -77,8 +78,10 @@ class User extends CActiveRecord
 		);
     }
 
+    //Users with some accesses to administrative functions
     public static function monitorRoles(){
     	return array(
+    		self::ROLE_ADMIN,
     		self::ROLE_MONITOR,
     		self::ROLE_TELESALES,
     		self::ROLE_SUPPORT,
@@ -746,6 +749,7 @@ class User extends CActiveRecord
 				return '<a href="' . Yii::app()->baseUrl . '/admin/teacher/view/id/' . $this->id . '">' . $this->fullname() . '</a>';
 				break;
 			default:
+				return '<a href="' . Yii::app()->baseUrl . '/admin/user/view/id/' . $this->id . '">' . $this->fullname() . '</a>';
 				break;
 		}
 	}

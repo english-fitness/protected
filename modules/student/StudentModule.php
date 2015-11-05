@@ -26,7 +26,7 @@ class StudentModule extends CWebModule{
         //Check loggin user is admin user
         if(!(Yii::app()->user->getId() && Yii::app()->user->role==User::ROLE_STUDENT))
         {
-        	$otherAccessRoles = array(User::ROLE_ADMIN, User::ROLE_MONITOR, User::ROLE_SUPPORT);
+        	$otherAccessRoles = User::monitorRoles();
         	if(!(in_array(Yii::app()->user->role, $otherAccessRoles) && $controller->id=='quiz')){
             	$controller->redirect(Yii::app()->homeUrl);
         	}
