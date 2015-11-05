@@ -21,7 +21,7 @@ class AdminModule extends CWebModule
 	public function beforeControllerAction($controller, $action)
 	{
 		//Check loggin user is admin user
-		$adminRules = array(User::ROLE_ADMIN, User::ROLE_MONITOR);
+		$adminRules = User::adminRoles();
 		if(!(Yii::app()->user->getId() && in_array(Yii::app()->user->role, $adminRules)))
 		{
 			$quizControllers = array('quizTopic', 'quizExam', 'quizItem');
