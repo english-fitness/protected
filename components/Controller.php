@@ -133,6 +133,7 @@ class Controller extends CController
 			return Yii::app()->baseUrl."/media/";
 		}
 		if ($this->_baseAssetsUrl === null)
+			Yii::app()->getAssetManager()->linkAssets = true;
             $this->_baseAssetsUrl = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias('application')."/../media/");
         return $this->_baseAssetsUrl;
 	}
@@ -142,6 +143,7 @@ class Controller extends CController
 			Yii::app()->theme->baseUrl."/";
 		}
 		if ($this->_themeAssetsUrl === null)
+			Yii::app()->getAssetManager()->linkAssets = true;
             $this->_themeAssetsUrl = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias('application')."/../".Yii::app()->theme->baseUrl."/");
         return $this->_themeAssetsUrl;
 	}
