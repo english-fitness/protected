@@ -1,5 +1,5 @@
 <?php if(Yii::app()->language=="vi"):?>
-<script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/lang_vi.js'></script>
+<script src='<?php echo $this->baseAssetsUrl; ?>/js/calendar/lang_vi.js'></script>
 <?php endif;?>
 
 <div class="page-title"><p style="color:#ffffff; text-align:center; font-size:20px;"><?php echo Yii::t('lang', 'schedule')?></p></div>

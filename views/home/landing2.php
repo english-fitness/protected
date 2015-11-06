@@ -13,9 +13,11 @@ if (isset($_REQUEST['ref'])){
 if ($referrer == ""){
     $referrer = "Online - Facebook";
 }
+
+$baseAssetsUrl = $this->baseAssetsUrl;
 ?>
 
-<link rel="stylesheet" href="/media/home/style/landing-2.css" />
+<link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/home/style/landing-2.css" />
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,900,300' rel='stylesheet' type='text/css'>
 <div id="main">
     <!--waypoints-->
@@ -29,7 +31,7 @@ if ($referrer == ""){
         <div id="body-header" class="clearfix">
             <div class="speakup-logo">
                 <a style="display:block;height:54px" href="https://speakup.vn/news" target="_blank" title="Trang chủ">
-                    <img style="height:54px" src="/media/home/img/logo.png" />
+                    <img style="height:54px" src="<?php echo $baseAssetsUrl;?>/home/img/logo.png" />
                 </a>
             </div>
             <div id="quick-nav">
@@ -76,16 +78,16 @@ if ($referrer == ""){
                     </div>
                     <div class="border-bottom">
                         <div class="benefit-piece benefit-img">
-                            <img src="/media/home/img/landing-2/benefit-1.png">
+                            <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/benefit-1.png">
                         </div>
                         <div class="benefit-piece benefit-img middle-piece">
-                            <img src="/media/home/img/landing-2/benefit-2.png">
+                            <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/benefit-2.png">
                         </div>
                         <div class="benefit-piece benefit-img middle-piece">
-                            <img src="/media/home/img/landing-2/benefit-3.png">
+                            <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/benefit-3.png">
                         </div>
                         <div class="benefit-piece benefit-img" style="margin-left:21px">
-                            <img src="/media/home/img/landing-2/benefit-4.png">
+                            <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/benefit-4.png">
                         </div>
                     </div>
                     <div class="benefit-txt-div accent">
@@ -112,13 +114,13 @@ if ($referrer == ""){
                     <div class="inner-content accent-bg">
                         <div class="bottom-border" style="height:105px">
                             <div class="step-img step-piece">
-                                <img src="/media/home/img/landing-2/step-1.png">
+                                <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/step-1.png">
                             </div>
                             <div class="step-img step-piece middle-piece">
-                                <img src="/media/home/img/landing-2/step-2.png">
+                                <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/step-2.png">
                             </div>
                             <div class="step-img step-piece">
-                                <img src="/media/home/img/landing-2/step-3.png">
+                                <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/step-3.png">
                             </div>
                         </div>
                         <div style="clear:both"></div>
@@ -233,7 +235,7 @@ if ($referrer == ""){
             <div class="layer-2">
                 <div class="form-container" id="main-form">
                     <div class="close-button">
-                        <a href='#'><img src="/media/images/icon/close-button.png"/></a>
+                        <a href='#'><img src="<?php echo $baseAssetsUrl;?>/images/icon/close-button.png"/></a>
                     </div>
                     <div class="inner-form">
                         <!--main form-->
@@ -325,7 +327,7 @@ if ($referrer == ""){
         <!--testimonials-->
         <div id="testimonials" class="body-content">
             <div class="content-title testimonial-title">
-                <p><img src="/media/home/img/landing-2/wing-left.png"> HỌC VIÊN NÓI VỀ <span style=" color:#fa5a00">SPEAK UP</span> <img src="/media/home/img/landing-2/wing-right.png"></p>
+                <p><img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/wing-left.png"> HỌC VIÊN NÓI VỀ <span style=" color:#fa5a00">SPEAK UP</span> <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/wing-right.png"></p>
                 <br><br>
                 <p>★ ★ ★</p>
             </div>

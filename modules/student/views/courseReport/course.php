@@ -10,8 +10,6 @@
         background:url(/media/images/icon/ripple-loader.gif) center center no-repeat;
     }
 </style>
-<script src="/media/js/bootstrap/bootstrap-dialog.min.js"></script>
-<link rel="stylesheet" href="/media/css/bootstrap/bootstrap-dialog.min.css">
 <div class="page-title"><p><?php echo  Yii::t('lang','course_report') ;?></p></div>
 <div class="detail-class">
 	<div class="session">

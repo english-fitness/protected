@@ -8,7 +8,7 @@ $this->breadcrumbs=array(
 	'Update',
 );
 ?>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/course.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseAssetsUrl ?>/js/admin/course.js"></script>
 <?php $this->renderPartial('_form', array('model'=>$model, 'subjects'=>$subjects,
  'availableTeachers'=>$availableTeachers, 'availableStudents'=>$availableStudents,
  'priorityTeachers'=>$priorityTeachers, 'action'=>'update')); ?>

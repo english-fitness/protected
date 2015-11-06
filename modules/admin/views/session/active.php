@@ -10,7 +10,7 @@ $this->breadcrumbs=array(
 <script type="text/javascript">
    	setTimeout(function(){window.location.href="/admin/session/active"},60000);
 </script>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/session.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseAssetsUrl ?>/js/admin/session.js"></script>
 <div class="page-header-toolbar-container row">
     <div class="col col-lg-12">
         <h2 class="page-title mT10">Buổi học đang diễn ra</h2>

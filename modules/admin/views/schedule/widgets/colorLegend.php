@@ -25,22 +25,28 @@
     box-shadow:1px 1px 1px #ddd;
     border-radius:3px;
 }
+.color-legend{
+    width: 25px;
+    height: 15px;
+    float: left;
+    margin: 3px;
+}
 </style>
 <div class="fs14">
     <div class="left-floating-widget widget-box" style="bottom:10px;">
     	<span style="margin:3px"><b>Chú thích</b></span>
     	<div style="clear:both"></div>
-    	<div style="width:25px;height:15px;background-color:yellow;float:left;margin:3px"></div><span style="float:left">Khung giờ trống</span>
+    	<div style="background-color:yellow" class="color-legend"></div><span style="float:left">Khung giờ trống</span>
     	<div style="clear:both"></div>
-    	<div style="width:25px;height:15px;background-color:darkgray;float:left;margin:3px"></div><span style="float:left">Đã hết hạn</span>
+    	<div style="background-color:darkgray" class="color-legend"></div><span style="float:left">Đã hết hạn</span>
     	<div style="clear:both"></div>
-    	<div style="width:25px;height:15px;background-color:lime;float:left;margin:3px"></div><span style="float:left">Đã xác nhận</span>
+    	<div style="background-color:lime" class="color-legend"></div><span style="float:left">Đã xác nhận</span>
     	<div style="clear:both"></div>
-    	<div style="width:25px;height:15px;background-color:darkgreen;float:left;margin:3px"></div><span style="float:left">Đang chờ</span>
+    	<div style="background-color:darkgreen" class="color-legend"></div><span style="float:left">Đang chờ</span>
     	<div style="clear:both"></div>
-    	<div style="width:25px;height:15px;background-color:turquoise;float:left;margin:3px"></div><span style="float:left">Đang diễn ra</span>
+    	<div style="background-color:turquoise" class="color-legend"></div><span style="float:left">Đang diễn ra</span>
     	<div style="clear:both"></div>
-    	<div style="width:25px;height:15px;background-color:darkorange;float:left;margin:3px"></div><span style="float:left">Đã kết thúc</span>
+    	<div style="background-color:darkorange" class="color-legend"></div><span style="float:left">Đã kết thúc</span>
     	<div style="clear:both"></div>
     </div>
     <div id="floating-datepicker" class="left-floating-widget" style="bottom:165px;display:none">
@@ -94,10 +100,10 @@ $(document).on("calendarLoaded", function(e){
         $(window).scroll(function(){
             var currentPos = window.pageYOffset;
             if (currentPos >= firstCalendarTop && !floatingDatepickerShowing){
-                $('#floating-datepicker').show(300);
+                $('#floating-datepicker').slideDown(300);
                 floatingDatepickerShowing = true;
             } else if (currentPos < firstCalendarTop && floatingDatepickerShowing && !$("#changingSchedule").is(":visible")){
-                $('#floating-datepicker').hide(300);
+                $('#floating-datepicker').slideUp(300);
                 floatingDatepickerShowing = false;
             }
         });

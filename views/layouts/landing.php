@@ -9,34 +9,35 @@
             <meta name="viewport" content="width=1366">
         <?php endif;?>
         <title>Speak up - Học tiếng Anh online</title>
+        <?php $baseAssetsUrl = $this->baseAssetsUrl?>
         <!--favicon-->
-        <link rel="apple-touch-icon" sizes="57x57" href="/media/images/favicons/apple-touch-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="/media/images/favicons/apple-touch-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="/media/images/favicons/apple-touch-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="/media/images/favicons/apple-touch-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="/media/images/favicons/apple-touch-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="/media/images/favicons/apple-touch-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="/media/images/favicons/apple-touch-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="/media/images/favicons/apple-touch-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/media/images/favicons/apple-touch-icon-180x180.png">
-        <link rel="icon" type="image/png" href="/media/images/favicons/favicon-32x32.png" sizes="32x32">
-        <link rel="icon" type="image/png" href="/media/images/favicons/android-chrome-192x192.png" sizes="192x192">
-        <link rel="icon" type="image/png" href="/media/images/favicons/favicon-96x96.png" sizes="96x96">
-        <link rel="icon" type="image/png" href="/media/images/favicons/favicon-16x16.png" sizes="16x16">
-        <link rel="manifest" href="/media/images/favicons/manifest.json">
-        <link rel="shortcut icon" href="/media/images/favicons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="57x57" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-180x180.png">
+        <link rel="icon" type="image/png" href="<?php echo $baseAssetsUrl;?>/images/favicons/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="<?php echo $baseAssetsUrl;?>/images/favicons/android-chrome-192x192.png" sizes="192x192">
+        <link rel="icon" type="image/png" href="<?php echo $baseAssetsUrl;?>/images/favicons/favicon-96x96.png" sizes="96x96">
+        <link rel="icon" type="image/png" href="<?php echo $baseAssetsUrl;?>/images/favicons/favicon-16x16.png" sizes="16x16">
+        <link rel="manifest" href="<?php echo $baseAssetsUrl;?>/images/favicons/manifest.json">
+        <link rel="shortcut icon" href="<?php echo $baseAssetsUrl;?>/images/favicons/favicon.ico">
         <meta name="msapplication-TileColor" content="#da532c">
-        <meta name="msapplication-TileImage" content="/media/images/favicons/mstile-144x144.png">
-        <meta name="msapplication-config" content="/media/images/favicons/browserconfig.xml">
+        <meta name="msapplication-TileImage" content="<?php echo $baseAssetsUrl;?>/images/favicons/mstile-144x144.png">
+        <meta name="msapplication-config" content="<?php echo $baseAssetsUrl;?>/images/favicons/browserconfig.xml">
         <meta name="theme-color" content="#ffffff">
         <!--end favicon-->
-        <link rel="stylesheet" href="/media/css/bootstrap/bootstrap.min.css" />
-        <script src="/media/js/jquery/jquery-1.9.1.min.js"></script>
+        <link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/css/bootstrap/bootstrap.min.css" />
+        <script src="<?php echo $baseAssetsUrl;?>/js/jquery/jquery-1.9.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/flick/jquery-ui.css">
-        <script src="/media/js/bootstrap/bootstrap.min.js"></script>
+        <script src="<?php echo $baseAssetsUrl;?>/js/bootstrap/bootstrap.min.js"></script>
         <?php if ($this->device == 'mobile'):?>
-            <script src="/media/home/js/landing-m.js"></script>
+            <script src="<?php echo $baseAssetsUrl;?>/home/js/landing-m.js"></script>
             <script type="text/javascript">
                 $(document).bind('mobileinit',function(){
                     $.mobile.loadingMessage = false;
@@ -44,21 +45,21 @@
             </script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
         <?php else:?>
-            <script src="/media/home/js/landing.js"></script>
+            <script src="<?php echo $baseAssetsUrl;?>/home/js/landing.js"></script>
         <?php endif;?>
-        <script src="/media/home/js/modernizr.js"></script>
-        <script src="/media/home/js/masonry.pkgd.min.js"></script>
-        <script src="/media/home/js/jquery/jquery.flexslider-min.js"></script>
-        <script src="/media/home/js/jquery/jquery.testimonial-slider.js"></script>
-        <link rel="stylesheet" href="/media/home/style/jquery/jquery.testimonial-slider.css" />
-        <script src="/media/js/jquery/jquery.timepickr.js"></script>
-        <script src="/media/js/jquery/jquery.weekLine.min.js"></script>
-        <script src="/media/home/js/jquery.lightbox/html5lightbox.js"></script>
-        <link rel="stylesheet" href="/media/css/jquery/jquery.weekLine.css">
-        <script src="/media/js/bootstrap/bootstrap-dialog.min.js"></script>
-        <link rel="stylesheet" href="/media/css/bootstrap/bootstrap-dialog.min.css">
-        <script src="/media/uploads/home/data/testimonials.js"></script>
-        <script src="/media/uploads/home/data/teachers.js"></script>
+        <script src="<?php echo $baseAssetsUrl;?>/home/js/modernizr.js"></script>
+        <script src="<?php echo $baseAssetsUrl;?>/home/js/masonry.pkgd.min.js"></script>
+        <script src="<?php echo $baseAssetsUrl;?>/home/js/jquery/jquery.flexslider-min.js"></script>
+        <script src="<?php echo $baseAssetsUrl;?>/home/js/jquery/jquery.testimonial-slider.js"></script>
+        <link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/home/style/jquery/jquery.testimonial-slider.css" />
+        <script src="<?php echo $baseAssetsUrl;?>/js/jquery/jquery.timepickr.js"></script>
+        <script src="<?php echo $baseAssetsUrl;?>/js/jquery/jquery.weekLine.min.js"></script>
+        <script src="<?php echo $baseAssetsUrl;?>/home/js/jquery.lightbox/html5lightbox.js"></script>
+        <link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/css/jquery/jquery.weekLine.css">
+        <script src="<?php echo $baseAssetsUrl;?>/js/bootstrap/bootstrap-dialog.min.js"></script>
+        <link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/css/bootstrap/bootstrap-dialog.min.css">
+        <script src="<?php echo $baseAssetsUrl;?>/uploads/home/data/testimonials.js"></script>
+        <script src="<?php echo $baseAssetsUrl;?>/uploads/home/data/teachers.js"></script>
         <!--Start of Tawk.to Script-->
         <script type="text/javascript">
             // var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();

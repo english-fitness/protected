@@ -3,7 +3,6 @@
 /* @var $model Course */
 /* @var $form CActiveForm */
 ?>
-<script src="/media/js/moment.min.js"></script>
 <script type="text/javascript">
 	function cancel(){
 		<?php $type = (!$model->isNewRecord)? $model->type: 1;?>

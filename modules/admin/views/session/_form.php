@@ -3,7 +3,7 @@
 /* @var $model Session */
 /* @var $form CActiveForm */
 ?>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/session.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseAssetsUrl ?>/js/admin/session.js"></script>
 <script type="text/javascript">
 	function cancel(){
 		window.location = daykemBaseUrl + '/admin/session?course_id=<?php echo $modelCourse->id; ?>';

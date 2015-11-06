@@ -13,16 +13,18 @@ if (isset($_REQUEST['ref'])){
 if ($referrer == ""){
     $referrer = "Online - Facebook";
 }
+
+$baseAssetsUrl = $this->baseAssetsUrl;
 ?>
 
-<link rel="stylesheet" href="/media/home/style/landing.css" />
+<link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/home/style/landing.css" />
 <div id="main">
     <!--banner-->
     <div id="main-banner">
         <div id="body-header" class="clearfix">
             <div class="speakup-logo">
                 <a style="display:block;height:54px" href="https://speakup.vn/news" target="_blank" title="Trang chủ">
-                    <img style="height:54px" src="/media/home/img/logo.png" />
+                    <img style="height:54px" src="<?php echo $baseAssetsUrl;?>/home/img/logo.png" />
                 </a>
             </div>
             <div id="quick-nav">
@@ -60,7 +62,7 @@ if ($referrer == ""){
     </div>
     <div id="floating-logo">
         <a style="display:block;height:54px" href="https://speakup.vn/news" target="_blank" title="Trang chủ">
-            <img style="height:80px" src="/media/home/img/logo.png" />
+            <img style="height:80px" src="<?php echo $baseAssetsUrl;?>/home/img/logo.png" />
         </a>
     </div>
     <!--end content header-->
@@ -80,7 +82,7 @@ if ($referrer == ""){
                 <ul class="benefits clearfix">
                     <li>
                         <div class="benefit-img">
-                            <img src="/media/home/img/landing-1/su-benefit-11.png" />
+                            <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-1/su-benefit-11.png" />
                         </div>
                         <div class="benefit-txt orange-darker">
                             <p>100% GIÁO VIÊN QUỐC TẾ<br><span class="accent">sẽ đem lại môi trường tuyệt vời cho bạn nói tiếng anh</span></p>
@@ -88,7 +90,7 @@ if ($referrer == ""){
                     </li>
                     <li>
                         <div class="benefit-img">
-                            <img src="/media/home/img/landing-1/su-benefit-teacher.png" />
+                            <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-1/su-benefit-teacher.png" />
                         </div>
                         <div class="benefit-txt orange-darker">
                             <p>GIÁO VIÊN LUÔN SÁT CÁNH<br><span class="accent">giúp bạn sửa lỗi nhanh</span></p>
@@ -96,7 +98,7 @@ if ($referrer == ""){
                     </li>
                     <li>
                         <div class="benefit-img">
-                            <img src="/media/home/img/landing-1/su-benefit-personalize.png" />
+                            <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-1/su-benefit-personalize.png" />
                         </div>
                         <div class="benefit-txt orange-darker">
                             <p>GIÁO TRÌNH THIẾT KẾ RIÊNG<br><span class="accent">phù hợp với trình độ của từng học viên</span></p>
@@ -104,7 +106,7 @@ if ($referrer == ""){
                     </li>
                     <li>
                         <div class="benefit-img">
-                            <img src="/media/home/img/landing-1/su-benefit-everywhere.png" />
+                            <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-1/su-benefit-everywhere.png" />
                         </div>
                         <div class="benefit-txt orange-darker">
                             <p>GIÁO VIÊN TÂM HUYẾT<br><span class="accent">tạo không gian cởi mở giúp bạn tự tin khi giao tiếp tiếng Anh</span></p>
@@ -187,7 +189,7 @@ if ($referrer == ""){
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <div class="step-img">
-                                <img src="/media/home/img/landing-1/step-1.png" />
+                                <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-1/step-1.png" />
                             </div>
                             <div class="step-text">
                                 <p>ĐĂNG KÝ</p>
@@ -198,7 +200,7 @@ if ($referrer == ""){
                         <div class="step-number">2</div>
                         <div class="step-content">
                             <div class="step-img">
-                                <img src="/media/home/img/landing-1/step-2.png" style="padding-top:8px" />
+                                <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-1/step-2.png" style="padding-top:8px" />
                             </div>
                             <div class="step-text">
                                 <p>XẾP LỊCH HỌC</p>
@@ -209,7 +211,7 @@ if ($referrer == ""){
                         <div class="step-number">3</div>
                         <div class="step-content">
                             <div class="step-img">
-                                <img src="/media/home/img/landing-1/step-3.png" />
+                                <img src="<?php echo $baseAssetsUrl;?>/home/img/landing-1/step-3.png" />
                             </div>
                             <div class="step-text">
                                 <p>THAM GIA HỌC THỬ</p>
@@ -227,7 +229,7 @@ if ($referrer == ""){
         <div id="registration" class="body-content">
             <div class="form-container" id="main-form">
                 <div class="close-button">
-                    <a href='#'><img src="/media/images/icon/close-button.png"/></a>
+                    <a href='#'><img src="<?php echo $baseAssetsUrl;?>/images/icon/close-button.png"/></a>
                 </div>
                 <div class="inner-form">
                     <!--main form-->

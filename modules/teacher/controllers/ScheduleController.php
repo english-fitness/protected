@@ -4,12 +4,12 @@ class ScheduleController extends Controller
 {
 	public function init(){
 		parent::init();
-		$baseUrl = Yii::app()->baseUrl;
+		$baseAssetsUrl = $this->baseAssetsUrl;
 		$cs = Yii::app()->getClientScript();
-		$cs->registerScriptFile($baseUrl.'/media/js/calendar/fullcalendar.min.js');
-		$cs->registerScriptFile($baseUrl.'/media/js/calendar/calendar.js');
-		$cs->registerCssFile($baseUrl.'/media/js/calendar/fullcalendar.min.css');
-		$cs->registerCssFile($baseUrl.'/media/css/calendar.css');
+		$cs->registerScriptFile($baseAssetsUrl.'/js/calendar/fullcalendar.min.js');
+		$cs->registerScriptFile($baseAssetsUrl.'/js/calendar/calendar.js');
+		$cs->registerCssFile($baseAssetsUrl.'/js/calendar/fullcalendar.min.css');
+		$cs->registerCssFile($baseAssetsUrl.'/css/calendar.css');
 	}
 	
     public function actionRegisterSchedule(){

@@ -13,9 +13,6 @@ class AdminModule extends CWebModule
 			'admin.components.*',
 			'admin.classes.*',
 		));
-		Yii::app()->getClientScript()->scriptMap = array(
-        	'jquery.yiigridview.js' => Yii::app()->baseUrl . '/media/js/jquery/jquery.yiigridview.js',
-		);
 	}
 
 	public function beforeControllerAction($controller, $action)

@@ -55,8 +55,6 @@ function getStatusDisplay($session){
 }
 ?>
 
-<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/popup.js"></script>
-<link href="<?php echo Yii::app()->theme->baseUrl; ?>/css/popup.css" type="text/css" rel="stylesheet">
 <div class="page-header-toolbar-container row">
     <div class="col col-lg-12">
         <h2 class="page-title mT10">Các buổi học trong khóa</h2>

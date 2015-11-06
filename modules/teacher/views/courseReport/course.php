@@ -7,7 +7,7 @@
         width:960px;
     }
     .iframe-container{
-        background:url(/media/images/icon/ripple-loader.gif) center center no-repeat;
+        background:url(<?php echo $this->baseAssetsUrl?>/images/icon/ripple-loader.gif) center center no-repeat;
     }
 </style>
 

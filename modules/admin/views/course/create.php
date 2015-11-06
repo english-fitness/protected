@@ -19,7 +19,7 @@
         $packagePrices[$package->id] = $prices;
     }
 ?>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/course.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseAssetsUrl ?>/js/admin/course.js"></script>
 <script type="text/javascript">
 	function cancel(){
 		window.location = daykemBaseUrl+'/admin/course?type=1';

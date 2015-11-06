@@ -4,8 +4,21 @@ class ScheduleController extends Controller
 {
     public  function  init()
     {
-        Yii::app()->language = 'en';//Config admin language is Vietnamese
+    	parent::init();
+    	$baseAssetsUrl = $this->baseAssetsUrl;
+    	$cs = Yii::app()->getClientScript();
+    	$cs->registerScriptFile($baseAssetsUrl.'/js/moment.min.js');
+    	$cs->registerScriptFile($baseAssetsUrl.'/js/calendar/fullcalendar.min.js');
+    	$cs->registerScriptFile($baseAssetsUrl.'/js/calendar/calendar.js');
+    	$cs->registerScriptFile($baseAssetsUrl.'/js/utils.js');
+    	$cs->registerCssFile($baseAssetsUrl.'/css/base/style.css');
+    	$cs->registerCssFile($baseAssetsUrl.'/css/bootstrap/bootstrap.min.css');
+    	$cs->registerCssFile($baseAssetsUrl.'/js/calendar/fullcalendar.min.css');
+    	$cs->registerCssFile($baseAssetsUrl.'/css/calendar.css');
+
+        Yii::app()->language = 'en';
     }
+
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
@@ -28,10 +41,6 @@ class ScheduleController extends Controller
 		}
         
 		if ($view == 'day'){
-			//get teacher id
-			//render the day view page
-			//do some pagination
-			
 			if (isset($_REQUEST['page'])){
 				$page = $_REQUEST['page'];
 			} else {

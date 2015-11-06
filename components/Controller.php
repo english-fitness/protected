@@ -5,6 +5,9 @@
  */
 class Controller extends CController
 {
+	private $_baseAssetsUrl;
+	private $_themeAssetsUrl;
+
 	/**
 	 * @var string the default layout for the controller view. Defaults to '//layouts/column1',
 	 * meaning using a single column layout. See 'protected/views/layouts/column1.php'.
@@ -30,7 +33,7 @@ class Controller extends CController
 			$cs = Yii::app()->getClientScript();
 			$cs->registerCoreScript('jquery');
 			$cs->registerCoreScript('jquery.ui');
-			$cs->registerCssFile(Yii::app()->baseUrl."/media/css/jquery/jquery-ui.min.css");
+			$cs->registerCssFile($this->baseAssetsUrl."/css/jquery/jquery-ui.min.css");
 		}
 	}
 
@@ -123,5 +126,24 @@ class Controller extends CController
 		}
 		return Yii::app()->request->getPost($param, $default);
 	}
-	
+
+	//use asset manager only in production
+	public function getBaseAssetsUrl(){
+		if (defined('YII_DEBUG') && YII_DEBUG){
+			return Yii::app()->baseUrl."/media/";
+		}
+		if ($this->_baseAssetsUrl === null)
+            $this->_baseAssetsUrl = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias('application')."/../media/");
+        return $this->_baseAssetsUrl;
+	}
+
+	public function getThemeAssetsUrl(){
+		if (defined('YII_DEBUG') && YII_DEBUG){
+			Yii::app()->theme->baseUrl."/";
+		}
+		if ($this->_themeAssetsUrl === null)
+            $this->_themeAssetsUrl = Yii::app()->getAssetManager()->publish(Yii::getPathOfAlias('application')."/../".Yii::app()->theme->baseUrl."/");
+        return $this->_themeAssetsUrl;
+	}
+
 }

@@ -2,17 +2,6 @@
     <head>
         <meta charset="utf-8"/>
         <title>Speak up - Teacher Schedule</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-        <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/moment.js'></script>
-        <script src='<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/fullcalendar.min.js'></script>
-        <link rel="stylesheet" type="text/css" href="/media/css/base/style.css" />
-        <link rel="stylesheet" type="text/css" href="/themes/daykem/bootstrap/css/bootstrap.min.css" />
-        <link href="/media/js/calendar/fullcalendar.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="/media/css/calendar.css" />
-        <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/calendar/calendar.js"></script>
-        <script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/utils.js"></script>
     </head>
     <body>
         <style>

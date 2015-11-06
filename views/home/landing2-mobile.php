@@ -1,10 +1,29 @@
-<link rel="stylesheet" href="/media/home/style/landing-2m.css" />
+<?php
+$referrer = "";
+if (isset($_REQUEST['ref'])){
+    $knownReferrer = array(
+        'facebook'=>'Online - Facebook',
+        'hocmai'=>'Offline - Hocmai',
+    );
+    if (isset($knownReferrer[$_REQUEST['ref']])){
+        $referrer = $knownReferrer[$_REQUEST['ref']];
+    }
+}
+
+if ($referrer == ""){
+    $referrer = "Online - Facebook";
+}
+
+$baseAssetsUrl = $this->baseAssetsUrl;
+?>
+
+<link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/home/style/landing-2m.css" />
 <div class="main-page">
 	<div id="header-bg" class="bg"></div>
 	<div id="header">
 		<div class="layer-2">
 			<div class="su-logo">
-				<img src="/media/home/img/logo.png" style="width:400px">
+				<img src="<?php echo $baseAssetsUrl;?>/home/img/logo.png" style="width:400px">
 			</div>
 			<div class="header-nav-bar">
 				<div class="header-nav">
@@ -51,25 +70,25 @@
             </div>
             <div id="benefit-container">
             	<div class="benefit-col">
-            		<img src="/media/home/img/landing-2/benefit-1.png">
+            		<img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/benefit-1.png">
             		<div class="benefit-txt">
             			<p>MỘT THẦY MỘT TRÒ</p>
             		</div>
             	</div>
             	<div class="benefit-col">
-            		<img src="/media/home/img/landing-2/benefit-2.png">
+            		<img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/benefit-2.png">
             		<div class="benefit-txt">
             			<p>GIẢNG VIÊN CHẤT LƯỢNG</p>
             		</div>
             	</div>
             	<div class="benefit-col">
-            		<img src="/media/home/img/landing-2/benefit-3.png">
+            		<img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/benefit-3.png">
             		<div class="benefit-txt">
             			<p>CÁ NHÂN HÓA GIÁO TRÌNH</p>
             		</div>
             	</div>
             	<div class="benefit-col">
-            		<img src="/media/home/img/landing-2/benefit-4.png">
+            		<img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/benefit-4.png">
             		<div class="benefit-txt">
             			<p>MỌI LÚC MỌI NƠI</p>
             		</div>
@@ -87,7 +106,7 @@
 		</div>
 		<div id="registration-container" class="accent-bg">
 			<div class="registration-step">
-				<img src="/media/home/img/landing-2/step1-lg.png">
+				<img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/step1-lg.png">
 				<p class="step-txt-title">Bước 1: <b>ĐĂNG KÝ</b></p>
 				<div class="step-txt-content">
                     <p>* Đăng ký</p>
@@ -95,7 +114,7 @@
 				</div>
 			</div>
 			<div class="registration-step">
-				<img src="/media/home/img/landing-2/step2-lg.png">
+				<img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/step2-lg.png">
 				<p class="step-txt-title">Bước 2: <b>TEST KỸ THUẬT</b></p>
 				<div class="step-txt-content">
 					<p>* Đăng nhập hệ thống, kiểm tra chất lượng loa, mic</p>
@@ -103,7 +122,7 @@
 				</div>
 			</div>
 			<div class="registration-step">
-				<img src="/media/home/img/landing-2/step3-lg.png">
+				<img src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/step3-lg.png">
 				<p class="step-txt-title">Bước 3: <b>THAM GIA HỌC</b></p>
 				<div class="step-txt-content">
 					<p>* Học thử với giáo viên nước ngoài</p>
@@ -190,6 +209,9 @@
 	<div id="registration" class="accent-bg layer-2">
 		<div id="reg-wp" class="waypoint"></div>
 		<form id="registration-form" role="form">
+			<?php if ($referrer != ""):?>
+	            <input type="hidden" name="referrer" value="<?php echo $referrer?>">
+	        <?php endif;?>
 			<div class="form-group">
 				<label class="control-label" for="fullname">
 					Họ tên *:
@@ -227,9 +249,9 @@
 		<div id="testimonials-content" class="layer-2">
 			<div class="testimonials-title">
 				<p>
-					<img class="wing" src="/media/home/img/landing-2/wing-left.png">
+					<img class="wing" src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/wing-left.png">
 					<span>HỌC VIÊN NÓI VỀ</span>
-					<img class="wing" src="/media/home/img/landing-2/wing-right.png">
+					<img class="wing" src="<?php echo $baseAssetsUrl;?>/home/img/landing-2/wing-right.png">
 					<br><span style=" color:#fa5a00">SPEAK UP</span>
 					<br><p>★ ★ ★</p>
 				</p>

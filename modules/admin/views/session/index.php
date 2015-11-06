@@ -7,7 +7,7 @@ $this->breadcrumbs=array(
 	'Manage',
 );
 ?>
-<script type="text/javascript" src="<?php echo Yii::app()->baseUrl; ?>/media/js/admin/session.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseAssetsUrl ?>/js/admin/session.js"></script>
 <div class="page-header-toolbar-container row">
     <div class="col col-lg-6">
         <h2 class="page-title mT10">Quản lý buổi học trong khóa</h2>
