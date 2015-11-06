@@ -24,7 +24,7 @@
                 <div class="login-box <?php echo $loginBoxClass?>">
                     <div class="text-center">
             		    <a href="/">
-                            <img class="logo" src="<?php echo Yii::app()->baseUrl; ?>/media/images/logo/logo-white-bordered-200.png" alt="">
+                            <img class="logo" src="<?php echo $this->baseAssetsUrl ?>/images/logo/logo-white-bordered-200.png" alt="">
             		    </a>
                     </div>
                     <form name="login-form" class="form-signin" action="<?php echo Yii::app()->baseurl;?>/site/signin" method="post">

@@ -3,5 +3,5 @@
 <?php $this->renderPartial('myFileTabs'); ?>
 
 <div class="row ">
-	<iframe style="border:none" width="100%" height="600" src="/media/applications/filemanager/publicLibrary/dialog.php?type=0" scrolling='no'></iframe>
+	<iframe style="border:none" width="100%" height="600" src="<?php echo $this->baseAssetsUrl; ?>/applications/filemanager/publicLibrary/dialog.php?type=0" scrolling='no'></iframe>
 </div>

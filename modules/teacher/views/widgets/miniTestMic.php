@@ -20,8 +20,8 @@
         </div>
     </li>
 </ul>
-<script type="text/javascript" src="<?php echo $this->baseAssetsUrl;?>/media/js/chroma.js"></script>
-<script type="text/javascript" src="<?php echo $this->baseAssetsUrl;?>/media/js/microphone.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseAssetsUrl;?>/js/chroma.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseAssetsUrl;?>/js/microphone.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
 
