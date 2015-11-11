@@ -17,7 +17,6 @@ if ($referrer == ""){
 $baseAssetsUrl = $this->baseAssetsUrl;
 ?>
 
-<link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/home/style/landing.css" />
 <div id="main">
     <!--banner-->
     <div id="main-banner">

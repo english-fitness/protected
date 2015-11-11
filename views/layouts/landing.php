@@ -8,7 +8,6 @@
         <?php else:?>
             <meta name="viewport" content="width=1366">
         <?php endif;?>
-        <title>Speak up - Học tiếng Anh online</title>
         <?php $baseAssetsUrl = $this->baseAssetsUrl?>
         <!--favicon-->
         <link rel="apple-touch-icon" sizes="57x57" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-57x57.png">
@@ -31,22 +30,22 @@
         <meta name="msapplication-config" content="<?php echo $baseAssetsUrl;?>/images/favicons/browserconfig.xml">
         <meta name="theme-color" content="#ffffff">
         <!--end favicon-->
-        <link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/css/bootstrap/bootstrap.min.css" />
         <script src="<?php echo $baseAssetsUrl;?>/js/jquery/jquery-1.9.1.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/themes/flick/jquery-ui.css">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/flick/jquery-ui.css">
         <script src="<?php echo $baseAssetsUrl;?>/js/bootstrap/bootstrap.min.js"></script>
         <?php if ($this->device == 'mobile'):?>
-            <script src="<?php echo $baseAssetsUrl;?>/home/js/landing-m.js"></script>
             <script type="text/javascript">
                 $(document).bind('mobileinit',function(){
                     $.mobile.loadingMessage = false;
                 })
             </script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
-        <?php else:?>
-            <script src="<?php echo $baseAssetsUrl;?>/home/js/landing.js"></script>
         <?php endif;?>
+        <!--common js-->
+        <script src="<?php echo $baseAssetsUrl;?>/home/js/landing.js"></script>
+        <!---->
+
         <script src="<?php echo $baseAssetsUrl;?>/home/js/modernizr.js"></script>
         <script src="<?php echo $baseAssetsUrl;?>/home/js/masonry.pkgd.min.js"></script>
         <script src="<?php echo $baseAssetsUrl;?>/home/js/jquery/jquery.flexslider-min.js"></script>
@@ -54,12 +53,19 @@
         <link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/home/style/jquery/jquery.testimonial-slider.css" />
         <script src="<?php echo $baseAssetsUrl;?>/js/jquery/jquery.timepickr.js"></script>
         <script src="<?php echo $baseAssetsUrl;?>/js/jquery/jquery.weekLine.min.js"></script>
-        <script src="<?php echo $baseAssetsUrl;?>/home/js/jquery.lightbox/html5lightbox.js"></script>
         <link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/css/jquery/jquery.weekLine.css">
         <script src="<?php echo $baseAssetsUrl;?>/js/bootstrap/bootstrap-dialog.min.js"></script>
         <link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/css/bootstrap/bootstrap-dialog.min.css">
         <script src="<?php echo $baseAssetsUrl;?>/uploads/home/data/testimonials.js"></script>
         <script src="<?php echo $baseAssetsUrl;?>/uploads/home/data/teachers.js"></script>
+
+        <title>Speak up - Học tiếng Anh online</title>
+        <script type="text/javascript" src="<?php echo $baseAssetsUrl;?>/home/js/testimonials.js"></script>
+        <script src="<?php echo $baseAssetsUrl;?>/home/js/jquery.lightbox/html5lightbox.js"></script>
+        <script type="text/javascript">
+           var baseAssetsUrl = '<?php echo $baseAssetsUrl?>';
+        </script>
+        
         <!--Start of Tawk.to Script-->
         <script type="text/javascript">
             // var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();

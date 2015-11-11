@@ -17,7 +17,6 @@ if ($referrer == ""){
 $baseAssetsUrl = $this->baseAssetsUrl;
 ?>
 
-<link rel="stylesheet" href="<?php echo $baseAssetsUrl;?>/home/style/landing-2.css" />
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,900,300' rel='stylesheet' type='text/css'>
 <div id="main">
     <!--waypoints-->
@@ -45,7 +44,7 @@ $baseAssetsUrl = $this->baseAssetsUrl;
             </div>
             <div style="clear:both"></div>
             <h2 class="banner-subtitle">
-                <span>Chương trình miễn phí</span>
+                <span style="font-size:1.5em">Tặng 2011 suất học miễn phí</span>
             </h2>
             <h2 class="banner-title">
                 <span style="color:#FF4200"><b>HỌC TIẾNG ANH TRỰC TUYẾN</b></span>
@@ -53,7 +52,7 @@ $baseAssetsUrl = $this->baseAssetsUrl;
                 <span style="color:#044C95; font-weight:300">VỚI GIÁO VIÊN NƯỚC NGOÀI</span>
             </h2>
             <div style="width:770px; margin:5px auto; text-align:right;">
-                <span class="title-offer-tag">ĐẾN HẾT 30/10/2015</span>
+                <span class="title-offer-tag">ĐẾN HẾT <?php echo $params['promotionEnd']?></span>
             </div>
             <div class="text-center" style="padding-top:100px">
                 <a href="#" class="orange-btn large teleporter" data-waypoint="wp-1">THAM GIA NGAY</a>
