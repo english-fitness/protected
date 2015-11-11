@@ -62,8 +62,8 @@ class ReportController extends Controller
                     array('name'=>'Lession Type','width'=>'15'),
                     array('name'=>'Status','width'=>'12'),
                     array('name'=>'Tools','width'=>'10'),
-                    array('name'=>'Payment Status','width'=>'25'),
-                    array('name'=>'Remarks','width'=>'25'),
+                    array('name'=>'Payment Status','width'=>'15'),
+                    array('name'=>'Remarks','width'=>'40'),
                 );
                 break;
             case 'userRegistration':
@@ -74,6 +74,7 @@ class ReportController extends Controller
                     array('name'=>'Email','width'=>'40'),
                     array('name'=>'Ngày đăng ký','width'=>'14'),
                     array('name'=>'Trạng thái chăm sóc','width'=>'17'),
+                    array('name'=>'Người tư vấn', 'width'=>'30'),
                     array('name'=>'Ghi chú','width'=>'50'),
                 );
                 break;
@@ -135,6 +136,10 @@ class ReportController extends Controller
             throw new CHttpException(400, 'Bad request');
         }
     }
+
+    private function processSessionReportData($data){
+
+    }
     
     private function sendSessionReport($requestParams){
         $data = ReportBuilder::getSessionReportExportData($requestParams);
@@ -167,6 +172,8 @@ class ReportController extends Controller
             }
             $row++;
         }
+
+        $activeSheet->getStyle('A1:K1')->getFont()->setBold(true);
         
         $currentSheetAlignment = $activeSheet->getStyle( $phpExcel->getActiveSheet()->calculateWorksheetDimension() )
         ->getAlignment();
@@ -178,7 +185,7 @@ class ReportController extends Controller
         
         $this->sendReportFile($phpExcel, 'session_' . ReportBuilder::getReportDate($requestParams));
     }
-    
+
     private function sendUserRegistrationReport($requestParams){
         $data = ReportBuilder::getUserRegistrationReportExportData($requestParams);
         $careStatusOptions = PreregisterUser::careStatusOptions();
@@ -205,16 +212,6 @@ class ReportController extends Controller
         foreach($data as $record){
             $col = 0;
             foreach ($record as $key=>$value){
-                if ($key == 'sale_note'){
-                    $html = new Html2Text($value);
-                    $value = $html->getText();
-                } else if ($key == 'care_status'){
-                    $value = $careStatusOptions[$value];
-                } else if ($key == 'phone'){
-                    
-                } else if ($key == 'created_date'){
-                    $value = date("d/m/Y", strtotime($value));
-                }
                 $activeSheet->setCellValueExplicitByColumnAndRow($col, $row, $value);
                 $col++;
             }
@@ -226,9 +223,10 @@ class ReportController extends Controller
         $currentSheetAlignment->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
         $currentSheetAlignment->setWrapText(true);
         
+        $activeSheet->getStyle('A1:H1')->getFont()->setBold(true);
         $activeSheet->getStyle('D2:D'.$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $activeSheet->getStyle('A2:A'.$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-        $activeSheet->getStyle('G2:G'.$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $activeSheet->getStyle('H2:H'.$row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         
         $activeSheet->setSelectedCells('A1');
         

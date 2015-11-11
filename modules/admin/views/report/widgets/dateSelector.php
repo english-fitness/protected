@@ -102,18 +102,33 @@
 					);
 				?>
 			</div>
-			<div class="selector row mT10 dpn" data-report="userRegistration">
-				<label class="fL mL0" for="source" >Nguồn</label>
-				<?php
-					echo CHtml::dropDownList(
-						'source',
-						'',
-						array('all'=>'Tất cả') + PreregisterUser::allowableSource(),
-						array(
-							'class'=>'pull-left w250'
+			<div class="row mT10 selector dpn" data-report="userRegistration">
+				<div class="fL">
+					<label class="fL mL0" for="source" >Nguồn</label>
+					<?php
+						echo CHtml::dropDownList(
+							'source',
+							'',
+							array('all'=>'Tất cả') + PreregisterUser::sourceFilter(),
+							array(
+								'class'=>'pull-left w250'
+							)
 						)
-					)
-				?>
+					?>
+				</div>
+				<div class="fL mL20">
+					<label class="fL mL0" for="source" >Người tư vấn</label>
+					<?php
+						echo CHtml::dropDownList(
+							'saleUserId',
+							'',
+							array('all'=>'Tất cả') + Student::model()->getSalesUserOptions(false, "", false),
+							array(
+								'class'=>'pull-left w250'
+							)
+						)
+					?>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -128,6 +143,11 @@
 			<p><i>Export to Excel file is not available due to massive number of records. Please try narrowing down the date range.</i></p>
 		</div>
 		<?php endif;?>
+		<?php 
+			$reportParams = $_GET;
+			unset($reportParams['report']);
+		?>
+		<a class="btn btn-primary fR" id="edit-button" href="/admin/sessionMonitor?<?php echo http_build_query($reportParams)?>">Edit</a>
 	<?php endif;?>
 </div>
 <script>
@@ -161,11 +181,25 @@
 		});
 		setSelector(false);
 		
-		$('#report_btn').click(function(){
-			$('#report-form').submit();
+		$('#report_btn').click(function(e){
+			e.preventDefault();
+            var formData = $('#report-form').serializeArray();
+            var params = {};
+
+            for (var i in formData){
+                var data = formData[i];
+                params[data['name']] = data['value'];
+            }
+
+            if (typeof requestParams !== 'undefined' && requestParamsEqual(requestParams, params)){
+                return;
+            }
+
+            $('#report-form').submit();
 		});
-		$('#export-button').click(function(){
-			$('#report-form').attr('action', '/admin/report/export').submit();
+		$('#export-button').click(function(e){
+			e.preventDefault();
+			$('#report-form').attr('action', '/admin/report/export').submit().attr('action', '');
 		});
 	});
 	

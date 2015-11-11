@@ -199,6 +199,10 @@ class PreregisterUserController extends Controller
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['PreregisterUser'])){
 			$model->attributes=$_GET['PreregisterUser'];
+			if (isset($_GET['PreregisterUser']['source']) && $_GET['PreregisterUser']['source'] == 'allOnline'){
+				$model->source = null;
+				$model->getDbCriteria()->compare('source', 'online', true);
+			}
 			if(isset($_GET['PreregisterUser']['created_date'])){
 				$model->created_date = Common::convertDateFilter($_GET['PreregisterUser']['created_date']);//Created date filter
 			}

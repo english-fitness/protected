@@ -187,7 +187,9 @@ class Session extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
+		$alias = $this->getTableAlias(false, false);
+
+		$criteria->compare($alias.'.id',$this->id);
 		$criteria->compare('course_id',$this->course_id);
 		$criteria->compare('teacher_id',$this->teacher_id);
 		$criteria->compare('subject',$this->subject,true);
@@ -197,12 +199,12 @@ class Session extends CActiveRecord
 		$criteria->compare('actual_start',$this->actual_start,true);
 		$criteria->compare('actual_end',$this->actual_end,true);
 		$cmpStatus = ($status!==null)? $status: $this->status;
-		$criteria->compare('status',$cmpStatus, true);
-		$criteria->compare('type',$this->type);
+		$criteria->compare($alias.'.status',$cmpStatus, true);
+		$criteria->compare($alias.'.type',$this->type);
 		$criteria->compare('total_of_student',$this->total_of_student);
-		$criteria->compare('deleted_flag',$this->deleted_flag);
-		$criteria->compare('created_date',$this->created_date,true);
-		$criteria->compare('modified_date',$this->modified_date,true);
+		$criteria->compare($alias.'.deleted_flag',$this->deleted_flag);
+		$criteria->compare($alias.'.created_date',$this->created_date,true);
+		$criteria->compare($alias.'.modified_date',$this->modified_date,true);
         
         if (isset($this->teacher_fullname)){
             $teacherName = $this->teacher_fullname;
@@ -534,11 +536,13 @@ class Session extends CActiveRecord
 		$query = "SELECT student_id FROM tbl_session_student WHERE session_id=".$this->id;
 		$studentIds = Yii::app()->db->createCommand($query)->queryColumn();
         if($returnModel){
-            $students = array();
-            foreach($studentIds as $id){
-                $students[] = User::model()->findByPk($id);
-            }
-            return $students;
+        	if (count($studentIds) > 0){
+	        	$criteria = new CDbCriteria;
+	        	$criteria->condition = "id IN(".implode(",", $assignedStudents).")";
+
+	            return Student::model()->findAll($criteria);
+	        }
+	        return array();
         } else {
             return $studentIds;
         }

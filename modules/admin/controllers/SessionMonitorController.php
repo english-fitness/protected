@@ -44,16 +44,13 @@ class SessionMonitorController extends Controller
     public function actionIndex(){
         $this->subPageTitle = "Theo dõi buổi học";
 
-        if (isset($_REQUEST['type'])){
+        if (isset($_GET['type'])){
         	$this->loadJQuery = false;
             try {
-                $sessions = SessionNote::getSessionNote($_REQUEST);
-                
-                $requestParams = $_GET;
+                $sessions = ReportBuilder::getSessionReport($_GET);
                 
                 $this->render('index', array(
                     'sessions'=>$sessions,
-                    'requestParams'=>$requestParams,
                 ));
             } catch (Exception $e){
             	exit($e);

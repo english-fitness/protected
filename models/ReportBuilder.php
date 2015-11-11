@@ -6,76 +6,163 @@ class ReportBuilder {
             'userRegistration'=>'Học sinh đăng ký',
         );
     }
-    
-    public static function getSessionReport($requestParams){
-        $dateConstraint = self::getDateConstraint($requestParams, 'sessions.plan_start');
 
-        $subject_id = !empty($requestParams['subject']) && $requestParams['subject'] != 'all' ? $requestParams['subject'] : '';
+    private static function getSessionReportCriteria($requestParams, $relations=null){
+        $dateConstraint = self::getDateConstraint($requestParams, 'plan_start');
+
+        $subject_id = isset($requestParams['subject'])
+                      && $requestParams['subject'] != 'all'
+                      && is_numeric($requestParams['subject']) ? $requestParams['subject'] : '';
         if ($subject_id != ''){
-            $subjectCondition = "AND subject_id = " . $subject_id . " ";
+            $subjectCondition = "subject_id = " . $subject_id . " ";
         } else {
             $subjectCondition = '';
         }
 
-        $countQuery =   "SELECT count(sessions.id) FROM tbl_session sessions JOIN tbl_course c
-                        ON sessions.course_id = c.id
-                        WHERE " . $dateConstraint .
-                        $subjectCondition .
-                        "AND sessions.deleted_flag = 0";
-        
-        $count = Yii::app()->db->createCommand($countQuery)->queryScalar();
-        
-        $query = self::getSessionReportQuery($dateConstraint, $requestParams);
-        
-        return new CSqlDataProvider($query, array(
-            'totalItemCount'=>$count,
-			'pagination'=>array(
-				'pageSize'=>20,
-			),
-            'keyField'=>'session_id',
-        ));
-    }
-    
-    public static function getSessionReportExportData($requestParams){
-        $dateConstraint = self::getDateConstraint($requestParams, 'sessions.plan_start');
-        $query = self::getSessionReportQuery($dateConstraint, $requestParams);
-        
-        return Yii::app()->db->createCommand($query)->queryAll();
-    }
-    
-    public static function getUserRegistrationReport($requestParams){
-        $dateConstraint = self::getDateConstraint($requestParams, 'created_date');
-
-        $source = !empty($requestParams['source']) && $requestParams['source'] != 'all' ? $requestParams['source'] : '';
-        if ($source != ''){
-            $sourceCondition = "AND source = '" . $source . "' ";
+        $order = isset($requestParams['order']) && in_array(strtoupper($requestParams['order']), array('ASC', 'DESC')) ? $requestParams['order'] : '';
+        if ($order != ''){
+            $order = 'plan_start '.$order;
         } else {
-            $sourceCondition = '';
+            $order = 'plan_start, t.id ASC';
         }
 
-        $countQuery = "SELECT count(id) FROM tbl_preregister_user
-                       WHERE " . $dateConstraint .
-                       $sourceCondition .
-                       "AND deleted_flag = 0";
-                       
-        $count = Yii::app()->db->createCommand($countQuery)->queryScalar();
-        
-        $query = self::getUserRegistrationReportQuery($dateConstraint, $requestParams);
+        if ($relations == null){
+            $relations = array(
+                "note"=>array(
+                    'select'=>array('using_platform', 'note'),
+                ),
+                "course"=>array(
+                    'select'=>array('subject_id'),
+                    'condition'=>$subjectCondition,
+                ),
+                "teacherFine",
+                "teacher"=>array(
+                    'select'=>array('firstname', 'lastname'),
+                )
+            );
+        }
 
-        return new CSqlDataProvider($query, array(
-            'totalItemCount'=>$count,
-            'pagination'=>array(
-                'pageSize'=>20,
-            ),
-            'keyField'=>'email',
+        $criteria = new CDbCriteria();
+        $criteria->addCondition($dateConstraint);
+        $criteria->order = $order;
+        $criteria->with= $relations;
+
+        return $criteria;
+    }
+
+    public static function getSessionReport($requestParams){
+        $criteria = self::getSessionReportCriteria($requestParams);
+
+        return new CActiveDataProvider('Session', array(
+            'criteria'=>$criteria,
+            'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
+            'sort'=>array('sortVar'=>'sort'),
         ));
+    }
+
+    public static function getSessionReportExportData($requestParams){
+        $criteria = self::getSessionReportCriteria($requestParams, $relations);
+
+        $sessions = Session::model()->findAll($criteria);
+
+        $reportData = array();
+
+        foreach ($sessions as $data) {
+            $reportData[] = array(
+                $data->id,
+                date("d/m/Y", strtotime($data->plan_start)),
+                date("H:i", strtotime($data->plan_start)),
+                date("H:i", strtotime("+1 hour", strtotime($data->plan_start))),
+                $data->teacher->firstname,
+                implode(", ", $data->getAssignedStudentsArrs()),
+                self::getSessionTypeDisplay($data->type),
+                self::getSessionStatusDisplay($data->status),
+                self::getSessionToolDisplay($data),
+                $data["teacher_paid"] ? "Paid" : ($data["teacher_paid"] === "0" ? "Unpaid" : ""),
+                $data->status == Session::STATUS_CANCELED ? $data->status_note : ($data->note != null ? $data->note->note : ""),
+            );
+        }
+
+        return $reportData;
+    }
+
+    private static function getUserRegistrationCriteria($requestParams){
+        $criteria = new CDbCriteria;
+        $criteria->alias = 't';
+
+        $dateConstraint = self::getDateConstraint($requestParams, $criteria->alias.'.created_date');
+
+        $params = array();
+        $extraConditions = array();
+
+        if (!empty($requestParams['source']) && $requestParams['source'] != 'all'){
+            $source = $requestParams['source'];
+            if ($source == 'allOnline'){
+                $extraConditions[] = "source LIKE '%online%'";
+            } else {
+                $extraConditions[] = "source = :source";
+                $params[":source"] = $requestParams['source'];
+            }
+        }
+
+        if (!empty($requestParams['saleUserId']) && $requestParams['saleUserId'] != 'all'){
+            $extraConditions[] = "sale_user_id = :sale_user_id";
+            $params[":sale_user_id"] = $requestParams['saleUserId'];
+        }
+
+        $criteria->addCondition($dateConstraint);
+        if (!empty($extraConditions)){
+            foreach ($extraConditions as $condition) {
+                $criteria->addCondition($condition);
+            }
+        }
+        if (!empty($params)){
+            $criteria->params = $params;
+        }
+        $criteria->addCondition($criteria->alias.'.deleted_flag = 0');
+
+        $criteria->with = array(
+            'saleUser'=>array(
+                'select'=>array('firstname', 'lastname'),
+            )
+        );
+
+        return $criteria;
+    }
+
+    public static function getUserRegistrationReport($requestParams){
+        $criteria = self::getUserRegistrationCriteria($requestParams);
+
+        return new CActiveDataProvider('PreregisterUser', array(
+            'criteria'=>$criteria,
+            'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
+            'sort'=>array('sortVar'=>'sort'),
+        ));
+
     }
     
     public static function getUserRegistrationReportExportData($requestParams){
-        $dateConstraint = self::getDateConstraint($requestParams, 'created_date');
-        $query = self::getUserRegistrationReportQuery($dateConstraint, $requestParams);
+        $criteria = self::getUserRegistrationCriteria($requestParams);
         
-        return Yii::app()->db->createCommand($query)->queryAll();
+        $registrations =  PreregisterUser::model()->findAll($criteria);
+
+        $reportData = array();
+        $html2Text = new Html2Text();
+
+        foreach ($registrations as $data) {
+            $reportData[] = array(
+                $data->fullname,
+                $data->source,
+                Common::formatPhoneNumber($data->phone),
+                $data->email,
+                date("d/m/Y", strtotime($data["created_date"])),
+                PreregisterUser::careStatusOptions($data["care_status"]),
+                $data->saleUser != null ? $data->saleUser->fullname() : "",
+                $html2Text->setHtml($data["sale_note"])->getText(),
+            );
+        }
+
+        return $reportData;
     }
     
     public static function getReportDate($requestParams){
@@ -147,68 +234,40 @@ class ReportBuilder {
         return $dateConstraint;
     }
     
-    private static function getSessionReportQuery($dateConstraint, $params){
-        $subject_id = !empty($params['subject']) && $params['subject'] != 'all' ? $params['subject'] : '';
-        if ($subject_id != ''){
-            $subjectCondition = "AND subject_id = " . $subject_id . " ";
-        } else {
-            $subjectCondition = '';
-        }
-        return "SELECT
-                    sessions.id AS 'session_id',
-                    DATE_FORMAT(sessions.plan_start, '%d/%m/%Y') AS 'session_date',
-                    DATE_FORMAT(sessions.plan_start, '%H:%i') AS 'session_time_hn',
-                    DATE_FORMAT(sessions.plan_start  + INTERVAL 1 HOUR, '%H:%i') AS 'session_time_ph',
-                    teacher.firstname AS 'session_tutor',
-                    CONCAT(student.lastname, ' ' ,student.firstname) AS 'session_student',
-                    CASE
-                        WHEN sessions.type = 1 THEN 'Regular session'
-                        ELSE 'Trial session'
-                    END AS 'session_type',
-                    CASE
-                        WHEN sessions.status = 0 THEN 'Pending'
-                        WHEN sessions.status = 1 THEN 'Approved'
-                        WHEN sessions.status = 2 THEN 'Active'
-                        WHEN sessions.status = 3 THEN 'Ended'
-                        WHEN sessions.status = 4 THEN 'Cancelled'
-                        ELSE 'N/a'
-                    END AS 'session_status',
-                    CASE
-                        WHEN sessions.status = 4 OR note.note IS NULL THEN 'X'
-                        WHEN note.using_platform = 1 THEN 'Platform'
-                        ELSE 'Skype'
-                    END AS 'session_tool',
-                    CASE
-                        WHEN sessions.teacher_paid = 1 THEN 'Paid'
-                        ELSE 'Unpaid'
-                    END AS 'paid_session',
-                    CASE
-                        WHEN sessions.status = " . Session::STATUS_CANCELED . " THEN status_note
-                        ELSE note.note
-                    END AS 'session_remarks'
-                FROM tbl_session as sessions JOIN (tbl_session_student JOIN tbl_user student ON tbl_session_student.student_id = student.id)
-                ON sessions.id = tbl_session_student.session_id
-                JOIN tbl_user teacher ON sessions.teacher_id = teacher.id
-                JOIN tbl_course course ON sessions.course_id = course.id
-                LEFT JOIN tbl_session_note note ON sessions.id = note.session_id
-                WHERE " . $dateConstraint .
-                $subjectCondition .
-                "AND sessions.deleted_flag = 0
-                ORDER BY sessions.plan_start ASC";
+    private static function getSessionTypeDisplay($type){
+        return array(
+            Session::TYPE_SESSION_TESTING => 'Test session',
+            Session::TYPE_SESSION_TRAINING=>'Trial session',
+            Session::TYPE_SESSION_NORMAL=>'Regular session',
+        )[$type];
     }
-    
-    private static function getUserRegistrationReportQuery($dateConstraint, $params){
-        $source = !empty($params['source']) && $params['source'] != 'all' ? $params['source'] : '';
-        if ($source != ''){
-            $sourceCondition = "AND source = '" . $source . "' ";
+
+    private static function getSessionStatusDisplay($status){
+        return array(
+            Session::STATUS_PENDING => 'Pending',
+            Session::STATUS_APPROVED => 'Approved',
+            Session::STATUS_WORKING => 'Ongoing',
+            Session::STATUS_ENDED => 'Ended',
+            Session::STATUS_CANCELED => 'Cancelled',
+        )[$status];
+    }
+
+    private static function getSessionToolDisplay($session){
+        if ($session->status == Session::STATUS_CANCELED || $session->note == null){
+            return "X";
         } else {
-            $sourceCondition = '';
+            switch ($session->note->using_platform) {
+                case '1':
+                    return "Platform";
+                    break;
+                case '0':
+                    return "Skype";
+                    break;
+                default:
+                    return "X";
+                    break;
+            }
         }
-        return  "SELECT fullname, source, phone, email, created_date, care_status, sale_note FROM tbl_preregister_user
-                WHERE " . $dateConstraint .
-                $sourceCondition .
-                "AND deleted_flag = 0
-                ORDER BY created_date DESC";
     }
 }
 ?>

@@ -92,93 +92,41 @@ class SessionNote extends CActiveRecord
 	
 	public static function countSessionByCourse($courseId){
 		$query = "SELECT count(*) FROM tbl_session " .
-				 "WHERE course_id = " . $courseId;
+				 "WHERE course_id = :course_id";
 				 
-		return Yii::app()->db->createCommand($query)->queryScalar();
+		return Yii::app()->db->createCommand($query)->bindValue(':course_id', $courseId, PDO::PARAM_INT)->queryScalar();
 	}
 	
 	public static function countCompletedSessionByCourse($courseId, $usingPlatform = null){
 		if ($usingPlatform !== null){
 			$query = "SELECT count(*) FROM tbl_session_note JOIN tbl_session " .
 					 "ON tbl_session_note.session_id = tbl_session.id " .
-					 "WHERE tbl_session.course_id = " . $courseId . " " .
+					 "WHERE tbl_session.course_id = :course_id " .
 					 // "AND status = " . Session::STATUS_ENDED . " " .
-					 "AND tbl_session_note.using_platform = " . $usingPlatform;
+					 "AND tbl_session_note.using_platform = :using_platform";
 		} else {
 			$query = "SELECT count(*) FROM tbl_session " .
-					 "WHERE course_id = " . $courseId . " " .
+					 "WHERE course_id = :course_id " .
 					 "AND status = " . Session::STATUS_ENDED;
 		}
 
-		return Yii::app()->db->createCommand($query)->queryScalar();
+		$queryCommand = Yii::app()->db->createCommand($query);
+		$queryCommand->bindValue(':course_id', $courseId, PDO::PARAM_INT);
+		if ($usingPlatform !== null){
+			$queryCommand->bindValue(':using_platform', $usingPlatform, PDO::PARAM_INT);
+		}
+
+		return $queryCommand->queryScalar();
 	}
 	
 	public static function countCancelledSessionByCourse($courseId){
 		$query = "SELECT count(*) FROM tbl_session " .
-				 "WHERE course_id = " . $courseId . " ".
+				 "WHERE course_id = :course_id ".
 				 "AND status = " . Session::STATUS_CANCELED;
 				 
-		return Yii::app()->db->createCommand($query)->queryScalar();
+		return Yii::app()->db->createCommand($query)->bindValue(':course_id', $courseId, PDO::PARAM_INT)->queryScalar();
 	}
     
-    private static function getDateConstraint($requestParams, $columnName){
-        $type= $requestParams['type'];
-        switch ($type){
-            case 'date':
-                $dateTimestamp =  strtotime($requestParams['date']);
-                $date = date('Y-m-d 00:00:00', $dateTimestamp);
-                $dateAfter = date('Y-m-d 00:00:00', strtotime('+1 days', $dateTimestamp));
-                $dateConstraint = $columnName . " >= '" . $date . "' AND " . $columnName . " < '" . $dateAfter . "'";
-                break;
-            case 'week':
-                $week = $requestParams['week'];
-                $year = date('Y');
-                if ($week < 10){
-                    $week = "0" . $week;
-                }
-                $dateStartTimestamp = strtotime($year . 'W' . $week);
-                $dateStart = date('Y-m-d 00:00:00', $dateStartTimestamp);
-                $dateEnd = date('Y-m-d 00:00:00', strtotime('+7 days', $dateStartTimestamp));
-                $dateConstraint = $columnName . " >= '" . $dateStart . "' AND " . $columnName . " < '" . $dateEnd . "'";
-                break;
-            case 'month':
-                $month = $requestParams['month'];
-                $year = $requestParams['year'];
-                if ($month < 10){
-                    $month = "0" . $month;
-                }
-                $monthStart = $year . '-' . $month . '-01 00:00:00';
-                $monthEnd = date($year . '-' . $month . '-t 00:00:00');
-                $dateConstraint = $columnName . " >= '" . $monthStart . "' AND " . $columnName . " < '" . $monthEnd . "'";
-                break;
-            case 'range':
-                $dateFrom = date('Y-m-d 00:00:00', strtotime($requestParams['dateFrom']));
-                $dateTo = date('Y-m-d 00:00:00', strtotime($requestParams['dateTo']));
-                $dateConstraint = $columnName . " >= '" . $dateFrom . "' AND " . $columnName . " < '" . $dateTo . "'";
-                break;
-            default:
-                break;
-        }
-        
-        return $dateConstraint;
-    }
-    
-    public static function getSessionNote($requestParams){
-        $dateConstraint = self::getDateConstraint($requestParams, 'plan_start');
-
-        $criteria = new CDbCriteria();
-        $criteria->addCondition($dateConstraint);
-        $criteria->addCondition("deleted_flag = 0");
-        $criteria->order = "plan_start DESC";
-        $criteria->with= array("note", "teacherFine");
-
-        return new CActiveDataProvider('Session', array(
-        	'criteria'=>$criteria,
-        	'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),
-		    'sort'=>array('sortVar'=>'sort'),
-    	));
-    }
-	
 	public static function getSessionNoteByCourse($courseId, $usingPlatform = null, $ended=false){
 		if ($usingPlatform !== null){
 			$joinType = "JOIN";

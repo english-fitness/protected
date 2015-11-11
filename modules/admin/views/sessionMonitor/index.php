@@ -55,11 +55,16 @@ function getStatusDisplay($session){
     <h2 class="page-title mT10">Thống kê buổi học</h2>
 </div>
 <?php
-    if (!isset($requestParams)){
+    if (empty($_GET)){
         $this->renderPartial('widgets/dateSelector');
     } else {
+        if (isset($sessions) && $sessions->totalItemCount > 0){
+            $hasData = true;
+        } else {
+            $hasData = false;
+        }
         $this->renderPartial('widgets/dateSelector', array(
-            'requestParams'=>$requestParams,
+            'hasData'=>$hasData,
         ));
     }
     
@@ -296,9 +301,9 @@ function getStatusDisplay($session){
         form.find("#session-id").val(formFields.session_id);
 
         if (formFields.status == STATUS_ENDED || formFields.status == STATUS_CANCELED){
-            form.find("#status").val(formFields.status).prop("disabled", true);
+            form.find("#status").val(formFields.status);
         } else {
-            form.find("#status").val(STATUS_ENDED).prop("disabled", false);
+            form.find("#status").val(STATUS_ENDED);
         }
 
         form.find("#status").change();
