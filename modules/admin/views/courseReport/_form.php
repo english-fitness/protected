@@ -77,7 +77,7 @@
 			<?php echo $form->labelEx($model, 'report_date')?>
 		</div>
 		<div class="col col-lg-9">
-            <?php echo $form->textField($model, 'report_date', array("class"=>"datepicker", "value"=>date("Y-m-d"), "readonly"=>true))?>
+            <?php echo $form->textField($model, 'report_date', array("class"=>"datepicker", "readonly"=>true))?>
             <?php echo $form->error($model, 'report_date')?>
 		</div>
 	</div>
@@ -135,7 +135,11 @@
     }
 
     function cancel(){
-    	window.location.href = "<?php echo Yii::app()->request->urlReferrer?>";
+        <?php if (!empty(Yii::app()->request->urlReferrer) && Yii::app()->request->urlReferrer !== Yii::app()->request->hostInfo.Yii::app()->request->url):?>
+            window.location.href = "<?php echo Yii::app()->request->urlReferrer?>";
+        <?php else:?>
+            window.location.href = "/admin/courseReport/course/id/<?php echo isset($model) ? $model->course->id : $_GET['course_id'] ?>";
+        <?php endif;?>
     }
 
     function allowEdit(element){

@@ -99,6 +99,12 @@ class CourseReport extends CActiveRecord
 		);
 	}
 
+	public function afterSave()
+	{
+		$userActionLog = new UserActionHistory();
+		return $userActionLog->saveActionLog($this->tableName(), $this->id, $this->isNewRecord);
+	}
+
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
 	 *
@@ -172,8 +178,8 @@ class CourseReport extends CActiveRecord
                 	} else {
                 		$saveFileName = $this->report_file;
                 	}
-                	$fileFullPath = $uploadDir."/".$saveFileName;
                 }
+                $fileFullPath = $uploadDir."/".$saveFileName;
                 if (move_uploaded_file($uploadedFile['tmp_name'], $fileFullPath)){
                 	if ($this->report_file != $saveFileName && !$this->isNewRecord){
                 		$oldReport = $uploadDir.'/'.$this->report_file;

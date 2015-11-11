@@ -89,15 +89,16 @@ class CourseReportController extends Controller
         
         if (isset($_REQUEST['course_id'])){
             $model->course_id = $_REQUEST['course_id'];
+            $fileUploaded = false;
             if (isset($_POST['CourseReport'])){
                 $model->attributes = $_POST['CourseReport'];
                 if (isset($_FILES['report_file']) && $_FILES['report_file']['name'] && !$_FILES['report_file']['error']){
 	                $uploadedFile = $_FILES['report_file'];
 	                $fileUploaded = $model->handleReportFileUpload($uploadedFile);
-		            $modelSaved = $model->save();
-		            if ($fileUploaded && $modelSaved){
-		                $this->redirect("/admin/courseReport/course/id/".$model->course_id);
-		            }
+	            }
+	            //do model save outside so it can echo model errors to the form
+	            if ($model->save() && $modelSaved){
+	                $this->redirect("/admin/courseReport/course/id/".$model->course_id);
 	            }
             }
             
@@ -116,14 +117,16 @@ class CourseReportController extends Controller
         
         if (isset($_POST['CourseReport'])){
             $model->attributes = $_POST['CourseReport'];
-            if (isset($_FILES['report_file']) && $_FILES['report_file']['name'] && !$_FILES['report_file']['error']){
+            $fileUploaded = false;
+            $hasUploadedFile = isset($_FILES['report_file']) && $_FILES['report_file']['name'] && !$_FILES['report_file']['error'];
+            if ($hasUploadedFile){
 	            $uploadedFile = $_FILES['report_file'];
 	            $fileUploaded = $model->handleReportFileUpload($uploadedFile);
-	            $modelSaved = $model->save();
-	            if ($fileUploaded && $modelSaved){
-	                $this->redirect("/admin/courseReport/course/id/".$model->course_id);
-	            }
 	        }
+	        $modelSaved = $model->save();
+            if ($modelSaved && !($hasUploadedFile && !$fileUploaded)){
+                $this->redirect("/admin/courseReport/course/id/".$model->course_id);
+            }
         }
         
         $this->render('create', array(
