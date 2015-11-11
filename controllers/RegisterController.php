@@ -48,6 +48,8 @@ class RegisterController extends Controller
             
             if (isset($_REQUEST['referrer'])){
                 $model->source = $_REQUEST['referrer'];
+            } else {
+                $model->source = 'Online';
             }
 
             try {

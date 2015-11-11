@@ -94,6 +94,7 @@ class PreregisterUser extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'saleUser'=>array(self::BELONGS_TO, 'User', 'sale_user_id'),
 		);
 	}
 
@@ -147,7 +148,7 @@ class PreregisterUser extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('fullname',$this->fullname,true);
-        $criteria->compare('source',$this->source,true);
+        $criteria->compare('source',$this->source);
 		$criteria->compare('birthday',$this->birthday,true);
 		$criteria->compare('gender',$this->gender);
 		$criteria->compare('phone',$this->phone,true);
@@ -257,6 +258,21 @@ class PreregisterUser extends CActiveRecord
 
 	public static function allowableSource(){
 		return array(
+			'Online'=>'Online',
+			'Online - Hocmai.vn'=>'Online - Hocmai.vn',
+			'Online - Facebook'=>'Online - Facebook',
+			'Offline'=>'Offline',
+			'Offline - Ba đình'=>'Offline - Ba đình',
+			'Offline - Ngôi sao'=>'Offline - Ngôi sao',
+			'Người quen'=>'Người quen',
+			'Nhân viên - HM'=>'Nhân viên - HM',
+			'Hocmai - Telesales'=>'Hocmai - Telesales',
+		);
+	}
+
+	public static function sourceFilter(){
+		return array(
+			"allOnline"=>'Tất cả - Online',
 			'Online'=>'Online',
 			'Online - Hocmai.vn'=>'Online - Hocmai.vn',
 			'Online - Facebook'=>'Online - Facebook',
