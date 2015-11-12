@@ -200,6 +200,7 @@ class Session extends CActiveRecord
 		$criteria->compare('actual_end',$this->actual_end,true);
 		$cmpStatus = ($status!==null)? $status: $this->status;
 		$criteria->compare($alias.'.status',$cmpStatus, true);
+		$criteria->compare('teacher_paid', $this->teacher_paid);
 		$criteria->compare($alias.'.type',$this->type);
 		$criteria->compare('total_of_student',$this->total_of_student);
 		$criteria->compare($alias.'.deleted_flag',$this->deleted_flag);

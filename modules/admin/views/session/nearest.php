@@ -36,13 +36,13 @@ $this->breadcrumbs=array(
 		),
 		array(
 		   'header'=>'Môn học',
-		   'value'=>'Subject::model()->displayClassSubject($data->course->subject_id)',
-		   'htmlOptions'=>array('style'=>'min-width:100px;'),
+		   'value'=>'$data->course->subject->name',
+		   'htmlOptions'=>array('style'=>'min-width:100px;text-align:center'),
 		),
 		array(
 		   'name'=>'subject',
 		   'value'=>'ClsAdminHtml::displayInlineEdit($data->id, $data->subject)',
-		   'htmlOptions'=>array('style'=>'min-width:100px;'),	
+		   'htmlOptions'=>array('style'=>'min-width:100px;text-align:center'),	
 		),
 		/*
 		array(
@@ -57,6 +57,7 @@ $this->breadcrumbs=array(
 		   'value'=>'$data->getTeacher("/admin/teacher/view/id", true)',
            'filter'=>'<input type="text" value="'.$teacherFullname.'" name="Session[teacher_fullname]">',
 		   'type'  => 'raw',
+		   'htmlOptions'=>array('style'=>'text-align:center'),
 		),
 		array(
 		   'header' => 'Học sinh',
@@ -69,21 +70,23 @@ $this->breadcrumbs=array(
 		   'header'=>'Ngày học',
 		   'value'=>'date("d/m/Y", strtotime($data->plan_start))',
 		   'filter'=>'<input type="text" value="'.$startDateFilter.'" name="Session[plan_start]">',
-		   'htmlOptions'=>array('style'=>'width:100px;'),
+		   'htmlOptions'=>array('style'=>'width:90px;text-align:center'),
 		),
 		array(
 		   'header'=>'Giờ học',
 		   'value'=>'$data->displayActualTime()',
-		   'htmlOptions'=>array('style'=>'width:80px;'),
+		   'htmlOptions'=>array('style'=>'width:90px;text-align:center'),
 		),
 		array(
 		   'header' => 'Thời gian còn lại',
 		   'value'=>'$data->displayRemainTime()',
+		   'htmlOptions'=>array('style'=>'text-align:center'),
 		),
 		array(
 		   'name'=>'status',
 		   'value'=>'ClsAdminHtml::displaySessionStatus($data->id, $data->status)',
 		   'filter'=>Session::statusOptions(),
+		   'htmlOptions'=>array('style'=>'text-align:center'),
 		),
 		array(
 		   'name'=>'whiteboard',
@@ -92,6 +95,7 @@ $this->breadcrumbs=array(
 		),
 		array(
 			'class'=>'CButtonColumn',
+			'template'=>'{view}{update}',
 			'buttons'=>array (
 		        'update'=> array('label'=>'', 'imageUrl'=>'',
 		            'options'=>array( 'class'=>'btn-edit mL15' ),
@@ -100,17 +104,14 @@ $this->breadcrumbs=array(
 		            'label'=>'', 'imageUrl'=>'',
 		            'options'=>array( 'class'=>'btn-view mL5' ),
 		        ),
-		        'delete'=>array(
-		            'label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'dpn' ),
-		        ),
     		),
+    		'htmlOptions'=>array('style'=>'width:80px;'),
 		),
 		array(
 		   'header'=>'Hoãn/hủy',
 		   'value'=>'($data->status==Session::STATUS_APPROVED)? CHtml::link("Báo hủy", "/admin/session/cancel/id/".$data->id, array("class"=>"icon-undo pL20", "style"=>"width:80px;")): ""',
-		   'filter'=>false, 'type'  => 'raw',
-		   'htmlOptions'=>array('style'=>'width:80px;'),
+		   'filter'=>false, 'type'=>'raw',
+		   'htmlOptions'=>array('style'=>'text-align:center'),
 		),
 	),
 )); ?>

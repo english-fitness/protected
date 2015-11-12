@@ -36,25 +36,25 @@
 		),
 		array(
 		   'name'=>'subject_id',
-		   'value'=>'Subject::model()->displayClassSubject($data->subject_id)',
+		   'value'=>'$data->subject->name',
 		   'filter'=>Subject::model()->generateSubjectFilters(),
-		   'htmlOptions'=>array('style'=>'width:240px; text-align:left;'),
+		   'htmlOptions'=>array('style'=>'width:130px; text-align:center;'),
 		),
 		array(
 		   'name'=>'final_price',
 		   'value'=>'number_format($data->final_price)',
-		   'htmlOptions'=>array('style'=>'width:100px; text-align:right;'),
+		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
 		),
 		array(
 		   'name'=>'total_sessions',
-		   'value'=>'$data->total_sessions',
+		   'value'=>'$data->total_sessions." buổi"',
 		   'filter'=>false,
-		   'htmlOptions'=>array('style'=>'width:120px; text-align:center;'),
+		   'htmlOptions'=>array('style'=>'width:100px; text-align:center;'),
 		),
 		array(
 		   'header'=>'Giáo viên',
 		   'value'=>'$data->getTeacher("/admin/teacher/view/id")',
-		   'htmlOptions'=>array('style'=>'width:140px;'),
+		   'htmlOptions'=>array('style'=>'width:140px;text-align:center;'),
 		   'type' => 'raw',
 		),
 		array(
@@ -82,10 +82,10 @@
 			'type'=>'raw',
 		),
 		array(
-			'header'=>'Buổi học đã thực hiện',
+			'header'=>'Buổi học đã kết thúc',
 			'value'=>'CHtml::link(
 				SessionNote::countCompletedSessionByCourse($data->id) . " Buổi",
-				"/admin/sessionMonitor/sessionView?cid=$data->id&ended=1"
+				"/admin/sessionMonitor/sessionView?cid=$data->id&ended"
 			)',
 			'htmlOptions'=>array('style'=>'width:100px; text-align:center;'), 
 			'type'=>'raw',
@@ -96,6 +96,19 @@
 				SessionNote::countCancelledSessionByCourse($data->id) . " Buổi",
 				"/admin/session/canceled?Session[status]=4&Session[course_id]= " . $data->id
 			)',
+			'htmlOptions'=>array('style'=>'width:100px; text-align:center;'), 
+			'type'=>'raw',
+		),
+		array(
+			'header'=>'Buổi học tính tiền',
+			'value'=>function($data){
+				$paidSession = Session::model()->countByAttributes(array(
+					'course_id'=>$data->id,
+					'teacher_paid'=>true,
+					'deleted_flag'=>0,
+				));
+				return CHtml::link($paidSession." Buổi", "/admin/sessionMonitor/sessionView?cid=".$data->id."&paid");
+			},
 			'htmlOptions'=>array('style'=>'width:100px; text-align:center;'), 
 			'type'=>'raw',
 		),

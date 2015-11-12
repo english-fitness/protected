@@ -105,7 +105,7 @@ class SessionMonitorController extends Controller
 	}
 	
 	public function actionSessionView(){
-		$this->subPageTitle = "Các buổi học";
+		$this->subPageTitle = "Buổi học trong khóa";
 		$this->loadJQuery = false;
 		
 		if (isset($_GET['using_platform'])){
@@ -115,12 +115,18 @@ class SessionMonitorController extends Controller
 		}
 		
 		if (isset($_GET['ended'])){
-			$ended = $_GET['ended'];
+			$ended = true;
 		} else {
 			$ended = false;
 		}
+
+		if (isset($_GET['paid'])){
+			$paid = true;
+		} else {
+			$paid = false;
+		}
 		
-		$sessions = SessionNote::getSessionNoteByCourse($_GET['cid'], $using_platform, $ended);
+		$sessions = SessionNote::getSessionNoteByCourse($_GET['cid'], $using_platform, $ended, $paid);
 		$course = Course::model()->findByPk($_GET['cid']);
 		
 		$this->render('sessionView', array(

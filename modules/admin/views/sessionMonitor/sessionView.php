@@ -111,12 +111,12 @@ function getStatusDisplay($session){
 		array(
 		   'header'=>'Chủ đề',
 		   'value'=>'$data["subject"]',
-		   'htmlOptions'=>array('style'=>'width:150px; vertical-align:top;'),
+		   'htmlOptions'=>array('style'=>'width:150px; vertical-align:top;text-align:center'),
 		),
 		array(
 		   'header'=>'Giáo viên',
-		   'value'=>'Yii::app()->user->getFullNameById($data["teacher_id"])',
-		   'htmlOptions'=>array('style'=>'width:150px; vertical-align:top;'),
+		   'value'=>'$data->teacher->fullname()',
+		   'htmlOptions'=>array('style'=>'width:120px; vertical-align:top;text-align:center'),
 		   'type'  => 'raw',
 		),
 		array(

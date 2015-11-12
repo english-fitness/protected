@@ -45,9 +45,9 @@ $columns = array(
 	),
 	array(
 	    'name'=>'subject_id',
-	    'value'=>'Subject::model()->displayClassSubject($data->subject_id)',
+	    'value'=>'$data->subject->name',
 	    'filter'=>Subject::model()->generateSubjectFilters(),
-	    'htmlOptions'=>array('style'=>'width:245px; text-align:center;'),
+	    'htmlOptions'=>array('style'=>'width:150px; text-align:center;'),
 	),
 	array(
 	    'header' => 'Số buổi',
@@ -119,7 +119,14 @@ if ($model->type == Course::TYPE_COURSE_NORMAL){
 		),
 		array(
 			'name'=>'total_sessions',
-			'value'=>'$data->total_sessions . " buổi"',
+			'value'=>function($data){
+				$paidSession = Session::model()->countByAttributes(array(
+					'course_id'=>$data->id,
+					'teacher_paid'=>true,
+					'deleted_flag'=>0,
+				));
+				return $paidSession."/".$data->total_sessions." buổi";
+			},
 			'htmlOptions'=>array('style'=>'width:80px;text-align:center'),
 		),
 	);

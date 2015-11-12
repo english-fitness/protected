@@ -127,7 +127,7 @@ class SessionNote extends CActiveRecord
 		return Yii::app()->db->createCommand($query)->bindValue(':course_id', $courseId, PDO::PARAM_INT)->queryScalar();
 	}
     
-	public static function getSessionNoteByCourse($courseId, $usingPlatform = null, $ended=false){
+	public static function getSessionNoteByCourse($courseId, $usingPlatform = null, $ended=false, $paid=false){
 		if ($usingPlatform !== null){
 			$joinType = "JOIN";
 		} else {
@@ -141,6 +141,10 @@ class SessionNote extends CActiveRecord
 
 		if ($ended){
 			$otherFilter .= " AND status = " . Session::STATUS_ENDED;
+		}
+
+		if ($paid){
+			$otherFilter .= " AND teacher_paid = 1";
 		}
 
 		$condition .= $otherFilter;
@@ -160,6 +164,9 @@ class SessionNote extends CActiveRecord
 				"order"=>"plan_start ASC",
 				"with"=>array(
 					"note"=>$sessionNoteCriteria,
+					"teacher"=>array(
+						'select'=>array('firstname', 'lastname'),
+					)
 				),
 			),
 			'pagination'=>array('pageVar'=>'page', 'pageSize'=>20),

@@ -85,12 +85,12 @@ function getStatusDisplay($session){
                 array(
                    'name'=>'subject',
                    'value'=>'$data["subject"]',
-                   'htmlOptions'=>array('style'=>'width:150px; vertical-align:top;'),
+                   'htmlOptions'=>array('style'=>'width:120px; vertical-align:top;text-align:center'),
                 ),
                 array(
                    'name'=>'teacher_id',
                    'value'=>'Yii::app()->user->getFullNameById($data["teacher_id"])',
-                   'htmlOptions'=>array('style'=>'width:150px; vertical-align:top;'),
+                   'htmlOptions'=>array('style'=>'width:150px; vertical-align:top;text-align:center'),
                    'type'  => 'raw',
                 ),
                 array(
@@ -102,17 +102,17 @@ function getStatusDisplay($session){
                 array(
                    'header'=>'Ngày học',
                    'value'=>'date("d/m/Y", strtotime($data["plan_start"]))',
-                   'htmlOptions'=>array('style'=>'width:100px; text-align:center;vertical-align:top;'),
+                   'htmlOptions'=>array('style'=>'width:90px; text-align:center;vertical-align:top;'),
                 ),
                 array(
                    'header' => 'Giờ học',
                    'value'=>'date("H:i", strtotime($data["plan_start"])) . " - " . date("H:i", strtotime($data["plan_start"] . " +" . $data["plan_duration"] . "minutes"))',
-                   'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
+                   'htmlOptions'=>array('style'=>'width:90px; text-align:center;vertical-align:top;'),
                 ),
                 array(
                    'name' => 'status',
                    'value'=>'getStatusDisplay($data)',
-                   'htmlOptions'=>array('style'=>'width:80px; text-align:center;vertical-align:top;'),
+                   'htmlOptions'=>array('style'=>'width:100px; text-align:center;vertical-align:top;'),
                    'type'=>'raw',
                 ),
                 array(
@@ -128,7 +128,7 @@ function getStatusDisplay($session){
                 array(
                    'header' => 'Ghi chú',
                    'value'=>'$data->status == Session::STATUS_CANCELED ? $data->status_note : ($data->note != null ? $data->note->note : "")',
-                   'htmlOptions'=>array('style'=>'width:250px;vertical-align:top;'),
+                   'htmlOptions'=>array('style'=>'width:300px;vertical-align:top;'),
                    'type'=>'raw',
                 ),
                 array(
@@ -191,7 +191,7 @@ function getStatusDisplay($session){
                     <label>Nội dung</label>
                 </div>
                 <div class="col-md-9">
-                    <textarea id="session-content" name="Session[content]" style="height:100px;max-width:651px"></textarea>
+                    <textarea id="session-content" name="Session[content]" style="height:100px;max-width:666px"></textarea>
                 </div>
             </div>
             <div class="row">
@@ -199,7 +199,7 @@ function getStatusDisplay($session){
                     <label>Ghi chú</label>
                 </div>
                 <div class="col-md-9">
-                    <textarea id="session-note" name="SessionNote[note]" style="height:100px;max-width:651px"></textarea>
+                    <textarea id="session-note" name="SessionNote[note]" style="height:100px;max-width:666px"></textarea>
                 </div>
             </div>
         </div>
@@ -222,7 +222,7 @@ function getStatusDisplay($session){
                     <label>Ghi chú</label>
                 </div>
                 <div class="col-md-9">
-                    <textarea id="teacher-fine-note" name="TeacherFine[notes]" style="max-width:651px;height:100px"></textarea>
+                    <textarea id="teacher-fine-note" name="TeacherFine[notes]" style="max-width:666px;height:100px"></textarea>
                 </div>
             </div>
         </div>
