@@ -97,7 +97,7 @@ class CourseReportController extends Controller
 	                $fileUploaded = $model->handleReportFileUpload($uploadedFile);
 	            }
 	            //do model save outside so it can echo model errors to the form
-	            if ($model->save() && $modelSaved){
+	            if ($model->save() && $fileUploaded){
 	                $this->redirect("/admin/courseReport/course/id/".$model->course_id);
 	            }
             }
