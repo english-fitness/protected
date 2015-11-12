@@ -45,6 +45,14 @@
 	.registeredUser.selected a{
 		color: white;
 	}
+	a.duplicate{
+		color: black;
+		text-decoration: none;
+	}
+	a.duplicate:hover{
+		color: darkviolet;
+		text-decoration: underline;
+	}
 </style>
 <?php 
 	$createdDateFilter = Yii::app()->controller->getQuery('PreregisterUser[created_date]', '');
@@ -65,6 +73,25 @@
 				break;
 		}
 	}
+
+	function getPhoneDisplay($phone, $duplicate){
+		$formatted = Common::formatPhoneNumber($phone);
+		if ($duplicate){
+			return '<a class="duplicate" href="/admin/preregisterUser/index?PreregisterUser[phone]='.$phone.'" title="Số điện thoại đã được đăng ký">'.
+						$formatted.'*'.
+					'</a>';
+		}
+		return $formatted;
+	}
+
+	function getEmailDisplay($email, $duplicate){
+		if ($duplicate){
+			return '<a class="duplicate" href="/admin/preregisterUser/index?PreregisterUser[email]='.$email.'" title="Email đã được đăng ký">'.
+						$email.'*'.
+					'</a>';
+		}
+		return $email;
+	}
 ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'gridView',
@@ -78,10 +105,19 @@
 		'fullname',
         array(
             'name'=>'phone',
-            'value'=>'Common::formatPhoneNumber($data->phone)',
+            'value'=>function($data){
+            	return getPhoneDisplay($data->phone, $data->phone_duplicate);
+            },
             'htmlOptions'=>array('style'=>'width:100px;'),
+            'type'=>'raw'
         ),
-		'email',
+        array(
+        	'name'=>'email',
+        	'value'=>function($data){
+            	return getEmailDisplay($data->email, $data->email_duplicate);
+            },
+            'type'=>'raw',
+    	),
 		'promotion_code',
         array(
             'name'=>'source',
@@ -109,21 +145,14 @@
 		),
 		array(
 			'class'=>'CButtonColumn',
+			'template'=>'{update}',
 			'buttons'=>array (
 		        'update'=> array('label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'btn-edit mL15' ),
-		        ),
-		        'view'=>array(
-		            'label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'dpn' ),
-		        ),
-		        'delete'=>array(
-		            'label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'dpn' ),
+		            'options'=>array( 'class'=>'btn-edit' ),
 		        ),
     		),
-            'headerHtmlOptions'=>array('style'=>'width:60px'),
-            'htmlOptions'=>array('style'=>'width:60px;'),
+            'headerHtmlOptions'=>array('style'=>'width:25px'),
+            'htmlOptions'=>array('style'=>'width:25px;'),
 		),
 		array(
 		   'header'=>'Tư vấn',

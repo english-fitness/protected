@@ -69,8 +69,9 @@ class PreregisterUser extends CActiveRecord
 			array('phone', 'length', 'max'=>20),
 			array('sale_status', 'length', 'max'=>80),
 			array('birthday, last_sale_date', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
-			array('birthday, care_status, sale_note, last_sale_date, created_user_id, modified_user_id,
-				   created_date, promotion_code, modified_date, deleted_flag, source', 'safe'),
+			array('care_status, sale_note, last_sale_date, created_user_id, modified_user_id,
+				   created_date, promotion_code, modified_date, deleted_flag, source,
+				   phone_duplicate, email_duplicate', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, email, fullname, birthday, gender, address, phone, promotion_code, care_status, sale_status,
@@ -190,6 +191,10 @@ class PreregisterUser extends CActiveRecord
 		foreach($stripTagFields as $textField){
 			$this->$textField = strip_tags($this->$textField, Common::allowHtmlTags());
 		}
+		
+		$this->phone = preg_replace('/\s+/', '', $this->phone);
+        $this->phone = str_replace('+84', '0', $this->phone);
+
 		if($this->birthday=='') $this->birthday = NULL;
 		if($this->last_sale_date=='') $this->last_sale_date = NULL;
 		return true;

@@ -2,7 +2,7 @@
 
 class RegisterController extends Controller
 {
-    public  function  init()
+    public function  init()
     {
         Yii::app()->language = 'vi';
         $this->layout = '//layouts/blank';
@@ -52,28 +52,28 @@ class RegisterController extends Controller
                 $model->source = 'Online';
             }
 
-            try {
-            	$cache = Yii::app()->cache;
-            	// $cache->flush();
-            	$availableSalesStaffs = $cache->get('availableSalesStaffs');
-            	if ($availableSalesStaffs === false){
-            		$availableSalesStaffs = ClsUser::getAvailableSalesStaff();
-            		$cache->add('availableSalesStaffs', $availableSalesStaffs);
-            	}
-            	$lastAssignedSale = $cache->get('lastAssignedSale');
-            	$currentSale = array_search($lastAssignedSale, $availableSalesStaffs);
-            	if ($lastAssignedSale === false || $currentSale == -1 || $currentSale == count($availableSalesStaffs) - 1){
-            		$lastAssignedSale = $availableSalesStaffs[0];
-            	} else {
-            		$lastAssignedSale = $availableSalesStaffs[$currentSale + 1];
-            	}
-            	$model->sale_user_id = $lastAssignedSale;
-            	$cache->set('lastAssignedSale', $lastAssignedSale);
-            } catch (Exception $e) {
-            	
+            if ($model->validate()){
+                //remove all space in phone number so we can do searches in db
+                //duplicate with model before save but we need it so just do it anyway
+                $model->phone = preg_replace('/\s+/', '', $model->phone);
+                $model->phone = str_replace('+84', '0', $model->phone);
+                $possibleDuplicate = ClsUserRegistration::findDuplicate($model->phone, $model->email);
+                if ($possibleDuplicate['phone_duplicate'] == null && $possibleDuplicate['email_duplicate'] == null){
+                    $model->sale_user_id = ClsUserRegistration::getNextSaleStaff();
+                } else {
+                    if ($possibleDuplicate['phone_duplicate'] != null){
+                        $model->phone_duplicate = true;
+                        $model->sale_user_id = $possibleDuplicate['phone_duplicate'];
+                    }
+                    if ($possibleDuplicate['email_duplicate'] != null){
+                        $model->email_duplicate = true;
+                        $model->sale_user_id = $possibleDuplicate['email_duplicate'];
+                    }
+                }
             }
 
-			if ($model->save()){
+            //no need to validate again since we have just done it right above
+			if ($model->save(false)){
                 if (isset($utmParams)){
                     $utmStat = new UtmSaleStat;
                     $utmStat->register_id = $model->id;
