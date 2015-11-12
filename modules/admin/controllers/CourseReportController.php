@@ -32,7 +32,7 @@ class CourseReportController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
+				'actions'=>array('delete'),
 				'users'=>array('*'),
 				'expression' => 'Yii::app()->user->isAdmin()',
 			),
@@ -132,6 +132,25 @@ class CourseReportController extends Controller
         $this->render('create', array(
             'model'=>$model,
         ));
+    }
+
+    public function actionDelete($id){
+    	$model = $this->loadModel($id);
+
+    	$success = false;
+		$reportFile = CourseReport::REPORT_UPLOAD_DIR."/".$model->course_id."/".$model->report_file;
+    	if ($model->delete() && file_exists($reportFile)){
+    		unlink($reportFile);
+    		$success = true;
+    	}
+    	$this->renderJSON(array('success'=>$success));
+    }
+
+    private function loadModel($id, $with=array()){
+    	$model = CourseReport::model()->with($with)->findByPk($id);
+    	if($model===null)
+            throw new CHttpException(404,'The requested page does not exist.');
+        return $model;
     }
     
 }

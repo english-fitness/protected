@@ -24,6 +24,9 @@
 	        <div class="btn-group">
 	        	<button class="btn btn-primary" name="form_action" type="submit"><i class="icon-save"></i>Lưu lại</button>
 	        	<button class="btn btn-default cancel" name="form_action" type="button" onclick="cancel();"><i class="icon-undo"></i>Bỏ qua</button>
+                <?php if(Yii::app()->user->isAdmin()):?>
+                    <button class="btn btn-default remove" name="form_action" type="button" onclick="deleteReport();"><i class="btn-remove"></i>Xóa báo cáo</button>
+                <?php endif;?>
 	        </div>
 	    </div>
 	</div>
@@ -140,6 +143,25 @@
         <?php else:?>
             window.location.href = "/admin/courseReport/course/id/<?php echo isset($model) ? $model->course->id : $_GET['course_id'] ?>";
         <?php endif;?>
+    }
+
+    function deleteReport(){
+        if (confirm('Bạn có chắc muốn xóa báo cáo này không?')){
+            $.ajax({
+                type:'post',
+                url:'/admin/courseReport/delete/id/<?php echo $model->id?>',
+                success:function(response){
+                    if (response.success){
+                        window.location.href = "/admin/courseReport/course/id/<?php echo $model->course_id?>"
+                    } else {
+                        alert("Không thể xóa báo cáo");
+                    }
+                },
+                error: function(){
+                    alert("Không thể xóa báo cáo");
+                }
+            });
+        }
     }
 
     function allowEdit(element){
