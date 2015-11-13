@@ -2,7 +2,7 @@
 
 class RegisterController extends Controller
 {
-    public function  init()
+    public function init()
     {
         Yii::app()->language = 'vi';
         $this->layout = '//layouts/blank';
@@ -62,11 +62,9 @@ class RegisterController extends Controller
                     $model->sale_user_id = ClsUserRegistration::getNextSaleStaff();
                 } else {
                     if ($possibleDuplicate['phone_duplicate'] != null){
-                        $model->phone_duplicate = true;
                         $model->sale_user_id = $possibleDuplicate['phone_duplicate'];
                     }
                     if ($possibleDuplicate['email_duplicate'] != null){
-                        $model->email_duplicate = true;
                         $model->sale_user_id = $possibleDuplicate['email_duplicate'];
                     }
                 }
@@ -85,7 +83,7 @@ class RegisterController extends Controller
 		}
 		
 		// $this->renderJSON(array("success"=>$success, "model"=>$model, 'error'=>json_encode($model->getErrors())));
-		$this->renderJSON(array("success"=>$success));
+		$this->renderJSON(array("success"=>$success, "model"=>array("id"=>$model->id)));
 	}
     
     public function actionGetPreregisterUser(){

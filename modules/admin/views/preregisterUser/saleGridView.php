@@ -106,7 +106,7 @@
         array(
             'name'=>'phone',
             'value'=>function($data){
-            	return getPhoneDisplay($data->phone, $data->phone_duplicate);
+            	return getPhoneDisplay($data->phone, $data->phoneDuplicate);
             },
             'htmlOptions'=>array('style'=>'width:100px;'),
             'type'=>'raw'
@@ -114,7 +114,7 @@
         array(
         	'name'=>'email',
         	'value'=>function($data){
-            	return getEmailDisplay($data->email, $data->email_duplicate);
+            	return getEmailDisplay($data->email, $data->emailDuplicate);
             },
             'type'=>'raw',
     	),

@@ -29,19 +29,39 @@ class ClsUserRegistration {
 		$select = array();
 		$values = array();
 		if (!empty($phone)){
-			// $select[] = "SUM(phone = :phone) AS phone";
-			$select[] = "(SELECT sale_user_id FROM tbl_preregister_user WHERE phone=:phone LIMIT 1) AS phone_duplicate";
+			$select[] = "(SELECT sale_user_id FROM tbl_preregister_user WHERE phone=:phone AND deleted_flag=0 LIMIT 1) AS phone_duplicate";
 			$values['phone'] = $phone;
 		}
 		if (!empty($email)){
-			// $select[] = "SUM(email = :email) AS email";
-			$select[] = "(SELECT sale_user_id FROM tbl_preregister_user WHERE email=:email LIMIT 1) AS email_duplicate";
+			$select[] = "(SELECT sale_user_id FROM tbl_preregister_user WHERE email=:email AND deleted_flag=0  LIMIT 1) AS email_duplicate";
 			$values['email'] = $email;
 		}
 
 		if ($select != ''){
-			// $query ="SELECT ".implode(',',$select)." FROM ".PreregisterUser::model()->tablename();
 			$query ="SELECT ".implode(',',$select);
+			return Yii::app()->db->createCommand($query)->bindValues($values)->queryRow();
+		}
+
+		return null;
+	}
+
+	public static function countDuplicate($phone='', $email=''){
+		//may be we don't need values binding at all
+		//since it should be validated before sending here
+		//but let's just do it
+		$select = array();
+		$values = array();
+		if (!empty($phone)){
+			$select[] = "SUM(phone = :phone AND deleted_flag=0) AS phone_duplicate";
+			$values['phone'] = $phone;
+		}
+		if (!empty($email)){
+			$select[] = "SUM(email = :email AND deleted_flag=0) AS email_duplicate";
+			$values['email'] = $email;
+		}
+
+		if ($select != ''){
+			$query ="SELECT ".implode(',',$select)." FROM ".PreregisterUser::model()->tablename();
 			return Yii::app()->db->createCommand($query)->bindValues($values)->queryRow();
 		}
 

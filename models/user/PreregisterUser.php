@@ -28,6 +28,9 @@
  */
 class PreregisterUser extends CActiveRecord
 {
+	private $_phoneDuplicate;
+	private $_emailDuplicate;
+
 	public $extraAttributes = array();
 
 	//Const for role of user
@@ -70,8 +73,7 @@ class PreregisterUser extends CActiveRecord
 			array('sale_status', 'length', 'max'=>80),
 			array('birthday, last_sale_date', 'type', 'type' => 'date', 'dateFormat' => 'yyyy-MM-dd'),
 			array('care_status, sale_note, last_sale_date, created_user_id, modified_user_id,
-				   created_date, promotion_code, modified_date, deleted_flag, source,
-				   phone_duplicate, email_duplicate', 'safe'),
+				   created_date, promotion_code, modified_date, deleted_flag, source,', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, email, fullname, birthday, gender, address, phone, promotion_code, care_status, sale_status,
@@ -322,5 +324,37 @@ class PreregisterUser extends CActiveRecord
     public function hasExistingUser(){
         $query = "SELECT COUNT(*) FROM tbl_student WHERE preregister_id = " . $this->id;
         return Yii::app()->db->createCommand($query)->queryScalar() > 0;
+    }
+
+    private function setDuplicate(){
+    	$possibleDuplicate = ClsUserRegistration::countDuplicate($this->phone, $this->email);
+    	if ($possibleDuplicate['phone_duplicate'] > 1){
+    		$this->_phoneDuplicate = true;
+    	} else {
+    		$this->_phoneDuplicate = false;
+    	}
+    	if ($possibleDuplicate['email_duplicate'] > 1){
+    		$this->_emailDuplicate = true;
+    	} else {
+    		$this->_emailDuplicate = false;
+    	}
+    }
+
+    public function getPhoneDuplicate(){
+    	if (isset($this->_phoneDuplicate)){
+    		return $this->_phoneDuplicate;
+    	} else {
+    		$this->setDuplicate();
+    		return $this->_phoneDuplicate;
+    	}
+    }
+
+    public function getEmailDuplicate(){
+    	if (isset($this->_emailDuplicate)){
+    		return $this->_emailDuplicate;
+    	} else {
+    		$this->setDuplicate();
+    		return $this->_emailDuplicate;
+    	}
     }
 }
