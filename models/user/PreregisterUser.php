@@ -98,6 +98,7 @@ class PreregisterUser extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'saleUser'=>array(self::BELONGS_TO, 'User', 'sale_user_id'),
+			'utmSaleData'=>array(self::HAS_ONE, 'UtmSaleStat', 'register_id'),
 		);
 	}
 

@@ -181,7 +181,23 @@ class PreregisterUserController extends Controller
                 $this->redirect(array('/admin/preregisterUser'));
             }
 		}else{
-			$model->delete();//Delete forever this User
+			$transaction = Yii::app()->db->beginTransaction();
+
+			try {
+				$delete = array($model);
+				if ($model->utmSaleData != null){
+					$delete[] = $model->utmSaleData;
+				}
+				foreach ($delete as $object) {
+					if(!$object->delete()){
+						throw new Exception("Error deleting model: " . get_class($object));
+					}
+				}
+				$transaction->commit();
+
+			} catch (Exception $e) {
+				$transaction->rollBack();
+			}
 		}
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
