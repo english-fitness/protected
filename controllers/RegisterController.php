@@ -46,11 +46,22 @@ class RegisterController extends Controller
 				}
 			}
             
-            if (isset($_REQUEST['referrer'])){
-                $model->source = $_REQUEST['referrer'];
-            } else {
-                $model->source = 'Online';
+            $knownReferrer = array(
+                'fb'=>'Online - Facebook',
+                'hocmai'=>'Online - Hocmai',
+            );
+            if (isset($_REQUEST['referrer']) && !empty($_REQUEST['referrer'])){
+                $r = $_REQUEST['referrer'];
+            } else if (isset($_COOKIE['referrer']) && !empty($_COOKIE['referrer'])){
+                $r = $_COOKIE['referrer'];
             }
+            if (isset($knownReferrer[$r])){
+                $referrer = $knownReferrer[$r];
+            } else {
+                $referrer = 'Online';
+            }
+            $model->source = $referrer;
+
 
             if ($model->validate()){
                 //remove all space in phone number so we can do searches in db

@@ -1,17 +1,8 @@
 <?php
-$referrer = "";
-if (isset($_REQUEST['ref'])){
-    $knownReferrer = array(
-        'facebook'=>'Online - Facebook',
-        'hocmai'=>'Offline - Hocmai',
-    );
-    if (isset($knownReferrer[$_REQUEST['ref']])){
-        $referrer = $knownReferrer[$_REQUEST['ref']];
-    }
-}
-
-if ($referrer == ""){
-    $referrer = "Online - Facebook";
+if (isset($_REQUEST['r']) && !empty($_REQUEST['r'])){
+    $referrer = $_REQUEST['r'];
+} else {
+    $referrer = 'fb';
 }
 
 $baseAssetsUrl = $this->baseAssetsUrl;

@@ -1,3 +1,21 @@
+<?php 
+    $utmParams = array();
+    
+    if (isset($_REQUEST['utm_source']))
+        $utmParams['utm_source'] = $_REQUEST['utm_source'];
+    if (isset($_REQUEST['utm_medium']))
+        $utmParams['utm_medium'] = $_REQUEST['utm_medium'];
+    if (isset($_REQUEST['utm_term']))
+        $utmParams['utm_term'] = $_REQUEST['utm_term'];
+    if (isset($_REQUEST['utm_content']))
+        $utmParams['utm_content'] = $_REQUEST['utm_content'];
+    if (isset($_REQUEST['utm_campaign']))
+        $utmParams['utm_campaign'] = $_REQUEST['utm_campaign'];
+
+    setcookie('utmParams', json_encode($utmParams), 0, '/');
+
+    $baseAssetsUrl = $this->baseAssetsUrl;
+?>
 <!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -8,7 +26,6 @@
         <?php else:?>
             <meta name="viewport" content="width=1366">
         <?php endif;?>
-        <?php $baseAssetsUrl = $this->baseAssetsUrl?>
         <!--favicon-->
         <link rel="apple-touch-icon" sizes="57x57" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-57x57.png">
         <link rel="apple-touch-icon" sizes="60x60" href="<?php echo $baseAssetsUrl;?>/images/favicons/apple-touch-icon-60x60.png">
@@ -102,22 +119,6 @@
         <!--End Google Analytics-->
     </head>
     <body>
-    <?php 
-        $utmParams = array();
-        
-        if (isset($_REQUEST['utm_source']))
-            $utmParams['utm_source'] = $_REQUEST['utm_source'];
-        if (isset($_REQUEST['utm_medium']))
-            $utmParams['utm_medium'] = $_REQUEST['utm_medium'];
-        if (isset($_REQUEST['utm_term']))
-            $utmParams['utm_term'] = $_REQUEST['utm_term'];
-        if (isset($_REQUEST['utm_content']))
-            $utmParams['utm_content'] = $_REQUEST['utm_content'];
-        if (isset($_REQUEST['utm_campaign']))
-            $utmParams['utm_campaign'] = $_REQUEST['utm_campaign'];
-
-        setcookie('utmParams', json_encode($utmParams), time()+60*60, '/');
-    ?>
     <?php echo $content; ?>
     </body>
 </html>
