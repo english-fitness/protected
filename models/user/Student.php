@@ -27,24 +27,27 @@ class Student extends CActiveRecord
     // const STATUS_NEW_STUDENT = 7;
     // const STATUS_OLD_STUDENT = 8;
 
-    const STATUS_NEW_REGISTER = 0;
-    const STATUS_TEST = 1;
-    const STATUS_TRIAL_TEST = 2;
-    const STATUS_TRIAL_TEACHER = 3;
-    const STATUS_TRIAL_COMPLETE = 4;
-    const STATUS_DISCONTINUED_STUDENT = 5;
-    const STATUS_NEW_STUDENT = 6;
-    const STATUS_OLD_STUDENT = 7;
-    
+	const STATUS_NEW_REGISTER = 0;
+	const STATUS_TEST = 1;
+    const STATUS_L5 = 5;
+	const STATUS_L6 = 6;
+	const STATUS_L7A = 7;
+	const STATUS_L7B = 8;
+	const STATUS_L8A = 9;
+	const STATUS_L8B = 10;
+	const STATUS_L9A = 11;
+	const STATUS_L9B = 12;
+
     public static function statusOptions($status=null){
         $statusOptions = array(
-            self::STATUS_NEW_REGISTER => 'Mới đăng ký',
-			self::STATUS_TRIAL_TEST => 'Đang học thử/Test',
-			self::STATUS_TRIAL_TEACHER => 'Đang học thử/GV',
-			self::STATUS_TRIAL_COMPLETE => 'Học viên/Quản lý',
-            self::STATUS_DISCONTINUED_STUDENT => 'Học viên/Nghỉ',
-			self::STATUS_NEW_STUDENT => 'Học viên mới',
-			self::STATUS_OLD_STUDENT => 'Học viên VIP',
+        	self::STATUS_L5=>'L5',
+			self::STATUS_L6=>'L6',
+			self::STATUS_L7A=>'L7A',
+			self::STATUS_L7B=>'L7B',
+			self::STATUS_L8A=>'L8A',
+			self::STATUS_L8B=>'L8B',
+			self::STATUS_L9A=>'L9A',
+			self::STATUS_L9B=>'L9B',
 		);
 		if($status==null){
 			return $statusOptions;
@@ -54,25 +57,51 @@ class Student extends CActiveRecord
 		return null;
     }
 
-    public static function filterOptions($status=null){
-    	$filterOptions = array(
-            self::STATUS_NEW_REGISTER => 'Mới đăng ký',
-			self::STATUS_TRIAL_TEST => 'Đang học thử/Test',
-			self::STATUS_TRIAL_TEACHER => 'Đang học thử/GV',
-			self::STATUS_TRIAL_COMPLETE => 'Học viên/Quản lý',
-            self::STATUS_DISCONTINUED_STUDENT => 'Học viên/Nghỉ',
-            '>='.self::STATUS_NEW_STUDENT=>'Học viên',
-			self::STATUS_NEW_STUDENT => 'Học viên mới',
-			self::STATUS_OLD_STUDENT => 'Học viên VIP',
+    public static function statusGuide($status=null){
+    	$statusOptions = array(
+        	self::STATUS_L5=>'Đã hướng dẫn sử dụng hệ thống',
+			self::STATUS_L6=>'Đã học thử với giáo viên',
+			self::STATUS_L7A=>'Đã tạm dừng',
+			self::STATUS_L7B=>'Đã nghỉ',
+			self::STATUS_L8A=>'Đã đăng ký 1 khóa học',
+			self::STATUS_L8B=>'Đăng ký nhiều khóa học/tài khoản',
+			self::STATUS_L9A=>'Đã đăng ký học tiếp',
+			self::STATUS_L9B=>'Đã đăng ký học tiếp nhiều khóa học/tài khoản',
 		);
 		if($status==null){
-			return $filterOptions;
-		}elseif(isset($filterOptions[$status])){
-			return $filterOptions[$status];
+			return $statusOptions;
+		}elseif(isset($statusOptions[$status])){
+			return $statusOptions[$status];
 		}
 		return null;
     }
-    
+
+    public static function statusSelect($addEmpty=false, $select="", $htmlOptions=null){
+		$allowableStatus = self::statusOptions();
+		$statusGuide = self::statusGuide();
+
+		if ($addEmpty){
+			$options = '<option value=""></option>';
+		} else {
+			$options = '';
+		}
+		foreach ($allowableStatus as $key => $value) {
+			if ($select != ""){
+				$selected = $select == $key ? 'selected' : '';
+			} else {
+				$selected = "";
+			}
+			$options .= '<option value="'.$key.'" title="'.$statusGuide[$key].'" '.$selected.'>'.$value.'</option>';
+		}
+		$htmlOptionsString = '';
+		if (!empty($htmlOptions)){
+			foreach ($htmlOptions as $key => $value) {
+				$htmlOptionsString .= $key.'="'.$value.'"';
+			}
+		}
+		return '<select name="User[status]" '.$htmlOptionsString.'>'.$options.'</select>';
+	}
+
 	/**
 	 * @return string the associated database table name
 	 */

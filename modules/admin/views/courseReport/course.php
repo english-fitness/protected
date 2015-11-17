@@ -144,7 +144,7 @@ $(".reportViewLink").click(function(e){
     
     BootstrapDialog.show({
         title:'Progress report',
-        message:'<div class="iframe-container"><iframe id="googleDocsViewer" height="520" width="910" src="' + this.getAttribute('href') + '"></div>',
+        message:'<div class="iframe-container"><iframe id="googleDocsViewer" height="520" width="928" src="' + this.getAttribute('href') + '"></div>',
     });
     
     $('body').unbind('mousewheel DOMMouseScroll');

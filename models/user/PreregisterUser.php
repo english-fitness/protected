@@ -37,16 +37,14 @@ class PreregisterUser extends CActiveRecord
 	const TYPE_USER_STUDENT = 0;//Type Student  user
 	const TYPE_USER_TEACHER = 1;//Type teacher user
 	const TYPE_USER_PARENT = 2;//Type  parent of user
+
+	const CARE_STATUS_L0 = 0;
+	const CARE_STATUS_L1 = 1;
+	const CARE_STATUS_L2 = 2;
+	const CARE_STATUS_L3 = 3;
+	const CARE_STATUS_L4 = 4;
+	const CARE_STATUS_L = 5;
     
-	//Const for care status of user
-    const CARE_STATUS_PENDING = 0;//Pending status
-    const CARE_STATUS_APPROVED = 1;//Approved status
-    const CARE_STATUS_WORKING = 2;//Working status
-    const CARE_STATUS_DISABLED = 3;//Disabled status
-    const CARE_STATUS_REGISTERED = 4;
-    const CARE_STATUS_LATER = 5;
-    const CARE_STATUS_SCHEDULED = 6;
-	
 	/**
 	 * @return string the associated database table name
 	 */
@@ -235,13 +233,12 @@ class PreregisterUser extends CActiveRecord
 	public static function careStatusOptions($careStatus=null)
 	{
 		$careStatusOptions = array(
-			self::CARE_STATUS_PENDING => 'Chưa chăm sóc',
-			self::CARE_STATUS_APPROVED => 'Hẹn chăm sóc',
-			self::CARE_STATUS_WORKING => 'Đang chăm sóc',
-			self::CARE_STATUS_LATER => 'Chăm sóc sau',
-            self::CARE_STATUS_REGISTERED => 'Đăng ký hệ thống',
-            self::CARE_STATUS_SCHEDULED => 'Đã xếp lịch',
-			self::CARE_STATUS_DISABLED => 'Hủy chăm sóc',
+			self::CARE_STATUS_L=>'L',
+			self::CARE_STATUS_L0=>'L0',
+			self::CARE_STATUS_L1=>'L1',
+			self::CARE_STATUS_L2=>'L2',
+			self::CARE_STATUS_L3=>'L3',
+			self::CARE_STATUS_L4=>'L4',
 		);
 		if($careStatus==null){
 			return $careStatusOptions;
@@ -251,10 +248,25 @@ class PreregisterUser extends CActiveRecord
 		return null;
 	}
 
+	public static function careStatusGuide($careStatus=null){
+		$careStatusGuide = array(
+			self::CARE_STATUS_L=>'Đã hủy bỏ',
+			self::CARE_STATUS_L0=>'Chưa xử lý',
+			self::CARE_STATUS_L1=>'Đã xử lý',
+			self::CARE_STATUS_L2=>'Chưa liên lạc được',
+			self::CARE_STATUS_L3=>'Đã liên lạc được',
+			self::CARE_STATUS_L4=>'Đã tư vấn, xếp lịch học thử...',
+		);
+		if($careStatus==null){
+			return $careStatusGuide;
+		}elseif(isset($careStatusGuide[$careStatus])) {
+			return $careStatusGuide[$careStatus];
+		}
+	}
+
 	public static function registeredCareStatusOptions($careStatus=null){
 		$careStatusOptions = array(
-            self::CARE_STATUS_REGISTERED => 'Đăng ký hệ thống',
-			self::CARE_STATUS_SCHEDULED => 'Đã xếp lịch',
+            self::CARE_STATUS_L4 => 'L4',
 		);
 		if($careStatus==null){
 			return $careStatusOptions;
@@ -262,6 +274,32 @@ class PreregisterUser extends CActiveRecord
 			return $careStatusOptions[$careStatus];
 		}
 		return null;
+	}
+
+	public static function careStatusFilter($addEmpty=false, $select="", $htmlOptions=null){
+		$allowableStatus = self::careStatusOptions();
+		$statusGuide = self::careStatusGuide();
+
+		if ($addEmpty){
+			$options = '<option value=""></option>';
+		} else {
+			$options = '';
+		}
+		foreach ($allowableStatus as $key => $value) {
+			if ($select != ""){
+				$selected = $select == $key ? 'selected' : '';
+			} else {
+				$selected = "";
+			}
+			$options .= '<option value="'.$key.'" title="'.$statusGuide[$key].'" '.$selected.'>'.$value.'</option>';
+		}
+		$htmlOptionsString = '';
+		if (!empty($htmlOptions)){
+			foreach ($htmlOptions as $key => $value) {
+				$htmlOptionsString .= $key.'="'.$value.'"';
+			}
+		}
+		return '<select name="PreregisterUser[care_status]" '.$htmlOptionsString.'>'.$options.'</select>';
 	}
 
 	public static function allowableSource(){
@@ -278,21 +316,6 @@ class PreregisterUser extends CActiveRecord
 		);
 	}
 
-	public static function sourceFilter(){
-		return array(
-			"allOnline"=>'Tất cả - Online',
-			'Online'=>'Online',
-			'Online - Hocmai.vn'=>'Online - Hocmai.vn',
-			'Online - Facebook'=>'Online - Facebook',
-			'Offline'=>'Offline',
-			'Offline - Ba đình'=>'Offline - Ba đình',
-			'Offline - Ngôi sao'=>'Offline - Ngôi sao',
-			'Người quen'=>'Người quen',
-			'Nhân viên - HM'=>'Nhân viên - HM',
-			'Hocmai - Telesales'=>'Hocmai - Telesales',
-		);
-	}
-	
 	public function getWeekdays(){
 		$weekdays = array("Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy", "Chủ nhật");
 		$weekdayArray = preg_split('/,[\s]*/', $this->weekday);
@@ -334,7 +357,7 @@ class PreregisterUser extends CActiveRecord
     	} else {
     		$this->_phoneDuplicate = false;
     	}
-    	if ($possibleDuplicate['email_duplicate'] > 1){
+    	if (isset($possibleDuplicate['email_duplicate']) && $possibleDuplicate['email_duplicate'] > 1){
     		$this->_emailDuplicate = true;
     	} else {
     		$this->_emailDuplicate = false;
@@ -359,3 +382,4 @@ class PreregisterUser extends CActiveRecord
     	}
     }
 }
+

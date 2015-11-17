@@ -72,10 +72,10 @@ class RegisterController extends Controller
                 if ($possibleDuplicate['phone_duplicate'] == null && $possibleDuplicate['email_duplicate'] == null){
                     $model->sale_user_id = ClsUserRegistration::getNextSaleStaff();
                 } else {
-                    if ($possibleDuplicate['phone_duplicate'] != null){
+                    if ($possibleDuplicate['phone_duplicate'] > 1){
                         $model->sale_user_id = $possibleDuplicate['phone_duplicate'];
                     }
-                    if ($possibleDuplicate['email_duplicate'] != null){
+                    if (isset($possibleDuplicate['email_duplicate']) && $possibleDuplicate['email_duplicate'] > 1){
                         $model->sale_user_id = $possibleDuplicate['email_duplicate'];
                     }
                 }

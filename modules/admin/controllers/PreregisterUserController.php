@@ -210,7 +210,12 @@ class PreregisterUserController extends Controller
 	public function actionIndex()
 	{
 		$this->subPageTitle = 'Danh sách đăng ký tư vấn';
-		$this->loadJQuery = false;//Not load jquery
+
+		$cs = Yii::app()->getClientScript();
+		$baseAssetsUrl = $this->baseAssetsUrl;
+		$cs->registerScriptFile($baseAssetsUrl."/js/jquery/jquery.qtip.min.js");
+		$cs->registerCssFile($baseAssetsUrl."/css/jquery/jquery.qtip.min.css");
+
 		$model = new PreregisterUser('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['PreregisterUser'])){
@@ -235,7 +240,6 @@ class PreregisterUserController extends Controller
     
     public function actionSaleStat(){
         $this->subPageTitle = 'Registration Statistics';
-        $this->loadJQuery = false;//Not load jquery
 		$model = new PreregisterUser('search');
 		$model->unsetAttributes();  // clear any default values
         if(isset($_GET['PreregisterUser'])){

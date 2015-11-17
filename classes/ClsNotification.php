@@ -128,7 +128,7 @@ class ClsNotification
      */
     public function countPendingPreregisterUser()
     {
-    	$attributes = array('care_status'=>PreregisterUser::CARE_STATUS_PENDING, 'deleted_flag'=>0);
+    	$attributes = array('care_status'=>PreregisterUser::CARE_STATUS_L0, 'deleted_flag'=>0);
     	$count = PreregisterUser::model()->countByAttributes($attributes);
     	return $count;
     }

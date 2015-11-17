@@ -109,7 +109,7 @@
 						echo CHtml::dropDownList(
 							'source',
 							'',
-							array('all'=>'Tất cả') + PreregisterUser::sourceFilter(),
+							array('all'=>'Tất cả', "allOnline"=>"Tất cả - Online") + PreregisterUser::allowableSource(),
 							array(
 								'class'=>'pull-left w250'
 							)

@@ -57,23 +57,6 @@
 <?php 
 	$createdDateFilter = Yii::app()->controller->getQuery('PreregisterUser[created_date]', '');
 
-	function setHighlightClass($status){
-		switch ($status) {
-			case PreregisterUser::CARE_STATUS_LATER:
-				return array("class"=>"notable");
-				break;
-			case PreregisterUser::CARE_STATUS_REGISTERED:
-				return array("class"=>"registeredUser");
-				break;
-			case PreregisterUser::CARE_STATUS_SCHEDULED:
-				return array("class"=>"scheduledUser");
-				break;
-			default:
-				return array();
-				break;
-		}
-	}
-
 	function getPhoneDisplay($phone, $duplicate){
 		$formatted = Common::formatPhoneNumber($phone);
 		if ($duplicate){
@@ -93,6 +76,7 @@
 		return $email;
 	}
 ?>
+<?php $this->renderPartial('careStatusGuide')?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'gridView',
 	'dataProvider'=>$model->search(),
@@ -100,7 +84,6 @@
 	'enableHistory'=>true,
 	'ajaxVar'=>'',
 	'pager' => array('class'=>'CustomLinkPager'),
-	'rowHtmlOptionsExpression'=>'setHighlightClass($data->care_status)',
 	'columns'=>array(
 		'fullname',
         array(
@@ -126,40 +109,40 @@
             'htmlOptions'=>array('style'=>'min-width:100px;'),
         ),
 		array(
-		   'name'=>'created_date',
-		   'value'=>'date("d/m/Y, H:i", strtotime($data->created_date))',
-		   'filter'=>'<input type="text" value="'.$createdDateFilter.'" name="PreregisterUser[created_date]">',
-		   'htmlOptions'=>array('style'=>'width:110px;'),
+			'name'=>'created_date',
+			'value'=>'date("d/m/Y, H:i", strtotime($data->created_date))',
+			'filter'=>'<input type="text" value="'.$createdDateFilter.'" name="PreregisterUser[created_date]">',
+			'htmlOptions'=>array('style'=>'width:110px;'),
 		),
 		array(
-		   'name'=>'care_status',
-		   'value'=>'$data->careStatusOptions($data->care_status)',
-		   'filter'=>$model->careStatusOptions(),
-		   'htmlOptions'=>array('style'=>'width:135px;'),
+			'name'=>'care_status',
+			'value'=>'$data->careStatusOptions($data->care_status)',
+			'filter'=>PreregisterUser::careStatusFilter(true, Yii::app()->controller->getQuery('PreregisterUser[care_status]')),
+			'htmlOptions'=>array("style"=>"width:135px;text-align:center;"),
 		),
 		array(
-		   'name'=>'sale_user_id',
-		   'value'=>'($data->sale_user_id)? User::model()->displayUserById($data->sale_user_id):""',
-           'filter'=>Student::model()->getSalesUserOptions(false, "", false),
-		   'htmlOptions'=>array('style'=>'width:150px;'),
+			'name'=>'sale_user_id',
+			'value'=>'($data->sale_user_id)? User::model()->displayUserById($data->sale_user_id):""',
+			'filter'=>Student::model()->getSalesUserOptions(false, "", false),
+			'htmlOptions'=>array('style'=>'width:150px;'),
 		),
 		array(
 			'class'=>'CButtonColumn',
 			'template'=>'{update}',
 			'buttons'=>array (
 		        'update'=> array('label'=>'', 'imageUrl'=>'',
-		            'options'=>array( 'class'=>'btn-edit' ),
+		            'options'=>array( 'class'=>'btn-edit'),
 		        ),
     		),
             'headerHtmlOptions'=>array('style'=>'width:25px'),
             'htmlOptions'=>array('style'=>'width:25px;'),
 		),
 		array(
-		   'header'=>'Tư vấn',
-		   'value'=>'CHtml::link("Tư vấn", "/admin/preregisterUser/saleUpdate/id/".$data->id, array("class"=>"icon-plus pL20", "style"=>"width:60px;"))',
-		   'filter'=>false, 'type'  => 'raw',
-           'headerHtmlOptions'=>array('style'=>'width:60px'),
-		   'htmlOptions'=>array('style'=>'width:60px;'),
+			'header'=>'Tư vấn',
+			'value'=>'CHtml::link("Tư vấn", "/admin/preregisterUser/saleUpdate/id/".$data->id, array("class"=>"icon-plus pL20", "style"=>"width:60px;"))',
+			'filter'=>false, 'type'  => 'raw',
+			'headerHtmlOptions'=>array('style'=>'width:60px'),
+			'htmlOptions'=>array('style'=>'width:60px;'),
 		),
 	),
 )); ?>

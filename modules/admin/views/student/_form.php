@@ -131,6 +131,7 @@ foreach ($usernamePrefixesOptions as $prefix){
 	        </div>
 	    </div>
 	</div>
+	<?php $this->renderPartial("/preregisterUser/careStatusGuide")?>
     <div class="row"><div style="float:right"><?php echo $form->error($student,'preregister_id'); ?></div></div>
 <fieldset>
 	<?php $disabledAttrs = (!$model->isNewRecord)? array('disabled'=>'disabled'):array();?>
@@ -268,7 +269,7 @@ foreach ($usernamePrefixesOptions as $prefix){
 					<?php echo $form->error($model,'phone'); ?>
 			</div>
 		</div>
-	</div>	
+	</div>
 	<div class="form-element-container row">
 		<div class="col col-lg-3">
 			<?php echo $form->labelEx($model,'address'); ?>
@@ -283,13 +284,14 @@ foreach ($usernamePrefixesOptions as $prefix){
 			<?php echo $form->labelEx($model,'status'); ?>
 		</div>
 		<div class="col col-lg-9">
-			<?php echo $form->dropDownList($model,'status', Student::statusOptions(), $disabledAttrs); ?>
+			<?php echo Student::statusSelect(false, $model->status, array("id"=>"User_status") + $disabledAttrs) ?>
 			<?php echo $form->error($model,'status'); ?>
 			<?php if(!$model->isNewRecord):?>
 			<div class="fR">
 				<a class="fs12 errorMessage" href="javascript: openStudentStatus();">Thay đổi trạng thái của học sinh (thủ công)!</a>
 			</div>
 			<?php endif;?>
+			</div>
 		</div>
 	</div>
     <?php if (!$model->isNewRecord && Yii::app()->user->isAdmin()):?>
@@ -365,3 +367,9 @@ foreach ($usernamePrefixesOptions as $prefix){
         document.getElementById('User_phone').value = '<?php echo $preregisterUser->phone?>';
     </script>
 <?php endif;?>
+<script type="text/javascript">
+	var statusGuide = <?php echo json_encode(Student::statusGuide())?>;
+    $("#User_status").find('option').each(function(){
+    	$(this).html($(this).html() + ' - ' + statusGuide[$(this).val()]);
+    })
+</script>

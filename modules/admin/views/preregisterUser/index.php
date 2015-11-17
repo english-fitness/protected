@@ -50,8 +50,11 @@ $this->breadcrumbs=array(
 </div>
 <div class="form-element-container row">
 <?php if($model->deleted_flag==0):?>
-	<div class="col col-lg-6">
+	<div class="col col-lg-3">
       <a href="/admin/preregisterUser?deleted_flag=1"><span class="trash"></span>&nbsp;Danh sách đăng ký tư vấn đã bị xóa/hủy</a>
+    </div>
+    <div class="col col-lg-3">
+      <a href="/admin/preregisterUser/saleStat"><span class="btn-view"></span>&nbsp;Thống kê nguồn đăng ký</a>
     </div>
 <?php endif;?>
     <div id="import_data" class="col col-lg-6 dpn">
@@ -70,11 +73,6 @@ $this->breadcrumbs=array(
             <img id="succes_img" class="dpn" src="/media/images/icon/tick.png" style="height:20px; position:absolute; left:0; top:-5px"/>
             <p id="file_upload_message" class="fs12" style="color:blue"></p>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col col-lg-6">
-      <a href="/admin/preregisterUser/saleStat">Thống kê nguồn đăng ký</a>
     </div>
 </div>
 <?php $this->renderPartial('saleGridView', array('model'=>$model))?>

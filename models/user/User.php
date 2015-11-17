@@ -158,7 +158,7 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		$modelRules = array(
-			array('username, email, password, firstname, lastname', 'required'),
+			array('username, email, password, firstname, lastname, status', 'required'),
 			array('phone', 'checkPhone'),
 			array('username', 'unique'),
 			array('username', 'match' ,'pattern'=>'/^[A-Za-z0-9-@.-_]+$/u',

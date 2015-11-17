@@ -108,6 +108,7 @@
 	$readOnlyAttrs = (!$model->isNewRecord)? array('readonly'=>'readonly','ondblclick'=>'allowEdit(this)'): array();
 	$disabledAttrs = (!$model->isNewRecord)? array('disabled'=>'disabled'):array();
 ?>
+<?php $this->renderPartial('/preregisterUser/careStatusGuide')?>
 <fieldset>
 <legend>
 	Thông tin người đăng ký
@@ -167,7 +168,7 @@
 		</div>
 		<div class="col col-lg-9">
 			<div class="col col-lg-5 pL0i pR0i">
-				<?php echo $form->dropDownList($model,'care_status', $model->careStatusOptions(), array()); ?>
+				<?php echo PreregisterUser::careStatusFilter(false, $model->care_status, array("id"=>"PreregisterUser_care_status")); ?>
 				<?php echo $form->error($model,'care_status'); ?>
 			</div>
 			<div class="col col-lg-7 pL0i pR0i">
@@ -220,3 +221,10 @@
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<script type="text/javascript">
+	var statusGuide = <?php echo json_encode(PreregisterUser::careStatusGuide())?>;
+    $("#PreregisterUser_care_status").find('option').each(function(){
+    	$(this).html($(this).html() + ' - ' + statusGuide[$(this).val()]);
+    })
+</script>

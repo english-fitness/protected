@@ -97,7 +97,7 @@ class StudentController extends Controller
 			}
 			$user->attributes= $student_values;
 			$user->passwordSave = $student_values['password'];
-            if ($user->attributes['status'] >= Student::STATUS_NEW_STUDENT){
+            if ($user->attributes['status'] >= Student::STATUS_L8A){
                 $student->official_start_date = date('Y-m-d');
             }
             
@@ -108,7 +108,7 @@ class StudentController extends Controller
                     // $student->attributes = $student_profile_values;
                     if (isset($_REQUEST['preregisterId'])){
                         $student->preregister_id = $_REQUEST['preregisterId'];
-                        $preregisterUser->care_status = PreregisterUser::CARE_STATUS_REGISTERED;
+                        $preregisterUser->care_status = PreregisterUser::CARE_STATUS_L4;
                         $preregisterUser->save();
                     }
                     $student->user_id = $user->id;
@@ -165,9 +165,9 @@ class StudentController extends Controller
 				$changePassStatus = false;
 				unset($studentValues['password']);//Not save password
 			}
-            $unofficialUser = ($user->status <= Student::STATUS_NEW_STUDENT);
+            $unofficialUser = ($user->status <= Student::STATUS_L8A);
 			$user->attributes = $studentValues;
-            if ($unofficialUser && $user->attributes['status'] >= Student::STATUS_NEW_STUDENT){
+            if ($unofficialUser && $user->attributes['status'] >= Student::STATUS_L8A){
                 $student->official_start_date = date('Y-m-d');
             }
 			if($changePassStatus){
@@ -284,7 +284,7 @@ class StudentController extends Controller
 	{
 		$this->subPageTitle = 'Xóa học sinh';
 		$model = $this->loadModel($id);
-		if($model->status==Student::STATUS_NEW_REGISTER){
+		if($model->status==Student::STATUS_L5){
 			$model->deleted_flag = 1;//Deleted flag
             $student = Student::model()->findByPk($id);
             if ($student != null){

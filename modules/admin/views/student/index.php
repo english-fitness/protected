@@ -25,6 +25,7 @@ $this->breadcrumbs=array(
 	$createdDateFilter = Yii::app()->controller->getQuery('User[created_date]', '');
 	$birthdayFilter = Yii::app()->controller->getQuery('User[birthday]', '');
 ?>
+<?php $this->renderPartial('/preregisterUser/careStatusGuide')?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'dataProvider'=>$model->with(array(
 		'student'=>array(
@@ -71,7 +72,7 @@ $this->breadcrumbs=array(
 		array(
 		   'name'=>'status',
 		   'value'=>'($data->statusOptions($data->status))',
-		   'filter'=>Student::filterOptions(),
+		   'filter'=>Student::statusSelect(true, Yii::app()->controller->getQuery('User[status]')),
 		   'htmlOptions'=>array('style'=>'width:130px;text-align:center'),
 		),
         array(
