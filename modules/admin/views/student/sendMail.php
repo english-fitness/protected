@@ -4,19 +4,18 @@
 	} else if (isset($_GET['template'])){
 		$template = $_GET['template'];
 	} else {
-		switch ($student->status){
-			case Student::STATUS_NEW_REGISTER:
-			case Student::STATUS_TRIAL_TEST:
+		switch (true){
+			case $student->status == Student::STATUS_L5:
 				$template = "testSchedule";
 				break;
-			case Student::STATUS_TRIAL_TEACHER:
+			case $student->status == Student::STATUS_L6:
 				$template = "trialSchedule";
 				break;
-			case Student::STATUS_TRIAL_COMPLETE:
+			case $student->status >= Student::STATUS_L8A:
 				$template = "classSchedule";
 				break;
 			default:
-				$template = 'welcome';
+				$template = 'testSchedule';
 				break;
 		}
 	}
