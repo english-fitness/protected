@@ -47,7 +47,7 @@ class ScheduleController extends Controller
                 'users'=>array('*'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions'=>array('admin','delete'),
+                'actions'=>array('delete'),
                 'users'=>array('*'),
                 'expression' => 'Yii::app()->user->isAdmin()',
             ),
@@ -526,10 +526,10 @@ class ScheduleController extends Controller
 
 				//converting booked session time to timeslot number
 				//OMG too long, should I use an array instead
-				$startHour = 9;
+				$startHour = 7;
 				$startMin = 0;
 				$slotDuration = 40;
-				$slotCount = 21;
+				$slotCount = 24;
 				$start = $startHour * 60 + $startMin;
 
 				$bookedSessions = array();

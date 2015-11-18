@@ -19,12 +19,6 @@
         </div>
     </div>
     <?php $this->renderPartial('widgets/colorLegend')?>
-    <div style="position:fixed;top:330px;left:10px;width:160px;padding:3px;border:solid 1px #ddd;box-sizing:border-box;background-color:white;box-shadow:1px 1px 1px #ddd;border-radius:3px;text-align:justify; display:none"
-     id="changingSchedule">
-        <p><b>Changing schedule</b></p>
-        <p>Click on an available slot to change schedule. Click the button bellow to cancel</p>
-        <button id="cancelChangeSchedule" class="btn" style="margin-left: 35px">Cancel</button>
-    </div>
 	<div style="margin-left:150px">
 		<label class="form-label" for="month-selection">Chọn tháng: </label>
 		<select id="month-selection" style="width:500px">
@@ -51,7 +45,7 @@
 		var start = new Date('<?php echo date('Y-m-01')?>');
 		var end = new Date('<?php echo date('Y-m-t')?>');
 		
-		var minTime = '09:00';
+		var minTime = '07:00';
 		var maxTime = '22:51';
 		
 		<?php if (isset($timezone)){

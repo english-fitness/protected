@@ -42,10 +42,10 @@ class ScheduleController extends Controller
 			
 			//converting booked session time to timeslot number
 			//OMG too long, should I use an array instead
-			$startHour = 9;
+			$startHour = 7;
 			$startMin = 0;
 			$slotDuration = 40;
-			$slotCount = 21;
+			$slotCount = 24;
 			$start = $startHour * 60 + $startMin;
 			
 			$bookedSessions = array();

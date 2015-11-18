@@ -32,9 +32,9 @@
 	<div>
 		<table id="scheduleRegistration" class="table-calendar" style="clear:both">
 			<?php
-				$startTime = array('09:00', '09:40' ,'10:20','11:00', '11:40', '12:20', '13:00', '13:40', '14:20', '15:00', '15:40', '16:20',
+				$startTime = array('07:00', '07:40', '08:20', '09:00', '09:40' ,'10:20','11:00', '11:40', '12:20', '13:00', '13:40', '14:20', '15:00', '15:40', '16:20',
 						'17:00', '17:40', '18:20', '19:00', '19:40', '20:20', '21:00', '21:40', '22:10');
-				$endTime = array('09:30', '10:10', '10:50','11:30', '12:10', '12:50', '13:30', '14:10', '14:50', '15:30', '16:10', '16:50',
+				$endTime = array('07:30', '08:10', '08:50', '09:30', '10:10', '10:50','11:30', '12:10', '12:50', '13:30', '14:10', '14:50', '15:30', '16:10', '16:50',
 						'17:30', '18:10', '18:50', '19:30', '20:10', '20:50', '21:30', '22:10', '22:50');
 				
 				$timeslotCount = sizeof($startTime);
@@ -210,7 +210,8 @@
 			var weekStart = document.getElementById('week_start').value;
 		}
 		var timeslots = '';
-		for (var i = 0; i < 147; i++){
+		var slotCount = 24*7;
+		for (var i = 0; i < slotCount; i++){
 			var timeslot = document.getElementById(i);
 			if (timeslot.value == 1){
 				if (timeslots === ''){
@@ -254,7 +255,8 @@
 	
 	function loadSchedule(){
 		loading.created();
-		for (var i = 0; i < 147; i++){
+		var slotCount = 24*7;
+		for (var i = 0; i < slotCount; i++){
 			var selection = document.getElementById(i);
 			selection.style.background = '';
             selection.disabled = true;
@@ -291,7 +293,8 @@
 		
 		var selected = document.getElementById('week_start').value.replace(/-/g, '/');
 		var thisWeek = '<?php echo $thisWeek;?>'.replace(/-/g, '/');
-		for (var i = 0; i < 147; i++){
+		var slotCount = 24*7
+		for (var i = 0; i < slotCount; i++){
 			var selection = document.getElementById(i);
             if (selected >= thisWeek){
                 selection.disabled = false;

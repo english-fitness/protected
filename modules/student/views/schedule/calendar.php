@@ -29,7 +29,7 @@
 	<?php $this->renderPartial('widgets/colorLegend');?>
 </div>
 <script>
-	var minTime = '09:00';
+	var minTime = '07:00';
 	var maxTime = '22:51';
 	
 	//end global variables
@@ -75,7 +75,7 @@
 	}
 
 	function createCalendar(divId, data, size){
-		document.getElementById(divId).setAttribute("style","width:"+1000*(size/4)+"px; height:1300px;margin: 40px auto");
+		document.getElementById(divId).setAttribute("style","width:"+1000*(size/4)+"px; height:1450px;margin: 40px auto");
 		var sessions = data.sessions;
 		var availableSlots = data.availableSlots;
 		

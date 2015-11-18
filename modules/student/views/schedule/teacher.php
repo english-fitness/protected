@@ -46,7 +46,7 @@
 		var start = new Date('<?php echo date('Y-m-01')?>');
 		var end = new Date('<?php echo date('Y-m-t')?>');
 		
-		var minTime = '09:00';
+		var minTime = '07:00';
 		var maxTime = '22:51';
 		
 		<?php if (isset($timezone)){

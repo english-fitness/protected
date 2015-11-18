@@ -43,7 +43,7 @@
 	var changingSchedule = false;
 	var pendingChangeSession;
 
-	var minTime = '09:00';
+	var minTime = '07:00';
 	var maxTime = '22:51';
 
 	//end global variables
@@ -94,7 +94,7 @@
 	function createCalendar(divId, data, size){
 		var firstColumnWidth = 85;
 		var calendarWidth = firstColumnWidth+(1000-firstColumnWidth)*(size/4);
-		document.getElementById(divId).setAttribute("style","width:"+calendarWidth+"px; height:1300px;margin: 40px auto");
+		document.getElementById(divId).setAttribute("style","width:"+calendarWidth+"px; height:1400px;margin: 40px auto");
 		var sessions = data.sessions;
 		var availableSlots = data.availableSlots;
 

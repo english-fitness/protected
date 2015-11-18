@@ -21,8 +21,7 @@ class TeacherTimeslots extends CActiveRecord
 		return array(
 			array('teacher_id', 'required'),
 			array('teacher_id', 'numerical', 'integerOnly'=>true),
-			array('week_start', 'value'=>date('Y-m-d')),
-			array('timeslots', 'match', 'pattern'=>'^([0-9]*\s*,*\s*)+$'),
+			array('timeslots', 'match', 'pattern'=>'/^([0-9]*\s*,*\s*)+$/'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('teacher_id', 'safe', 'on'=>'search'),

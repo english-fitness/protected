@@ -81,6 +81,7 @@
             buttonImage:'/media/images/icon/calendar.png',
             buttomImageOnly:true,
             dateFormat:'yy-mm-dd',
+            firstDay:1,
         });
         $('.mini-datepicker').change(function(){
             goToDate(this.value);
