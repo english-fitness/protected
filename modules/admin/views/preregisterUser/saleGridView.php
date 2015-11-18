@@ -1,25 +1,25 @@
 <style type="text/css">
-	/* notable */
-	.notable{
+	/* working */
+	.working{
 		color: darkviolet;
 		background-color: lightblue !important;
 		font-weight: bold;
 	}
-	.notable a{
+	.working a{
 		color: darkviolet;
 	}
-	.notable:hover{
+	.working:hover{
 		color: blue;
 		background-color: #BCE774 !important;
 	}
-	.notable:hover a{
+	.working:hover a{
 		color: blue;
 	}
-	.notable.selected{
+	.working.selected{
 		color: white;
 		background-color: #245ba7 !important;
 	}
-	.notable.selected a{
+	.working.selected a{
 		color: white;
 	}
 	/* registeredUser */
@@ -45,13 +45,13 @@
 	.registeredUser.selected a{
 		color: white;
 	}
-	a.duplicate{
+	tr:not(.notable):not(.registeredUser) a.duplicate{
 		color: black;
 		text-decoration: none;
 	}
 	a.duplicate:hover{
-		color: darkviolet;
-		text-decoration: underline;
+		color: darkviolet !important;
+		text-decoration: underline !important;
 	}
 </style>
 <?php 
@@ -75,6 +75,19 @@
 		}
 		return $email;
 	}
+
+	function setHighlight($status){
+		switch ($status) {
+			case PreregisterUser::CARE_STATUS_L3:
+				return "working";
+				break;
+			case PreregisterUser::CARE_STATUS_L4:
+				return "registeredUser";
+				break;
+			default:
+				break;
+		}
+	}
 ?>
 <?php $this->renderPartial('careStatusGuide')?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
@@ -84,6 +97,7 @@
 	'enableHistory'=>true,
 	'ajaxVar'=>'',
 	'pager' => array('class'=>'CustomLinkPager'),
+	'rowHtmlOptionsExpression'=>'array("class"=>setHighlight($data->care_status))',
 	'columns'=>array(
 		'fullname',
         array(
